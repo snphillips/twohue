@@ -11,3 +11,51 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+button {
+  display: block;
+}
+
+
+#color-bubble-tray  > span {
+  width: 80px;
+  height: 80px;
+  border: 3px solid  #abb2b9;
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+.bubble {
+  border-radius: 50%;
+  opacity: .5;
+  display: inline-block;
+}
+
+.bubble:hover {
+  animation: pop 0.4s linear 1;
+  opacity: .7;
+}
+
+#bubble00 {
+  background-color: red;
+}
+
+#bubble01 {
+  background-color: orange;
+}
+
+#bubble02 {
+  background-color: yellow;
+}
+
+#bubble03 {
+  background-color: green;
+}
+
+#bubble04 {
+  background-color: blue;
+}
+
+#bubble05 {
+  background-color: purple;
+}

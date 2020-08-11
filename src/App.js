@@ -1,54 +1,75 @@
 import React from 'react';
 import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
+// import ColorBubbleTray from './ColorBubbleTray'
 
 
+
+// ==============================
+// React Automata State Chart
+// ==============================
 const statechart = {
   initial: 'loading',
   states: {
     loading: {
-      on: {
-        READY: 'practice',
-      },
       onEntry: 'readyAction',
-    },
-    practice: {
       on: {
-        SELECT_COLOR: 'practice',
-        START_GAME: 'round0',
+        READY: 'homeScreenPractice',
       },
-      onEntry: 'sayCiao',
     },
-    round0: {
+    homeScreenPractice: {
+      onEntry: 'updateMessage',
       on: {
-        SELECT_COLOR: 'roundN',
+        SELECT_COLOR: 'homeScreenPractice',
+        START_GAME: 'roundCount0',
       },
-      onEntry: 'sayCiao',
     },
-    attempt0: {
+    roundCount0: {
+      onEntry: 'roundCount0',
       on: {
-        SELECT_COLOR: 'roundN',
+        SELECT_COLOR: 'attemptCount0',
       },
-      onEntry: 'sayCiao',
     },
-    roundN: {
+    roundCountN: {
+      onEntry: 'roundCountN',
       on: {
-        UNFINISHED_GAME: 'attemptN',
-        FINISHED_GAME: 'roundsComplete',
+        FINISHED_GAME: 'roundFinal',
+        UNFINISHED_GAME: 'attemptCountN',
       },
-      onEntry: 'sayCiao',
     },
-    attemptN: {
-      on: {
-        UNFINISHED_ATTEMPT: 'attemptN',
-        FINISHED_ATTEMPT: 'roundN',
-      },
+    roundFinal: {
       onEntry: 'sayCiao',
+      on: {
+        CLOSE_GAME: 'homeScreenPractice',
+        PLAY_AGAIN:'roundCount0',
+      },
     },
-    roundsComplete: {
+    attemptCount0: {
+      onEntry: 'rightOrWrong',
       on: {
+        SELECT_COLOR: 'checkColor',
       },
+    },
+    attemptCountN: {
+      onEntry: 'attemptCountN',
+      on: {
+        SELECT_COLOR: 'checkColor',
+        FINAL_INCORRECT_GUESS: 'attemptFinal',
+
+      },
+    },
+    checkColor: {
+      onEntry: 'checkColor',
+      on: {
+        CORRECT_GUESS: 'roundCountN',
+        INCORRECT_GUESS: 'attemptCountN',
+      },
+    },
+    attemptFinal: {
       onEntry: 'sayCiao',
+      on: {
+        CONTINUE: 'roundCountN',
+      },
     },
   },
 }
@@ -57,10 +78,11 @@ const statechart = {
 
 
 
+const maxRoundCount = 10
+const maxPlayerPickCount = 6
 
 
-const maxRounds = 10
-const maxAttempts = 6
+
 
 
 
@@ -69,19 +91,49 @@ class App extends React.Component {
   super(props);
 
   this.state = {
-    round: 0,
-    attempt: 0,
+    roundCount: 0,
+    attemptCount: 0,
+
 
   };
 
   // This binding is necessary to make `this` work in the callback
-  // this.handleChange = this.handleChange.bind(this);
 
 }
 
- readyAction = ()=>{this.props.transition('READY')}
- circle1 = ()=>{this.props.transition('SELECT_COLOR')}
- circle2 = ()=>{this.props.transition('SELECT_COLOR')}
+ readyAction = () => { this.props.transition('READY') }
+
+
+roundCount0 = ()=>{
+  this.setState({roundCount: (this.state.roundCount + 1)})
+}
+
+
+roundCountN = ()=>{
+  if (this.state.roundCount >= 10){
+    this.props.transition("FINISHED_GAME")
+  }else{
+
+    this.setState({roundCount: (this.state.roundCount + 1)})
+    this.props.transition("UNFINISHED_GAME")
+  }
+}
+
+attemptCountN = ()=>{
+this.setState({attemptCount: (this.state.attemptCount + 1)})
+
+  if (this.state.attemptCount >= 5){
+    this.props.transition("FINAL_INCORRECT_GUESS")
+  }
+}
+
+
+checkColor = () => {
+    this.props.transition("INCORRECT_GUESS")
+
+}
+
+
 
 
   handleClick = () => {
@@ -91,12 +143,72 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.circle1}>circle 1</button>
-        <button onClick={this.circle2}>circle 2</button>
-        <button onClick={()=>{this.props.transition('START_GAME')}}>START_GAME</button>
+        <p>
+
+       {(this.props.machineState.value)}
+        </p>
+
+        <State is={['homeScreenPractice']}>
+          <p>Welcome to twohue, a color mixing game. Practice clicking bubbles before starting.</p>
+        </State>
+
+        <State is={['roundCount0']}>
+          <p>Choose a color.</p>
+        </State>
+
+        <State is={['roundCountN']}>
+          <p>Choose a different color.</p>
+        </State>
+
+        <State is={['roundCountFinal']}>
+          <p>Choose final.</p>
+        </State>
+
+
+        <State is={['homeScreenPractice']}>
+          <button onClick={ () => {
+            this.props.transition('START_GAME')
+          }}>
+            START_GAME
+          </button>
+        </State>
+
+        <State is="homeScreenPractice">practice round</State>
+
         <State is="loading">SPINNER</State>
-        <State is="practice">practice</State>
-        <State is="round0">game play</State>
+
+        <State is="roundCount0">game play</State>
+
+        <p>roundCount: {this.state.roundCount}</p>
+        <p>playerPickCount: {this.state.attemptCount}</p>
+
+        <div id="color-bubble-tray">
+          <span className="bubble" id="bubble00" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+          <span className="bubble" id="bubble01" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+          <span className="bubble" id="bubble02" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+          <span className="bubble" id="bubble03" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+          <span className="bubble" id="bubble04" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+          <span className="bubble" id="bubble05" onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+
+            }}>&nbsp;</span>
+      </div>
+
       </div>
     )
   }
