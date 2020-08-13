@@ -34,6 +34,7 @@ const statechart = {
       onEntry: 'incrementRoundCounter',
       on: {
         GO_TO_ATTEMPT_N: 'attemptN',
+        NO_MORE_ROUNDS: 'gameOver',
       },
     },
     attemptN: {
@@ -83,11 +84,6 @@ const statechart = {
 
 
 
-// const maxRound = 10
-// const maxPlayerPick = 6
-
-
-
 class App extends React.Component {
   constructor(props) {
   super(props);
@@ -110,15 +106,15 @@ class App extends React.Component {
 
 
 roundN(){
-  console.log("This is roundN(). Clearing attempts")
+  console.log("Clearing attempts for new round")
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
 }
 
 
 incrementRoundCounter() {
-  if (this.state.round >= 10) {
-    this.props.transition("FINISHED_GAME")
+  if (this.state.round >= 3) {
+    this.props.transition("NO_MORE_ROUNDS")
   } else {
     this.setState({round: (this.state.round + 1)})
     console.log("Increment Round by one")
@@ -155,6 +151,21 @@ checkSolution() {
  }
 
 
+playerWinsRound() {
+  console.log("player wins round")
+ }
+
+
+playerLoosesRound() {
+  console.log("player looses round")
+ }
+
+gameOver() {
+  console.log("game over")
+  this.setState({attempt: 0})
+  this.setState({round: 0})
+}
+
   handleClick = () => {
     this.props.transition('READY')
   }
@@ -188,8 +199,14 @@ checkSolution() {
 
 
         <State is={['attemptFinal']}>
-          <p>attemptFinal message.</p>
+          <p>final attempt message.</p>
         </State>
+
+
+        <State is={['gameOver']}>
+          <p>game over</p>
+        </State>
+
 
         <State is={['playerWinsRound', 'playerLoosesRound']}>
           <button onClick={ () => {
@@ -205,6 +222,22 @@ checkSolution() {
             this.props.transition('START_GAME')
           }}>
             START_GAME
+          </button>
+        </State>
+
+        <State is={['gameOver']}>
+          <button onClick={ () => {
+            this.props.transition('PLAY_AGAIN')
+          }}>
+            PLAY_AGAIN
+          </button>
+        </State>
+
+        <State is={['gameOver']}>
+          <button onClick={ () => {
+            this.props.transition('DONT_PLAY_AGAIN')
+          }}>
+            DONT_PLAY_AGAIN
           </button>
         </State>
 
