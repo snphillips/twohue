@@ -7,6 +7,7 @@ import { Action, withStateMachine, State } from 'react-automata'
 
 // ==============================
 // React Automata State Chart
+// States, TRANSITIONS, Functions
 // ==============================
 const statechart = {
   initial: 'loading',
@@ -26,6 +27,12 @@ const statechart = {
     },
     roundN: {
       onEntry: 'roundN',
+      on: {
+        INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
+      },
+    },
+    roundFinal: {
+      onEntry: 'roundFinal',
       on: {
         INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
       },
@@ -55,7 +62,6 @@ const statechart = {
       on: {
         CORRECT_SOLUTION: 'playerWinsRound',
         INCORRECT_SOLUTION: 'attemptN',
-        INCORRECT_SOLUTION_NO_MORE_ATTEMPTS: 'playerLoosesRound',
       },
     },
     playerWinsRound: {
@@ -82,6 +88,7 @@ const statechart = {
   },
 }
 
+let maxRoundCount = 3
 
 
 class App extends React.Component {
@@ -105,15 +112,15 @@ class App extends React.Component {
 }
 
 
+
 roundN(){
   console.log("Clearing attempts for new round")
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
 }
 
-
 incrementRoundCounter() {
-  if (this.state.round >= 3) {
+  if (this.state.round >= maxRoundCount) {
     this.props.transition("NO_MORE_ROUNDS")
   } else {
     this.setState({round: (this.state.round + 1)})
@@ -123,7 +130,7 @@ incrementRoundCounter() {
 }
 
 attemptN() {
-  console.log("attemptN() - user selects color")
+  console.log("attemptN()")
   this.props.transition("CHECK_COLOR")
 }
 
@@ -141,24 +148,30 @@ checkColor() {
 }
 
 checkSolution() {
-  if (this.state.attempt > 1) {
-    console.log("check solution - hardcoded correct for now")
-    this.props.transition("CORRECT_SOLUTION")
-  } else {
+  if (this.state.attempt <= 1) {
     console.log("There has only been one guess. There can't be a solution.")
     this.props.transition("INCORRECT_SOLUTION")
+  } else {
+    console.log("check solution - hardcoded correct for now")
+    this.props.transition("CORRECT_SOLUTION")
   }
  }
 
-
 playerWinsRound() {
-  console.log("player wins round")
- }
-
+  if (this.state.round < maxRoundCount) {
+    console.log("player wins round")
+    // commented out b/c currently this action is happening within the button click
+    // this.props.transition('NEXT_ROUND')
+  }
+}
 
 playerLoosesRound() {
-  console.log("player looses round")
+  if (this.state.round < maxRoundCount) {
+   console.log("player looses round")
+   // commented out b/c currently this action is happening within the button click
+   // this.props.transition('NEXT_ROUND')
  }
+}
 
 gameOver() {
   console.log("game over")
@@ -184,17 +197,9 @@ gameOver() {
           <p>Welcome to twohue, a color mixing game. Practice clicking bubbles before starting.</p>
         </State>
 
-        <State is={['roundN']}>
-          <p>New Round. Select a color.</p>
-        </State>
 
         <State is={['attemptN']}>
           <p>Select a color</p>
-        </State>
-
-
-        <State is={['roundFinal']}>
-          <p>Choose final color.</p>
         </State>
 
 
@@ -206,7 +211,6 @@ gameOver() {
         <State is={['gameOver']}>
           <p>game over</p>
         </State>
-
 
         <State is={['playerWinsRound', 'playerLoosesRound']}>
           <button onClick={ () => {
