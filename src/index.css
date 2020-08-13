@@ -19,6 +19,11 @@ button {
 /*====================================================================*/
 /*Game Field*/
 /*====================================================================*/
+#game-field {
+
+
+}
+
 .target-swatch {
   border: 3px solid #abb2b9;
   border-radius: 50%;
@@ -26,6 +31,10 @@ button {
   height: 75px;
   padding: 10px;
   transform: translate(150%, 30%);
+}
+
+section#left-and-right-field {
+  display: flex;
 }
 
 
@@ -39,7 +48,7 @@ button {
   padding: 10px;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
-  transform: translate(15%, 25%);
+  /*transform: translate(15%, 25%);*/
 }
 
 
@@ -53,7 +62,7 @@ button {
   padding: 10px;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
-  transform: translate(75%, -76%);
+  transform: translate(-41%, 0%);
 }
 
 #color-bubble-tray  > span {

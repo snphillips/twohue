@@ -289,10 +289,16 @@ gameOver() {
 
         <State is="loading">SPINNER</State>
 
-
-
         <p>round: {this.state.round}</p>
         <p>attempt: {this.state.attempt}</p>
+
+
+          <div id="game-field">
+            <div className="target-swatch">&nbsp;</div>
+            <section id="left-and-right-field">
+              <div className="left-field">&nbsp;</div>
+              <div className="right-field">&nbsp;</div>
+            </section>
 
         <div id="color-bubble-tray">
           <span className="bubble" id="bubble00" onClick={ () => {
@@ -321,6 +327,8 @@ gameOver() {
             }}>&nbsp;</span>
       </div>
 
+         </div>
+
       </div>
     )
   }
@@ -330,8 +338,3 @@ export default withStateMachine(statechart)(App)
 
 
 
-         //  <div>
-         //    <div className="target-swatch">&nbsp;</div>
-         //    <div className="left-field">&nbsp;</div>
-         //    <div className="right-field">&nbsp;</div>
-         // </div>
