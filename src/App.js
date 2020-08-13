@@ -53,8 +53,20 @@ const statechart = {
     checkColor: {
       onEntry: 'checkColor',
       on: {
-        CORRECT_GUESS: 'checkSolution',
-        INCORRECT_GUESS: 'checkSolution',
+        CORRECT_COLOR_GUESS: 'colorGuessCorrect',
+        INCORRECT_COLOR_GUESS: 'colorGuessIncorrect',
+      },
+    },
+    colorGuessCorrect: {
+      onEntry: 'colorGuessCorrect',
+      on: {
+        CORRECT_GUESS_FEEDBACK: 'checkSolution',
+      },
+    },
+    colorGuessIncorrect: {
+      onEntry: 'colorGuessIncorrect',
+      on: {
+        INCORRECT_GUESS_FEEDBACK: 'checkSolution',
       },
     },
     checkSolution: {
@@ -62,6 +74,8 @@ const statechart = {
       on: {
         CORRECT_SOLUTION: 'playerWinsRound',
         INCORRECT_SOLUTION: 'attemptN',
+        CORRECT_SOLUTION_NO_MORE_ROUNDS: 'playerWinsRoundFinalRound',
+        INCORRECT_SOLUTION_NO_MORE_ROUNDS: 'playerLoosesRoundFinalRound',
       },
     },
     playerWinsRound: {
@@ -75,6 +89,18 @@ const statechart = {
       onEntry: 'playerLoosesRound',
       on: {
         NEXT_ROUND: 'roundN',
+        NO_MORE_ROUNDS: 'gameOver'
+      },
+    },
+    playerWinsRoundFinalRound: {
+      onEntry: 'playerWinsRound',
+      on: {
+        NO_MORE_ROUNDS: 'gameOver'
+      },
+    },
+    playerLoosesRoundFinalRound: {
+      onEntry: 'playerLoosesRound',
+      on: {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
@@ -138,14 +164,26 @@ checkColor() {
   console.log("this.state.attempt: ", this.state.attempt)
   if (this.state.attempt < 1) {
     this.setState({attempt: (this.state.attempt + 1)})
-    this.props.transition("INCORRECT_GUESS")
+    this.props.transition("INCORRECT_COLOR_GUESS")
     console.log("checking color- hard coded INCORRECT_GUESS")
   } else {
     this.setState({attempt: (this.state.attempt + 1)})
     console.log("check color guess - hardcoded correct for now")
-    this.props.transition("CORRECT_GUESS")
+    this.props.transition("CORRECT_COLOR_GUESS")
   }
 }
+
+ colorGuessCorrect() {
+  console.log("Correct color guess")
+  this.props.transition("CORRECT_GUESS_FEEDBACK")
+ }
+
+colorGuessIncorrect() {
+  console.log("Incorrect color guess")
+  this.props.transition("INCORRECT_GUESS_FEEDBACK")
+ }
+
+
 
 checkSolution() {
   if (this.state.attempt <= 1) {
@@ -156,6 +194,7 @@ checkSolution() {
     this.props.transition("CORRECT_SOLUTION")
   }
  }
+
 
 playerWinsRound() {
   if (this.state.round < maxRoundCount) {
@@ -220,6 +259,7 @@ gameOver() {
             NEXT_ROUND
           </button>
         </State>
+
 
         <State is={['homeScreenPractice']}>
           <button onClick={ () => {
@@ -288,3 +328,10 @@ gameOver() {
 
 export default withStateMachine(statechart)(App)
 
+
+
+         //  <div>
+         //    <div className="target-swatch">&nbsp;</div>
+         //    <div className="left-field">&nbsp;</div>
+         //    <div className="right-field">&nbsp;</div>
+         // </div>

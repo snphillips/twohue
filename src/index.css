@@ -16,6 +16,45 @@ button {
   display: block;
 }
 
+/*====================================================================*/
+/*Game Field*/
+/*====================================================================*/
+.target-swatch {
+  border: 3px solid #abb2b9;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  padding: 10px;
+  transform: translate(150%, 30%);
+}
+
+
+.left-field   {
+  opacity: .5;
+  border: 3px solid #abb2b9;
+  border-radius: 50%;
+  margin: 5px;
+  width: 200px;
+  height: 200px;
+  padding: 10px;
+  /*mix-blend-mode ensures the colors blend properly*/
+  mix-blend-mode: multiply;
+  transform: translate(15%, 25%);
+}
+
+
+.right-field  {
+  opacity: .5;
+  border: 3px solid #abb2b9;
+  border-radius: 50%;
+  margin: 5px;
+  width: 200px;
+  height: 200px;
+  padding: 10px;
+  /*mix-blend-mode ensures the colors blend properly*/
+  mix-blend-mode: multiply;
+  transform: translate(75%, -76%);
+}
 
 #color-bubble-tray  > span {
   width: 80px;
