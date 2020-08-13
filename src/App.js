@@ -33,7 +33,7 @@ const statechart = {
     incrementRoundCounter: {
       onEntry: 'incrementRoundCounter',
       on: {
-        SELECT_COLOR: 'checkColor',
+        GO_TO_ATTEMPT_N: 'attemptN',
       },
     },
     attemptN: {
@@ -110,8 +110,9 @@ class App extends React.Component {
 
 
 roundN(){
-  console.log("This is roundN()")
+  console.log("This is roundN(). Clearing attempts")
   this.props.transition('INCREMENT_ROUND_COUNTER')
+  this.setState({attempt: 0})
 }
 
 
@@ -121,22 +122,23 @@ incrementRoundCounter() {
   } else {
     this.setState({round: (this.state.round + 1)})
     console.log("Increment Round by one")
-    this.props.transition("SELECT_COLOR")
+    this.props.transition("GO_TO_ATTEMPT_N")
   }
 }
 
 attemptN() {
   console.log("attemptN() - user selects color")
-  this.props.transition("SELECT_COLOR")
+  this.props.transition("CHECK_COLOR")
 }
 
 checkColor() {
-  this.setState({attempt: (this.state.attempt + 1)})
   console.log("this.state.attempt: ", this.state.attempt)
   if (this.state.attempt < 1) {
+    this.setState({attempt: (this.state.attempt + 1)})
     this.props.transition("INCORRECT_GUESS")
     console.log("checking color- hard coded INCORRECT_GUESS")
   } else {
+    this.setState({attempt: (this.state.attempt + 1)})
     console.log("check color guess - hardcoded correct for now")
     this.props.transition("CORRECT_GUESS")
   }
@@ -172,20 +174,18 @@ checkSolution() {
         </State>
 
         <State is={['roundN']}>
-          <p>Select a color.</p>
+          <p>New Round. Select a color.</p>
         </State>
 
-        <State is={['roundN']}>
-          <p>Select a different color.</p>
+        <State is={['attemptN']}>
+          <p>Select a color</p>
         </State>
+
 
         <State is={['roundFinal']}>
           <p>Choose final color.</p>
         </State>
 
-        <State is={['attemptN']}>
-          <p>Select an other color</p>
-        </State>
 
         <State is={['attemptFinal']}>
           <p>attemptFinal message.</p>
@@ -193,7 +193,8 @@ checkSolution() {
 
         <State is={['playerWinsRound', 'playerLoosesRound']}>
           <button onClick={ () => {
-            this.props.transition('INCREMENT_ROUND_COUNTER')
+            this.props.transition('NEXT_ROUND')
+            console.log('NEXT_ROUND')
           }}>
             NEXT_ROUND
           </button>
