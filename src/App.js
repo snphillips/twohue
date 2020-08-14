@@ -294,38 +294,41 @@ gameOver() {
 
 
           <div id="game-field">
-            <div className="target-swatch">&nbsp;</div>
+
+            <section className="target-swatch">&nbsp;</section>
             <section id="left-and-right-field">
               <div className="left-field">&nbsp;</div>
               <div className="right-field">&nbsp;</div>
             </section>
 
-        <div id="color-bubble-tray">
-          <span className="bubble" id="bubble00" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+            <section id="color-bubble-tray">
 
-            }}>&nbsp;</span>
-          <span className="bubble" id="bubble01" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+              <div className="bubble" id="bubble00" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
 
-            }}>&nbsp;</span>
-          <span className="bubble" id="bubble02" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+                }}>&nbsp;</div>
+              <div className="bubble" id="bubble01" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
 
-            }}>&nbsp;</span>
-          <span className="bubble" id="bubble03" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+                }}>&nbsp;</div>
+              <div className="bubble" id="bubble02" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
 
-            }}>&nbsp;</span>
-          <span className="bubble" id="bubble04" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+                }}>&nbsp;</div>
+              <div className="bubble" id="bubble03" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
 
-            }}>&nbsp;</span>
-          <span className="bubble" id="bubble05" onClick={ () => {
-              this.props.transition('SELECT_COLOR')
+                }}>&nbsp;</div>
+              <div className="bubble" id="bubble04" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
 
-            }}>&nbsp;</span>
-      </div>
+                }}>&nbsp;</div>
+              <div className="bubble" id="bubble05" onClick={ () => {
+                  this.props.transition('SELECT_COLOR')
+
+                }}>&nbsp;</div>
+
+          </section>
 
          </div>
 

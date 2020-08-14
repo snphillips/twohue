@@ -20,21 +20,27 @@ button {
 /*Game Field*/
 /*====================================================================*/
 #game-field {
-
-
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid #333;
 }
 
 .target-swatch {
+  margin: 0 auto;
   border: 3px solid #abb2b9;
   border-radius: 50%;
   width: 75px;
   height: 75px;
   padding: 10px;
-  transform: translate(150%, 30%);
+  /*transform: translate(150%, 30%);*/
 }
 
 section#left-and-right-field {
   display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  border: 1px solid red;
 }
 
 
@@ -48,7 +54,7 @@ section#left-and-right-field {
   padding: 10px;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
-  /*transform: translate(15%, 25%);*/
+  transform: translate(15%, 0%);
 }
 
 
@@ -62,21 +68,23 @@ section#left-and-right-field {
   padding: 10px;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
-  transform: translate(-41%, 0%);
+  transform: translate(-23%, 0%);
 }
 
-#color-bubble-tray  > span {
+#color-bubble-tray {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.bubble {
   width: 80px;
   height: 80px;
   border: 3px solid  #abb2b9;
   text-align: center;
   margin: 0 0 10px 0;
-}
-
-.bubble {
   border-radius: 50%;
   opacity: .5;
-  display: inline-block;
 }
 
 .bubble:hover {
