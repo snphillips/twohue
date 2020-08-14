@@ -23,52 +23,44 @@ button {
   display: block;
   width: 100%;
   max-width: 600px;
-  border: 1px solid #333;
+  /*border: 1px solid #333;*/
 }
 
 .target-swatch {
   margin: 0 auto;
-  border: 3px solid #abb2b9;
-  border-radius: 50%;
-  width: 75px;
-  height: 75px;
-  padding: 10px;
-  /*transform: translate(150%, 30%);*/
+  border-left: 3px solid #abb2b9;
+  border-top: 3px solid #abb2b9;
+  border-right: 3px solid #abb2b9;
+  width: 492px;
+  height: 80px;
 }
 
 section#left-and-right-field {
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  border: 1px solid red;
+  /*border: 1px solid red;*/
 }
 
+
+.field   {
+  opacity: .5;
+  border-left: 3px solid #abb2b9;
+  border-top: 3px solid #abb2b9;
+  border-right: 3px solid #abb2b9;
+  width: 300px;
+  height: 200px;
+  /*mix-blend-mode ensures the colors blend properly*/
+  mix-blend-mode: multiply;
+  transform: translate(17%, 0%);
+}
 
 .left-field   {
-  opacity: .5;
-  border: 3px solid #abb2b9;
-  border-radius: 50%;
-  margin: 5px;
-  width: 200px;
-  height: 200px;
-  padding: 10px;
-  /*mix-blend-mode ensures the colors blend properly*/
-  mix-blend-mode: multiply;
-  transform: translate(15%, 0%);
+  transform: translate(17%, 0%);
 }
 
-
 .right-field  {
-  opacity: .5;
-  border: 3px solid #abb2b9;
-  border-radius: 50%;
-  margin: 5px;
-  width: 200px;
-  height: 200px;
-  padding: 10px;
-  /*mix-blend-mode ensures the colors blend properly*/
-  mix-blend-mode: multiply;
-  transform: translate(-23%, 0%);
+  transform: translate(-17%, 0%);
 }
 
 #color-bubble-tray {
@@ -80,10 +72,11 @@ section#left-and-right-field {
 .bubble {
   width: 80px;
   height: 80px;
-  border: 3px solid  #abb2b9;
+  border-left: 3px solid  #abb2b9;
+  border-top: 3px solid  #abb2b9;
+  border-bottom: 3px solid  #abb2b9;
   text-align: center;
-  margin: 0 0 10px 0;
-  border-radius: 50%;
+  /*border-radius: 50%;*/
   opacity: .5;
 }
 

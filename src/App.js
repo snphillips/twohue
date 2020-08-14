@@ -297,8 +297,8 @@ gameOver() {
 
             <section className="target-swatch">&nbsp;</section>
             <section id="left-and-right-field">
-              <div className="left-field">&nbsp;</div>
-              <div className="right-field">&nbsp;</div>
+              <div className="field left-field">&nbsp;</div>
+              <div className="field right-field">&nbsp;</div>
             </section>
 
             <section id="color-bubble-tray">
