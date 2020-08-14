@@ -4,4 +4,5 @@ A recreation of a game I created but this time, using a state chart to manage us
 
 ## Made With
 - React
-- https://www.npmjs.com/package/react-automata
+- React Automata (X state library) https://www.npmjs.com/package/react-automata
+- Chroma.js https://www.npmjs.com/package/chroma-js
