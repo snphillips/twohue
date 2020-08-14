@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
 // import ColorBubbleTray from './ColorBubbleTray'
+import Header from './Header';
 
 
 
@@ -225,6 +226,8 @@ gameOver() {
   render() {
     return (
       <div>
+
+        <Header/>
 
         <p>
          {(this.props.machineState.value)}
