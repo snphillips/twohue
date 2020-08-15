@@ -3,6 +3,7 @@ import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
 // import ColorBubbleTray from './ColorBubbleTray'
 import Header from './Header';
+import Footer from './Footer';
 
 
 
@@ -83,14 +84,14 @@ const statechart = {
       onEntry: 'playerWinsRound',
       on: {
         NEXT_ROUND: 'roundN',
-        NO_MORE_ROUNDS: 'gameOver'
+        // NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
         NEXT_ROUND: 'roundN',
-        NO_MORE_ROUNDS: 'gameOver'
+        // NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerWinsRoundFinalRound: {
@@ -105,7 +106,7 @@ const statechart = {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
-    gameOver: {
+     : {
       onEntry: 'gameOver',
       on: {
         PLAY_AGAIN: 'roundN',
@@ -116,6 +117,8 @@ const statechart = {
 }
 
 let maxRoundCount = 3
+let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']
+
 
 
 class App extends React.Component {
@@ -133,10 +136,12 @@ class App extends React.Component {
 
 }
 
+
  readyAction = () => {
   this.props.transition('READY')
   // this.setState({round: (this.state.round + 1)})
 }
+
 
 
 
@@ -225,12 +230,12 @@ gameOver() {
 
   render() {
     return (
-      <div>
+      <div className="twohue">
 
         <Header/>
 
         <p>
-         {(this.props.machineState.value)}
+         machineState: {(this.props.machineState.value)}
         </p>
 
         <hr/>
@@ -252,6 +257,11 @@ gameOver() {
 
         <State is={['gameOver']}>
           <p>game over</p>
+        </State>
+
+        <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
+          <p>round: {this.state.round} /12</p>
+          <p>attempt: {this.state.attempt} /6</p>
         </State>
 
         <State is={['playerWinsRound', 'playerLoosesRound']}>
@@ -300,8 +310,8 @@ gameOver() {
 
             <section className="target-swatch">&nbsp;</section>
             <section id="left-and-right-field">
-              <div className="field left-field">&nbsp;</div>
-              <div className="field right-field">&nbsp;</div>
+              <span className="field left-field">&nbsp;</span>
+              <span className="field right-field">&nbsp;</span>
             </section>
 
             <section id="color-bubble-tray">
@@ -334,6 +344,8 @@ gameOver() {
           </section>
 
          </div>
+
+         <Footer/>
 
       </div>
     )
