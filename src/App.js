@@ -5,6 +5,7 @@ import { Action, withStateMachine, State } from 'react-automata'
 import Header from './Header';
 import Footer from './Footer';
 import colorRounds from './ColorRoundsArray';
+import GameField from './GameField';
 import ColorBubbleTray from './ColorBubbleTray';
 
 
@@ -137,6 +138,7 @@ class App extends React.Component {
     rightField: {'backgroundColor': null},
 
 
+
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -150,7 +152,6 @@ class App extends React.Component {
 //  =================================
  readyAction = () => {
   this.props.transition('READY')
-  // this.setState({round: (this.state.round + 1)})
 }
 
 roundN(){
@@ -342,6 +343,11 @@ updateFieldColor(color){
 
           <div id="game-field">
 
+            <GameField colorRound={this.state.colorRound}
+                       leftField={this.state.leftField}
+                       rightField={this.state.rightField}
+                        />
+
             <section className="target-swatch">&nbsp;</section>
             <section id="left-and-right-field">
               <span className="field left-field">&nbsp;</span>
@@ -350,7 +356,6 @@ updateFieldColor(color){
 
             <ColorBubbleTray colorRound={this.state.colorRound}
                              transition={this.props.transition}
-
                              />
 
          </div>
