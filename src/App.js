@@ -130,6 +130,7 @@ class App extends React.Component {
   this.state = {
     round: 0,
     attempt: 0,
+    colorRound: colorRounds[0],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
@@ -346,7 +347,10 @@ updateFieldColor(color){
               <span className="field right-field">&nbsp;</span>
             </section>
 
-            <ColorBubbleTray/>
+            <ColorBubbleTray colorRound={this.state.colorRound}
+                             transition={this.props.transition}
+                             parent_state={this.state}
+                             />
 
          </div>
 

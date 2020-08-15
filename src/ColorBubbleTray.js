@@ -1,5 +1,7 @@
-
 import React, { Component } from 'react';
+// import colorRounds from './ColorRoundsArray';
+
+
 
 export default class ColorBubbleTray extends Component {
   render() {
@@ -7,30 +9,60 @@ export default class ColorBubbleTray extends Component {
 
       <section id="color-bubble-tray">
 
-        <div className="bubble" id="bubble00" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble00"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[0]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
-        <div className="bubble" id="bubble01" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble01"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[1]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
-        <div className="bubble" id="bubble02" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble02"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[2]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
-        <div className="bubble" id="bubble03" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble03"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[3]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
-        <div className="bubble" id="bubble04" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble04"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[4]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
-        <div className="bubble" id="bubble05" onClick={ () => {
-            this.props.transition('SELECT_COLOR')
+        <div className="bubble"
+             id="bubble05"
+             style={{'backgroundColor': this.props.colorRound.allColorBubbles[5]}}
+             onClick={ () => {
+              this.props.transition('SELECT_COLOR')
+            }}>
+            &nbsp;
+        </div>
 
-          }}>&nbsp;</div>
 
     </section>
 
