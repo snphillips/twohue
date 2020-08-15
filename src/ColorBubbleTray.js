@@ -5,18 +5,35 @@ export default class ColorBubbleTray extends Component {
   render() {
     return (
 
-  <div id="color-bubble-tray">
+      <section id="color-bubble-tray">
 
-    <span className="bubble" id="bubble00" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
-    <span className="bubble" id="bubble01" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
-    <span className="bubble" id="bubble02" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
-    <span className="bubble" id="bubble03" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
-    <span className="bubble" id="bubble04" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
-    <span className="bubble" id="bubble05" onClick={this.props.playerMakesAGuess}>&nbsp;</span>
+        <div className="bubble" id="bubble00" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
 
+          }}>&nbsp;</div>
+        <div className="bubble" id="bubble01" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
 
+          }}>&nbsp;</div>
+        <div className="bubble" id="bubble02" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
 
-  </div>
+          }}>&nbsp;</div>
+        <div className="bubble" id="bubble03" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
+
+          }}>&nbsp;</div>
+        <div className="bubble" id="bubble04" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
+
+          }}>&nbsp;</div>
+        <div className="bubble" id="bubble05" onClick={ () => {
+            this.props.transition('SELECT_COLOR')
+
+          }}>&nbsp;</div>
+
+    </section>
+
 
     );
   }

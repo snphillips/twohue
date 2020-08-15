@@ -5,6 +5,7 @@ import { Action, withStateMachine, State } from 'react-automata'
 import Header from './Header';
 import Footer from './Footer';
 import colorRounds from './ColorRoundsArray';
+import ColorBubbleTray from './ColorBubbleTray';
 
 
 
@@ -129,6 +130,10 @@ class App extends React.Component {
   this.state = {
     round: 0,
     attempt: 0,
+    currentField: 'leftField',
+    currentFieldHover: 'leftField',
+    leftField: {'backgroundColor': null},
+    rightField: {'backgroundColor': null},
 
 
   };
@@ -138,13 +143,14 @@ class App extends React.Component {
 }
 
 
+
+//  =================================
+//  State Machine Funcitons
+//  =================================
  readyAction = () => {
   this.props.transition('READY')
   // this.setState({round: (this.state.round + 1)})
 }
-
-
-
 
 roundN(){
   console.log("Clearing attempts for new round")
@@ -224,6 +230,35 @@ gameOver() {
   this.setState({attempt: 0})
   this.setState({round: 0})
 }
+
+//  ====================================
+//  Toggling between the left and right fields, to determine which
+//  one will get filled in with color.
+//  =====================================
+toggleLeftRightField(){
+  if (this.state.currentField === "leftField") {
+    this.setState({'currentField': "rightField"})
+    this.setState({'currentFieldHover': "rightField"})
+  } else {
+    this.setState({'currentField': "leftField"})
+    this.setState({'currentFieldHover': "leftField"})
+  }
+};
+
+//  ==================================================================
+//  Filling in chosen color into left or right fields,
+//  then checking if winning solution (as a callback function)
+//  ==================================================================
+updateFieldColor(color){
+  if (this.state.currentField === 'leftField') {
+   this.setState({"leftField": {'backgroundColor': color}}, this.checkWinningSolution)
+  } else {
+    this.setState({"rightField": {'backgroundColor': color}}, this.checkWinningSolution)
+  }
+};
+
+
+
 
   handleClick = () => {
     this.props.transition('READY')
@@ -311,34 +346,7 @@ gameOver() {
               <span className="field right-field">&nbsp;</span>
             </section>
 
-            <section id="color-bubble-tray">
-
-              <div className="bubble" id="bubble00" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-              <div className="bubble" id="bubble01" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-              <div className="bubble" id="bubble02" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-              <div className="bubble" id="bubble03" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-              <div className="bubble" id="bubble04" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-              <div className="bubble" id="bubble05" onClick={ () => {
-                  this.props.transition('SELECT_COLOR')
-
-                }}>&nbsp;</div>
-
-          </section>
+            <ColorBubbleTray/>
 
          </div>
 
