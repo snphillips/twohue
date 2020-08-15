@@ -21,7 +21,6 @@ const colorRounds = [
 },
 
 {
-  // why is this round being skipped?
   round: 2,
   name: 'orange',
   targetColor: '#f17e56',

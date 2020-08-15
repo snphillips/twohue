@@ -164,6 +164,7 @@ incrementRoundCounter() {
     this.props.transition("NO_MORE_ROUNDS")
   } else {
     this.setState({round: (this.state.round + 1)})
+    this.setState({colorRound: (colorRounds[this.state.round + 1])})
     console.log("Increment Round by one")
     this.props.transition("GO_TO_ATTEMPT_N")
   }
@@ -349,7 +350,7 @@ updateFieldColor(color){
 
             <ColorBubbleTray colorRound={this.state.colorRound}
                              transition={this.props.transition}
-                             parent_state={this.state}
+
                              />
 
          </div>
