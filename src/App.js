@@ -4,6 +4,7 @@ import { Action, withStateMachine, State } from 'react-automata'
 // import ColorBubbleTray from './ColorBubbleTray'
 import Header from './Header';
 import Footer from './Footer';
+import colorRounds from './ColorRoundsArray';
 
 
 
@@ -90,7 +91,7 @@ const statechart = {
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
-        NEXT_ROUND: 'roundN',
+        NEXT_ROUND: 'roundN'
         // NO_MORE_ROUNDS: 'gameOver'
       },
     },
@@ -106,14 +107,14 @@ const statechart = {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
-     : {
+    gameOver: {
       onEntry: 'gameOver',
       on: {
         PLAY_AGAIN: 'roundN',
         DONT_PLAY_AGAIN: 'homeScreenPractice',
       }
     }
-  },
+  }
 }
 
 let maxRoundCount = 3
@@ -301,10 +302,6 @@ gameOver() {
         <State is="homeScreenPractice">practice round</State>
 
         <State is="loading">SPINNER</State>
-
-        <p>round: {this.state.round}</p>
-        <p>attempt: {this.state.attempt}</p>
-
 
           <div id="game-field">
 
