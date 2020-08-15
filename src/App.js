@@ -142,7 +142,8 @@ class App extends React.Component {
   };
 
   // This binding is necessary to make `this` work in the callback
-
+  this.toggleLeftRightField = this.toggleLeftRightField.bind(this)
+  this.updateFieldColor = this.updateFieldColor.bind(this)
 }
 
 
@@ -166,6 +167,8 @@ incrementRoundCounter() {
   } else {
     this.setState({round: (this.state.round + 1)})
     this.setState({colorRound: (colorRounds[this.state.round + 1])})
+    this.setState({"leftField": {'backgroundColor': null}})
+    this.setState({"rightField": {'backgroundColor': null}})
     console.log("Increment Round by one")
     this.props.transition("GO_TO_ATTEMPT_N")
   }
@@ -234,6 +237,32 @@ gameOver() {
   this.setState({round: 0})
 }
 
+
+//  ==================================================================
+//  Click handler for the color bubbles at bottom of screen
+//  ==================================================================
+bubbleClickHandler(event) {
+  // The first lines below are guard clauses. They turns off the click
+  // handler so that nothing happens if bubbles are clicked after the round
+  // is over or the game is over.
+  // if (this.state.playerPickCount > maxPlayerPick) {return}
+  // if (this.state.playAgainButton.display === true) {return}
+  // if (this.state.isWinningSolution === true) {return}
+
+  // this.bubbleSound();
+  this.transition('SELECT_COLOR')
+  // this.toggleLeftRightField();
+  // The "event" is the click on a specific color bubble. The "currentTarget"
+  // is whatever color bubble is clicked. The style.backgroundColor takes
+  // whatever background color the clicked color bubble has, and applies that to
+  // the color field in questions
+  this.updateFieldColor(event.currentTarget.style.backgroundColor);
+
+  // if (this.state.practice === true) {return}
+  // this.playerPickIncrease();
+  // this.isOutOfPicksShowSolution();
+};
+
 //  ====================================
 //  Toggling between the left and right fields, to determine which
 //  one will get filled in with color.
@@ -254,6 +283,7 @@ toggleLeftRightField(){
 //  ==================================================================
 updateFieldColor(color){
   if (this.state.currentField === 'leftField') {
+    console.log( this.state.currentField, this.color)
    this.setState({"leftField": {'backgroundColor': color}}, this.checkWinningSolution)
   } else {
     this.setState({"rightField": {'backgroundColor': color}}, this.checkWinningSolution)
@@ -261,11 +291,10 @@ updateFieldColor(color){
 };
 
 
-
-
   handleClick = () => {
     this.props.transition('READY')
   }
+
 
   render() {
     return (
@@ -344,18 +373,19 @@ updateFieldColor(color){
           <div id="game-field">
 
             <GameField colorRound={this.state.colorRound}
+                       currentField={this.state.currentField}
                        leftField={this.state.leftField}
                        rightField={this.state.rightField}
-                        />
+                       />
 
-            <section className="target-swatch">&nbsp;</section>
-            <section id="left-and-right-field">
-              <span className="field left-field">&nbsp;</span>
-              <span className="field right-field">&nbsp;</span>
-            </section>
 
             <ColorBubbleTray colorRound={this.state.colorRound}
                              transition={this.props.transition}
+                             updateFieldColor={this.updateFieldColor}
+                             currentField={this.state.currentField}
+                             leftField={this.state.leftField}
+                             rightField={this.state.rightField}
+                             bubbleClickHandler={this.bubbleClickHandler}
                              />
 
          </div>
@@ -371,3 +401,9 @@ export default withStateMachine(statechart)(App)
 
 
 
+
+            // <section className="target-swatch">&nbsp;</section>
+            // <section id="left-and-right-field">
+            //   <span className="field left-field">&nbsp;</span>
+            //   <span className="field right-field">&nbsp;</span>
+            // </section>
