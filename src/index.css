@@ -8,7 +8,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-repeat: repeat;
-  background-image: url("/stuckaxiom/stuckaxiom.png");
+  background-image: url("/images/struckaxiom/struckaxiom.png");
   background-color: #f1f1f1;
 }
 
@@ -31,7 +31,7 @@ button {
 }
 
 h1 {
-  font: 45px 'Oleo Script', cursive;
+  font: 2.5rem 'Oleo Script', cursive;
   color: #a6a6a6;
   text-align: left;
   margin-top: 4px;
@@ -62,10 +62,11 @@ h1 {
 
 section#left-and-right-field {
   box-sizing: border-box;
-  display: flex;
+  /*display: flex;*/
   justify-content: center;
   margin: 0 auto;
   /*border: 1px solid red;*/
+  height: 149px;
 }
 
 
@@ -84,12 +85,12 @@ section#left-and-right-field {
 
 #left-field   {
   transform: translate(0%, 0%);
-  width: 450px;
+  width: 400px;
 }
 
 #right-field  {
-  transform: translate(0%, 0%);
-  width: 450px;
+  transform: translate(42%, -100%);
+  width: 400px;
 }
 
 #color-bubble-tray {

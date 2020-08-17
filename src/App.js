@@ -87,14 +87,12 @@ const statechart = {
       onEntry: 'playerWinsRound',
       on: {
         NEXT_ROUND: 'roundN',
-        // NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
         NEXT_ROUND: 'roundN'
-        // NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerWinsRoundFinalRound: {
@@ -123,7 +121,6 @@ let maxRoundCount = 3
 let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']
 
 
-
 class App extends React.Component {
   constructor(props) {
   super(props);
@@ -135,14 +132,10 @@ class App extends React.Component {
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
-    rightField: {'backgroundColor': null},
-
-
-
+    rightField: {'backgroundColor': null}
   };
 
   // This binding is necessary to make `this` work in the callback
-  this.toggleLeftRightField = this.toggleLeftRightField.bind(this)
   this.updateFieldColor = this.updateFieldColor.bind(this)
 }
 
@@ -236,12 +229,30 @@ gameOver() {
   this.setState({attempt: 0})
   this.setState({round: 0})
 }
+// ***********************************
+
+//  ====================================
+//  Toggling between the left and right fields, to determine which
+//  one will get filled in with color.
+//  =====================================
+toggleLeftRightField = () => {
+
+  console.log("OKOK")
+  if (this.state.currentField === "leftField") {
+    this.setState({'currentField': "rightField"})
+    this.setState({'currentFieldHover': "rightField"})
+  } else {
+    this.setState({'currentField': "leftField"})
+    this.setState({'currentFieldHover': "leftField"})
+  }
+}
+
 
 
 //  ==================================================================
 //  Click handler for the color bubbles at bottom of screen
 //  ==================================================================
-bubbleClickHandler(event) {
+ bubbleClickHandler = (event) =>  {
   // The first lines below are guard clauses. They turns off the click
   // handler so that nothing happens if bubbles are clicked after the round
   // is over or the game is over.
@@ -250,8 +261,8 @@ bubbleClickHandler(event) {
   // if (this.state.isWinningSolution === true) {return}
 
   // this.bubbleSound();
-  this.transition('SELECT_COLOR')
-  // this.toggleLeftRightField();
+  this.props.transition('SELECT_COLOR');
+  this.toggleLeftRightField();
   // The "event" is the click on a specific color bubble. The "currentTarget"
   // is whatever color bubble is clicked. The style.backgroundColor takes
   // whatever background color the clicked color bubble has, and applies that to
@@ -263,19 +274,6 @@ bubbleClickHandler(event) {
   // this.isOutOfPicksShowSolution();
 };
 
-//  ====================================
-//  Toggling between the left and right fields, to determine which
-//  one will get filled in with color.
-//  =====================================
-toggleLeftRightField(){
-  if (this.state.currentField === "leftField") {
-    this.setState({'currentField': "rightField"})
-    this.setState({'currentFieldHover': "rightField"})
-  } else {
-    this.setState({'currentField': "leftField"})
-    this.setState({'currentFieldHover': "leftField"})
-  }
-};
 
 //  ==================================================================
 //  Filling in chosen color into left or right fields,
@@ -283,10 +281,14 @@ toggleLeftRightField(){
 //  ==================================================================
 updateFieldColor(color){
   if (this.state.currentField === 'leftField') {
-    console.log( this.state.currentField, this.color)
-   this.setState({"leftField": {'backgroundColor': color}}, this.checkWinningSolution)
+    // console.log( this.state.currentField, this.color)
+   this.setState({"leftField": {'backgroundColor': color}},
+    // this.checkWinningSolution
+    )
   } else {
-    this.setState({"rightField": {'backgroundColor': color}}, this.checkWinningSolution)
+    this.setState({"rightField": {'backgroundColor': color}},
+      // this.checkWinningSolution
+      )
   }
 };
 

@@ -9,7 +9,7 @@ const colorRounds = [
 {
   round: 1,
   name: 'purple',
-  targetColor: '#8b468c',
+  targetColor: '#8858c5',
   solutionColor1: 'rgb(255, 0, 0)',
   solutionColor2: 'rgb(0, 0, 255)',
   wrongColor1: 'rgb(177, 10, 136, 1)',
@@ -19,11 +19,10 @@ const colorRounds = [
   allColorBubbles: [ 'rgb(255, 0, 0)', 'rgb(0, 0, 255)', 'rgb(177, 10, 136)',
   'rgb(10, 177, 53)', 'rgb(237, 244, 31)', 'rgb(203, 107, 5)'],
 },
-
 {
   round: 2,
   name: 'orange',
-  targetColor: '#f17e56',
+  targetColor: '#f99356',
   solutionColor1: 'rgb(255, 0, 0)',
   solutionColor2: 'rgb(237, 244, 33)',
   wrongColor1: 'rgb(177, 10, 136, 1)',
@@ -36,7 +35,7 @@ const colorRounds = [
 {
   round: 3,
   name: 'cmyk',
-  targetColor: 'rgba(128, 128, 255, 1)',
+  targetColor: '#935691',
   solutionColor1: 'rgb(0, 255, 255)',
   solutionColor2: 'rgb(255, 0, 255)',
   wrongColor1: 'rgb(255,255,0)',
