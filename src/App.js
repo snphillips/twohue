@@ -53,6 +53,7 @@ const statechart = {
       onEntry: 'attemptN',
       on: {
         SELECT_COLOR: 'checkColor',
+        OUT_OF_ATTEMPTS: 'roundN',
       },
     },
     checkColor: {
@@ -118,7 +119,8 @@ const statechart = {
 }
 
 let maxRoundCount = 3
-let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']
+let maxAttemptCount = 6
+let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
 
 
 class App extends React.Component {
@@ -148,6 +150,8 @@ class App extends React.Component {
   this.props.transition('READY')
 }
 
+
+
 roundN(){
   console.log("Clearing attempts for new round")
   this.props.transition('INCREMENT_ROUND_COUNTER')
@@ -168,24 +172,47 @@ incrementRoundCounter() {
 }
 
 attemptN() {
-  console.log("attemptN()")
-  this.props.transition("CHECK_COLOR")
+  if (this.state.attempt < 6) {
+    console.log("attemptN()")
+    this.props.transition("CHECK_COLOR")
+  } else if (this.state.attempt > 6) {
+    console.log("OUT_OF_ATTEMPTS")
+    this.props.transition("OUT_OF_ATTEMPTS")
+  }
 }
 
+
 checkColor() {
-  console.log("this.state.attempt: ", this.state.attempt)
-  if (this.state.attempt < 1) {
+
+  let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  let solutionColor1 = this.state.colorRound.solutionColor1;
+  let solutionColor2 = this.state.colorRound.solutionColor2;
+
+  if ( (leftFieldBackgroundColor !== solutionColor1) ||
+       (leftFieldBackgroundColor !== solutionColor2) ||
+       (rightFieldBackgroundColor !== solutionColor1) ||
+       (rightFieldBackgroundColor !== solutionColor2) )
+  {
     this.setState({attempt: (this.state.attempt + 1)})
     this.props.transition("INCORRECT_COLOR_GUESS")
-    console.log("checking color- hard coded INCORRECT_GUESS")
-  } else {
+    console.log("INCORRECT_COLOR_GUESS yours guess is: ", leftFieldBackgroundColor, rightFieldBackgroundColor )
+
+  } else if ( (leftFieldBackgroundColor == solutionColor1) ||
+              (leftFieldBackgroundColor == solutionColor2) ||
+              (rightFieldBackgroundColor == solutionColor1) ||
+              (rightFieldBackgroundColor == solutionColor2) )
+
+  {
     this.setState({attempt: (this.state.attempt + 1)})
     console.log("check color guess - hardcoded correct for now")
     this.props.transition("CORRECT_COLOR_GUESS")
   }
 }
 
- colorGuessCorrect() {
+
+
+colorGuessCorrect() {
   console.log("Correct color guess")
   this.props.transition("CORRECT_GUESS_FEEDBACK")
  }
@@ -196,16 +223,39 @@ colorGuessIncorrect() {
  }
 
 
-
 checkSolution() {
+
+  let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  let solutionColor1 = this.state.colorRound.solutionColor1;
+  let solutionColor2 = this.state.colorRound.solutionColor2;
+
+
   if (this.state.attempt <= 1) {
     console.log("There has only been one guess. There can't be a solution.")
     this.props.transition("INCORRECT_SOLUTION")
-  } else {
+  } else if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
+        ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) &&
+        ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
+     )
+  {
     console.log("check solution - hardcoded correct for now")
     this.props.transition("CORRECT_SOLUTION")
-  }
+    // this.playWinSound();
+  } else if (  (this.state.attempt > 1) &&
+    ((leftFieldBackgroundColor !== solutionColor1) ||
+    (leftFieldBackgroundColor !== solutionColor2)) &&
+    ((rightFieldBackgroundColor !== solutionColor1) ||
+    (rightFieldBackgroundColor !== solutionColor2))
+    ) {
+        this.props.transition("INCORRECT_SOLUTION")
+      }
+
+
  }
+
+
+
 
 
 playerWinsRound() {
@@ -224,6 +274,16 @@ playerLoosesRound() {
  }
 }
 
+playerWinsRoundFinalRound() {
+  console.log("player wins final round")
+  this.props.transition("NO_MORE_ROUNDS")
+}
+
+playerLoosesRoundFinalRound() {
+  console.log("player looses final round")
+  this.props.transition("NO_MORE_ROUNDS")
+}
+
 gameOver() {
   console.log("game over")
   this.setState({attempt: 0})
@@ -231,13 +291,12 @@ gameOver() {
 }
 // ***********************************
 
+
 //  ====================================
 //  Toggling between the left and right fields, to determine which
 //  one will get filled in with color.
 //  =====================================
 toggleLeftRightField = () => {
-
-  console.log("OKOK")
   if (this.state.currentField === "leftField") {
     this.setState({'currentField': "rightField"})
     this.setState({'currentFieldHover': "rightField"})
@@ -256,8 +315,6 @@ toggleLeftRightField = () => {
   // The first lines below are guard clauses. They turns off the click
   // handler so that nothing happens if bubbles are clicked after the round
   // is over or the game is over.
-  // if (this.state.playerPickCount > maxPlayerPick) {return}
-  // if (this.state.playAgainButton.display === true) {return}
   // if (this.state.isWinningSolution === true) {return}
 
   // this.bubbleSound();
@@ -268,9 +325,6 @@ toggleLeftRightField = () => {
   // whatever background color the clicked color bubble has, and applies that to
   // the color field in questions
   this.updateFieldColor(event.currentTarget.style.backgroundColor);
-
-  // if (this.state.practice === true) {return}
-  // this.playerPickIncrease();
   // this.isOutOfPicksShowSolution();
 };
 
@@ -401,11 +455,3 @@ updateFieldColor(color){
 
 export default withStateMachine(statechart)(App)
 
-
-
-
-            // <section className="target-swatch">&nbsp;</section>
-            // <section id="left-and-right-field">
-            //   <span className="field left-field">&nbsp;</span>
-            //   <span className="field right-field">&nbsp;</span>
-            // </section>
