@@ -53,7 +53,7 @@ const statechart = {
       onEntry: 'attemptN',
       on: {
         SELECT_COLOR: 'checkColor',
-        OUT_OF_ATTEMPTS: 'roundN',
+        OUT_OF_ATTEMPTS: 'playerLoosesRound',
       },
     },
     checkColor: {
@@ -175,7 +175,7 @@ attemptN() {
   if (this.state.attempt < 6) {
     console.log("attemptN()")
     this.props.transition("CHECK_COLOR")
-  } else if (this.state.attempt > 6) {
+  } else if (this.state.attempt >= 6) {
     console.log("OUT_OF_ATTEMPTS")
     this.props.transition("OUT_OF_ATTEMPTS")
   }
@@ -189,36 +189,48 @@ checkColor() {
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
 
-  if ( (leftFieldBackgroundColor !== solutionColor1) ||
+  // Correct guess
+  if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
+        ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) ||
+        ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2)) )
+  {
+    this.setState({attempt: (this.state.attempt + 1)})
+    this.props.transition("CORRECT_COLOR_GUESS")
+    console.log("CORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+  }
+  // Incorrect color guess, only one turn
+  else if ( (leftFieldBackgroundColor !== solutionColor1) ||
        (leftFieldBackgroundColor !== solutionColor2) ||
        (rightFieldBackgroundColor !== solutionColor1) ||
        (rightFieldBackgroundColor !== solutionColor2) )
-  {
-    this.setState({attempt: (this.state.attempt + 1)})
-    this.props.transition("INCORRECT_COLOR_GUESS")
-    console.log("INCORRECT_COLOR_GUESS yours guess is: ", leftFieldBackgroundColor, rightFieldBackgroundColor )
+    {
+      this.setState({attempt: (this.state.attempt + 1)})
+      this.props.transition("INCORRECT_COLOR_GUESS")
+      console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
 
-  } else if ( (leftFieldBackgroundColor == solutionColor1) ||
-              (leftFieldBackgroundColor == solutionColor2) ||
-              (rightFieldBackgroundColor == solutionColor1) ||
-              (rightFieldBackgroundColor == solutionColor2) )
+    }
+  // Incorrect color guess
+  else if ( (leftFieldBackgroundColor !== solutionColor1) ||
+       (leftFieldBackgroundColor !== solutionColor2) ||
+       (rightFieldBackgroundColor !== solutionColor1) ||
+       (rightFieldBackgroundColor !== solutionColor2) )
+    {
+      this.setState({attempt: (this.state.attempt + 1)})
+      this.props.transition("INCORRECT_COLOR_GUESS")
+      console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
 
-  {
-    this.setState({attempt: (this.state.attempt + 1)})
-    console.log("check color guess - hardcoded correct for now")
-    this.props.transition("CORRECT_COLOR_GUESS")
-  }
+    }
 }
 
 
 
 colorGuessCorrect() {
-  console.log("Correct color guess")
+  console.log("CORRECT_GUESS_FEEDBACK")
   this.props.transition("CORRECT_GUESS_FEEDBACK")
  }
 
 colorGuessIncorrect() {
-  console.log("Incorrect color guess")
+  console.log("INCORRECT_GUESS_FEEDBACK - moving to checkSolution")
   this.props.transition("INCORRECT_GUESS_FEEDBACK")
  }
 
@@ -239,7 +251,7 @@ checkSolution() {
         ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
      )
   {
-    console.log("check solution - hardcoded correct for now")
+    console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
     // this.playWinSound();
   } else if (  (this.state.attempt > 1) &&
@@ -368,16 +380,17 @@ updateFieldColor(color){
           <p>Welcome to twohue, a color mixing game. Practice clicking bubbles before starting.</p>
         </State>
 
-
         <State is={['attemptN']}>
           <p>Select a color</p>
         </State>
 
-
         <State is={['attemptFinal']}>
-          <p>final attempt message.</p>
+          <p>One last guess remaining</p>
         </State>
 
+        <State is={['colorGuessIncorrect']}>
+          <p>Incorrect guess</p>
+        </State>
 
         <State is={['gameOver']}>
           <p>game over</p>
