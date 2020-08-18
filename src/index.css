@@ -21,9 +21,11 @@ code {
   box-sizing: border-box;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 2rem auto;
   background-color: #fff;
   padding: 1rem;
+  border-top: 5px solid #ebedef;
+
 }
 
 button {
@@ -117,6 +119,8 @@ footer {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
+  border-top: 5px solid #ebedef;
+  padding-top: .5rem;
 }
 
 .footer-link {

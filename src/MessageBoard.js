@@ -15,7 +15,8 @@ export default class MessageBoard extends Component {
 
         <State is={['homeScreenPractice']}>
           <p>Welcome to twohue, a color mixing game.</p>
-          <p>Practice clicking bubbles before starting.</p>
+          <p>The aim is to chooose two colors that mix to create the target color.</p>
+          <p>Practice clicking bubbles before playing.</p>
         </State>
 
         <State is={['attemptN']}>

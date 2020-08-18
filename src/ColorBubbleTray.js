@@ -12,6 +12,8 @@ export default class ColorBubbleTray extends Component {
         <div className="bubble"
              id="bubble00"
              style={{'backgroundColor': this.props.colorRound.allColorBubbles[0]}}
+             onMouseEnter={this.props.currentFieldMouseEnter}
+             onMouseLeave={this.props.currentFieldMouseLeave}
              onClick={ (event) => {
               this.props.bubbleClickHandler(event)
             }}>

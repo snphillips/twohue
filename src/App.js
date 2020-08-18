@@ -151,6 +151,8 @@ class App extends React.Component {
   // This binding is necessary to make `this` work in the callback
   this.updateFieldColor = this.updateFieldColor.bind(this)
   this.muteButtonToggle = this.muteButtonToggle.bind(this)
+  this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
+  this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
 }
 
 
@@ -314,6 +316,43 @@ gameOver() {
 // ***********************************
 
 
+//  ==================================================================
+//  Hover handler for color bubbles - shows player which field of the
+//  two fields is currently active. Note: we have to set the backgroundColor
+//  otherwise it will revert to none.
+//  Leave the commented out lines in for now....we may need them in future.
+//  ==================================================================
+currentFieldMouseEnter(){
+if (this.state.currentField === 'leftField'){
+this.setState({'leftField': {
+  "border": "8px solid #abb2b9",
+  "backgroundColor": "this.color",
+}});
+
+
+  } else {
+    this.setState({'rightField':{
+      "border": "8px solid #abb2b9",
+      "backgroundColor": "this.color",
+    }});
+  }
+};
+
+currentFieldMouseLeave(){
+  if (this.state.currentField === 'leftField'){
+    this.setState({'leftField': {
+      "border": "3px solid #abb2b9",
+      "backgroundColor": "this.color"
+    }});
+  } else {
+    this.setState({'rightField':{
+      "border": "3px solid #abb2b9",
+      "backgroundColor": "this.color"
+    }});
+  }
+};
+
+
 //  ====================================
 //  Toggling between the left and right fields, to determine which
 //  one will get filled in with color.
@@ -455,14 +494,13 @@ gameOverChimes() {
 
         <Header/>
 
+
+          <div id="game-field">
+
         <MessageBoard round={this.state.round}
                       attempt={this.state.attempt}
                       transition={this.props.transition}
                       />
-
-
-
-          <div id="game-field">
 
             <GameField colorRound={this.state.colorRound}
                        currentField={this.state.currentField}
@@ -478,6 +516,8 @@ gameOverChimes() {
                              currentField={this.state.currentField}
                              leftField={this.state.leftField}
                              rightField={this.state.rightField}
+                             currentFieldMouseEnter={this.currentFieldMouseEnter}
+                             currentFieldMouseLeave={this.currentFieldMouseLeave}
                              bubbleClickHandler={this.bubbleClickHandler}
                              />
 
