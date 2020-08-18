@@ -9,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-repeat: repeat;
   /*background-image: url("/images/struckaxiom/struckaxiom.png");*/
-  background-color: #f1f1f1;
+  /*background-color: #f1f1f1;*/
 }
 
 code {
@@ -27,7 +27,10 @@ code {
 }
 
 button {
-  display: block;
+  display: inline-block;
+  border: none;
+  border-radius: 25px;
+  padding: .5rem 1.5rem;
 }
 
 h1 {
@@ -65,7 +68,7 @@ section#left-and-right-field {
   justify-content: center;
   margin: 0 auto;
   /*border: 1px solid red;*/
-  height: 11rem;
+  height: 15rem;
 }
 
 
@@ -73,8 +76,8 @@ section#left-and-right-field {
   box-sizing: border-box;
   opacity: .5;
   border: 3px solid #abb2b9;
-  width: 12rem;
-  height: 12rem;
+  width: 16rem;
+  height: 16rem;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
   border-radius: 50%;
@@ -110,26 +113,16 @@ section#left-and-right-field {
   opacity: .7;
 }
 
-#bubble00 {
-  /*background-color: red;*/
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
 }
 
-#bubble01 {
-  /*background-color: orange;*/
-}
-
-#bubble02 {
-  /*background-color: yellow;*/
-}
-
-#bubble03 {
-  /*background-color: green;*/
-}
-
-#bubble04 {
-  /*background-color: blue;*/
-}
-
-#bubble05 {
-  /*background-color: purple;*/
+.footer-link {
+  margin-top: 10px;
+  position: relative;
+  bottom: 0;
+  color: #999;
+  text-decoration: none;
 }

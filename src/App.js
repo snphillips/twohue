@@ -3,9 +3,10 @@ import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
 // import ColorBubbleTray from './ColorBubbleTray'
 import Header from './Header';
-import Footer from './Footer';
+import Byline from './Byline';
 import colorRounds from './ColorRoundsArray';
 import GameField from './GameField';
+import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 // Howler manages the sound effects
 import {Howl} from 'howler';
@@ -95,6 +96,12 @@ const statechart = {
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
+        SHOW_SOLUTION: 'solution'
+      },
+    },
+    solution: {
+      onEntry: 'solution',
+      on: {
         NEXT_ROUND: 'roundN'
       },
     },
@@ -136,11 +143,13 @@ class App extends React.Component {
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
-    rightField: {'backgroundColor': null}
+    rightField: {'backgroundColor': null},
+    isAudioOn: false,
   };
 
   // This binding is necessary to make `this` work in the callback
   this.updateFieldColor = this.updateFieldColor.bind(this)
+  this.muteButtonToggle = this.muteButtonToggle.bind(this)
 }
 
 
@@ -270,8 +279,6 @@ checkSolution() {
 
 
 
-
-
 playerWinsRound() {
   if (this.state.round < maxRoundCount) {
     console.log("player wins round")
@@ -321,7 +328,6 @@ toggleLeftRightField = () => {
 }
 
 
-
 //  ==================================================================
 //  Click handler for the color bubbles at bottom of screen
 //  ==================================================================
@@ -360,11 +366,33 @@ updateFieldColor(color){
   }
 };
 
+
+
+startSound(){
+  // A guard clause if the user has clicked the audio off
+  if (this.state.isAudioOn === false) {return}
+  const sound = new Howl({
+    src: ['/sound/finger-snap.wav']
+  });
+  sound.play()
+};
+
 //  ===========================
 //  Sound/audio that bubbles make upon clicking.
 //  There are two distinct sounds. One for the left, one for the right.
 //  ===========================
- bubbleSound(){
+
+
+//  Mute button toggle, if audio is on,
+//  the !(not) turns it off and vice versa
+   muteButtonToggle() {
+    this.setState(prevState => ({
+      isAudioOn: !prevState.isAudioOn
+    }));
+  }
+
+
+  bubbleSound(){
   // Using the Howler npm package for sound
   // a guard clause if the player has toggled sound to be off
   if (this.state.isAudioOn === false) {return}
@@ -426,10 +454,9 @@ gameOverChimes() {
 
         <Header/>
 
-        <hr/>
-
         <State is={['homeScreenPractice']}>
-          <p>Welcome to twohue, a color mixing game. Practice clicking bubbles before starting.</p>
+          <p>Welcome to twohue, a color mixing game.</p>
+          <p>Practice clicking bubbles before starting.</p>
         </State>
 
         <State is={['attemptN']}>
@@ -458,7 +485,7 @@ gameOverChimes() {
             this.props.transition('NEXT_ROUND')
             console.log('NEXT_ROUND')
           }}>
-            NEXT_ROUND
+            next round
           </button>
         </State>
 
@@ -467,7 +494,7 @@ gameOverChimes() {
           <button onClick={ () => {
             this.props.transition('START_GAME')
           }}>
-            START_GAME
+            start game
           </button>
         </State>
 
@@ -486,8 +513,6 @@ gameOverChimes() {
             DONT_PLAY_AGAIN
           </button>
         </State>
-
-        <State is="homeScreenPractice">practice round</State>
 
         <State is="loading">SPINNER</State>
 
@@ -511,7 +536,19 @@ gameOverChimes() {
 
          </div>
 
-         <Footer/>
+
+         <footer>
+
+           <Byline muteButtonToggle={this.muteButtonToggle}
+                   isAudioOn={this.state.isAudioOn}
+                   />
+
+
+           <AudioToggle muteButtonToggle={this.muteButtonToggle}
+                        isAudioOn={this.state.isAudioOn}
+                       />
+        </footer>
+
 
       </div>
     )
