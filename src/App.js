@@ -7,6 +7,8 @@ import Footer from './Footer';
 import colorRounds from './ColorRoundsArray';
 import GameField from './GameField';
 import ColorBubbleTray from './ColorBubbleTray';
+// Howler manages the sound effects
+import {Howl} from 'howler';
 
 
 
@@ -253,7 +255,7 @@ checkSolution() {
   {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
-    // this.playWinSound();
+    this.playWinSound();
   } else if (  (this.state.attempt > 1) &&
     ((leftFieldBackgroundColor !== solutionColor1) ||
     (leftFieldBackgroundColor !== solutionColor2)) &&
@@ -329,7 +331,7 @@ toggleLeftRightField = () => {
   // is over or the game is over.
   // if (this.state.isWinningSolution === true) {return}
 
-  // this.bubbleSound();
+  this.bubbleSound();
   this.props.transition('SELECT_COLOR');
   this.toggleLeftRightField();
   // The "event" is the click on a specific color bubble. The "currentTarget"
@@ -358,6 +360,56 @@ updateFieldColor(color){
   }
 };
 
+//  ===========================
+//  Sound/audio that bubbles make upon clicking.
+//  There are two distinct sounds. One for the left, one for the right.
+//  ===========================
+ bubbleSound(){
+  // Using the Howler npm package for sound
+  // a guard clause if the player has toggled sound to be off
+  if (this.state.isAudioOn === false) {return}
+    // a different sound if left or right field is active
+    if (this.state.currentField === "leftField") {
+      const sound = new Howl({
+      src: ['/sound/moogy73_perc14.wav']});
+      sound.play()
+
+    } else if (this.state.currentField === "rightField") {
+      const sound = new Howl({
+      src: ['/sound/moogy73_perc15.wav']});
+      sound.play()
+    }
+ };
+
+playWinSound(){
+  // a guard clause if the player has toggled sound to be off
+  if (this.state.isAudioOn === false) {return}
+  const sound = new Howl({
+    src: ['/sound/success.wav']
+  });
+  sound.play()
+};
+
+playLoseSound(){
+  // a guard clause if the player has toggled sound to be off
+  if (this.state.isAudioOn === false) {return}
+  const sound = new Howl({
+    src: ['/sound/descending.wav']
+  });
+  sound.play()
+};
+
+gameOverChimes() {
+    // A guard clause if the user has clicked the audio off
+  if (this.state.isAudioOn === false) {return}
+  const sound = new Howl({
+    src: ['/sound/windchimes.mp3']
+  });
+  sound.play()
+};
+
+
+
 
   handleClick = () => {
     this.props.transition('READY')
@@ -368,11 +420,11 @@ updateFieldColor(color){
     return (
       <div className="twohue">
 
-        <Header/>
-
         <p>
          machineState: {(this.props.machineState.value)}
         </p>
+
+        <Header/>
 
         <hr/>
 
