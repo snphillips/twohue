@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
 body {
   margin: 0;
@@ -10,11 +11,18 @@ body {
   background-repeat: repeat;
   /*background-image: url("/images/struckaxiom/struckaxiom.png");*/
   /*background-color: #f1f1f1;*/
+  /*background-color: #efefef;*/
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+p {
+  font-family: 'Alata', sans-serif;
+  margin-top: .75rem;
+  margin-bottom: .75rem;
 }
 
 .twohue {
@@ -25,15 +33,20 @@ code {
   background-color: #fff;
   padding: 1rem;
   border-top: 5px solid #ebedef;
-
 }
 
 button {
+  font-family: 'Alata', sans-serif;
   display: inline-block;
   border: none;
   border-radius: 25px;
   padding: .5rem 1.5rem;
 }
+
+button:hover {
+  background-color: #ccc;
+}
+
 
 h1 {
   font: 2.5rem 'Oleo Script', cursive;
@@ -41,6 +54,15 @@ h1 {
   text-align: left;
   margin-top: 4px;
   margin-bottom: 4px;
+}
+
+.message-board {
+  /*position: relative;*/
+  /*top: 245px;*/
+}
+
+.machine-state-indicator {
+  font-size: 11px;
 }
 
 
@@ -59,9 +81,31 @@ h1 {
   box-sizing: border-box;
   margin: 0 auto;
   border: 3px solid #abb2b9;
-  width: 5rem;
-  height: 5rem;
+  width: 5.5rem;
+  height: 5.5rem;
   border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.target-swatch .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #efefef;
+  color: #333;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  left: 30px;
+  z-index: 1;
+}
+
+.target-swatch:hover .tooltiptext {
+  visibility: visible;
 }
 
 section#left-and-right-field {
@@ -70,7 +114,7 @@ section#left-and-right-field {
   justify-content: center;
   margin: 0 auto;
   /*border: 1px solid red;*/
-  height: 15rem;
+  height: 13rem;
 }
 
 
@@ -78,8 +122,8 @@ section#left-and-right-field {
   box-sizing: border-box;
   opacity: .5;
   border: 3px solid #abb2b9;
-  width: 16rem;
-  height: 16rem;
+  width: 14rem;
+  height: 14rem;
   /*mix-blend-mode ensures the colors blend properly*/
   mix-blend-mode: multiply;
   border-radius: 50%;
@@ -113,6 +157,7 @@ section#left-and-right-field {
 .bubble:hover {
   animation: pop 0.4s linear 1;
   opacity: .7;
+  cursor: pointer;
 }
 
 footer {
@@ -125,8 +170,9 @@ footer {
 
 .footer-link {
   margin-top: 10px;
+  font-size: .75rem;
   position: relative;
   bottom: 0;
-  color: #999;
+  color: #666;
   text-decoration: none;
 }

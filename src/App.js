@@ -488,7 +488,7 @@ gameOverChimes() {
     return (
       <div className="twohue">
 
-        <p>
+        <p className="machine-state-indicator">
          machineState: {(this.props.machineState.value)}
         </p>
 
