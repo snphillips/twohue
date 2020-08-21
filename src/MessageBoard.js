@@ -31,11 +31,15 @@ export default class MessageBoard extends Component {
           <p>Incorrect guess</p>
         </State>
 
+        <State is={['showSolution']}>
+          <p>Solution</p>
+        </State>
+
         <State is={['gameOver']}>
           <p>game over</p>
         </State>
 
-        <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
+        <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
           <p>round: {this.props.round} /12</p>
           <p>attempt: {this.props.attempt} /6</p>
         </State>

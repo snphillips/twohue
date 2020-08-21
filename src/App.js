@@ -103,17 +103,18 @@ const statechart = {
     showSolution: {
       onEntry: 'showSolution',
       on: {
-        NEXT_ROUND: 'roundN'
+        NEXT_ROUND: 'roundN',
+        NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerWinsRoundFinalRound: {
-      onEntry: 'playerWinsRound',
+      onEntry: 'playerWinsRoundFinalRound',
       on: {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerLoosesRoundFinalRound: {
-      onEntry: 'playerLoosesRound',
+      onEntry: 'playerLoosesRoundFinalRound',
       on: {
         NO_MORE_ROUNDS: 'gameOver'
       },
@@ -300,6 +301,9 @@ playerLoosesRound() {
 
 
 showSolution() {
+  console.log("showSolution")
+
+
   this.setState({"leftField": {
     'backgroundColor': this.state.colorRound.solutionColor1,
     'animation': 'fadein 5.0s'
@@ -308,8 +312,21 @@ showSolution() {
     'backgroundColor': this.state.colorRound.solutionColor2,
     'animation': 'fadein 5.0s'
   }});
-};
 
+
+    let transition = () => {
+      this.props.transition('NEXT_ROUND')
+    }
+
+    setTimeout(function() {
+      console.log("setTimeout 2000")
+    //your code to be executed after 2 seconds
+    transition()
+    }, 2500);
+
+
+
+};
 
 
 
@@ -330,7 +347,10 @@ gameOver() {
   this.setState({attempt: 0})
   this.setState({round: 0})
 }
-// ***********************************
+// *********************************************************************
+// *********************************************************************
+// *********************************************************************
+// *********************************************************************
 
 
 //  ==================================================================
@@ -373,7 +393,7 @@ currentFieldMouseLeave(){
 //  ====================================
 //  Toggling between the left and right fields, to determine which
 //  one will get filled in with color.
-//  =====================================
+//  ====================================
 toggleLeftRightField = () => {
   if (this.state.currentField === "leftField") {
     this.setState({'currentField': "rightField"})
@@ -385,9 +405,9 @@ toggleLeftRightField = () => {
 }
 
 
-//  ==================================================================
+//  ===================================
 //  Click handler for the color bubbles at bottom of screen
-//  ==================================================================
+//  ===================================
  bubbleClickHandler = (event) =>  {
   // The first lines below are guard clauses. They turns off the click
   // handler so that nothing happens if bubbles are clicked after the round
@@ -405,10 +425,10 @@ toggleLeftRightField = () => {
 };
 
 
-//  ==================================================================
+//  ==================================
 //  Filling in chosen color into left or right fields,
 //  then checking if winning solution (as a callback function)
-//  ==================================================================
+//  ==================================
 updateFieldColor(color){
   if (this.state.currentField === 'leftField') {
     // console.log( this.state.currentField, this.color)
@@ -464,32 +484,32 @@ startSound(){
     }
  };
 
-playWinSound(){
-  // a guard clause if the player has toggled sound to be off
-  if (this.state.isAudioOn === false) {return}
-  const sound = new Howl({
-    src: ['/sound/success.wav']
-  });
-  sound.play()
-};
+  playWinSound(){
+    // a guard clause if the player has toggled sound to be off
+    if (this.state.isAudioOn === false) {return}
+    const sound = new Howl({
+      src: ['/sound/success.wav']
+    });
+    sound.play()
+  };
 
-playLoseSound(){
-  // a guard clause if the player has toggled sound to be off
-  if (this.state.isAudioOn === false) {return}
-  const sound = new Howl({
-    src: ['/sound/descending.wav']
-  });
-  sound.play()
-};
+  playLoseSound(){
+    // a guard clause if the player has toggled sound to be off
+    if (this.state.isAudioOn === false) {return}
+    const sound = new Howl({
+      src: ['/sound/descending.wav']
+    });
+    sound.play()
+  };
 
-gameOverChimes() {
-    // A guard clause if the user has clicked the audio off
-  if (this.state.isAudioOn === false) {return}
-  const sound = new Howl({
-    src: ['/sound/windchimes.mp3']
-  });
-  sound.play()
-};
+  gameOverChimes() {
+      // A guard clause if the user has clicked the audio off
+    if (this.state.isAudioOn === false) {return}
+    const sound = new Howl({
+      src: ['/sound/windchimes.mp3']
+    });
+    sound.play()
+  };
 
 
 
