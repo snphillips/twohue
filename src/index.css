@@ -41,6 +41,7 @@ button {
   border: none;
   border-radius: 25px;
   padding: .5rem 1.5rem;
+  transition:  background-color .5s;
 }
 
 button:hover {
@@ -158,6 +159,11 @@ section#left-and-right-field {
   animation: pop 0.4s linear 1;
   opacity: .7;
   cursor: pointer;
+}
+
+/*Revealing the solution animation*/
+@keyframes fadein {
+  from {opacity:0} to {opacity:.5}
 }
 
 footer {

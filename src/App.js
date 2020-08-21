@@ -97,11 +97,11 @@ const statechart = {
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
-        SHOW_SOLUTION: 'solution'
+        SHOW_SOLUTION: 'showSolution'
       },
     },
-    solution: {
-      onEntry: 'solution',
+    showSolution: {
+      onEntry: 'showSolution',
       on: {
         NEXT_ROUND: 'roundN'
       },
@@ -153,6 +153,7 @@ class App extends React.Component {
   this.muteButtonToggle = this.muteButtonToggle.bind(this)
   this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
   this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
+  this.showSolution = this.showSolution.bind(this)
 }
 
 
@@ -277,10 +278,7 @@ checkSolution() {
         this.props.transition("INCORRECT_SOLUTION")
       }
 
-
  }
-
-
 
 playerWinsRound() {
   if (this.state.round < maxRoundCount) {
@@ -294,9 +292,28 @@ playerLoosesRound() {
   if (this.state.round < maxRoundCount) {
    console.log("player looses round")
    // commented out b/c currently this action is happening within the button click
-   // this.props.transition('NEXT_ROUND')
+   this.props.transition('SHOW_SOLUTION')
  }
 }
+
+
+
+
+showSolution() {
+  this.setState({"leftField": {
+    'backgroundColor': this.state.colorRound.solutionColor1,
+    'animation': 'fadein 5.0s'
+  }});
+  this.setState({"rightField": {
+    'backgroundColor': this.state.colorRound.solutionColor2,
+    'animation': 'fadein 5.0s'
+  }});
+};
+
+
+
+
+
 
 playerWinsRoundFinalRound() {
   console.log("player wins final round")
@@ -385,7 +402,6 @@ toggleLeftRightField = () => {
   // whatever background color the clicked color bubble has, and applies that to
   // the color field in questions
   this.updateFieldColor(event.currentTarget.style.backgroundColor);
-  // this.isOutOfPicksShowSolution();
 };
 
 
@@ -405,7 +421,6 @@ updateFieldColor(color){
       )
   }
 };
-
 
 
 startSound(){
@@ -549,72 +564,4 @@ export default withStateMachine(statechart)(App)
 
 
 
-
-
-
-
-
-      //   <section className="message-board">
-
-      //   <State is={['homeScreenPractice']}>
-      //     <p>Welcome to twohue, a color mixing game.</p>
-      //     <p>Practice clicking bubbles before starting.</p>
-      //   </State>
-
-      //   <State is={['attemptN']}>
-      //     <p>Select a color</p>
-      //   </State>
-
-      //   <State is={['attemptFinal']}>
-      //     <p>One last guess remaining</p>
-      //   </State>
-
-      //   <State is={['colorGuessIncorrect']}>
-      //     <p>Incorrect guess</p>
-      //   </State>
-
-      //   <State is={['gameOver']}>
-      //     <p>game over</p>
-      //   </State>
-
-      //   <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-      //     <p>round: {this.state.round} /12</p>
-      //     <p>attempt: {this.state.attempt} /6</p>
-      //   </State>
-
-      //   <State is={['playerWinsRound', 'playerLoosesRound']}>
-      //     <button onClick={ () => {
-      //       this.props.transition('NEXT_ROUND')
-      //       console.log('NEXT_ROUND')
-      //     }}>
-      //       next round
-      //     </button>
-      //   </State>
-
-
-      //   <State is={['homeScreenPractice']}>
-      //     <button onClick={ () => {
-      //       this.props.transition('START_GAME')
-      //     }}>
-      //       start game
-      //     </button>
-      //   </State>
-
-      //   <State is={['gameOver']}>
-      //     <button onClick={ () => {
-      //       this.props.transition('PLAY_AGAIN')
-      //     }}>
-      //       play again
-      //     </button>
-      //   </State>
-
-      //   <State is={['gameOver']}>
-      //     <button onClick={ () => {
-      //       this.props.transition('DONT_PLAY_AGAIN')
-      //     }}>
-      //       don't play again
-      //     </button>
-      //   </State>
-
-      // </section>
 
