@@ -5,17 +5,14 @@ import { Action, withStateMachine, State } from 'react-automata'
 
 
 
-
-
 export default class MessageBoard extends Component {
   render() {
     return (
 
-        <section className="message-board">
+      <section className="message-board">
 
         <State is={['homeScreenPractice']}>
           <p>Twohue is a color mixing game.</p>
-          <p>Win by chooose two colors that create the target color when mixed.</p>
           <p>Practice clicking bubbles before playing.</p>
         </State>
 
@@ -73,7 +70,7 @@ export default class MessageBoard extends Component {
           </button>
         </State>
 
-      </section>
+    </section>
 
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MessageBoard from './MessageBoard';
 import ScoreBoard from './ScoreBoard';
+import Title from './Title';
 
 export default class Header extends Component {
   render() {
@@ -8,9 +9,7 @@ export default class Header extends Component {
 
   <header>
 
-    <section>
-      <h1 className="app-title">twohue</h1>
-    </section>
+    <Title />
 
     <MessageBoard
       transition={this.props.transition}

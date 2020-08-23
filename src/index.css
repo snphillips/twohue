@@ -75,16 +75,21 @@ h1 {
 header {
   display: flex;
   justify-content: space-between;
-  min-height: 108px;
+  align-items: center;
+  max-height: 168px;
   margin-bottom: 2rem;
   border-top: 5px solid #ebedef;
   border-bottom: 5px solid #ebedef;
   padding: .5rem 0;
 }
 
-header > section {
+
+.title,
+.message-board,
+.score-board {
+  display: flex;
+  flex-direction: column;
   padding-right: 2rem;
-  /*border: 1px solid red;*/
 }
 
 
