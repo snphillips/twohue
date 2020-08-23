@@ -172,6 +172,7 @@ resetScore(){
 
 roundN(){
   console.log("Clearing attempts for new round")
+  this.setState({confettiFalling: false})
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
 }
