@@ -526,6 +526,9 @@ startSound(){
 
         <Header
           transition={this.props.transition}
+          round={this.state.round}
+          attempt={this.state.attempt}
+          score={this.state.score}
           />
 
 
