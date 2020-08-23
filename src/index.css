@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -21,18 +25,16 @@ code {
 
 p {
   font-family: 'Alata', sans-serif;
-  margin-top: .75rem;
-  margin-bottom: .75rem;
+  margin-top: .25rem;
+  margin-bottom: .25rem;
 }
 
 .twohue {
-  box-sizing: border-box;
   width: 100%;
   max-width: 600px;
   margin: 2rem auto;
   background-color: #fff;
   padding: 1rem;
-  border-top: 5px solid #ebedef;
 }
 
 button {
@@ -73,7 +75,11 @@ h1 {
 header {
   display: flex;
   justify-content: space-between;
+  min-height: 108px;
   margin-bottom: 2rem;
+  border-top: 5px solid #ebedef;
+  border-bottom: 5px solid #ebedef;
+  padding: .5rem 0;
 }
 
 header > section {

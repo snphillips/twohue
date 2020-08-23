@@ -47,7 +47,7 @@ const colorRounds = [
 {
   round: 4,
   name: 'cmyk',
-  targetColor: '#935691',
+  targetColor: '#b397fc',
   solutionColor1: 'rgb(0, 255, 255)',
   solutionColor2: 'rgb(255, 0, 255)',
   wrongColor1: 'rgb(255,255,0)',

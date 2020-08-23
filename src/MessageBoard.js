@@ -14,8 +14,8 @@ export default class MessageBoard extends Component {
         <section className="message-board">
 
         <State is={['homeScreenPractice']}>
-          <p>Welcome to twohue, a color mixing game.</p>
-          <p>Your goal: chooose two colors that when mixed, create the target color.</p>
+          <p>Twohue is a color mixing game.</p>
+          <p>Win by chooose two colors that create the target color when mixed.</p>
           <p>Practice clicking bubbles before playing.</p>
         </State>
 
@@ -53,7 +53,7 @@ export default class MessageBoard extends Component {
           <button onClick={ () => {
             this.props.transition('START_GAME')
           }}>
-            start game
+            start
           </button>
         </State>
 
