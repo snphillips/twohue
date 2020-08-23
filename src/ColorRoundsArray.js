@@ -8,16 +8,16 @@ import Chroma from 'chroma-js';
 const colorRounds = [
 {
   round: 1,
-  name: 'purple',
-  targetColor: '#8858c5',
+  name: 'practice-orange',
+  targetColor: '#f99356',
   solutionColor1: 'rgb(255, 0, 0)',
-  solutionColor2: 'rgb(0, 0, 255)',
+  solutionColor2: 'rgb(237, 244, 33)',
   wrongColor1: 'rgb(177, 10, 136, 1)',
   wrongColor2: 'rgb(10, 177, 53, 1)',
   wrongColor3: 'rgb(237, 244, 33, 1)',
   wrongColor4: 'rgb(203, 107, 5, 1)',
   allColorBubbles: [ 'rgb(255, 0, 0)', 'rgb(0, 0, 255)', 'rgb(177, 10, 136)',
-  'rgb(10, 177, 53)', 'rgb(237, 244, 31)', 'rgb(203, 107, 5)'],
+  'rgb(10, 177, 53)', 'rgb(237, 244, 33)', 'rgb(203, 107, 5)'],
 },
 {
   round: 2,
@@ -34,6 +34,19 @@ const colorRounds = [
 },
 {
   round: 3,
+  name: 'purple',
+  targetColor: '#a35791',
+  solutionColor1: 'rgb(255, 0, 0)',
+  solutionColor2: 'rgb(0, 0, 255)',
+  wrongColor1: 'rgb(177, 10, 136, 1)',
+  wrongColor2: 'rgb(10, 177, 53, 1)',
+  wrongColor3: 'rgb(237, 244, 33, 1)',
+  wrongColor4: 'rgb(203, 107, 5, 1)',
+  allColorBubbles: [ 'rgb(255, 0, 0)', 'rgb(0, 0, 255)', 'rgb(177, 10, 136)',
+  'rgb(10, 177, 53)', 'rgb(237, 244, 33)', 'rgb(203, 107, 5)'],
+},
+{
+  round: 4,
   name: 'cmyk',
   targetColor: '#935691',
   solutionColor1: 'rgb(0, 255, 255)',
@@ -46,7 +59,7 @@ const colorRounds = [
   'rgb(255, 0, 0)', 'rgb(0, 0, 0)', 'rgb(0,255,0)'],
 },
 {
-  round: 4,
+  round: 5,
   name: 'cmyk2-purple',
   targetColor: 'rgba(128,64,128, 1)',
   solutionColor1: 'rgb(0, 0, 0)',
@@ -59,7 +72,7 @@ const colorRounds = [
   'rgb(255, 0, 0)', 'rgb(0, 0, 0)', 'rgb(0,255,0)'],
 },
 {
-  round: 5,
+  round: 6,
   name: 'lime green',
   targetColor: 'rgba(125, 202, 84, 1)',
   solutionColor1: 'rgb(245, 248, 23)',
@@ -72,7 +85,7 @@ const colorRounds = [
   'rgb(14, 229, 136)', 'rgb(158,  237, 81)', 'rgb(223,  171, 12)'],
 },
 {
-  round: 6,
+  round: 7,
   name: 'blue',
   targetColor: 'rgba(93, 124, 251, 1)',
   solutionColor1: 'rgb(112, 3, 251)',
@@ -85,7 +98,7 @@ const colorRounds = [
   'rgb(37, 3, 251)', 'rgb(78, 122, 209)', 'rgb(133, 203, 245)'],
 },
 {
-  round: 7,
+  round: 8,
   name: 'pinky',
   targetColor: 'rgb(244, 118, 150)',
   solutionColor1: 'rgb(239, 37, 58)',
@@ -98,7 +111,7 @@ const colorRounds = [
   'rgb(169, 106, 235)', 'rgb(236, 93, 139)', 'rgb(111, 37, 239)'],
 },
 {
-  round: 8,
+  round: 9,
   name: 'fawn',
   targetColor: 'rgb(207, 181, 95)',
   solutionColor1: 'rgb(174, 131, 68)',
@@ -111,7 +124,7 @@ const colorRounds = [
   'rgb(176, 209, 28)', 'rgb(247, 243, 214)', 'rgb(148, 104, 16 )'],
 },
 {
-  round: 9,
+  round: 10,
   name: 'rose',
   targetColor: 'rgb(144, 112, 153)',
   solutionColor1: 'rgb(122, 22, 75)',
@@ -124,7 +137,7 @@ const colorRounds = [
   'rgb(22, 22, 75)', 'rgb(19, 15, 25)', 'rgb(175, 74, 127)'],
 },
 {
-  round: 10,
+  round: 11,
   name: 'green-gray',
   targetColor: 'rgba(157, 161, 154, 1)',
   solutionColor1: 'rgb(180, 123, 112)',

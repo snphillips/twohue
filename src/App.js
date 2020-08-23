@@ -84,8 +84,6 @@ const statechart = {
       on: {
         CORRECT_SOLUTION: 'playerWinsRound',
         INCORRECT_SOLUTION: 'attemptN',
-        CORRECT_SOLUTION_NO_MORE_ROUNDS: 'playerWinsRoundFinalRound',
-        INCORRECT_SOLUTION_NO_MORE_ROUNDS: 'playerLoosesRoundFinalRound',
       },
     },
     playerWinsRound: {
@@ -107,18 +105,12 @@ const statechart = {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
-    playerWinsRoundFinalRound: {
-      onEntry: 'playerWinsRoundFinalRound',
-      on: {
-        NO_MORE_ROUNDS: 'gameOver'
-      },
-    },
-    playerLoosesRoundFinalRound: {
-      onEntry: 'playerLoosesRoundFinalRound',
-      on: {
-        NO_MORE_ROUNDS: 'gameOver'
-      },
-    },
+    // playerWinsRoundFinalRound: {
+    //   onEntry: 'playerWinsRoundFinalRound',
+    //   on: {
+    //     NO_MORE_ROUNDS: 'gameOver'
+    //   },
+    // },
     gameOver: {
       onEntry: 'gameOver',
       on: {
@@ -141,6 +133,7 @@ class App extends React.Component {
   this.state = {
     round: 0,
     attempt: 0,
+    score: 0,
     colorRound: colorRounds[0],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
@@ -282,6 +275,7 @@ checkSolution() {
  }
 
 playerWinsRound() {
+  this.setState({score: (this.state.score + 1)})
   if (this.state.round < maxRoundCount) {
     console.log("player wins round")
     // commented out b/c currently this action is happening within the button click
@@ -315,21 +309,24 @@ showSolution() {
 
 
     let transition = () => {
-      this.props.transition('NEXT_ROUND')
+      if (this.state.round < maxRoundCount) {
+        console.log(`this.props.transition('NEXT_ROUND')`)
+        this.props.transition('NEXT_ROUND')
+      } else if (this.state.round === maxRoundCount) {
+        console.log(`this.props.transition('NO_MORE_ROUNDS')`)
+        this.props.transition('NO_MORE_ROUNDS')
+      } else {
+        console.log("bananarama")
+      }
     }
 
     setTimeout(function() {
       console.log("setTimeout 2000")
     //your code to be executed after 2 seconds
     transition()
-    }, 2500);
-
-
+    }, 3000);
 
 };
-
-
-
 
 
 playerWinsRoundFinalRound() {
@@ -534,6 +531,7 @@ startSound(){
 
         <MessageBoard round={this.state.round}
                       attempt={this.state.attempt}
+                      score={this.state.score}
                       transition={this.props.transition}
                       />
 
