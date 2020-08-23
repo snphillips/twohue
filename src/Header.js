@@ -19,6 +19,7 @@ export default class Header extends Component {
       round={this.props.round}
       attempt={this.props.attempt}
       score={this.props.score}
+      transition={this.props.transition}
       />
 
   </header>

@@ -46,7 +46,7 @@ const colorRounds = [
 },
 {
   round: 4,
-  name: 'cmyk',
+  name: 'cmyk-01',
   targetColor: '#b397fc',
   solutionColor1: 'rgb(0, 255, 255)',
   solutionColor2: 'rgb(255, 0, 255)',
@@ -59,7 +59,7 @@ const colorRounds = [
 },
 {
   round: 5,
-  name: 'cmyk2-purple',
+  name: 'cmyk2-02',
   targetColor: 'rgba(128,64,128, 1)',
   solutionColor1: 'rgb(0, 0, 0)',
   solutionColor2: 'rgb(255, 0, 255)',
@@ -72,6 +72,19 @@ const colorRounds = [
 },
 {
   round: 6,
+  name: 'cmyk2-green',
+  targetColor: '#acfc97',
+  solutionColor1: 'rgb(0, 255, 255)',
+  solutionColor2: 'rgb(255,255,0)',
+  wrongColor1: 'rgb(255, 0, 255)',
+  wrongColor2: 'rgb(255, 0, 0)',
+  wrongColor3: 'rgb(0, 0, 0)',
+  wrongColor4: 'rgb(0,255,0)',
+  allColorBubbles: ['rgb(0, 255, 255)', 'rgb(255, 0, 255)', 'rgb(255,255,0)',
+  'rgb(255, 0, 0)', 'rgb(0, 0, 0)', 'rgb(0,255,0)'],
+},
+{
+  round: 7,
   name: 'lime green',
   targetColor: 'rgba(125, 202, 84, 1)',
   solutionColor1: 'rgb(245, 248, 23)',
@@ -84,7 +97,7 @@ const colorRounds = [
   'rgb(14, 229, 136)', 'rgb(158,  237, 81)', 'rgb(223,  171, 12)'],
 },
 {
-  round: 7,
+  round: 8,
   name: 'blue',
   targetColor: 'rgba(93, 124, 251, 1)',
   solutionColor1: 'rgb(112, 3, 251)',
@@ -97,7 +110,7 @@ const colorRounds = [
   'rgb(37, 3, 251)', 'rgb(78, 122, 209)', 'rgb(133, 203, 245)'],
 },
 {
-  round: 8,
+  round: 9,
   name: 'pinky',
   targetColor: 'rgb(244, 118, 150)',
   solutionColor1: 'rgb(239, 37, 58)',
@@ -110,7 +123,7 @@ const colorRounds = [
   'rgb(169, 106, 235)', 'rgb(236, 93, 139)', 'rgb(111, 37, 239)'],
 },
 {
-  round: 9,
+  round: 10,
   name: 'fawn',
   targetColor: 'rgb(207, 181, 95)',
   solutionColor1: 'rgb(174, 131, 68)',
@@ -123,7 +136,7 @@ const colorRounds = [
   'rgb(176, 209, 28)', 'rgb(247, 243, 214)', 'rgb(148, 104, 16 )'],
 },
 {
-  round: 10,
+  round: 11,
   name: 'rose',
   targetColor: 'rgb(144, 112, 153)',
   solutionColor1: 'rgb(122, 22, 75)',
@@ -136,7 +149,7 @@ const colorRounds = [
   'rgb(22, 22, 75)', 'rgb(19, 15, 25)', 'rgb(175, 74, 127)'],
 },
 {
-  round: 11,
+  round: 12,
   name: 'green-gray',
   targetColor: 'rgba(157, 161, 154, 1)',
   solutionColor1: 'rgb(180, 123, 112)',

@@ -46,13 +46,6 @@ export default class MessageBoard extends Component {
         </State>
 
 
-        <State is={['homeScreenPractice']}>
-          <button onClick={ () => {
-            this.props.transition('START_GAME')
-          }}>
-            start
-          </button>
-        </State>
 
         <State is={['gameOver']}>
           <button onClick={ () => {

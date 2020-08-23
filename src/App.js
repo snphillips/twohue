@@ -121,7 +121,7 @@ const statechart = {
   }
 }
 
-let maxRoundCount = 3
+let maxRoundCount = 12
 let maxAttemptCount = 6
 let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
 
