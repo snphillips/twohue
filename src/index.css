@@ -27,6 +27,7 @@ p {
   font-family: 'Alata', sans-serif;
   margin-top: .25rem;
   margin-bottom: .25rem;
+  text-align: center;
 }
 
 .twohue {
@@ -55,8 +56,6 @@ h1 {
   font: 2.5rem 'Oleo Script', cursive;
   color: #a6a6a6;
   text-align: left;
-  margin-top: 4px;
-  margin-bottom: 4px;
 }
 
 .message-board {
@@ -92,6 +91,11 @@ header {
   padding-right: 2rem;
 }
 
+.score-board {
+  text-align: end;
+  padding-right: 0;
+}
+
 
 /*=======================*/
 /*Game Field*/
@@ -108,8 +112,8 @@ header {
   box-sizing: border-box;
   margin: 0 auto;
   border: 3px solid #abb2b9;
-  width: 6.5rem;
-  height: 6.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
   border-radius: 50%;
   cursor: pointer;
   position: relative;

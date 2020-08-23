@@ -121,7 +121,7 @@ const statechart = {
   }
 }
 
-let maxRoundCount = 12
+// let maxRoundCount = colorRounds.length
 let maxAttemptCount = 6
 let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
 
@@ -132,6 +132,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
+    // maxRoundCount: colorRounds.length - 1,
+    maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
@@ -148,6 +150,7 @@ class App extends React.Component {
   this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
   this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
   this.showSolution = this.showSolution.bind(this)
+  this.resetScore = this.resetScore.bind(this)
 }
 
 
@@ -159,7 +162,10 @@ class App extends React.Component {
   this.props.transition('READY')
 }
 
-
+resetScore(){
+  this.setState({score:0})
+  console.log("resetting score to 0")
+}
 
 roundN(){
   console.log("Clearing attempts for new round")
@@ -168,7 +174,7 @@ roundN(){
 }
 
 incrementRoundCounter() {
-  if (this.state.round >= maxRoundCount) {
+  if (this.state.round >= this.state.maxRoundCount) {
     this.props.transition("NO_MORE_ROUNDS")
   } else {
     this.setState({round: (this.state.round + 1)})
@@ -276,7 +282,7 @@ checkSolution() {
 
 playerWinsRound() {
   this.setState({score: (this.state.score + 1)})
-  if (this.state.round < maxRoundCount) {
+  if (this.state.round < this.state.maxRoundCount) {
     console.log("player wins round")
     // commented out b/c currently this action is happening within the button click
     // this.props.transition('NEXT_ROUND')
@@ -284,7 +290,7 @@ playerWinsRound() {
 }
 
 playerLoosesRound() {
-  if (this.state.round < maxRoundCount) {
+  if (this.state.round < this.state.maxRoundCount) {
    console.log("player looses round")
    // commented out b/c currently this action is happening within the button click
    this.props.transition('SHOW_SOLUTION')
@@ -309,10 +315,10 @@ showSolution() {
 
 
     let transition = () => {
-      if (this.state.round < maxRoundCount) {
+      if (this.state.round < this.state.maxRoundCount) {
         console.log(`this.props.transition('NEXT_ROUND')`)
         this.props.transition('NEXT_ROUND')
-      } else if (this.state.round === maxRoundCount) {
+      } else if (this.state.round === this.state.maxRoundCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
       } else {
@@ -527,8 +533,10 @@ startSound(){
         <Header
           transition={this.props.transition}
           round={this.state.round}
+          maxRoundCount={this.state.maxRoundCount}
           attempt={this.state.attempt}
           score={this.state.score}
+          resetScore={this.resetScore}
           />
 
 

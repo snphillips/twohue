@@ -21,7 +21,7 @@ export default class ScoreBoard extends Component {
 
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
-          <p>round: {this.props.round}/12</p>
+          <p>round: {this.props.round}/{this.props.maxRoundCount}</p>
           <p>attempt: {this.props.attempt}/6</p>
         </State>
 

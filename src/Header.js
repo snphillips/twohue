@@ -13,10 +13,12 @@ export default class Header extends Component {
 
     <MessageBoard
       transition={this.props.transition}
+      resetScore={this.props.resetScore}
       />
 
     <ScoreBoard
       round={this.props.round}
+      maxRoundCount={this.props.maxRoundCount}
       attempt={this.props.attempt}
       score={this.props.score}
       transition={this.props.transition}

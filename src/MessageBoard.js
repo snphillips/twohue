@@ -46,9 +46,9 @@ export default class MessageBoard extends Component {
         </State>
 
 
-
         <State is={['gameOver']}>
           <button onClick={ () => {
+            this.props.resetScore()
             this.props.transition('PLAY_AGAIN')
           }}>
             play again
@@ -57,6 +57,7 @@ export default class MessageBoard extends Component {
 
         <State is={['gameOver']}>
           <button onClick={ () => {
+            this.props.resetScore()
             this.props.transition('DONT_PLAY_AGAIN')
           }}>
             don't play again
