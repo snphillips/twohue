@@ -107,12 +107,6 @@ const statechart = {
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
-    // playerWinsRoundFinalRound: {
-    //   onEntry: 'playerWinsRoundFinalRound',
-    //   on: {
-    //     NO_MORE_ROUNDS: 'gameOver'
-    //   },
-    // },
     gameOver: {
       onEntry: 'gameOver',
       on: {
@@ -171,7 +165,7 @@ resetScore(){
 }
 
 roundN(){
-  console.log("Clearing attempts for new round")
+  // console.log("Clearing attempts for new round")
   this.setState({confettiFalling: false})
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
@@ -272,8 +266,6 @@ checkSolution() {
   {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
-    this.playWinSound();
-    this.setState({confettiFalling: true})
 
   } else if (  (this.state.attempt > 1) &&
     ((leftFieldBackgroundColor !== solutionColor1) ||
@@ -287,6 +279,8 @@ checkSolution() {
  }
 
 playerWinsRound() {
+  this.playWinSound();
+  this.setState({confettiFalling: true})
   this.setState({score: (this.state.score + 1)})
   if (this.state.round < this.state.maxRoundCount) {
     console.log("player wins round")
@@ -340,16 +334,6 @@ showSolution() {
 
 };
 
-
-playerWinsRoundFinalRound() {
-  console.log("player wins final round")
-  this.props.transition("NO_MORE_ROUNDS")
-}
-
-playerLoosesRoundFinalRound() {
-  console.log("player looses final round")
-  this.props.transition("NO_MORE_ROUNDS")
-}
 
 gameOver() {
   console.log("game over")
@@ -545,6 +529,11 @@ startSound(){
         // height={height}
         // is the confetti falling or not?
         run={this.state.confettiFalling}
+        numberOfPieces={200}
+        recycle={false}
+        tweenDuration={100}
+        colors={this.state.colorRound.allColorBubbles}
+        opacity={0.5}
         />
 
 
