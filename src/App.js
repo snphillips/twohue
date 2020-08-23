@@ -11,6 +11,8 @@ import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 // Howler manages the sound effects
 import {Howl} from 'howler';
+// import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 
 
@@ -124,7 +126,7 @@ const statechart = {
 // let maxRoundCount = colorRounds.length
 let maxAttemptCount = 6
 let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
-
+// const { width, height } = useWindowSize()
 
 class App extends React.Component {
   constructor(props) {
@@ -142,6 +144,7 @@ class App extends React.Component {
     leftField: {'backgroundColor': null},
     rightField: {'backgroundColor': null},
     isAudioOn: false,
+    confettiFalling: false
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -269,6 +272,8 @@ checkSolution() {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
     this.playWinSound();
+    this.setState({confettiFalling: true})
+
   } else if (  (this.state.attempt > 1) &&
     ((leftFieldBackgroundColor !== solutionColor1) ||
     (leftFieldBackgroundColor !== solutionColor2)) &&
@@ -446,6 +451,13 @@ updateFieldColor(color){
 };
 
 
+
+
+
+//  ===========================
+//  Sound/audio that bubbles make upon clicking.
+//  There are two distinct sounds. One for the left, one for the right.
+//  ===========================
 startSound(){
   // A guard clause if the user has clicked the audio off
   if (this.state.isAudioOn === false) {return}
@@ -454,11 +466,6 @@ startSound(){
   });
   sound.play()
 };
-
-//  ===========================
-//  Sound/audio that bubbles make upon clicking.
-//  There are two distinct sounds. One for the left, one for the right.
-//  ===========================
 
 
 //  Mute button toggle, if audio is on,
@@ -517,6 +524,8 @@ startSound(){
 
 
 
+
+
   handleClick = () => {
     this.props.transition('READY')
   }
@@ -529,6 +538,14 @@ startSound(){
         <p className="machine-state-indicator">
          machineState: {(this.props.machineState.value)}
         </p>
+
+      <Confetti
+        // width={width}
+        // height={height}
+        // is the confetti falling or not?
+        run={this.state.confettiFalling}
+        />
+
 
         <Header
           transition={this.props.transition}
@@ -560,7 +577,7 @@ startSound(){
               currentFieldMouseEnter={this.currentFieldMouseEnter}
               currentFieldMouseLeave={this.currentFieldMouseLeave}
               bubbleClickHandler={this.bubbleClickHandler}
-               />
+              />
 
          </div>
 
