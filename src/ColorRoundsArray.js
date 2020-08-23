@@ -2,9 +2,8 @@ import Chroma from 'chroma-js';
 // ===============================================
 // Hard-coded game-rounds. One day will make dynamic...
 // ....one day.
-
-
 // ===============================================
+
 const colorRounds = [
 {
   round: 1,

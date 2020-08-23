@@ -67,6 +67,21 @@ h1 {
 }
 
 
+/* =======================*/
+/* Header */
+/* =======================*/
+header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+header > section {
+  padding-right: 2rem;
+  /*border: 1px solid red;*/
+}
+
+
 /*=======================*/
 /*Game Field*/
 /*=======================*/

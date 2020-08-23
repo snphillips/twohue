@@ -39,15 +39,6 @@ export default class MessageBoard extends Component {
           <p>game over</p>
         </State>
 
-        <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
-          <p>round: {this.props.round} /12</p>
-          <p>attempt: {this.props.attempt} /6</p>
-        </State>
-
-        <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-          <p>score: {this.props.score} /12</p>
-        </State>
-
         <State is={['playerWinsRound', 'playerLoosesRound']}>
           <button onClick={ () => {
             this.props.transition('NEXT_ROUND')

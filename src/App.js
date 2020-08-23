@@ -524,35 +524,32 @@ startSound(){
          machineState: {(this.props.machineState.value)}
         </p>
 
-        <Header/>
+        <Header
+          transition={this.props.transition}
+          />
 
 
           <div id="game-field">
 
-        <MessageBoard round={this.state.round}
-                      attempt={this.state.attempt}
-                      score={this.state.score}
-                      transition={this.props.transition}
-                      />
 
-            <GameField colorRound={this.state.colorRound}
-                       currentField={this.state.currentField}
-                       leftField={this.state.leftField}
-                       rightField={this.state.rightField}
-                       />
+            <GameField
+              colorRound={this.state.colorRound}
+              currentField={this.state.currentField}
+              leftField={this.state.leftField}
+              rightField={this.state.rightField}
+              />
 
-
-
-            <ColorBubbleTray colorRound={this.state.colorRound}
-                             transition={this.props.transition}
-                             updateFieldColor={this.updateFieldColor}
-                             currentField={this.state.currentField}
-                             leftField={this.state.leftField}
-                             rightField={this.state.rightField}
-                             currentFieldMouseEnter={this.currentFieldMouseEnter}
-                             currentFieldMouseLeave={this.currentFieldMouseLeave}
-                             bubbleClickHandler={this.bubbleClickHandler}
-                             />
+            <ColorBubbleTray
+              colorRound={this.state.colorRound}
+              transition={this.props.transition}
+              updateFieldColor={this.updateFieldColor}
+              currentField={this.state.currentField}
+              leftField={this.state.leftField}
+              rightField={this.state.rightField}
+              currentFieldMouseEnter={this.currentFieldMouseEnter}
+              currentFieldMouseLeave={this.currentFieldMouseLeave}
+              bubbleClickHandler={this.bubbleClickHandler}
+               />
 
          </div>
 
