@@ -175,41 +175,83 @@ attemptN() {
   }
 }
 
+// checkSolution() {
+
+
+//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+//   let solutionColors = this.state.colorRound.solutionColors;
+//   let solutionColor1 = this.state.colorRound.solutionColor1;
+//   let solutionColor2 = this.state.colorRound.solutionColor2;
+//   let wrongColors = this.state.colorRound.wrongColors;
+
+
+//   if (this.state.attempt <= 1) {
+//     console.log("There has only been one guess. There can't be a solution.")
+//     this.props.transition("INCORRECT_SOLUTION")
+
+//   } else if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
+//         ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) &&
+//         ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
+//      )
+//   {
+//     console.log("CORRECT_SOLUTION")
+//     this.props.transition("CORRECT_SOLUTION")
+
+//   } else if (  (this.state.attempt > 1) &&
+//     ((leftFieldBackgroundColor !== solutionColor1) ||
+//     (leftFieldBackgroundColor !== solutionColor2)) &&
+//     ((rightFieldBackgroundColor !== solutionColor1) ||
+//     (rightFieldBackgroundColor !== solutionColor2))
+//     ) {
+//         this.props.transition("INCORRECT_SOLUTION")
+//       }
+
+//  }
+
 
 
 
 checkSolution() {
 
-
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
-  // let solutionColors = this.state.colorRound.solutionColors;
-  let solutionColor1 = this.state.colorRound.solutionColor1;
-  let solutionColor2 = this.state.colorRound.solutionColor2;
+  let solutionColors = this.state.colorRound.solutionColors;
+  // let solutionColor1 = this.state.colorRound.solutionColor1;
+  // let solutionColor2 = this.state.colorRound.solutionColor2;
+  let wrongColors = this.state.colorRound.wrongColors;
+  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
+  console.log("wrongColors: ", wrongColors)
+  console.log("this.state.attempt: ", this.state.attempt)
 
 
-  if (this.state.attempt <= 1) {
-    console.log("There has only been one guess. There can't be a solution.")
+  // Not enough trys: incorrect
+  if (this.state.attempt === 1) {
+    console.log("There has only been one guess. => INCORRECT_SOLUTION")
     this.props.transition("INCORRECT_SOLUTION")
 
-  } else if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
-        ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) &&
-        ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
-     )
-  {
+  // incorrect
+  } else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+   {
+     console.log("INCORRECT_SOLUTION")
+     this.props.transition("INCORRECT_SOLUTION")
+
+  // correct
+   } else if ( solutionColors.includes(leftFieldBackgroundColor) && solutionColors.includes(rightFieldBackgroundColor))
+   {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
 
-  } else if (  (this.state.attempt > 1) &&
-    ((leftFieldBackgroundColor !== solutionColor1) ||
-    (leftFieldBackgroundColor !== solutionColor2)) &&
-    ((rightFieldBackgroundColor !== solutionColor1) ||
-    (rightFieldBackgroundColor !== solutionColor2))
-    ) {
-        this.props.transition("INCORRECT_SOLUTION")
-      }
-
+   // why is this triggering?
+   } else {
+    console.log("checkSolution() hasn't accounted for this case")
+    this.props.transition("INCORRECT_SOLUTION")
+   }
  }
+
+
+
+
 
 playerWinsRound() {
   this.playWinSound();
