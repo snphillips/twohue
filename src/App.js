@@ -62,25 +62,6 @@ const statechart = {
         OUT_OF_ATTEMPTS: 'playerLoosesRound',
       },
     },
-    // checkColor: {
-    //   onEntry: 'checkColor',
-    //   on: {
-    //     CORRECT_COLOR_GUESS: 'colorGuessCorrect',
-    //     INCORRECT_COLOR_GUESS: 'colorGuessIncorrect',
-    //   },
-    // },
-    // colorGuessCorrect: {
-    //   onEntry: 'colorGuessCorrect',
-    //   on: {
-    //     CORRECT_GUESS_FEEDBACK: 'checkSolution',
-    //   },
-    // },
-    // colorGuessIncorrect: {
-    //   onEntry: 'colorGuessIncorrect',
-    //   on: {
-    //     INCORRECT_GUESS_FEEDBACK: 'checkSolution',
-    //   },
-    // },
     checkSolution: {
       onEntry: 'checkSolution',
       on: {
@@ -244,10 +225,10 @@ playerWinsRound() {
       }
 
     setTimeout(function() {
-      console.log("setTimeout 2500")
-      //code to be executed after 2.5 seconds
+      console.log("setTimeout 2000")
+      //code to be executed after 2 seconds
       transition()
-    }, 2500);
+    }, 2000);
   }
 }
 
@@ -372,13 +353,13 @@ incrementAttempt(){
  bubbleClickHandler = (event) =>  {
   this.setState({attempt: (this.state.attempt + 1)})
   this.bubbleSound();
-  this.props.transition('SELECT_COLOR');
   this.toggleLeftRightField();
   // The "event" is the click on a specific color bubble. The "currentTarget"
   // is whatever color bubble is clicked. The style.backgroundColor takes
   // whatever background color the clicked color bubble has, and applies that to
   // the color field in questions
   this.updateFieldColor(event.currentTarget.style.backgroundColor);
+  this.props.transition('SELECT_COLOR');
 };
 
 
@@ -400,8 +381,6 @@ updateFieldColor(color){
       )
   }
 };
-
-
 
 
 
@@ -471,10 +450,6 @@ startSound(){
     });
     sound.play()
   };
-
-
-
-
 
 
   handleClick = () => {
@@ -554,10 +529,4 @@ startSound(){
 }
 
 export default withStateMachine(statechart)(App)
-
-
-
-
-
-
 

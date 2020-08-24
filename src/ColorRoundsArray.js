@@ -123,7 +123,7 @@ const colorRounds = [
   solutionColors:['rgb(174, 131, 68)','rgb(236, 223, 18)'],
   solutionColor1: 'rgb(174, 131, 68)',
   solutionColor2: 'rgb(236, 223, 18)',
-  wrongColors: [],
+  wrongColors: ['rgb(202, 173, 10)', 'rgb(176, 209, 28)','rgb(247, 243, 214)','rgb(148, 104, 16 )'],
   wrongColor1: 'rgb(202, 173, 10)',
   wrongColor2: 'rgb(176, 209, 28)',
   wrongColor3: 'rgb(247, 243, 214)',
