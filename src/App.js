@@ -98,8 +98,9 @@ const statechart = {
   }
 }
 
-// let maxRoundCount = colorRounds.length
-let maxAttemptCount = 4
+
+let maxAttemptCount = 6
+
 // let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
 // const { width, height } = useWindowSize()
 
@@ -109,7 +110,7 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    maxRoundCount: colorRounds.length - 1,
+    maxRoundCount: (colorRounds.length - 1),
     // maxRoundCount: 3,
     attempt: 0,
     score: 0,
@@ -175,42 +176,6 @@ attemptN() {
   }
 }
 
-// checkSolution() {
-
-
-//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
-//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
-//   let solutionColors = this.state.colorRound.solutionColors;
-//   let solutionColor1 = this.state.colorRound.solutionColor1;
-//   let solutionColor2 = this.state.colorRound.solutionColor2;
-//   let wrongColors = this.state.colorRound.wrongColors;
-
-
-//   if (this.state.attempt <= 1) {
-//     console.log("There has only been one guess. There can't be a solution.")
-//     this.props.transition("INCORRECT_SOLUTION")
-
-//   } else if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
-//         ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) &&
-//         ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
-//      )
-//   {
-//     console.log("CORRECT_SOLUTION")
-//     this.props.transition("CORRECT_SOLUTION")
-
-//   } else if (  (this.state.attempt > 1) &&
-//     ((leftFieldBackgroundColor !== solutionColor1) ||
-//     (leftFieldBackgroundColor !== solutionColor2)) &&
-//     ((rightFieldBackgroundColor !== solutionColor1) ||
-//     (rightFieldBackgroundColor !== solutionColor2))
-//     ) {
-//         this.props.transition("INCORRECT_SOLUTION")
-//       }
-
-//  }
-
-
-
 
 checkSolution() {
 
@@ -250,9 +215,6 @@ checkSolution() {
  }
 
 
-
-
-
 playerWinsRound() {
   this.playWinSound();
   this.setState({confettiFalling: true})
@@ -282,8 +244,6 @@ playerLoosesRound() {
    this.props.transition('SHOW_SOLUTION')
  }
 }
-
-
 
 
 showSolution() {
@@ -343,7 +303,6 @@ this.setState({'leftField': {
   "backgroundColor": "this.color",
 }});
 
-
   } else {
     this.setState({'rightField':{
       "border": "8px solid #abb2b9",
@@ -382,11 +341,9 @@ toggleLeftRightField = () => {
 }
 
 
-
 incrementAttempt(){
   this.setState({attempt: (this.state.attempt + 1)})
 }
-
 
 
 //  ===================================
@@ -410,7 +367,7 @@ incrementAttempt(){
 //  then checking if winning solution (as a callback function)
 //  ==================================
 updateFieldColor(color){
-  if (this.state.round >= (colorRounds.length - 1)) return
+  if (this.state.round > (this.state.maxRoundCount)) return
   if (this.state.attempt >= maxAttemptCount) return
   if (this.state.currentField === 'leftField') {
     // console.log( this.state.currentField, this.color)

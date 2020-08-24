@@ -91,7 +91,7 @@ const colorRounds = [
 {
   name: 'blue',
   targetColor: 'rgba(93, 124, 251, 1)',
-  solutionColors:['rgb(112, 3, 251)', 'rgb(3, 236, 251)'],
+  solutionColors: ['rgb(112, 3, 251)', 'rgb(3, 236, 251)'],
   solutionColor1: 'rgb(112, 3, 251)',
   solutionColor2: 'rgb(3, 236, 251)',
   wrongColors: ['rgb(3, 112, 251)', 'rgb(37, 3, 251)', 'rgb(78, 122, 209)', 'rgb(133, 203, 245)'],
@@ -105,7 +105,7 @@ const colorRounds = [
 {
   name: 'pinky',
   targetColor: 'rgb(244, 118, 150)',
-  solutionColors:['rgb(239, 37, 58)','rgb(250, 157, 252)'],
+  solutionColors: ['rgb(239, 37, 58)','rgb(250, 157, 252)'],
   solutionColor1: 'rgb(239, 37, 58)',
   solutionColor2: 'rgb(250, 157, 252)',
   wrongColors: ['rgb(106, 108, 235)', 'rgb(169, 106, 235)', 'rgb(236, 93, 139)', 'rgb(111, 37, 239)'],
