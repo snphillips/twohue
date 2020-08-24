@@ -58,29 +58,29 @@ const statechart = {
     attemptN: {
       onEntry: 'attemptN',
       on: {
-        SELECT_COLOR: 'checkColor',
+        SELECT_COLOR: 'checkSolution',
         OUT_OF_ATTEMPTS: 'playerLoosesRound',
       },
     },
-    checkColor: {
-      onEntry: 'checkColor',
-      on: {
-        CORRECT_COLOR_GUESS: 'colorGuessCorrect',
-        INCORRECT_COLOR_GUESS: 'colorGuessIncorrect',
-      },
-    },
-    colorGuessCorrect: {
-      onEntry: 'colorGuessCorrect',
-      on: {
-        CORRECT_GUESS_FEEDBACK: 'checkSolution',
-      },
-    },
-    colorGuessIncorrect: {
-      onEntry: 'colorGuessIncorrect',
-      on: {
-        INCORRECT_GUESS_FEEDBACK: 'checkSolution',
-      },
-    },
+    // checkColor: {
+    //   onEntry: 'checkColor',
+    //   on: {
+    //     CORRECT_COLOR_GUESS: 'colorGuessCorrect',
+    //     INCORRECT_COLOR_GUESS: 'colorGuessIncorrect',
+    //   },
+    // },
+    // colorGuessCorrect: {
+    //   onEntry: 'colorGuessCorrect',
+    //   on: {
+    //     CORRECT_GUESS_FEEDBACK: 'checkSolution',
+    //   },
+    // },
+    // colorGuessIncorrect: {
+    //   onEntry: 'colorGuessIncorrect',
+    //   on: {
+    //     INCORRECT_GUESS_FEEDBACK: 'checkSolution',
+    //   },
+    // },
     checkSolution: {
       onEntry: 'checkSolution',
       on: {
@@ -187,7 +187,7 @@ incrementRoundCounter() {
 attemptN() {
   if (this.state.attempt < 6) {
     console.log("attemptN()")
-    this.props.transition("CHECK_COLOR")
+    this.props.transition("CHECK_SOLUTION")
   } else if (this.state.attempt >= 6) {
     console.log("OUT_OF_ATTEMPTS")
     this.props.transition("OUT_OF_ATTEMPTS")
@@ -195,63 +195,108 @@ attemptN() {
 }
 
 
-checkColor() {
+// checkColor() {
 
-  let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
-  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
-  let solutionColor1 = this.state.colorRound.solutionColor1;
-  let solutionColor2 = this.state.colorRound.solutionColor2;
+//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+//   let solutionColor1 = this.state.colorRound.solutionColor1;
+//   let solutionColor2 = this.state.colorRound.solutionColor2;
 
-  // Correct guess
-  if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
-        ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) ||
-        ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2)) )
-  {
-    this.setState({attempt: (this.state.attempt + 1)})
-    this.props.transition("CORRECT_COLOR_GUESS")
-    console.log("CORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
-  }
-  // Incorrect color guess, only one turn
-  else if ( (leftFieldBackgroundColor !== solutionColor1) ||
-       (leftFieldBackgroundColor !== solutionColor2) ||
-       (rightFieldBackgroundColor !== solutionColor1) ||
-       (rightFieldBackgroundColor !== solutionColor2) )
-    {
-      this.setState({attempt: (this.state.attempt + 1)})
-      this.props.transition("INCORRECT_COLOR_GUESS")
-      console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+//   // Correct guess
+//   if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
+//         ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) ||
+//         ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2)) )
+//   {
+//     this.setState({attempt: (this.state.attempt + 1)})
+//     this.props.transition("CORRECT_COLOR_GUESS")
+//     console.log("CORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+//   }
+//   // Incorrect color guess, only one turn
+//   else if ( (leftFieldBackgroundColor !== solutionColor1) ||
+//        (leftFieldBackgroundColor !== solutionColor2) ||
+//        (rightFieldBackgroundColor !== solutionColor1) ||
+//        (rightFieldBackgroundColor !== solutionColor2) )
+//     {
+//       this.setState({attempt: (this.state.attempt + 1)})
+//       this.props.transition("INCORRECT_COLOR_GUESS")
+//       console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
 
-    }
-  // Incorrect color guess
-  else if ( (leftFieldBackgroundColor !== solutionColor1) ||
-       (leftFieldBackgroundColor !== solutionColor2) ||
-       (rightFieldBackgroundColor !== solutionColor1) ||
-       (rightFieldBackgroundColor !== solutionColor2) )
-    {
-      this.setState({attempt: (this.state.attempt + 1)})
-      this.props.transition("INCORRECT_COLOR_GUESS")
-      console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+//     }
+//   // Incorrect color guess
+//   else if ( (leftFieldBackgroundColor !== solutionColor1) ||
+//        (leftFieldBackgroundColor !== solutionColor2) ||
+//        (rightFieldBackgroundColor !== solutionColor1) ||
+//        (rightFieldBackgroundColor !== solutionColor2) )
+//     {
+//       this.setState({attempt: (this.state.attempt + 1)})
+//       this.props.transition("INCORRECT_COLOR_GUESS")
+//       console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
 
-    }
+//     }
+// }
+
+// checkColor() {
+
+//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+//   let solutionColors = this.state.colorRound.solutionColors;
+//   // let solutionColor2 = this.state.colorRound.solutionColor2;
+
+//   // Correct guess
+//   if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
+//         ((solutionColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor))
+//   {
+//     this.setState({attempt: (this.state.attempt + 1)})
+//     this.props.transition("CORRECT_COLOR_GUESS")
+//     console.log("CORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+//   }
+//   // Incorrect color guess, only one turn
+//   else if ( (leftFieldBackgroundColor !== solutionColor1) ||
+//        (leftFieldBackgroundColor !== solutionColor2) ||
+//        (rightFieldBackgroundColor !== solutionColor1) ||
+//        (rightFieldBackgroundColor !== solutionColor2) )
+//     {
+//       this.setState({attempt: (this.state.attempt + 1)})
+//       this.props.transition("INCORRECT_COLOR_GUESS")
+//       console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+
+//     }
+//   // Incorrect color guess
+//   else if ( (leftFieldBackgroundColor !== solutionColor1) ||
+//        (leftFieldBackgroundColor !== solutionColor2) ||
+//        (rightFieldBackgroundColor !== solutionColor1) ||
+//        (rightFieldBackgroundColor !== solutionColor2) )
+//     {
+//       this.setState({attempt: (this.state.attempt + 1)})
+//       this.props.transition("INCORRECT_COLOR_GUESS")
+//       console.log("INCORRECT_COLOR_GUESS. Guess: ", leftFieldBackgroundColor, rightFieldBackgroundColor, "Solution: ", solutionColor1, solutionColor2)
+
+//     }
+// }
+
+
+// colorGuessCorrect() {
+//   console.log("CORRECT_GUESS_FEEDBACK")
+//   this.props.transition("CORRECT_GUESS_FEEDBACK")
+//  }
+
+// colorGuessIncorrect() {
+//   console.log("INCORRECT_GUESS_FEEDBACK - moving to checkSolution")
+//   this.props.transition("INCORRECT_GUESS_FEEDBACK")
+//  }
+
+
+incrementAttempt(){
+  this.setState({attempt: (this.state.attempt + 1)})
 }
-
-
-
-colorGuessCorrect() {
-  console.log("CORRECT_GUESS_FEEDBACK")
-  this.props.transition("CORRECT_GUESS_FEEDBACK")
- }
-
-colorGuessIncorrect() {
-  console.log("INCORRECT_GUESS_FEEDBACK - moving to checkSolution")
-  this.props.transition("INCORRECT_GUESS_FEEDBACK")
- }
 
 
 checkSolution() {
 
+
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  // let solutionColors = this.state.colorRound.solutionColors;
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
 
@@ -259,6 +304,7 @@ checkSolution() {
   if (this.state.attempt <= 1) {
     console.log("There has only been one guess. There can't be a solution.")
     this.props.transition("INCORRECT_SOLUTION")
+
   } else if (   (leftFieldBackgroundColor !== rightFieldBackgroundColor) &&
         ((leftFieldBackgroundColor === solutionColor1) || (leftFieldBackgroundColor === solutionColor2)) &&
         ((rightFieldBackgroundColor === solutionColor1) || (rightFieldBackgroundColor === solutionColor2))
@@ -411,11 +457,7 @@ toggleLeftRightField = () => {
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  bubbleClickHandler = (event) =>  {
-  // The first lines below are guard clauses. They turns off the click
-  // handler so that nothing happens if bubbles are clicked after the round
-  // is over or the game is over.
-  // if (this.state.isWinningSolution === true) {return}
-
+  this.setState({attempt: (this.state.attempt + 1)})
   this.bubbleSound();
   this.props.transition('SELECT_COLOR');
   this.toggleLeftRightField();
