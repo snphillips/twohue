@@ -36,15 +36,6 @@ export default class MessageBoard extends Component {
           <p>game over</p>
         </State>
 
-        <State is={['playerWinsRound', 'playerLoosesRound']}>
-          <button onClick={ () => {
-            this.props.transition('NEXT_ROUND')
-            console.log('NEXT_ROUND')
-          }}>
-            next round
-          </button>
-        </State>
-
 
         <State is={['gameOver']}>
           <button onClick={ () => {
@@ -67,6 +58,14 @@ export default class MessageBoard extends Component {
 
 
 
+//        <State is={['playerWinsRound', 'playerLoosesRound']}>
+ //         <button onClick={ () => {
+  //          this.props.transition('NEXT_ROUND')
+  //          console.log('NEXT_ROUND')
+  //        }}>
+  //          next round
+  //        </button>
+  //     </State>
 
 
 

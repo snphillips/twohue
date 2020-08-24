@@ -286,8 +286,19 @@ playerWinsRound() {
     console.log("player wins round")
     // commented out b/c currently this action is happening within the button click
     // this.props.transition('NEXT_ROUND')
+
+      let transition = () => {
+          this.props.transition('NEXT_ROUND')
+      }
+
+    setTimeout(function() {
+      console.log("setTimeout 2500")
+      //code to be executed after 2.5 seconds
+      transition()
+    }, 2500);
   }
 }
+
 
 playerLoosesRound() {
   if (this.state.round < this.state.maxRoundCount) {
@@ -321,8 +332,6 @@ showSolution() {
       } else if (this.state.round === this.state.maxRoundCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
-      } else {
-        console.log("bananarama")
       }
     }
 
