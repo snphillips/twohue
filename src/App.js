@@ -538,7 +538,7 @@ startSound(){
       <Confetti
         run={this.state.confettiFalling}
         numberOfPieces={200}
-        recycle={false}
+        recycle={true}
         tweenDuration={100}
         colors={this.state.colorRound.allColorBubbles}
         opacity={0.5}
