@@ -336,10 +336,10 @@ showSolution() {
     }
 
     setTimeout(function() {
-      console.log("setTimeout 2000")
+      console.log("setTimeout 2500")
     //your code to be executed after 2 seconds
     transition()
-    }, 3000);
+    }, 3500);
 
 };
 
@@ -432,8 +432,8 @@ toggleLeftRightField = () => {
 //  then checking if winning solution (as a callback function)
 //  ==================================
 updateFieldColor(color){
-  if (this.state.maxRoundCount > (colorRounds.length - 1)) return
-  if (this.state.attempt > maxAttemptCount) return
+  if (this.state.round >= (colorRounds.length - 1)) return
+  if (this.state.attempt >= maxAttemptCount) return
   if (this.state.currentField === 'leftField') {
     // console.log( this.state.currentField, this.color)
    this.setState({"leftField": {'backgroundColor': color}},
