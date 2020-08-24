@@ -128,8 +128,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    // maxRoundCount: colorRounds.length - 1,
-    maxRoundCount: 3,
+    maxRoundCount: colorRounds.length - 1,
+    // maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
@@ -423,6 +423,8 @@ toggleLeftRightField = () => {
 //  then checking if winning solution (as a callback function)
 //  ==================================
 updateFieldColor(color){
+  if (this.state.maxRoundCount > (colorRounds.length - 1)) return
+  if (this.state.attempt > maxAttemptCount) return
   if (this.state.currentField === 'leftField') {
     // console.log( this.state.currentField, this.color)
    this.setState({"leftField": {'backgroundColor': color}},
@@ -525,9 +527,6 @@ startSound(){
         </p>
 
       <Confetti
-        // width={width}
-        // height={height}
-        // is the confetti falling or not?
         run={this.state.confettiFalling}
         numberOfPieces={200}
         recycle={false}
