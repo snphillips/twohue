@@ -73,6 +73,7 @@ const statechart = {
       onEntry: 'playerWinsRound',
       on: {
         NEXT_ROUND: 'roundN',
+        NO_MORE_ROUNDS: 'gameOver'
       },
     },
     playerLoosesRound: {
@@ -110,8 +111,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    maxRoundCount: (colorRounds.length - 1),
-    // maxRoundCount: 3,
+    // maxRoundCount: (colorRounds.length - 1),
+    maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
@@ -219,13 +220,18 @@ playerWinsRound() {
   this.playWinSound();
   this.setState({confettiFalling: true})
   this.setState({score: (this.state.score + 1)})
-  if (this.state.round < this.state.maxRoundCount) {
-    console.log("player wins round")
+  console.log("player wins round")
     // commented out b/c currently this action is happening within the button click
     // this.props.transition('NEXT_ROUND')
 
       let transition = () => {
+        if (this.state.round < this.state.maxRoundCount) {
+          console.log('NEXT_ROUND')
           this.props.transition('NEXT_ROUND')
+        } else if (this.state.round >= this.state.maxRoundCount){
+          console.log('NO_MORE_ROUNDS')
+          this.props.transition('NO_MORE_ROUNDS')
+        }
       }
 
     setTimeout(function() {
@@ -233,7 +239,7 @@ playerWinsRound() {
       //code to be executed after 2 seconds
       transition()
     }, 2000);
-  }
+
 }
 
 
