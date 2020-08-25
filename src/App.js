@@ -467,8 +467,9 @@ startSound(){
 
   render() {
     return (
-      <div className="twohue">
 
+      <div className="outer-div">
+        <div className="twohue">
 
         <State is={['playerWinsRound']}>
           <Confetti
@@ -530,9 +531,8 @@ startSound(){
                         isAudioOn={this.state.isAudioOn}
                        />
         </footer>
-
-
       </div>
+    </div>
     )
   }
 }
