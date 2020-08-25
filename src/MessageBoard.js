@@ -33,7 +33,7 @@ export default class MessageBoard extends Component {
         </State>
 
         <State is={['gameOver']}>
-          <p>game over</p>
+          <p className="game-over">game over</p>
         </State>
 
 

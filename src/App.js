@@ -102,8 +102,6 @@ const statechart = {
 
 let maxAttemptCount = 6
 
-// let allStateMachineStates = ['homeScreenPractice', 'roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver'];
-// const { width, height } = useWindowSize()
 
 class App extends React.Component {
   constructor(props) {
@@ -111,8 +109,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    // maxRoundCount: (colorRounds.length - 1),
-    maxRoundCount: 3,
+    maxRoundCount: (colorRounds.length - 1),
+    // maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
