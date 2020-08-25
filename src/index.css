@@ -43,7 +43,6 @@ p {
   max-width: 600px;
   margin: 2rem auto;
   background-color: #fff;
-  padding: 1rem;
 }
 
 button {
@@ -83,10 +82,10 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 7rem;
-  margin-bottom: 2rem;
+  height: 6rem;
+  margin-bottom: 1rem;
   border-top: 5px solid #ebedef;
-  border-bottom: 5px solid #ebedef;
+  /*border-bottom: 5px solid #ebedef;*/
   padding: .5rem 0;
 }
 
@@ -131,6 +130,8 @@ header {
 
 
 .target-swatch .tooltiptext {
+  font-size: 1rem;
+  font-weight: 500;
   visibility: hidden;
   width: 120px;
   background-color: #efefef;
