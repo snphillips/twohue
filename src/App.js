@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
-// import ColorBubbleTray from './ColorBubbleTray'
 import Header from './Header';
-// import MessageBoard from './MessageBoard';
 import Byline from './Byline';
 import colorRounds from './ColorRoundsArray';
 import GameField from './GameField';
@@ -138,6 +136,8 @@ class App extends React.Component {
  readyAction = () => {
   this.props.transition('READY')
 }
+
+
 
 resetScore(){
   this.setState({score:0})
@@ -458,16 +458,16 @@ startSound(){
     this.props.transition('READY')
   }
 
+  componentDidUpdate() {
+    console.log("machineState: ", this.props.machineState.value )
+  }
+
 
 
 
   render() {
     return (
       <div className="twohue">
-
-        <p className="machine-state-indicator">
-         machineState: {(this.props.machineState.value)}
-        </p>
 
 
         <State is={['playerWinsRound']}>
