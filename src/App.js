@@ -131,12 +131,11 @@ class App extends React.Component {
 
 
 //  =================================
-//  State Machine Funcitons
+//  State Machine Functions
 //  =================================
  readyAction = () => {
   this.props.transition('READY')
 }
-
 
 
 resetScore(){
@@ -145,7 +144,6 @@ resetScore(){
 }
 
 roundN(){
-  // console.log("Clearing attempts for new round")
   this.setState({confettiFalling: false})
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
@@ -174,9 +172,7 @@ attemptN() {
   }
 }
 
-
 checkSolution() {
-
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
   let solutionColors = this.state.colorRound.solutionColors;
@@ -191,6 +187,12 @@ checkSolution() {
   // Not enough trys: incorrect
   if (this.state.attempt === 1) {
     console.log("There has only been one guess. => INCORRECT_SOLUTION")
+    this.props.transition("INCORRECT_SOLUTION")
+
+  // both sides are the same: incorrect
+  // why isn't this working?
+  } else if (leftFieldBackgroundColor == rightFieldBackgroundColor) {
+    console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
     this.props.transition("INCORRECT_SOLUTION")
 
   // incorrect
@@ -293,12 +295,30 @@ gameOver() {
 // *********************************************************************
 
 
+
+
+
+
+
+
+
 //  ==================================================================
 //  Hover handler for color bubbles - shows player which field of the
 //  two fields is currently active. Note: we have to set the backgroundColor
 //  otherwise it will revert to none.
 //  Leave the commented out lines in for now....we may need them in future.
 //  ==================================================================
+
+
+
+
+
+
+
+
+
+
+
 currentFieldMouseEnter(){
 if (this.state.currentField === 'leftField'){
 this.setState({'leftField': {

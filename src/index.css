@@ -153,10 +153,8 @@ header {
 
 section#left-and-right-field {
   box-sizing: border-box;
-  /*display: flex;*/
   justify-content: center;
   margin: 0 auto;
-  /*border: 1px solid red;*/
   height: 13rem;
 }
 
@@ -226,3 +224,85 @@ footer {
   color: #666;
   text-decoration: none;
 }
+
+
+/* ********************************* */
+/* ********************************* */
+/* ********************************* */
+/* ********************************* */
+
+
+/* For tablets: */
+@media only screen and (max-width: 600px) {
+
+.outer-div {
+  align-items: unset;
+}
+
+.twohue {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+}
+
+
+
+
+
+/* For phones: */
+@media only screen and (max-width: 600px) {
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 8rem;
+    margin-bottom: 1rem;
+    border-top: 5px solid #ebedef;
+    padding: .5rem 0;
+  }
+
+  section#left-and-right-field {
+    height: 11.5rem;
+  }
+
+ .field   {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .bubble {
+    width: 4rem;
+    height: 4rem;
+  }
+
+
+  footer {
+    position: absolute;
+    bottom: 1rem;
+  }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
