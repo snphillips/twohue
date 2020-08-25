@@ -11,7 +11,6 @@ import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 // Howler manages the sound effects
 import {Howl} from 'howler';
-// import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 
 
@@ -460,6 +459,8 @@ startSound(){
   }
 
 
+
+
   render() {
     return (
       <div className="twohue">
@@ -468,14 +469,19 @@ startSound(){
          machineState: {(this.props.machineState.value)}
         </p>
 
-      <Confetti
-        run={this.state.confettiFalling}
-        numberOfPieces={200}
-        recycle={true}
-        tweenDuration={100}
-        colors={this.state.colorRound.allColorBubbles}
-        opacity={0.5}
-        />
+
+        <State is={['playerWinsRound']}>
+          <Confetti
+            run={this.state.confettiFalling}
+            numberOfPieces={300}
+            recycle={false}
+            tweenDuration={100}
+            colors={this.state.colorRound.allColorBubbles}
+            opacity={0.5}
+            gravity={0.4}
+            />
+        </State>
+
 
 
         <Header
