@@ -3,7 +3,7 @@ import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
 import Header from './Header';
 import Byline from './Byline';
-import colorRounds from './ColorRoundsArray';
+import colorRounds from './colorRoundsArray';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
