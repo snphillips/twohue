@@ -34,8 +34,8 @@ code {
 
 p {
   font-family: 'Alata', sans-serif;
-  margin-top: .25rem;
-  margin-bottom: .25rem;
+  margin-top: .1rem;
+  margin-bottom: .1rem;
 }
 
 .twohue {
@@ -74,6 +74,13 @@ h1 {
   font-size: 11px;
 }
 
+.score {
+
+}
+
+.final-score {
+  font-size: 1.2rem;
+}
 
 /* =======================*/
 /* Header */
@@ -101,6 +108,7 @@ header {
 .score-board {
   text-align: end;
   padding-right: 0;
+  width: 100px;
 }
 
 

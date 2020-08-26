@@ -106,8 +106,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    maxRoundCount: (colorRounds.length - 1),
-    // maxRoundCount: 3,
+    // maxRoundCount: (colorRounds.length - 1),
+    maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
@@ -503,7 +503,17 @@ startSound(){
             />
         </State>
 
-
+        <State is={['gameOver']}>
+          <Confetti
+            run={this.state.confettiFalling}
+            numberOfPieces={600}
+            recycle={true}
+            tweenDuration={100}
+            // colors={this.state.colorRound.allColorBubbles}
+            opacity={0.5}
+            gravity={0.1}
+            />
+        </State>
 
         <Header
           transition={this.props.transition}
