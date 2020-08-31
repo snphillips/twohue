@@ -1,6 +1,7 @@
 ## About TwoHue State Chart
 
 A recreation of a game I created but this time, using a state chart to manage user flow.
+View deployed site here: twohue-state-machine.surge.sh
 
 ## Made With
 - Create React App
