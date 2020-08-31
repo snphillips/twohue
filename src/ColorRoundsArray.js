@@ -1,10 +1,26 @@
-import Chroma from 'chroma-js';
+import chroma from 'chroma-js';
 // ===============================================
 // Hard-coded game-rounds. One day will make dynamic...
 // ....one day.
 // ===============================================
 
 const colorRounds = [
+{
+  name: 'chroma-js',
+  solutionColor1: chroma.random(),
+  solutionColor2: chroma.random(),
+  get targetColor() {
+    return this.solutionColor1 + this.solutionColor2
+  },
+  wrongColors: [chroma.random(), chroma.random(), chroma.random(), chroma.random()],
+  get solutionColors() {
+    return [this.solutionColor1, this.solutionColor2]
+  },
+  get allColorBubbles() {
+   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+  }
+  // allColorBubbles: [chroma.random(), chroma.random(), chroma.random(), chroma.random(), chroma.random(), chroma.random() ],
+},
 {
   name: 'practice-orange',
   targetColor: '#f99356',
@@ -16,7 +32,7 @@ const colorRounds = [
   'rgb(10, 177, 53)', 'rgb(203, 107, 5)'],
 },
 {
-  name: 'practice-orange',
+  name: 'orange',
   targetColor: '#f99356',
   solutionColors:['rgb(255, 0, 0)', 'rgb(237, 244, 33)'],
   solutionColor1: 'rgb(255, 0, 0)',

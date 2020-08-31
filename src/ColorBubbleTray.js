@@ -13,7 +13,7 @@ let i;
 
 for (i = 0; i < colorRounds.length; i++) {
   shuffle(colorRounds[i].allColorBubbles);
-  console.log("snakejazz colorRounds[i].allColorBubbles index: ", i, colorRounds[i].allColorBubbles)
+  // console.log("colorRounds[i].allColorBubbles index: ", i, colorRounds[i].allColorBubbles)
 }
 
 
