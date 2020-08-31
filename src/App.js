@@ -554,12 +554,13 @@ updateFieldColor(color){
 
          <footer>
 
-           <Byline />
+             <Byline />
 
-           <AudioToggle muteButtonToggle={this.muteButtonToggle}
-                        isAudioOn={this.state.isAudioOn}
-                       />
+             <AudioToggle muteButtonToggle={this.muteButtonToggle}
+                          isAudioOn={this.state.isAudioOn}
+                          />
         </footer>
+
       </div>
     </div>
     )
@@ -568,3 +569,6 @@ updateFieldColor(color){
 
 export default withStateMachine(statechart)(App)
 
+
+           // <section className="footer-section">
+           // </section>

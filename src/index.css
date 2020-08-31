@@ -24,6 +24,7 @@ code {
 }
 
 .outer-div {
+  box-sizing: border-box;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -39,6 +40,7 @@ p {
 }
 
 .twohue {
+  box-sizing: border-box;
   width: 100%;
   max-width: 600px;
   margin: 2rem auto;
@@ -220,12 +222,18 @@ section#left-and-right-field {
   from {opacity:0} to {opacity:.5}
 }
 
+/*=======================*/
+/* footer */
+/*=======================*/
 footer {
-  display: flex;
-  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
   margin-top: 2rem;
   border-top: 5px solid #ebedef;
   padding-top: .5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .footer-link {
@@ -311,6 +319,16 @@ footer {
   footer {
     position: absolute;
     bottom: 1rem;
+  }
+
+  .byline {
+    /*width: 50%;*/
+    /*flex-grow: 1;*/
+  }
+
+  .audio-button {
+    /*width: 50%;*/
+    /*flex-grow: 1;*/
   }
 
 
