@@ -6,6 +6,8 @@
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -107,11 +109,16 @@ header {
   padding-right: 2rem;
 }
 
+.title {
+  order: 1;
+}
+
 .message-board {
   order: 2;
 }
 
 .score-board {
+  order: 3;
   text-align: end;
   padding-right: 0;
   width: 100px;
@@ -228,7 +235,7 @@ section#left-and-right-field {
 footer {
   box-sizing: border-box;
   width: 100%;
-  max-width: 100vw;
+  max-width: 94vw;
   margin-top: 2rem;
   border-top: 5px solid #ebedef;
   padding-top: .5rem;
@@ -252,7 +259,9 @@ footer {
 /* ********************************* */
 
 
+/*=======================*/
 /* For tablets: */
+/*=======================*/
 @media only screen and (max-width: 600px) {
 
 .outer-div {
@@ -267,10 +276,9 @@ footer {
 }
 
 
-
-
-
+/*=======================*/
 /* For phones: */
+/*=======================*/
 @media only screen and (max-width: 600px) {
 
   .twohue {
@@ -282,7 +290,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     height: 10rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     border-top: 5px solid #ebedef;
     padding: .25rem 0;
     flex-wrap: wrap;
@@ -293,8 +301,8 @@ footer {
   }
 
   .message-board {
-    display: block;
     order: 3; /* when mobile, moved to 3rd position in header */
+    display: block;
     padding-right: 0;
     text-align: center;
     width: 100%;
@@ -315,24 +323,73 @@ footer {
     height: 4rem;
   }
 
-
+/* Can you do this with flex, like meeting app? */
   footer {
     position: absolute;
     bottom: 1rem;
   }
 
-  .byline {
-    /*width: 50%;*/
-    /*flex-grow: 1;*/
+}
+
+/*=======================*/
+/* for small phones: */
+/*=======================*/
+@media only screen and (max-width: 360px) {
+
+  header {
+    margin-bottom: 1rem;
   }
 
-  .audio-button {
-    /*width: 50%;*/
-    /*flex-grow: 1;*/
+  .message-board {
+    font-size: 1.10rem;
   }
 
+  .bubble {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 
+}
 
+/*=======================*/
+/* for foldable phones: */
+/*=======================*/
+@media only screen and (max-width: 280px) {
+
+  header {
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font: 2rem 'Oleo Script', cursive;
+  }
+
+  .message-board {
+    font-size: 1rem;
+  }
+
+  .target-swatch {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  section#left-and-right-field {
+    height: 8.5rem;
+  }
+
+  .field   {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .bubble {
+    width: 40px;
+    height: 40px;
+  }
+
+  footer {
+    max-width: 91vw;
+  }
 
 }
 
