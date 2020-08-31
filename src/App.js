@@ -106,8 +106,8 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    // maxRoundCount: (colorRounds.length - 1),
-    maxRoundCount: 3,
+    maxRoundCount: (colorRounds.length - 1),
+    // maxRoundCount: 3,
     attempt: 0,
     score: 0,
     colorRound: colorRounds[0],
@@ -153,6 +153,7 @@ roundN(){
   this.setState({confettiFalling: false})
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
+  this.startSound()
 }
 
 incrementRoundCounter() {
@@ -371,8 +372,7 @@ incrementAttempt(){
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  bubbleClickHandler = (event) =>  {
-  // guard clause to disable click handler
-  // TODO: add other conditions, like if player won
+  // guard clause to disable click handler if round is over
   if (this.state.round > (this.state.maxRoundCount)) return
   if (this.state.confettiFalling === true) return
 
@@ -408,11 +408,6 @@ updateFieldColor(color){
 };
 
 
-
-  //  ===========================
-  //  Sound/audio that bubbles make upon clicking.
-  //  There are two distinct sounds. One for the left, one for the right.
-  //  ===========================
   startSound(){
     // A guard clause if the user has clicked the audio off
     if (this.state.isAudioOn === false) {return}
@@ -434,6 +429,7 @@ updateFieldColor(color){
 
   bubbleSound(){
   // Using the Howler npm package for sound
+  // There are two distinct sounds. One for the left, one for the right.
   // a guard clause if the player has toggled sound to be off
   if (this.state.isAudioOn === false) {return}
     // a different sound if left or right field is active
