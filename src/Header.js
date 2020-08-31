@@ -22,6 +22,9 @@ export default class Header extends Component {
       attempt={this.props.attempt}
       score={this.props.score}
       transition={this.props.transition}
+      isAudioOn={this.props.isAudioOn}
+      startSound={this.props.startSound}
+      startGameClickHandler={this.props.startGameClickHandler}
       />
 
   </header>

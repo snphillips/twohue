@@ -3,6 +3,8 @@ import colorRounds from './colorRoundsArray.js'
 
 
 
+// shuffles the color bubbles
+// between every round
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
@@ -16,14 +18,7 @@ for (i = 0; i < colorRounds.length; i++) {
 
 
 
-
-
-
 export default class ColorBubbleTray extends Component {
-
-
-
-
 
 
   render() {
@@ -41,7 +36,8 @@ export default class ColorBubbleTray extends Component {
              onMouseLeave={this.props.currentFieldMouseLeave}
              onClick={ (event) => {
               this.props.bubbleClickHandler(event)
-            }}>
+            }}
+            >
             &nbsp;
         </div>
 

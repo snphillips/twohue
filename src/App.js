@@ -126,6 +126,7 @@ class App extends React.Component {
   this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
   this.showSolution = this.showSolution.bind(this)
   this.resetScore = this.resetScore.bind(this)
+  this.startGameClickHandler = this.startGameClickHandler.bind(this)
 }
 
 
@@ -135,6 +136,11 @@ class App extends React.Component {
 //  =================================
  readyAction = () => {
   this.props.transition('READY')
+}
+
+
+homeScreenPractice(){
+
 }
 
 
@@ -294,6 +300,9 @@ gameOver() {
 // *********************************************************************
 // *********************************************************************
 
+startGameClickHandler(){
+  this.props.transition('START_GAME')
+}
 
 
 
@@ -308,17 +317,6 @@ gameOver() {
 //  otherwise it will revert to none.
 //  Leave the commented out lines in for now....we may need them in future.
 //  ==================================================================
-
-
-
-
-
-
-
-
-
-
-
 currentFieldMouseEnter(){
 if (this.state.currentField === 'leftField'){
 this.setState({'leftField': {
@@ -373,13 +371,18 @@ incrementAttempt(){
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  bubbleClickHandler = (event) =>  {
+  // guard clause to disable click handler
+  // TODO: add other conditions, like if player won
+  if (this.state.round > (this.state.maxRoundCount)) return
+  if (this.state.confettiFalling === true) return
+
   this.setState({attempt: (this.state.attempt + 1)})
   this.bubbleSound();
   this.toggleLeftRightField();
-  // The "event" is the click on a specific color bubble. The "currentTarget"
-  // is whatever color bubble is clicked. The style.backgroundColor takes
-  // whatever background color the clicked color bubble has, and applies that to
-  // the color field in questions
+  // "event" is the click on a specific color bubble.
+  // "currentTarget" is whatever color bubble is clicked.
+  // "style.backgroundColor" takes whatever background color
+  // the clicked color bubble has, and applies that to color field
   this.updateFieldColor(event.currentTarget.style.backgroundColor);
   this.props.transition('SELECT_COLOR');
 };
@@ -406,18 +409,18 @@ updateFieldColor(color){
 
 
 
-//  ===========================
-//  Sound/audio that bubbles make upon clicking.
-//  There are two distinct sounds. One for the left, one for the right.
-//  ===========================
-startSound(){
-  // A guard clause if the user has clicked the audio off
-  if (this.state.isAudioOn === false) {return}
-  const sound = new Howl({
-    src: ['/sound/finger-snap.wav']
-  });
-  sound.play()
-};
+  //  ===========================
+  //  Sound/audio that bubbles make upon clicking.
+  //  There are two distinct sounds. One for the left, one for the right.
+  //  ===========================
+  startSound(){
+    // A guard clause if the user has clicked the audio off
+    if (this.state.isAudioOn === false) {return}
+    const sound = new Howl({
+      src: ['/sound/finger-snap.wav']
+    });
+    sound.play()
+  };
 
 
 //  Mute button toggle, if audio is on,
@@ -522,6 +525,9 @@ startSound(){
           attempt={this.state.attempt}
           score={this.state.score}
           resetScore={this.resetScore}
+          startSound={this.startSound}
+          isAudioOn={this.state.isAudioOn}
+          startGameClickHandler={this.startGameClickHandler}
           />
 
 
@@ -552,10 +558,7 @@ startSound(){
 
          <footer>
 
-           <Byline muteButtonToggle={this.muteButtonToggle}
-                   isAudioOn={this.state.isAudioOn}
-                   />
-
+           <Byline />
 
            <AudioToggle muteButtonToggle={this.muteButtonToggle}
                         isAudioOn={this.state.isAudioOn}
