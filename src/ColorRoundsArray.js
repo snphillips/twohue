@@ -7,19 +7,63 @@ import chroma from 'chroma-js';
 const colorRounds = [
 {
   name: 'chroma-js',
-  solutionColor1: chroma.random(),
-  solutionColor2: chroma.random(),
+  solutionColor1: chroma.random().hex(),
+  solutionColor2: chroma.random().hex(),
   get targetColor() {
-    return this.solutionColor1 + this.solutionColor2
+    return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
   },
-  wrongColors: [chroma.random(), chroma.random(), chroma.random(), chroma.random()],
   get solutionColors() {
-    return [this.solutionColor1, this.solutionColor2]
+    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
   },
+  wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
   get allColorBubbles() {
    return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
   }
-  // allColorBubbles: [chroma.random(), chroma.random(), chroma.random(), chroma.random(), chroma.random(), chroma.random() ],
+},
+{
+  name: 'chroma-js-2',
+  solutionColor1: chroma.random().hex(),
+  solutionColor2: chroma.random().hex(),
+  get targetColor() {
+    return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
+  },
+  get solutionColors() {
+    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+  },
+  wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
+  get allColorBubbles() {
+   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+  }
+},
+{
+  name: 'chroma-js-3',
+  solutionColor1: chroma.random().hex(),
+  solutionColor2: chroma.random().hex(),
+  get targetColor() {
+    return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
+  },
+  get solutionColors() {
+    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+  },
+  wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
+  get allColorBubbles() {
+   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+  }
+},
+{
+  name: 'chroma-js-4',
+  solutionColor1: chroma.random().hex(),
+  solutionColor2: chroma.random().hex(),
+  get targetColor() {
+    return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
+  },
+  get solutionColors() {
+    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+  },
+  wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
+  get allColorBubbles() {
+   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+  }
 },
 {
   name: 'practice-orange',

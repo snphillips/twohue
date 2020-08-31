@@ -182,7 +182,6 @@ section#left-and-right-field {
 
 .field   {
   box-sizing: border-box;
-  opacity: .5;
   border: 3px solid #abb2b9;
   width: 14rem;
   height: 14rem;
@@ -191,6 +190,7 @@ section#left-and-right-field {
   border-radius: 50%;
   margin: 0 auto;
   transition: background .10s;
+  /*opacity: .5;*/
 }
 
 #left-field   {
@@ -214,8 +214,8 @@ section#left-and-right-field {
   border: 3px solid  #abb2b9;
   text-align: center;
   border-radius: 50%;
-  opacity: .5;
   transition: background .5s;
+  /*opacity: .5;*/
 }
 
 .bubble:hover {
@@ -226,7 +226,8 @@ section#left-and-right-field {
 
 /*Revealing the solution animation*/
 @keyframes fadein {
-  from {opacity:0} to {opacity:.5}
+  /*from {opacity:0} to {opacity:.5}*/
+  from {opacity:0} to {opacity:1}
 }
 
 /*=======================*/

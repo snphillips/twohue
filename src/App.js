@@ -10,6 +10,7 @@ import ColorBubbleTray from './ColorBubbleTray';
 // Howler manages the sound effects
 import {Howl} from 'howler';
 import Confetti from 'react-confetti'
+import chroma from 'chroma-js';
 
 
 
@@ -179,15 +180,58 @@ attemptN() {
   }
 }
 
+// checkSolution() {
+//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+//   let solutionColors = this.state.colorRound.solutionColors;
+//   let solutionColor1 = this.state.colorRound.solutionColor1;
+//   let solutionColor2 = this.state.colorRound.solutionColor2;
+//   let wrongColors = this.state.colorRound.wrongColors;
+//   console.log("wrongColors: ", wrongColors)
+//   console.log("solutionColors: ", solutionColors)
+//   console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
+//   console.log("this.state.attempt: ", this.state.attempt)
+
+
+//   // Not enough trys: incorrect
+//   if (this.state.attempt === 1) {
+//     console.log("There has only been one guess. => INCORRECT_SOLUTION")
+//     this.props.transition("INCORRECT_SOLUTION")
+
+//   // both sides are the same: incorrect
+//   } else if (leftFieldBackgroundColor === rightFieldBackgroundColor) {
+//     console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
+//     this.props.transition("INCORRECT_SOLUTION")
+
+//   // incorrect
+//   } else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+//    {
+//      console.log("INCORRECT_SOLUTION")
+//      this.props.transition("INCORRECT_SOLUTION")
+
+//   // correct
+//    } else if ( solutionColors.includes(leftFieldBackgroundColor) && solutionColors.includes(rightFieldBackgroundColor))
+//    {
+//     console.log("CORRECT_SOLUTION")
+//     this.props.transition("CORRECT_SOLUTION")
+
+//    // why is this triggering?
+//    } else {
+//     console.log("checkSolution() hasn't accounted for this case")
+//     this.props.transition("INCORRECT_SOLUTION")
+//    }
+//  }
+
 checkSolution() {
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
   let solutionColors = this.state.colorRound.solutionColors;
-  // let solutionColor1 = this.state.colorRound.solutionColor1;
-  // let solutionColor2 = this.state.colorRound.solutionColor2;
+  let solutionColor1 = this.state.colorRound.solutionColor1;
+  let solutionColor2 = this.state.colorRound.solutionColor2;
   let wrongColors = this.state.colorRound.wrongColors;
-  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
   console.log("wrongColors: ", wrongColors)
+  console.log("solutionColors: ", solutionColors)
+  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
   console.log("this.state.attempt: ", this.state.attempt)
 
 
@@ -197,8 +241,7 @@ checkSolution() {
     this.props.transition("INCORRECT_SOLUTION")
 
   // both sides are the same: incorrect
-  // why isn't this working?
-  } else if (leftFieldBackgroundColor == rightFieldBackgroundColor) {
+  } else if (leftFieldBackgroundColor === rightFieldBackgroundColor) {
     console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
     this.props.transition("INCORRECT_SOLUTION")
 
@@ -209,17 +252,22 @@ checkSolution() {
      this.props.transition("INCORRECT_SOLUTION")
 
   // correct
-   } else if ( solutionColors.includes(leftFieldBackgroundColor) && solutionColors.includes(rightFieldBackgroundColor))
+   } else if ( solutionColors.includes( chroma(leftFieldBackgroundColor).hex() ) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex()  )   )
    {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
 
    // why is this triggering?
    } else {
-    console.log("checkSolution() hasn't accounted for this case")
+    console.log("checkSolution() hasn't accounted for this case.")
+    console.log("solutionColor1:", chroma(solutionColor1).hex())
+    console.log("solutionColor2:", chroma(solutionColor2).hex())
+    console.log("left: ", chroma(leftFieldBackgroundColor).hex() )
+    console.log("right: ", chroma(rightFieldBackgroundColor).hex())
     this.props.transition("INCORRECT_SOLUTION")
    }
  }
+
 
 
 playerWinsRound() {
@@ -261,14 +309,13 @@ playerLoosesRound() {
 showSolution() {
   console.log("showSolution")
 
-
   this.setState({"leftField": {
     'backgroundColor': this.state.colorRound.solutionColor1,
-    'animation': 'fadein 5.0s'
+    'animation': 'fadein 4.0s'
   }});
   this.setState({"rightField": {
     'backgroundColor': this.state.colorRound.solutionColor2,
-    'animation': 'fadein 5.0s'
+    'animation': 'fadein 4.0s'
   }});
 
 
@@ -284,9 +331,9 @@ showSolution() {
 
     setTimeout(function() {
       // console.log("setTimeout 2500")
-    //your code to be executed after 2 seconds
+      //your code to be executed after 2 seconds
     transition()
-    }, 3800);
+    }, 4000);
 
 };
 
