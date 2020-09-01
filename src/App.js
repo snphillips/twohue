@@ -40,12 +40,12 @@ const statechart = {
         INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
       },
     },
-    roundFinal: {
-      onEntry: 'roundFinal',
-      on: {
-        INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
-      },
-    },
+    // roundFinal: {
+    //   onEntry: 'roundFinal',
+    //   on: {
+    //     INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
+    //   },
+    // },
     incrementRoundCounter: {
       onEntry: 'incrementRoundCounter',
       on: {
@@ -100,23 +100,6 @@ const statechart = {
 
 let maxAttemptCount = 6
 
-// shuffles the color bubbles
-// between every round
-// function shuffle(array) {
-//   array.sort(() => Math.random() - 0.5);
-// }
-
-
-//   let i;
-
-//   for (i = 0; i < colorRound.length; i++) {
-//     shuffle(colorRound[i].allColorBubbles);
-//     console.log("colorRound[i].allColorBubbles index: ", i, colorRound[i].allColorBubbles)
-//   }
-
-
-
-
 
 // ===========================================
 // ===========================================
@@ -129,18 +112,17 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    // maxRoundCount: (colorRound.length - 1),
     maxRoundCount: 12,
+    // maxRoundCount: 2,
     attempt: 0,
     score: 0,
-    // colorRound: colorRound[0],
     colorRound: colorRound,
     allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
     rightField: {'backgroundColor': null},
-    isAudioOn: false,
+    isAudioOn: true,
     confettiFalling: false,
 
   };
@@ -186,7 +168,9 @@ roundN(){
 incrementRoundCounter() {
   if (this.state.round >= this.state.maxRoundCount) {
     this.props.transition("NO_MORE_ROUNDS")
-  } else {
+
+  } else if (this.state.round < this.state.maxRoundCount)
+  {
     this.setState({round: (this.state.round + 1)})
     // this.setState({colorRound: (colorRound[this.state.round + 1])})
     // this.setState({colorRound: colorRound})
@@ -195,6 +179,8 @@ incrementRoundCounter() {
     this.setState({"rightField": {'backgroundColor': null}})
     console.log("Increment Round by one")
     this.props.transition("GO_TO_ATTEMPT_N")
+  } else {
+    console.log("incrementRoundCounter() This shouldn't be triggering")
   }
 }
 
@@ -284,7 +270,7 @@ playerWinsRound() {
 
 
 playerLoosesRound() {
-  if (this.state.round < this.state.maxRoundCount) {
+  if (this.state.round <= this.state.maxRoundCount) {
    console.log("player looses round")
    // commented out b/c currently this action is happening within the button click
    this.props.transition('SHOW_SOLUTION')
@@ -569,12 +555,6 @@ updateFieldColor(color){
 
 
 
-
-
-
-
-
-
   render() {
     return (
 
@@ -630,7 +610,6 @@ updateFieldColor(color){
 
             <ColorBubbleTray
               round={this.state.round}
-              colorRound={this.state.colorRound}
               allColorBubbles={this.state.allColorBubbles}
               transition={this.props.transition}
               updateFieldColor={this.updateFieldColor}
@@ -658,10 +637,6 @@ updateFieldColor(color){
     </div>
     )
   }
-}
+};
 
-export default withStateMachine(statechart)(App)
-
-
-           // <section className="footer-section">
-           // </section>
+export default withStateMachine(statechart)(App);

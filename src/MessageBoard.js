@@ -17,11 +17,7 @@ export default class MessageBoard extends Component {
         </State>
 
         <State is={['attemptN']}>
-          <p>Select a color</p>
-        </State>
-
-        <State is={['attemptFinal']}>
-          <p>One last guess remaining</p>
+          <p>Select two colors</p>
         </State>
 
         <State is={['colorGuessIncorrect']}>
@@ -51,27 +47,6 @@ export default class MessageBoard extends Component {
 
     );
   }
-}
-
-
-
-
-
-
-
-//        <State is={['playerWinsRound', 'playerLoosesRound']}>
- //         <button onClick={ () => {
-  //          this.props.transition('NEXT_ROUND')
-  //          console.log('NEXT_ROUND')
-  //        }}>
-  //          next round
-  //        </button>
-  //     </State>
-
-
-
-
-
-
+};
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import colorRound from './colorRoundsArray.js'
+
 
 
 
@@ -7,14 +7,7 @@ import React, { Component } from 'react';
 
 
 export default class ColorBubbleTray extends Component {
-
-
-
-
   render() {
-
-
-
 
     return (
 
