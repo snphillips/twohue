@@ -4,6 +4,8 @@ A recreation of the game twohue I created a couple years agao, but this time usi
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
+<img src="https://i.imgur.com/6TvUx8j.png" width="500">
+
 ## Made With
 - Create React App
 - React Automata (X state library) https://www.npmjs.com/package/react-automata
