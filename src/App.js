@@ -283,11 +283,11 @@ showSolution() {
 
   this.setState({"leftField": {
     'backgroundColor': this.state.colorRound.solutionColor1,
-    'animation': 'fadein 4.0s'
+    'animation': 'fadein 1.25s'
   }});
   this.setState({"rightField": {
     'backgroundColor': this.state.colorRound.solutionColor2,
-    'animation': 'fadein 4.0s'
+    'animation': 'fadein 1.25s'
   }});
 
 
@@ -305,7 +305,7 @@ showSolution() {
       // console.log("setTimeout 2500")
       //your code to be executed after 2 seconds
     transition()
-    }, 4000);
+    }, 3200);
 
 };
 
