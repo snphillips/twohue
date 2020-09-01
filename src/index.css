@@ -63,35 +63,13 @@ button:hover {
 }
 
 
-h1 {
-  font: 2.5rem 'Oleo Script', cursive;
-  color: #a6a6a6;
-  text-align: left;
-}
-
-.message-board {
-  text-align: center;
-  font-size: 16px;
-}
-
-.machine-state-indicator {
-  font-size: 11px;
-}
-
-.score {
-
-}
-
-.final-score {
-  font-size: 1.2rem;
-}
-
 /* =======================*/
 /* Header */
 /* =======================*/
 header {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   height: 6rem;
   margin-bottom: 1rem;
@@ -100,6 +78,27 @@ header {
   padding: .5rem 0;
 }
 
+h1 {
+  font: 2.4rem 'Oleo Script', cursive;
+  color: #a6a6a6;
+  text-align: left;
+  order: 1;
+}
+
+.message-board {
+  text-align: center;
+  font-size: 16px;
+  order: 2;
+}
+
+
+.final-score {
+  font-size: 1.2rem;
+}
+
+.machine-state-indicator {
+  font-size: 11px;
+}
 
 .title,
 .message-board,
@@ -111,10 +110,6 @@ header {
 
 .title {
   order: 1;
-}
-
-.message-board {
-  order: 2;
 }
 
 .score-board {
@@ -261,7 +256,7 @@ footer {
 
 
 /*=======================*/
-/* For tablets: */
+/* For tablets and smaller: */
 /*=======================*/
 @media only screen and (max-width: 600px) {
 
@@ -271,7 +266,7 @@ footer {
 
 .twohue {
     max-width: 100%;
-    padding: 1rem;
+    padding: 2rem 1rem;
   }
 
 }
@@ -310,6 +305,10 @@ footer {
     font-size: 1.25rem;
   }
 
+  .score-board {
+    order: 2;
+  }
+
   section#left-and-right-field {
     height: 11.5rem;
   }
@@ -335,14 +334,34 @@ footer {
 /*=======================*/
 /* for small phones: */
 /*=======================*/
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 375px) {
 
   header {
     margin-bottom: 1rem;
   }
 
+  h1 {
+    font: 2rem 'Oleo Script', cursive;
+  }
+
   .message-board {
-    font-size: 1.10rem;
+    order: 3; /* when mobile, moved to 3rd position in header */
+    font-size: 1rem;
+  }
+
+  .target-swatch {
+    width: 22vw;
+    height: 22vw;
+  }
+
+
+   section#left-and-right-field {
+    height: 9.5rem;
+  }
+
+  .field   {
+    width: 10rem;
+    height: 10rem;
   }
 
   .bubble {
@@ -366,12 +385,13 @@ footer {
   }
 
   .message-board {
+    order: 3; /* when mobile, moved to 3rd position in header */
     font-size: 1rem;
   }
 
   .target-swatch {
-    width: 4.5rem;
-    height: 4.5rem;
+    /*width: 4.5rem;*/
+    /*height: 4.5rem;*/
   }
 
   section#left-and-right-field {
