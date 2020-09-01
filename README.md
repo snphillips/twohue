@@ -4,7 +4,7 @@ A recreation of the game twohue I created a couple years agao, but this time usi
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
-<img src="https://imgur.com/dDYHfb6" width="600">
+<img src="https://i.imgur.com/dDYHfb6.png" width="600">
 
 ## Made With
 - Create React App
