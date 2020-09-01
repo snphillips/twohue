@@ -1,6 +1,6 @@
 ## About TwoHue State Chart
 
-A recreation of the game twohue I created a couple years agao, but this time using a state chart to manage user flow.
+A recreation of the game twohue I created a couple years agao, but this time using a state chart to manage user flow and chroma.js to dynamically create the game rounds.
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
