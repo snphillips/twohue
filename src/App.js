@@ -3,7 +3,7 @@ import './App.css';
 import { Action, withStateMachine, State } from 'react-automata'
 import Header from './Header';
 import Byline from './Byline';
-import colorRounds from './colorRoundsArray';
+import colorRound from './colorRoundsArray';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
@@ -100,6 +100,28 @@ const statechart = {
 
 let maxAttemptCount = 6
 
+// shuffles the color bubbles
+// between every round
+// function shuffle(array) {
+//   array.sort(() => Math.random() - 0.5);
+// }
+
+
+//   let i;
+
+//   for (i = 0; i < colorRound.length; i++) {
+//     shuffle(colorRound[i].allColorBubbles);
+//     console.log("colorRound[i].allColorBubbles index: ", i, colorRound[i].allColorBubbles)
+//   }
+
+
+
+
+
+// ===========================================
+// ===========================================
+// ===========================================
+// ===========================================
 
 class App extends React.Component {
   constructor(props) {
@@ -107,11 +129,12 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    maxRoundCount: (colorRounds.length - 1),
-    // maxRoundCount: 3,
+    // maxRoundCount: (colorRound.length - 1),
+    maxRoundCount: 12,
     attempt: 0,
     score: 0,
-    colorRound: colorRounds[0],
+    // colorRound: colorRound[0],
+    colorRound: colorRound,
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
@@ -155,6 +178,7 @@ roundN(){
   this.props.transition('INCREMENT_ROUND_COUNTER')
   this.setState({attempt: 0})
   this.startSound()
+  console.log("shuffleColors: ", colorRound.allColorBubbles)
 }
 
 incrementRoundCounter() {
@@ -162,7 +186,9 @@ incrementRoundCounter() {
     this.props.transition("NO_MORE_ROUNDS")
   } else {
     this.setState({round: (this.state.round + 1)})
-    this.setState({colorRound: (colorRounds[this.state.round + 1])})
+    // this.setState({colorRound: (colorRound[this.state.round + 1])})
+    // this.setState({colorRound: colorRound})
+    this.generateColorRound()
     this.setState({"leftField": {'backgroundColor': null}})
     this.setState({"rightField": {'backgroundColor': null}})
     console.log("Increment Round by one")
@@ -179,48 +205,6 @@ attemptN() {
     this.props.transition("OUT_OF_ATTEMPTS")
   }
 }
-
-// checkSolution() {
-//   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
-//   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
-//   let solutionColors = this.state.colorRound.solutionColors;
-//   let solutionColor1 = this.state.colorRound.solutionColor1;
-//   let solutionColor2 = this.state.colorRound.solutionColor2;
-//   let wrongColors = this.state.colorRound.wrongColors;
-//   console.log("wrongColors: ", wrongColors)
-//   console.log("solutionColors: ", solutionColors)
-//   console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
-//   console.log("this.state.attempt: ", this.state.attempt)
-
-
-//   // Not enough trys: incorrect
-//   if (this.state.attempt === 1) {
-//     console.log("There has only been one guess. => INCORRECT_SOLUTION")
-//     this.props.transition("INCORRECT_SOLUTION")
-
-//   // both sides are the same: incorrect
-//   } else if (leftFieldBackgroundColor === rightFieldBackgroundColor) {
-//     console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
-//     this.props.transition("INCORRECT_SOLUTION")
-
-//   // incorrect
-//   } else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
-//    {
-//      console.log("INCORRECT_SOLUTION")
-//      this.props.transition("INCORRECT_SOLUTION")
-
-//   // correct
-//    } else if ( solutionColors.includes(leftFieldBackgroundColor) && solutionColors.includes(rightFieldBackgroundColor))
-//    {
-//     console.log("CORRECT_SOLUTION")
-//     this.props.transition("CORRECT_SOLUTION")
-
-//    // why is this triggering?
-//    } else {
-//     console.log("checkSolution() hasn't accounted for this case")
-//     this.props.transition("INCORRECT_SOLUTION")
-//    }
-//  }
 
 checkSolution() {
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
@@ -259,11 +243,11 @@ checkSolution() {
 
    // why is this triggering?
    } else {
-    console.log("checkSolution() hasn't accounted for this case.")
-    console.log("solutionColor1:", chroma(solutionColor1).hex())
-    console.log("solutionColor2:", chroma(solutionColor2).hex())
-    console.log("left: ", chroma(leftFieldBackgroundColor).hex() )
-    console.log("right: ", chroma(rightFieldBackgroundColor).hex())
+    // console.log("checkSolution() hasn't accounted for this case.")
+    // console.log("solutionColor1:", chroma(solutionColor1).hex())
+    // console.log("solutionColor2:", chroma(solutionColor2).hex())
+    // console.log("left: ", chroma(leftFieldBackgroundColor).hex() )
+    // console.log("right: ", chroma(rightFieldBackgroundColor).hex())
     this.props.transition("INCORRECT_SOLUTION")
    }
  }
@@ -348,9 +332,35 @@ gameOver() {
 // *********************************************************************
 // *********************************************************************
 
+  generateColorRound(){
+
+    let newColorRound = {
+      name: 'chroma-js',
+      solutionColor1: chroma.random().hex(),
+      solutionColor2: chroma.random().hex(),
+      wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
+      get targetColor() {
+        return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
+      },
+      get solutionColors() {
+        return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+      },
+      get allColorBubbles() {
+       return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+      }
+    };
+
+    this.setState({"colorRound": newColorRound})
+
+  }
+
+
+
 startGameClickHandler(){
   this.props.transition('START_GAME')
 }
+
+
 
 
 
@@ -455,6 +465,8 @@ updateFieldColor(color){
 };
 
 
+
+
   startSound(){
     // A guard clause if the user has clicked the audio off
     if (this.state.isAudioOn === false) {return}
@@ -524,9 +536,25 @@ updateFieldColor(color){
     this.props.transition('READY')
   }
 
-  componentDidUpdate() {
+
+  componentDidMount() {
     console.log("machineState: ", this.props.machineState.value )
+    this.generateColorRound()
+    // not working
+    this.shuffleColors(colorRound.allColorBubbles);
   }
+
+
+
+
+  shuffleColors(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
+
+
+
+
+
 
 
 
@@ -544,7 +572,7 @@ updateFieldColor(color){
             recycle={false}
             tweenDuration={100}
             colors={this.state.colorRound.allColorBubbles}
-            opacity={0.5}
+            opacity={0.6}
             gravity={0.4}
             />
         </State>
@@ -556,7 +584,7 @@ updateFieldColor(color){
             recycle={true}
             tweenDuration={100}
             // colors={this.state.colorRound.allColorBubbles}
-            opacity={0.5}
+            opacity={0.6}
             gravity={0.1}
             />
         </State>
@@ -585,6 +613,7 @@ updateFieldColor(color){
               />
 
             <ColorBubbleTray
+              round={this.state.round}
               colorRound={this.state.colorRound}
               transition={this.props.transition}
               updateFieldColor={this.updateFieldColor}

@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
-import colorRounds from './colorRoundsArray.js'
+// import colorRound from './colorRoundsArray.js'
 
 
 
-// shuffles the color bubbles
-// between every round
-function shuffle(array) {
-  array.sort(() => Math.random() - 0.5);
-}
-
-let i;
-
-for (i = 0; i < colorRounds.length; i++) {
-  shuffle(colorRounds[i].allColorBubbles);
-  // console.log("colorRounds[i].allColorBubbles index: ", i, colorRounds[i].allColorBubbles)
-}
 
 
 
 export default class ColorBubbleTray extends Component {
 
 
+
+
   render() {
+
 
 
 
