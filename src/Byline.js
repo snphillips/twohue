@@ -6,7 +6,7 @@ export default class Byline extends Component {
 
 
     <div className="byline">
-      <a className="footer-link" href="https://sarahphillipsdev.com/">by Sarah Phillips </a>
+      <a className="footer-link" href="https://sarahphillipsdev.surge.sh/">by Sarah Phillips </a>
       <a className="footer-link" href="https://github.com/snphillips/twohue-state-machine">
       <i className="fa fa-github" aria-hidden="true"></i></a>
     </div>

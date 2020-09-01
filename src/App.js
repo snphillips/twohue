@@ -302,8 +302,7 @@ showSolution() {
     }
 
     setTimeout(function() {
-      // console.log("setTimeout 2500")
-      //your code to be executed after 2 seconds
+      //your code to be executed after X seconds
     transition()
     }, 3200);
 
