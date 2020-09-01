@@ -135,12 +135,14 @@ class App extends React.Component {
     score: 0,
     // colorRound: colorRound[0],
     colorRound: colorRound,
+    allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
     rightField: {'backgroundColor': null},
     isAudioOn: false,
-    confettiFalling: false
+    confettiFalling: false,
+
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -350,7 +352,31 @@ gameOver() {
       }
     };
 
+    // the function that will shuffle the allColorBubbles bubbles
+    let shuffleColors = (array) => {
+
+      console.log("before shuffle array", array)
+
+      for (let i = array.length - 1; i > 0; i--)
+      {
+        const j = Math.floor(Math.random() * i)
+        const temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
+      }
+        console.log("after shuffle array", array)
+        this.setState({"allColorBubbles": array})
+    }
+
+    // now suffle the allColorBubbles array
+    // not working? or not working BEFORE setState?
+
+    console.log("1b) before shuffle state:", this.state.allColorBubbles)
+
+    shuffleColors(newColorRound.allColorBubbles)
+
     this.setState({"colorRound": newColorRound})
+    console.log("2b) after shuffle state:", this.state.allColorBubbles)
 
   }
 
@@ -359,12 +385,6 @@ gameOver() {
 startGameClickHandler(){
   this.props.transition('START_GAME')
 }
-
-
-
-
-
-
 
 
 
@@ -540,16 +560,12 @@ updateFieldColor(color){
   componentDidMount() {
     console.log("machineState: ", this.props.machineState.value )
     this.generateColorRound()
-    // not working
-    this.shuffleColors(colorRound.allColorBubbles);
   }
 
 
 
 
-  shuffleColors(array) {
-    array.sort(() => Math.random() - 0.5);
-  }
+
 
 
 
@@ -615,6 +631,7 @@ updateFieldColor(color){
             <ColorBubbleTray
               round={this.state.round}
               colorRound={this.state.colorRound}
+              allColorBubbles={this.state.allColorBubbles}
               transition={this.props.transition}
               updateFieldColor={this.updateFieldColor}
               currentField={this.state.currentField}
