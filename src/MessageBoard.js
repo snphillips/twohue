@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Action, withStateMachine, State } from 'react-automata'
 
 
-
+// Using react-automata's "State" (yes it gets confusing)
+// UI elements will only display when the game is in certain states.
+// Note: you can have multiple states in the State arrays
 
 
 export default class MessageBoard extends Component {
@@ -20,10 +22,6 @@ export default class MessageBoard extends Component {
           <p>Select two colors</p>
         </State>
 
-        <State is={['colorGuessIncorrect']}>
-          <p>Incorrect guess</p>
-        </State>
-
         <State is={['showSolution']}>
           <p>Solution</p>
         </State>
@@ -31,7 +29,6 @@ export default class MessageBoard extends Component {
         <State is={['gameOver']}>
           <p className="game-over">game over</p>
         </State>
-
 
         <State is={['gameOver']}>
           <button className="play-again-button"

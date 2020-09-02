@@ -15,9 +15,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-repeat: repeat;
-  /*background-image: url("/images/struckaxiom/struckaxiom.png");*/
-  /*background-color: #f1f1f1;*/
-  /*background-color: #efefef;*/
 }
 
 code {
@@ -47,11 +44,12 @@ p {
   max-width: 600px;
   margin: 2rem auto;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
   font-family: 'Alata', sans-serif;
-  /*display: inline-block;*/
   border: none;
   border-radius: 25px;
   padding: .5rem 1.5rem;
@@ -64,6 +62,7 @@ button:hover {
 }
 
 
+
 /* =======================*/
 /* Header */
 /* =======================*/
@@ -72,11 +71,7 @@ header {
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  height: 6rem;
-  margin-bottom: 1rem;
   border-top: 5px solid #ebedef;
-  /*border-bottom: 5px solid #ebedef;*/
-  padding: .5rem 0;
 }
 
 h1 {
@@ -84,6 +79,7 @@ h1 {
   color: #a6a6a6;
   text-align: left;
   order: 1;
+  margin: .5rem 0;
 }
 
 .message-board {
@@ -118,18 +114,28 @@ h1 {
   text-align: end;
   padding-right: 0;
   width: 102px;
+  margin: .5rem 0;
 }
 
+.game-over {
+  margin: .5rem 0;
+}
+
+.play-again-button {
+  margin: .5rem 0;
+  position: absolute;
+  top: 47%;
+  z-index: 2;
+  left: 55%;
+}
 
 /*=======================*/
 /*Game Field*/
 /*=======================*/
 #game-field {
   box-sizing: border-box;
-  /*display: block;*/
   width: 100%;
   max-width: 100%;
-  /*border: 1px solid #333;*/
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -144,7 +150,6 @@ h1 {
   border-radius: 50%;
   cursor: pointer;
   position: relative;
-  /*top: 44px;*/
   z-index: 0;
 }
 
@@ -184,12 +189,11 @@ section#left-and-right-field {
   border: 3px solid #abb2b9;
   width: 14rem;
   height: 14rem;
-  /*mix-blend-mode ensures the colors blend properly*/
+  /* mix-blend-mode ensures the colors blend properly */
   mix-blend-mode: multiply;
   border-radius: 50%;
   margin: 0 auto;
   transition: background .10s;
-  /*opacity: .5;*/
 }
 
 #left-field   {
@@ -214,7 +218,6 @@ section#left-and-right-field {
   text-align: center;
   border-radius: 50%;
   transition: background .5s;
-  /*opacity: .5;*/
 }
 
 .bubble:hover {
@@ -225,7 +228,6 @@ section#left-and-right-field {
 
 /*Revealing the solution animation*/
 @keyframes fadein {
-  /*from {opacity:0} to {opacity:.5}*/
   from {opacity:0} to {opacity:1}
 }
 
@@ -331,19 +333,59 @@ footer {
     height: 4rem;
   }
 
-/* Can you do this with flex, like meeting app? */
+
   footer {
     /*position: absolute;*/
     /*bottom: 1rem;*/
+
     border-top: 4px solid #ebedef;
   }
 
 }
 
 /*=======================*/
-/* for small phones: */
+/* for small phones (iphone 6/7/8): */
 /*=======================*/
 @media only screen and (max-width: 375px) {
+
+  header {
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font: 2rem 'Oleo Script', cursive;
+  }
+
+  .message-board {
+    order: 3; /* when mobile, moved to 3rd position in header */
+  }
+
+  .target-swatch {
+    width: 22vw;
+    height: 22vw;
+  }
+
+
+   section#left-and-right-field {
+    height: 9.5rem;
+  }
+
+  .field   {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .bubble {
+    width: 58px;
+    height: 58px;
+  }
+
+}
+
+/*=======================*/
+/* for tiny phones (iphone 5/SE): */
+/*=======================*/
+@media only screen and (max-width: 320px) {
 
   header {
     margin-bottom: 1rem;
