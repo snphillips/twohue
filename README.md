@@ -9,6 +9,18 @@ View deployed game here: http://twohue-state-machine.surge.sh
 <img src="https://i.imgur.com/hD0Y5QT.png" width="250">
 
 ## Getting Started
+clone this repo:
+
+`git clone `
+run npm to install all the dependencies:
+
+`npm install `
+
+start the server:
+
+`npm start`
+
+your browser should open to http://localhost:3000/ !
 
 
 
