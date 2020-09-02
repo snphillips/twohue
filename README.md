@@ -4,9 +4,9 @@ A recreation of the game twohue I created a couple years agao, but this time usi
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
-<img src="https://i.imgur.com/iaWzlC8.png" width="500">
-<img src="https://i.imgur.com/i91exEK.png" width="500">
-<img src="https://i.imgur.com/hD0Y5QT.png" width="300">
+<kbd><img src="https://i.imgur.com/iaWzlC8.png" width="500"></kbd>
+<kbd><img src="https://i.imgur.com/i91exEK.png" width="500"></kbd>
+<kbd><img src="https://i.imgur.com/hD0Y5QT.png" width="300"></kbd>
 
 
 ## Made With
