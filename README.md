@@ -1,6 +1,8 @@
 ## About TwoHue with State Machine
 
-TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years agao, but this time using a state machine to manage user flow and chroma.js to dynamically create the game rounds.
+TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago, during a web development bootcamp.
+
+For this version, I'm using a state machine to manage user flow and chroma.js to dynamically create the game rounds.
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
