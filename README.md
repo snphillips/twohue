@@ -1,6 +1,6 @@
-## About TwoHue with State Chart
+## About TwoHue with State Machine
 
-TwoHue with State Chart is a a refactor of the game TwoHue I created a couple years agao, but this time using a state chart to manage user flow and chroma.js to dynamically create the game rounds.
+TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years agao, but this time using a state machine to manage user flow and chroma.js to dynamically create the game rounds.
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
@@ -11,7 +11,7 @@ View deployed game here: http://twohue-state-machine.surge.sh
 
 ## Made With
 - Create React App
-- React Automata (X state library) https://www.npmjs.com/package/react-automata
+- React Automata (an X-state library) https://www.npmjs.com/package/react-automata
 - Chroma.js https://www.npmjs.com/package/chroma-js
 - react-confetti
 - howler
