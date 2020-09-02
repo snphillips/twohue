@@ -264,30 +264,19 @@ footer {
 /* ********************************* */
 /* ********************************* */
 
-
-/*=======================*/
-/* For tablets and smaller: */
-/*=======================*/
-@media only screen and (max-width: 600px) {
-
-.outer-div {
-  align-items: unset;
-}
-
-.twohue {
-    max-width: 100%;
-    padding: 1rem;
-  }
-
-}
-
-
 /*=======================*/
 /* For phones: */
 /*=======================*/
 @media only screen and (max-width: 600px) {
 
+  .outer-div {
+    align-items: unset;
+  }
+
+
   .twohue {
+    max-width: 100%;
+    padding: 1rem 1rem 0 1rem;
     margin: .5rem auto 1rem auto;
   }
 
@@ -349,7 +338,7 @@ footer {
 @media only screen and (max-width: 375px) {
 
   header {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
   h1 {

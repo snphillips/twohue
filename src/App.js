@@ -525,7 +525,7 @@ incrementAttempt(){
             recycle={true}
             tweenDuration={100}
             opacity={0.6}
-            gravity={0.1}
+            gravity={0.08}
             />
         </State>
 
