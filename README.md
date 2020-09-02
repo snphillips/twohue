@@ -11,10 +11,11 @@ View deployed game here: http://twohue-state-machine.surge.sh
 ## Getting Started
 clone this repo:
 
-`git clone `
+`git clone https://github.com/snphillips/twohue-state-chart.git`
+
 run npm to install all the dependencies:
 
-`npm install `
+`npm install`
 
 start the server:
 
