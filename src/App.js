@@ -276,7 +276,7 @@ showSolution() {
     setTimeout(function() {
     // Transition to next round after X seconds
     transition()
-    }, 2800);
+    }, 2500);
 };
 
 
