@@ -8,10 +8,14 @@ View deployed game here: http://twohue-state-machine.surge.sh
 <img src="https://i.imgur.com/i91exEK.png" width="450">
 <img src="https://i.imgur.com/hD0Y5QT.png" width="250">
 
+## Getting Started
+
+
+
 
 ## Made With
 - Create React App
-- React Automata (an X-state library) https://www.npmjs.com/package/react-automata
+- React Automata (an X-state library for React) https://www.npmjs.com/package/react-automata
 - Chroma.js https://www.npmjs.com/package/chroma-js
-- react-confetti
-- howler
+- react-confetti (for confetti falling effect) https://www.npmjs.com/package/react-confetti
+- Howler.js (for sound effects) https://www.npmjs.com/package/howler
