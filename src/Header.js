@@ -3,6 +3,8 @@ import MessageBoard from './MessageBoard';
 import ScoreBoard from './ScoreBoard';
 import Title from './Title';
 
+
+
 export default class Header extends Component {
   render() {
     return (
@@ -23,7 +25,7 @@ export default class Header extends Component {
       score={this.props.score}
       transition={this.props.transition}
       isAudioOn={this.props.isAudioOn}
-      startSound={this.props.startSound}
+      beginGameSound={this.props.beginGameSound}
       startGameClickHandler={this.props.startGameClickHandler}
       />
 

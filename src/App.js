@@ -15,6 +15,18 @@ import chroma from 'chroma-js';
 
 
 // ==============================
+// The withStateMachine higher-order component accepts an xstate configuration object
+// or an xstate machine, some options and a component. It returns a new component with
+// special props, action and activity methods and additional lifecycle hooks.
+// The initial machine state and the initial data can be passed to the resulting component
+// through the initialMachineState and initialData props.
+// https://github.com/MicheleBertoli/react-automata
+// ==============================
+
+
+
+
+// ==============================
 // React Automata State Chart
 // States, TRANSITIONS, & Functions
 // ==============================
@@ -123,7 +135,7 @@ class App extends React.Component {
 
   // This binding is necessary to make `this` work in the callback
   this.updateFieldColor = this.updateFieldColor.bind(this)
-  this.muteButtonToggle = this.muteButtonToggle.bind(this)
+  this.soundButtonToggle = this.soundButtonToggle.bind(this)
   this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
   this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
   this.showSolution = this.showSolution.bind(this)
@@ -135,6 +147,10 @@ class App extends React.Component {
 
 //  =================================
 //  State Machine Functions
+//  All the component's methods whose names match the names of actions and activities,
+//  are fired when the related transition happen. Actions receive the state and the event
+//  as arguments. Activities receive a boolean that is true when the activity should start,
+//  and false otherwise.
 //  =================================
  readyAction = () => {
   this.props.transition('READY')
@@ -151,7 +167,7 @@ resetScore(){
 roundN(){
   this.setState({confettiFalling: false})
   this.setState({attempt: 0})
-  this.startSound()
+  this.beginGameSound()
   this.props.transition('INCREMENT_ROUND_COUNTER')
 }
 
@@ -420,7 +436,7 @@ incrementAttempt(){
     }
   };
 
-  startSound(){
+  beginGameSound(){
     // A guard clause if the user has clicked the audio off
     if (this.state.isAudioOn === false) {return}
     const sound = new Howl({
@@ -430,9 +446,14 @@ incrementAttempt(){
   };
 
 
-//  Mute button toggle, if audio is on,
-//  the !(not) turns it off and vice versa
-   muteButtonToggle() {
+//  ==================================
+//  Mute button toggle
+//  if audio is on the state of isAudioOn is true,
+//  if audio is off the state of isAudioOn is false,
+//  the ! is the oposite of what it currently is.
+//  So, set the state to the 'oposite' of what it is.
+//  ==================================
+   soundButtonToggle() {
     this.setState(prevState => ({
       isAudioOn: !prevState.isAudioOn
     }));
@@ -536,10 +557,10 @@ incrementAttempt(){
           attempt={this.state.attempt}
           score={this.state.score}
           resetScore={this.resetScore}
-          startSound={this.startSound}
+          beginGameSound={this.beginGameSound}
           isAudioOn={this.state.isAudioOn}
           startGameClickHandler={this.startGameClickHandler}
-        />
+          />
 
 
           <div id="game-field">
@@ -550,7 +571,7 @@ incrementAttempt(){
               currentField={this.state.currentField}
               leftField={this.state.leftField}
               rightField={this.state.rightField}
-            />
+              />
 
             <ColorBubbleTray
               round={this.state.round}
@@ -562,7 +583,7 @@ incrementAttempt(){
               currentFieldMouseEnter={this.currentFieldMouseEnter}
               currentFieldMouseLeave={this.currentFieldMouseLeave}
               bubbleClickHandler={this.bubbleClickHandler}
-            />
+              />
 
          </div>
 
@@ -571,9 +592,11 @@ incrementAttempt(){
 
              <Byline />
 
-             <AudioToggle muteButtonToggle={this.muteButtonToggle}
-                          isAudioOn={this.state.isAudioOn}
-                          />
+             <AudioToggle
+               soundButtonToggle={this.soundButtonToggle}
+               isAudioOn={this.state.isAudioOn}
+               />
+
          </footer>
 
       </div>
