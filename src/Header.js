@@ -9,27 +9,28 @@ export default class Header extends Component {
   render() {
     return (
 
-  <header>
+      <header>
 
-    <Title />
+        <Title />
 
-    <MessageBoard
-      transition={this.props.transition}
-      resetScore={this.props.resetScore}
-      />
+        <MessageBoard
+          transition={this.props.transition}
+          resetScore={this.props.resetScore}
+          />
 
-    <ScoreBoard
-      round={this.props.round}
-      maxRoundCount={this.props.maxRoundCount}
-      attempt={this.props.attempt}
-      score={this.props.score}
-      transition={this.props.transition}
-      isAudioOn={this.props.isAudioOn}
-      beginGameSound={this.props.beginGameSound}
-      startGameClickHandler={this.props.startGameClickHandler}
-      />
+        <ScoreBoard
+          round={this.props.round}
+          maxRoundCount={this.props.maxRoundCount}
+          attempt={this.props.attempt}
+          score={this.props.score}
+          looseRound={this.props.looseRound}
+          transition={this.props.transition}
+          isAudioOn={this.props.isAudioOn}
+          beginGameSound={this.props.beginGameSound}
+          startGameClickHandler={this.props.startGameClickHandler}
+          />
 
-  </header>
+      </header>
 
     );
   }

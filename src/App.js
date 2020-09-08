@@ -15,11 +15,17 @@ import chroma from 'chroma-js';
 
 
 // ==============================
-// The withStateMachine higher-order component accepts an xstate configuration object
-// or an xstate machine, some options and a component. It returns a new component with
+// The withStateMachine higher-order component accepts:
+// 1) an xstate configuration object or an xstate machine,
+// 2) some options,
+// 3) and a component.
+
+// It returns a NEW component with
 // special props, action and activity methods and additional lifecycle hooks.
-// The initial machine state and the initial data can be passed to the resulting component
-// through the initialMachineState and initialData props.
+
+// The initial machine state and the initial data can be passed to
+// the resulting component through the initialMachineState and initialData props.
+
 // https://github.com/MicheleBertoli/react-automata
 // ==============================
 
@@ -120,6 +126,7 @@ class App extends React.Component {
     maxAttemptCount: 6,
     maxRoundCount: 12,
     // maxRoundCount: 2,
+    looseRound: 0,
     attempt: 0,
     score: 0,
     colorRound: colorRound,
@@ -128,7 +135,7 @@ class App extends React.Component {
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
     rightField: {'backgroundColor': null},
-    isAudioOn: true,
+    isAudioOn: false,
     confettiFalling: false,
 
   };
@@ -263,6 +270,7 @@ playerWinsRound() {
 playerLoosesRound() {
   if (this.state.round <= this.state.maxRoundCount) {
    console.log("player looses round")
+   this.setState({'looseRound': this.state.looseRound + 1})
    this.props.transition('SHOW_SOLUTION')
  }
 }
@@ -556,6 +564,7 @@ incrementAttempt(){
           maxRoundCount={this.state.maxRoundCount}
           attempt={this.state.attempt}
           score={this.state.score}
+          looseRound={this.state.looseRound}
           resetScore={this.resetScore}
           beginGameSound={this.beginGameSound}
           isAudioOn={this.state.isAudioOn}
