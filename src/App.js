@@ -170,6 +170,7 @@ homeScreenPractice(){
 
 resetScore(){
   this.setState({score:0})
+  this.setState({looseRound:0})
 }
 
 roundN(){
@@ -180,10 +181,10 @@ roundN(){
 }
 
 incrementRoundCounter() {
-  if (this.state.round >= this.state.maxLossCount) {
+  if (this.state.looseRound >= this.state.maxLossCount) {
     this.props.transition("NO_MORE_ROUNDS")
 
-  } else if (this.state.round < this.state.maxLossCount)
+  } else if (this.state.looseRound < this.state.maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
     this.generateColorRound()
@@ -192,6 +193,7 @@ incrementRoundCounter() {
     this.props.transition("GO_TO_ATTEMPT_N")
   } else {
     console.log("incrementRoundCounter() This shouldn't be triggering. Something is wrong.")
+    console.log("this.state.looseRound: ", this.state.looseRound, "this.state.maxLossCount: ", this.state.maxLossCount)
   }
 }
 
@@ -252,10 +254,10 @@ playerWinsRound() {
   console.log("player wins round")
 
       let stateTransition = () => {
-        if (this.state.round < this.state.maxLossCount) {
+        if (this.state.looseRound < this.state.maxLossCount) {
           console.log('NEXT_ROUND')
           this.props.transition('NEXT_ROUND')
-        } else if (this.state.round >= this.state.maxLossCount){
+        } else if (this.state.looseRound >= this.state.maxLossCount){
           console.log('NO_MORE_ROUNDS this.state.maxLossCount:', this.state.maxLossCount)
           this.props.transition('NO_MORE_ROUNDS')
         }
@@ -269,7 +271,7 @@ playerWinsRound() {
 }
 
 playerLoosesRound() {
-  if (this.state.round <= this.state.maxLossCount) {
+  if (this.state.looseRound <= this.state.maxLossCount) {
    console.log("player looses round")
    this.playLoseSound()
    this.setState({'looseRound': this.state.looseRound + 1})
@@ -290,11 +292,10 @@ showSolution() {
   }});
 
     let transition = () => {
-      if (this.state.round < this.state.maxLossCount) {
+      if (this.state.looseRound < this.state.maxLossCount) {
         console.log(`this.props.transition('NEXT_ROUND')`)
         this.props.transition('NEXT_ROUND')
-      // } else if (this.state.round === this.state.maxLossCount) {
-      } else if (this.state.round >= this.state.maxLossCount) {
+      } else if (this.state.looseRound >= this.state.maxLossCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
       }
@@ -310,6 +311,7 @@ showSolution() {
 gameOver() {
   this.setState({attempt: 0})
   this.setState({round: 0})
+  this.setState({looseRound: 0})
   this.setState({confettiFalling: true})
 }
 // *****************************************************
@@ -570,7 +572,6 @@ incrementAttempt(){
           attempt={this.state.attempt}
           score={this.state.score}
           looseRound={this.state.looseRound}
-          maxLossCount={this.state.maxLossCount}
           resetScore={this.resetScore}
           beginGameSound={this.beginGameSound}
           isAudioOn={this.state.isAudioOn}
