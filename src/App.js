@@ -9,14 +9,15 @@ import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 // Howler manages the sound effects
 import {Howl} from 'howler';
-import Confetti from 'react-confetti'
+// Color are all generated and mixed using chroma.js
 import chroma from 'chroma-js';
+import Confetti from 'react-confetti'
 
 
 
 // ==============================
 // The withStateMachine higher-order component accepts:
-// 1) an xstate configuration object or an xstate machine,
+// 1) an Xstate configuration object or an Xstate machine,
 // 2) some options,
 // 3) and a component.
 
@@ -127,8 +128,6 @@ class App extends React.Component {
     maxLossCount: 10,
     // maxLossCount: 2,
     looseRound: 0,
-    maxLossCount: 10,
-    // maxLossCount: 2,
     attempt: 0,
     score: 0,
     colorRound: colorRound,
@@ -257,7 +256,7 @@ playerWinsRound() {
           console.log('NEXT_ROUND')
           this.props.transition('NEXT_ROUND')
         } else if (this.state.round >= this.state.maxLossCount){
-          console.log('NO_MORE_ROUNDS')
+          console.log('NO_MORE_ROUNDS this.state.maxLossCount:', this.state.maxLossCount)
           this.props.transition('NO_MORE_ROUNDS')
         }
       }
@@ -295,7 +294,7 @@ showSolution() {
         console.log(`this.props.transition('NEXT_ROUND')`)
         this.props.transition('NEXT_ROUND')
       // } else if (this.state.round === this.state.maxLossCount) {
-      } else if (this.state.round === this.state.maxLossCount) {
+      } else if (this.state.round >= this.state.maxLossCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
       }
@@ -419,8 +418,10 @@ incrementAttempt(){
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  bubbleClickHandler = (event) =>  {
-  // guard clause to disable click handler if round is over
+  // guard clause to disable click handler if round is over,
+  // players is out of attempts or the game is over.
   if (this.state.round > (this.state.maxLossCount)) return
+  if (this.state.attempt >= this.state.maxAttemptCount) return
   if (this.state.confettiFalling === true) return
 
   this.setState({attempt: (this.state.attempt + 1)})
