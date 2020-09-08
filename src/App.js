@@ -124,7 +124,7 @@ class App extends React.Component {
   this.state = {
     round: 0,
     maxAttemptCount: 6,
-    maxRoundCount: 12,
+    maxRoundCount: 10,
     // maxRoundCount: 2,
     looseRound: 0,
     attempt: 0,
@@ -135,7 +135,7 @@ class App extends React.Component {
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': null},
     rightField: {'backgroundColor': null},
-    isAudioOn: false,
+    isAudioOn: true,
     confettiFalling: false,
 
   };
@@ -270,6 +270,7 @@ playerWinsRound() {
 playerLoosesRound() {
   if (this.state.round <= this.state.maxRoundCount) {
    console.log("player looses round")
+   this.playLoseSound()
    this.setState({'looseRound': this.state.looseRound + 1})
    this.props.transition('SHOW_SOLUTION')
  }
