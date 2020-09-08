@@ -83,7 +83,7 @@ h1 {
   color: #a6a6a6;
   text-align: left;
   order: 1;
-  margin: .5rem 0;
+  margin: 0;
 }
 
 .message-board {
@@ -101,7 +101,7 @@ h1 {
   font-size: 11px;
 }
 
-.title,
+.title-and-round-section,
 .message-board,
 .score-board {
   display: flex;
@@ -109,7 +109,7 @@ h1 {
   padding-right: 2rem;
 }
 
-.title {
+.title-and-round-section {
   order: 1;
 }
 
@@ -128,7 +128,7 @@ h1 {
 .play-again-button {
   margin: .5rem 0;
   position: absolute;
-  top: 47%;
+  top: 49%;
   z-index: 2;
   left: 55%;
 }

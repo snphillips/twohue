@@ -11,7 +11,9 @@ export default class Header extends Component {
 
       <header>
 
-        <Title />
+        <Title
+          round={this.props.round}
+        />
 
         <MessageBoard
           transition={this.props.transition}
@@ -20,10 +22,11 @@ export default class Header extends Component {
 
         <ScoreBoard
           round={this.props.round}
-          maxRoundCount={this.props.maxRoundCount}
+          maxLossCount={this.props.maxLossCount}
           attempt={this.props.attempt}
           score={this.props.score}
           looseRound={this.props.looseRound}
+          maxLossCount={this.props.maxLossCount}
           transition={this.props.transition}
           isAudioOn={this.props.isAudioOn}
           beginGameSound={this.props.beginGameSound}

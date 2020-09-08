@@ -124,9 +124,11 @@ class App extends React.Component {
   this.state = {
     round: 0,
     maxAttemptCount: 6,
-    maxRoundCount: 10,
-    // maxRoundCount: 2,
+    maxLossCount: 10,
+    // maxLossCount: 2,
     looseRound: 0,
+    maxLossCount: 10,
+    // maxLossCount: 2,
     attempt: 0,
     score: 0,
     colorRound: colorRound,
@@ -179,10 +181,10 @@ roundN(){
 }
 
 incrementRoundCounter() {
-  if (this.state.round >= this.state.maxRoundCount) {
+  if (this.state.round >= this.state.maxLossCount) {
     this.props.transition("NO_MORE_ROUNDS")
 
-  } else if (this.state.round < this.state.maxRoundCount)
+  } else if (this.state.round < this.state.maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
     this.generateColorRound()
@@ -251,10 +253,10 @@ playerWinsRound() {
   console.log("player wins round")
 
       let stateTransition = () => {
-        if (this.state.round < this.state.maxRoundCount) {
+        if (this.state.round < this.state.maxLossCount) {
           console.log('NEXT_ROUND')
           this.props.transition('NEXT_ROUND')
-        } else if (this.state.round >= this.state.maxRoundCount){
+        } else if (this.state.round >= this.state.maxLossCount){
           console.log('NO_MORE_ROUNDS')
           this.props.transition('NO_MORE_ROUNDS')
         }
@@ -268,7 +270,7 @@ playerWinsRound() {
 }
 
 playerLoosesRound() {
-  if (this.state.round <= this.state.maxRoundCount) {
+  if (this.state.round <= this.state.maxLossCount) {
    console.log("player looses round")
    this.playLoseSound()
    this.setState({'looseRound': this.state.looseRound + 1})
@@ -289,10 +291,11 @@ showSolution() {
   }});
 
     let transition = () => {
-      if (this.state.round < this.state.maxRoundCount) {
+      if (this.state.round < this.state.maxLossCount) {
         console.log(`this.props.transition('NEXT_ROUND')`)
         this.props.transition('NEXT_ROUND')
-      } else if (this.state.round === this.state.maxRoundCount) {
+      // } else if (this.state.round === this.state.maxLossCount) {
+      } else if (this.state.round === this.state.maxLossCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
       }
@@ -417,7 +420,7 @@ incrementAttempt(){
 //  ===================================
  bubbleClickHandler = (event) =>  {
   // guard clause to disable click handler if round is over
-  if (this.state.round > (this.state.maxRoundCount)) return
+  if (this.state.round > (this.state.maxLossCount)) return
   if (this.state.confettiFalling === true) return
 
   this.setState({attempt: (this.state.attempt + 1)})
@@ -436,7 +439,7 @@ incrementAttempt(){
   //  Filling in chosen color into left or right fields
   //  ==================================
   updateFieldColor(color){
-    if (this.state.round > (this.state.maxRoundCount)) return
+    if (this.state.round > (this.state.maxLossCount)) return
     if (this.state.attempt >= this.state.maxAttemptCount) return
     if (this.state.currentField === 'leftField') {
      this.setState({"leftField": {'backgroundColor': color}})
@@ -562,10 +565,11 @@ incrementAttempt(){
         <Header
           transition={this.props.transition}
           round={this.state.round}
-          maxRoundCount={this.state.maxRoundCount}
+          maxLossCount={this.state.maxLossCount}
           attempt={this.state.attempt}
           score={this.state.score}
           looseRound={this.state.looseRound}
+          maxLossCount={this.state.maxLossCount}
           resetScore={this.resetScore}
           beginGameSound={this.beginGameSound}
           isAudioOn={this.state.isAudioOn}
