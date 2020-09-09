@@ -125,8 +125,8 @@ class App extends React.Component {
   this.state = {
     round: 0,
     maxAttemptCount: 6,
-    maxLossCount: 10,
-    // maxLossCount: 1,
+    // maxLossCount: 10,
+    maxLossCount: 4,
     looseRound: 0,
     attempt: 0,
     score: 0,
@@ -134,8 +134,8 @@ class App extends React.Component {
     allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
-    leftField: {'backgroundColor': null},
-    rightField: {'backgroundColor': null},
+    leftField: {'backgroundColor': '#fff'},
+    rightField: {'backgroundColor': '#fff'},
     isAudioOn: true,
     confettiFalling: false,
 
@@ -188,8 +188,8 @@ incrementRoundCounter() {
   {
     this.setState({round: (this.state.round + 1)})
     this.generateColorRound()
-    this.setState({"leftField": {'backgroundColor': null}})
-    this.setState({"rightField": {'backgroundColor': null}})
+    this.setState({"leftField": {'backgroundColor': "#fff"}})
+    this.setState({"rightField": {'backgroundColor': "#fff"}})
     this.props.transition("GO_TO_ATTEMPT_N")
   } else {
     console.log("incrementRoundCounter() This shouldn't be triggering. Something is wrong.")
@@ -215,7 +215,7 @@ checkSolution() {
   let wrongColors = this.state.colorRound.wrongColors;
   console.log("wrongColors: ", wrongColors)
   console.log("solutionColors: ", solutionColors)
-  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
+  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
   console.log("this.state.attempt: ", this.state.attempt)
 
 
@@ -223,20 +223,20 @@ checkSolution() {
   if (this.state.attempt === 1) {
     console.log("There has only been one guess. => INCORRECT_SOLUTION")
     this.props.transition("INCORRECT_SOLUTION")
+   }
 
-  // both sides are the same: incorrect
-  } else if ( this.state.attempt >= 2 && leftFieldBackgroundColor === rightFieldBackgroundColor) {
-    console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
-    this.props.transition("INCORRECT_SOLUTION")
-
-  // incorrect
-  } else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+  // incorect
+   else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
    {
      console.log("INCORRECT_SOLUTION")
      this.props.transition("INCORRECT_SOLUTION")
 
   // correct
-   } else if ( solutionColors.includes( chroma(leftFieldBackgroundColor).hex() ) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex()  )   )
+   } else if (
+    ( solutionColors.includes(chroma(leftFieldBackgroundColor).hex()) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex())  )
+    // the colors can't be the same on either side
+    && ( chroma(leftFieldBackgroundColor).hex() !== chroma(rightFieldBackgroundColor).hex()  )
+    )
    {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
@@ -244,6 +244,7 @@ checkSolution() {
    // Ask yourself, "self, why is this triggering?"
    } else {
     this.props.transition("INCORRECT_SOLUTION")
+    console.log("INCORRECT_SOLUTION - why is this triggering?")
    }
  }
 
@@ -368,6 +369,7 @@ gameOver() {
 //  otherwise it will revert to none.
 //  ==================================================================
 currentFieldMouseEnter(){
+
 if (this.state.currentField === 'leftField'){
 this.setState({'leftField': {
   "border": "8px solid #abb2b9",
@@ -383,6 +385,7 @@ this.setState({'leftField': {
 };
 
 currentFieldMouseLeave(){
+
   if (this.state.currentField === 'leftField'){
     this.setState({'leftField': {
       "border": "3px solid #abb2b9",
@@ -421,8 +424,10 @@ incrementAttempt(){
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  bubbleClickHandler = (event) =>  {
-  // guard clause to disable click handler if round is over,
-  // players is out of attempts or the game is over.
+  // guard clause to disable click handler if:
+  // 1) round is over,
+  // 2) player is out of attempts,
+  // 3) the game is over.
   if (this.state.looseRound > (this.state.maxLossCount)) return
   if (this.state.attempt >= this.state.maxAttemptCount) return
   if (this.state.confettiFalling === true) return
@@ -443,7 +448,7 @@ incrementAttempt(){
   //  Filling in chosen color into left or right fields
   //  ==================================
   updateFieldColor(color){
-    if (this.state.round > (this.state.maxLossCount)) return
+    if (this.state.looseRound > (this.state.maxLossCount)) return
     if (this.state.attempt >= this.state.maxAttemptCount) return
     if (this.state.currentField === 'leftField') {
      this.setState({"leftField": {'backgroundColor': color}})
@@ -529,6 +534,10 @@ incrementAttempt(){
   componentDidMount() {
     console.log("machineState: ", this.props.machineState.value )
     this.generateColorRound()
+  }
+
+  componentDidUpdate() {
+    console.log("machineState: ", this.props.machineState.value )
   }
 
 

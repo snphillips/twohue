@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 
 // ==============================
-// The set of six 'color bubbles' at the bottom on the game field
+// The set of six 'color bubbles'
+// at the bottom on the game field
 // ==============================
 
 
