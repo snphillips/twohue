@@ -225,9 +225,7 @@ checkSolution() {
     this.props.transition("INCORRECT_SOLUTION")
 
   // both sides are the same: incorrect
-  // TODO fix THIS!!! it sees two white circles and
-  // it thinks you're done
-  } else if ( this.state.attempt > 0 && leftFieldBackgroundColor === rightFieldBackgroundColor) {
+  } else if ( this.state.attempt >= 2 && leftFieldBackgroundColor === rightFieldBackgroundColor) {
     console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
     this.props.transition("INCORRECT_SOLUTION")
 
@@ -311,6 +309,7 @@ showSolution() {
 
 
 gameOver() {
+  this.gameOverChimes()
   this.setState({attempt: 0})
   this.setState({round: 0})
   this.setState({looseRound: 0})
@@ -508,12 +507,12 @@ incrementAttempt(){
     // a guard clause if the player has toggled sound to be off
     if (this.state.isAudioOn === false) {return}
     const sound = new Howl({
-      src: ['/sound/descending.wav']
+      src: ['/sound/wrong-guess.wav']
     });
     sound.play()
   };
 
-  gameOverChimes() {
+  gameOverChimes(){
       // A guard clause if the user has clicked the audio off
     if (this.state.isAudioOn === false) {return}
     const sound = new Howl({
