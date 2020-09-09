@@ -126,7 +126,7 @@ class App extends React.Component {
     round: 0,
     maxAttemptCount: 6,
     maxLossCount: 10,
-    // maxLossCount: 2,
+    // maxLossCount: 1,
     looseRound: 0,
     attempt: 0,
     score: 0,

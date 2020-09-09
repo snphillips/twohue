@@ -22,6 +22,28 @@ code {
     monospace;
 }
 
+/* -----
+SVG Icons - svgicons.sparkk.fr
+----- */
+
+.svg-icon {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: #000;
+}
+
+.svg-icon circle {
+  stroke: #000;
+  stroke-width: 1;
+}
+/* ----- */
+
+
 .outer-div {
   box-sizing: border-box;
   position: absolute;
@@ -57,6 +79,10 @@ button {
   background-color: #efefef;
   transition:  background-color .5s;
   -webkit-appearance: none;
+}
+
+.audio-button {
+  padding: .5rem 1.75rem .2rem 1.75rem;
 }
 
 button:hover {
@@ -142,8 +168,8 @@ h1 {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .target-swatch {
