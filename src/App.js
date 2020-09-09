@@ -225,7 +225,9 @@ checkSolution() {
     this.props.transition("INCORRECT_SOLUTION")
 
   // both sides are the same: incorrect
-  } else if (leftFieldBackgroundColor === rightFieldBackgroundColor) {
+  // TODO fix THIS!!! it sees two white circles and
+  // it thinks you're done
+  } else if ( this.state.attempt > 0 && leftFieldBackgroundColor === rightFieldBackgroundColor) {
     console.log(" Both fields the same. Incorrect Solution. leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor)
     this.props.transition("INCORRECT_SOLUTION")
 
@@ -280,7 +282,7 @@ playerLoosesRound() {
 }
 
 showSolution() {
-  console.log("showSolution")
+  console.log("showSolution", this.state.colorRound.solutionColor1, this.state.colorRound.solutionColor2)
 
   this.setState({"leftField": {
     'backgroundColor': this.state.colorRound.solutionColor1,
@@ -422,7 +424,7 @@ incrementAttempt(){
  bubbleClickHandler = (event) =>  {
   // guard clause to disable click handler if round is over,
   // players is out of attempts or the game is over.
-  if (this.state.round > (this.state.maxLossCount)) return
+  if (this.state.looseRound > (this.state.maxLossCount)) return
   if (this.state.attempt >= this.state.maxAttemptCount) return
   if (this.state.confettiFalling === true) return
 
