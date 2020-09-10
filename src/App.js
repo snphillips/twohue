@@ -12,6 +12,7 @@ import {Howl} from 'howler';
 // Color are all generated and mixed using chroma.js
 import chroma from 'chroma-js';
 import Confetti from 'react-confetti'
+// import useWindowSize from 'react-use/lib/useWindowSize'
 
 
 
@@ -117,7 +118,6 @@ const statechart = {
 // ===========================================
 
 
-
 class App extends React.Component {
   constructor(props) {
   super(props);
@@ -174,9 +174,9 @@ resetScore(){
 }
 
 roundN(){
+  this.beginGameSound()
   this.setState({confettiFalling: false})
   this.setState({attempt: 0})
-  this.beginGameSound()
   this.props.transition('INCREMENT_ROUND_COUNTER')
 }
 
@@ -226,7 +226,8 @@ checkSolution() {
    }
 
   // incorect
-   else if ( (this.state.attempt > 1) && (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+   else if ( (this.state.attempt > 1) &&
+             (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
    {
      console.log("INCORRECT_SOLUTION")
      this.props.transition("INCORRECT_SOLUTION")
@@ -547,13 +548,24 @@ incrementAttempt(){
 // *****************************************************
 
   render() {
+
+  // for confetti to fall accross whole window,
+  // even if user resized window.
+  let width = window.innerWidth
+  let height = window.innerHeight
+
+
+
     return (
+
 
       <div className="outer-div">
         <div className="twohue">
 
         <State is={['playerWinsRound']}>
           <Confetti
+            width={width}
+            height={height}
             run={this.state.confettiFalling}
             numberOfPieces={300}
             recycle={false}
