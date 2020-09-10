@@ -2,12 +2,16 @@
 
 TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago, during a web development bootcamp.
 
-In this version, I've used **react-automata** to create a state machine that manages user flow and the color library **chroma.js** to dynamically create the game rounds.
+In this version I've made several changes, including:
+
+1) I use **react-automata** to create a state machine that manages user flow,
+2) I use the color library **chroma.js** to dynamically create unlimmited game rounds,
+3) I change the game logic so that the game ends when the player looses x rounds
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
-<img src="https://i.imgur.com/iaWzlC8.png" width="400">
-<img src="https://i.imgur.com/i91exEK.png" width="400">
+<img src="https://i.imgur.com/iaWzlC8.png" width="350">
+<img src="https://i.imgur.com/i91exEK.png" width="350">
 <img src="https://i.imgur.com/hD0Y5QT.png" width="250">
 
 ## How to Play
@@ -28,6 +32,10 @@ clone this repo:
 
 `git clone https://github.com/snphillips/twohue-state-chart.git`
 
+get into the correct directory:
+
+`cd twohue-state-machine`
+
 run npm to install all the dependencies:
 
 `npm install`
@@ -45,5 +53,5 @@ your browser should open to http://localhost:3000/ !
 - Create React App
 - React Automata (an X-state library for React) https://www.npmjs.com/package/react-automata
 - Chroma.js https://www.npmjs.com/package/chroma-js
-- react-confetti (for confetti falling effect) https://www.npmjs.com/package/react-confetti
+- react-confetti (for cool falling confetti effect) https://www.npmjs.com/package/react-confetti
 - Howler.js (for sound effects) https://www.npmjs.com/package/howler
