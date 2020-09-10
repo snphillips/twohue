@@ -3,7 +3,7 @@ import { Action, withStateMachine, State } from 'react-automata'
 import './App.css';
 import Header from './Header';
 import Byline from './Byline';
-import colorRound from './colorRoundsArray';
+// import colorRound from './colorRoundsArray';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
@@ -116,7 +116,7 @@ const statechart = {
 // ===========================================
 // ===========================================
 // ===========================================
-
+let newColorRound = [];
 
 class App extends React.Component {
   constructor(props) {
@@ -130,7 +130,8 @@ class App extends React.Component {
     looseRound: 0,
     attempt: 0,
     score: 0,
-    colorRound: colorRound,
+    // colorRound: colorRound,
+    colorRound: newColorRound,
     allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
@@ -324,21 +325,74 @@ gameOver() {
 
   generateColorRound(){
 
-    let newColorRound = {
-      name: 'chroma-js',
-      solutionColor1: chroma.random().hex(),
-      solutionColor2: chroma.random().hex(),
-      wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
-      get targetColor() {
-        return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
-      },
-      get solutionColors() {
-        return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
-      },
-      get allColorBubbles() {
-       return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
-      }
-    };
+    // let newColorRound = {
+    //   name: 'chroma-js',
+    //   solutionColor1: chroma.random().hex(),
+    //   solutionColor2: chroma.random().hex(),
+    //   wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
+    //   get targetColor() {
+    //     return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
+    //   },
+    //   get solutionColors() {
+    //     return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+    //   },
+    //   get allColorBubbles() {
+    //    return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+    //   }
+    // };
+
+
+var soluColor1;
+var soluColor2;
+var targColor;
+var colorLightness = 14;
+
+
+//=============================
+// If the target color to be too dark (like black),
+// the game is too hard to play.
+// First
+//=============================
+
+while (colorLightness <= 15) {
+
+  soluColor1 = chroma.random().hex()
+  console.log("soluColor1: ", soluColor1)
+
+  soluColor2 = chroma.random().hex()
+  console.log("soluColor2: ", soluColor2)
+
+  targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
+  console.log("targColor: ", targColor.hex() )
+
+  colorLightness = chroma(  targColor  ).get('lab.l')
+  console.log("colorLightness: ", colorLightness)
+
+};
+
+
+let newColorRound = {
+
+  solutionColor1: soluColor1,
+  solutionColor2: soluColor2,
+  wrongColors: [
+    chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()
+  ],
+  targetColor: targColor,
+  get solutionColors() {
+    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+  },
+  get allColorBubbles() {
+   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+  }
+};
+
+
+
+
+
+
+    console.log("targetColor from app.js", chroma(newColorRound.targetColor).hex()  )
 
     // the function that will shuffle the allColorBubbles bubbles
     // so the first two bubbles aren't always the solution

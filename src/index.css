@@ -143,7 +143,7 @@ h1 {
   text-align: end;
   padding-right: 0;
   width: 102px;
-  margin: .5rem 0;
+  margin: .25rem 0;
 }
 
 .game-over {
@@ -169,7 +169,7 @@ h1 {
   flex-direction: column;
   flex-grow: 1;
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .target-swatch {
