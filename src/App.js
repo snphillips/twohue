@@ -253,7 +253,8 @@ checkSolution() {
 playerWinsRound() {
   this.playWinSound();
   this.setState({confettiFalling: true})
-  this.setState({score: (this.state.score + 1)})
+  // this.setState({score: (this.state.score + 1)})
+  this.playerWinsPoints()
   console.log("player wins round")
 
       let stateTransition = () => {
@@ -325,74 +326,51 @@ gameOver() {
 
   generateColorRound(){
 
-    // let newColorRound = {
-    //   name: 'chroma-js',
-    //   solutionColor1: chroma.random().hex(),
-    //   solutionColor2: chroma.random().hex(),
-    //   wrongColors: [chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()],
-    //   get targetColor() {
-    //     return chroma.blend( chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex(), 'multiply');
-    //   },
-    //   get solutionColors() {
-    //     return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
-    //   },
-    //   get allColorBubbles() {
-    //    return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
-    //   }
-    // };
+    var soluColor1;
+    var soluColor2;
+    var targColor;
+    var colorLightness = 14;
+
+  //=============================
+  // If the target color to be too dark (like black),
+  // the game is too hard to play.
+  // First, use a white loop to genereate solution & target
+  // colors. Keep looping until it finds a solution
+  // that ISN'T too dark
+  //=============================
+    while (colorLightness <= 15) {
+
+      soluColor1 = chroma.random().hex()
+      console.log("soluColor1: ", soluColor1)
+
+      soluColor2 = chroma.random().hex()
+      console.log("soluColor2: ", soluColor2)
+
+      targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
+      console.log("targColor: ", targColor.hex() )
+
+      colorLightness = chroma(  targColor  ).get('lab.l')
+      console.log("colorLightness: ", colorLightness)
+
+    };
 
 
-var soluColor1;
-var soluColor2;
-var targColor;
-var colorLightness = 14;
+    let newColorRound = {
 
+      solutionColor1: soluColor1,
+      solutionColor2: soluColor2,
+      wrongColors: [
+        chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()
+      ],
+      targetColor: targColor,
+      get solutionColors() {
+        return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+      },
+      get allColorBubbles() {
+       return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+      }
+    };
 
-//=============================
-// If the target color to be too dark (like black),
-// the game is too hard to play.
-// First
-//=============================
-
-while (colorLightness <= 15) {
-
-  soluColor1 = chroma.random().hex()
-  console.log("soluColor1: ", soluColor1)
-
-  soluColor2 = chroma.random().hex()
-  console.log("soluColor2: ", soluColor2)
-
-  targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
-  console.log("targColor: ", targColor.hex() )
-
-  colorLightness = chroma(  targColor  ).get('lab.l')
-  console.log("colorLightness: ", colorLightness)
-
-};
-
-
-let newColorRound = {
-
-  solutionColor1: soluColor1,
-  solutionColor2: soluColor2,
-  wrongColors: [
-    chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()
-  ],
-  targetColor: targColor,
-  get solutionColors() {
-    return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
-  },
-  get allColorBubbles() {
-   return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
-  }
-};
-
-
-
-
-
-
-    console.log("targetColor from app.js", chroma(newColorRound.targetColor).hex()  )
 
     // the function that will shuffle the allColorBubbles bubbles
     // so the first two bubbles aren't always the solution
@@ -472,6 +450,21 @@ toggleLeftRightField = () => {
 
 incrementAttempt(){
   this.setState({attempt: (this.state.attempt + 1)})
+}
+
+playerWinsPoints() {
+  console.log("playerWinsPoints()", this.state.attempt )
+  if (this.state.attempt == 6 ) {
+    this.setState({score: (this.state.score + 1)})
+  } else if ( this.state.attempt == 5 ) {
+    this.setState({score: (this.state.score + 2)})
+  } else if ( this.state.attempt == 4 ) {
+    this.setState({score: (this.state.score + 3)})
+  } else if ( this.state.attempt == 3 ) {
+    this.setState({score: (this.state.score + 4)})
+  } else if ( this.state.attempt == 2 ) {
+    this.setState({score: (this.state.score + 5)})
+  }
 }
 
 
