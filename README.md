@@ -2,7 +2,7 @@
 
 TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago, during a web development bootcamp.
 
-In this version I've made several changes, including the following:
+In this version I've made several changes, including:
 
 1) I use **react-automata** to create a state machine that manages user flow,
 2) I use the color library **chroma.js** to dynamically create unlimmited game rounds,
