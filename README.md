@@ -53,5 +53,5 @@ your browser should open to http://localhost:3000/ !
 - Create React App
 - React Automata (an X-state library for React) https://www.npmjs.com/package/react-automata
 - Chroma.js https://www.npmjs.com/package/chroma-js
-- react-confetti (for confetti falling effect) https://www.npmjs.com/package/react-confetti
+- react-confetti (for cool falling confetti effect) https://www.npmjs.com/package/react-confetti
 - Howler.js (for sound effects) https://www.npmjs.com/package/howler
