@@ -32,6 +32,10 @@ clone this repo:
 
 `git clone https://github.com/snphillips/twohue-state-chart.git`
 
+get into the correct directory:
+
+`cd twohue-state-machine`
+
 run npm to install all the dependencies:
 
 `npm install`
