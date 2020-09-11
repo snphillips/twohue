@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { State } from 'react-automata'
+import { State } from 'react-automata';
 
 
 // Using react-automata's "State" (yes it gets confusing)

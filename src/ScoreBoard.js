@@ -30,7 +30,7 @@ export default class ScoreBoard extends Component {
         </State>
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-          <p className="loses">losses: {this.props.looseRound}/{this.props.maxLossCount}</p>
+          <p className="loses">flops: {this.props.looseRound}/{this.props.maxLossCount}</p>
         </State>
 
       </section>

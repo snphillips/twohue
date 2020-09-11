@@ -329,7 +329,7 @@ gameOver() {
     var soluColor1;
     var soluColor2;
     var targColor;
-    var colorLightness = 14;
+    var colorLightness = 13;
 
   //=============================
   // If the target color to be too dark (like black),
@@ -338,7 +338,7 @@ gameOver() {
   // colors. Keep looping until it finds a solution
   // that ISN'T too dark
   //=============================
-    while (colorLightness <= 15) {
+    while (colorLightness <= 14) {
 
       soluColor1 = chroma.random().hex()
       console.log("soluColor1: ", soluColor1)
