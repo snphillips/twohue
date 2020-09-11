@@ -130,8 +130,8 @@ class App extends React.Component {
     looseRound: 0,
     attempt: 0,
     score: 0,
-    // colorRound: colorRound,
     colorRound: newColorRound,
+    numColorBubbles: 2,
     allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
@@ -329,16 +329,16 @@ gameOver() {
     var soluColor1;
     var soluColor2;
     var targColor;
-    var colorLightness = 13;
+    var colorLightness = 19;
 
   //=============================
-  // If the target color to be too dark (like black),
+  // If the target color to be too dark (like blackish),
   // the game is too hard to play.
   // First, use a white loop to genereate solution & target
   // colors. Keep looping until it finds a solution
   // that ISN'T too dark
   //=============================
-    while (colorLightness <= 14) {
+    while (colorLightness <= 20) {
 
       soluColor1 = chroma.random().hex()
       console.log("soluColor1: ", soluColor1)
@@ -372,7 +372,7 @@ gameOver() {
     };
 
 
-    // the function that will shuffle the allColorBubbles bubbles
+    // The function that shuffles the allColorBubbles bubbles
     // so the first two bubbles aren't always the solution
     let shuffleColors = (array) => {
 
@@ -587,6 +587,7 @@ playerWinsPoints() {
 
   componentDidUpdate() {
     console.log("machineState: ", this.props.machineState.value )
+    console.log("this.state.allColorBubbles", this.state.allColorBubbles)
   }
 
 

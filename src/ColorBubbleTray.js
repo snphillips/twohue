@@ -9,9 +9,10 @@ import { State } from 'react-automata';
 
 
 
-
 export default class ColorBubbleTray extends Component {
   render() {
+
+    console.log("this.state.allColorBubbles in ColorBubbleTray", this.props.allColorBubbles)
 
     return (
 
@@ -31,79 +32,29 @@ export default class ColorBubbleTray extends Component {
           </div>
         </State>
 
+       {
+       this.props.allColorBubbles.map( item => {
 
-        <div
-          className="bubble"
-          id="bubble00"
-          style={{'backgroundColor': this.props.allColorBubbles[0]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}
-            >
-            &nbsp;
-        </div>
+         let imageIndex = this.props.allColorBubbles.indexOf(item)
 
-        <div
-          className="bubble"
-          id="bubble01"
-          style={{'backgroundColor': this.props.allColorBubbles[1]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}>
-            &nbsp;
-        </div>
+        return(
 
-        <div
-          className="bubble"
-          id="bubble02"
-          style={{'backgroundColor': this.props.allColorBubbles[2]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}>
-            &nbsp;
-        </div>
 
-        <div
-          className="bubble"
-          id="bubble03"
-          style={{'backgroundColor': this.props.allColorBubbles[3]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}>
-            &nbsp;
-        </div>
-
-        <div
-          className="bubble"
-          id="bubble04"
-          style={{'backgroundColor': this.props.allColorBubbles[4]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}>
-            &nbsp;
-        </div>
-
-        <div
-          className="bubble"
-          id="bubble05"
-          style={{'backgroundColor': this.props.allColorBubbles[5]}}
-          onMouseEnter={this.props.currentFieldMouseEnter}
-          onMouseLeave={this.props.currentFieldMouseLeave}
-          onClick={ (event) => {
-            this.props.bubbleClickHandler(event)
-          }}>
-            &nbsp;
-        </div>
+            <div
+              className="bubble"
+              // id="bubble00"
+              style={{'backgroundColor': this.props.allColorBubbles[imageIndex]}}
+              onMouseEnter={this.props.currentFieldMouseEnter}
+              onMouseLeave={this.props.currentFieldMouseLeave}
+              onClick={ (event) => {
+                this.props.bubbleClickHandler(event)
+              }}
+                >
+                &nbsp;
+            </div>
+         )
+       })
+     }
 
         <State is={['homeScreenPractice']}>
           <div className="arrow-container arrow-container-right">
