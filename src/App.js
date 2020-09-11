@@ -454,16 +454,17 @@ incrementAttempt(){
 
 playerWinsPoints() {
   console.log("playerWinsPoints()", this.state.attempt )
-  if (this.state.attempt == 6 ) {
+
+  if (this.state.attempt === 6 ) {
     this.setState({score: (this.state.score + 1)})
-  } else if ( this.state.attempt == 5 ) {
+  } else if ( this.state.attempt === 5 ) {
     this.setState({score: (this.state.score + 2)})
-  } else if ( this.state.attempt == 4 ) {
+  } else if ( this.state.attempt === 4 ) {
     this.setState({score: (this.state.score + 3)})
-  } else if ( this.state.attempt == 3 ) {
+  } else if ( this.state.attempt === 3 ) {
     this.setState({score: (this.state.score + 4)})
-  } else if ( this.state.attempt == 2 ) {
-    this.setState({score: (this.state.score + 5)})
+  } else if ( this.state.attempt === 2 ) {
+    this.setState({score: (this.state.score + 6)})
   }
 }
 

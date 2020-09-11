@@ -1,6 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
+/* =======================*/
+/* css variables */
+/* =======================*/
+:root {
+  --accent-gray-light: #ccc;
+  --accent-gray: #a6a6a6;
+  --accent-gray-darker: #666;
+  --accent-gray-darkest: #333;
+}
+
+
+
 * {
   box-sizing: border-box;
 }
@@ -22,9 +34,9 @@ code {
     monospace;
 }
 
-/* -----
-SVG Icons - svgicons.sparkk.fr
------ */
+/* =======================*/
+/*SVG Icons - svgicons.sparkk.fr*/
+/* =======================*/
 
 .svg-icon {
   width: 1.5em;
@@ -76,8 +88,9 @@ button {
   border: none;
   border-radius: 25px;
   padding: .5rem 1.5rem;
-  background-color: #efefef;
-  transition:  background-color .5s;
+  background-color: var(--accent-gray-light, #ccc);
+  transition:  background-color .4s;
+  transition:  color .4s;
   -webkit-appearance: none;
 }
 
@@ -86,7 +99,7 @@ button {
 }
 
 button:hover {
-  background-color: #ccc;
+  background-color: var(--accent-gray, #a6a6a6);
 }
 
 
@@ -99,7 +112,7 @@ header {
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  border-top: 5px solid #ebedef;
+  border-top: 5px solid var(--accent-gray-light, #ccc);
   height: 100px;
 }
 
@@ -268,7 +281,7 @@ section#left-and-right-field {
 footer {
   box-sizing: border-box;
   width: 100%;
-  border-top: 5px solid #ebedef;
+  border-top: 5px solid var(--accent-gray-light, #ccc);
   padding-top: .5rem;
   display: flex;
   justify-content: space-between;
@@ -280,16 +293,20 @@ footer {
 
 .footer-link {
   /* centers links vertically within footer */
+  position: relative;
+  bottom: 0;
   display: flex;
   justify-content: center;
   flex-direction: column;
   margin-right: 5px;
+  color: var(--accent-gray-darkest, #333);
   font-size: .75rem;
   font-weight: 500;
-  position: relative;
-  bottom: 0;
-  color: #666;
   text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--accent-gray-darker, #666);
 }
 
 .fa-github {
@@ -301,10 +318,11 @@ footer {
 }
 
 
-/* ********************************* */
-/* ********************************* */
-/* ********************************* */
-/* ********************************* */
+/* *********************************************** */
+/* *********************************************** */
+/* *********************************************** */
+/* *********************************************** */
+/* *********************************************** */
 
 /*=======================*/
 /* For phones: */
