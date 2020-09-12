@@ -15,7 +15,7 @@ import { State } from 'react-automata';
 export default class ColorBubbleTray extends Component {
   render() {
 
-    console.log("this.state.allColorBubbles in ColorBubbleTray", this.props.allColorBubbles)
+    // console.log("this.state.allColorBubbles in ColorBubbleTray", this.props.allColorBubbles)
 
     return (
 

@@ -187,7 +187,7 @@ incrementRoundCounter() {
   } else if (this.state.looseRound < this.state.maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
-    this.generateColorRound()
+    this.calculateNumWrongColorBubbles()
     this.setState({"leftField": {'backgroundColor': "#fff"}})
     this.setState({"rightField": {'backgroundColor': "#fff"}})
     this.props.transition("GO_TO_ATTEMPT_N")
@@ -328,6 +328,16 @@ gameOver() {
 // ** Start Regular Functions **************************
 // *****************************************************
 
+  calculateNumWrongColorBubbles(){
+    if (this.state.round > 1) {
+      this.setState({ numWrongColorBubbles: 4 },()=>{
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        this.generateColorRound()
+      })
+    }
+
+  }
+
   generateColorRound(){
 
     var soluColor1;
@@ -350,16 +360,16 @@ gameOver() {
     while (colorLightness <= 20) {
 
       soluColor1 = chroma.random().hex()
-      console.log("soluColor1: ", soluColor1)
+      // console.log("soluColor1: ", soluColor1)
 
       soluColor2 = chroma.random().hex()
-      console.log("soluColor2: ", soluColor2)
+      // console.log("soluColor2: ", soluColor2)
 
       targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
-      console.log("targColor: ", targColor.hex() )
+      // console.log("targColor: ", targColor.hex() )
 
       colorLightness = chroma( targColor ).get('lab.l')
-      console.log("colorLightness: ", colorLightness)
+      // console.log("colorLightness: ", colorLightness)
 
     };
 
@@ -375,8 +385,9 @@ gameOver() {
       // (therefore no wrong colors are needed).
       get wrongColors() {
 
-        for (let i = numWrongColorBubbles.length; i > 0; i--) {
-          return this.wrongColorsArray.push(  chroma.random().hex()  );
+        for (let i = numWrongColorBubbles; i > 0; i--) {
+
+          wrongColorsArray.push(  chroma.random().hex()  );
         }
         return wrongColorsArray
       },
@@ -606,7 +617,7 @@ playerWinsPoints() {
 
   componentDidUpdate() {
     console.log("machineState: ", this.props.machineState.value )
-    console.log("this.state.allColorBubbles", this.state.allColorBubbles)
+    // console.log("this.state.allColorBubbles", this.state.allColorBubbles)
   }
 
 
