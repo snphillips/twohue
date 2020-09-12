@@ -4,7 +4,10 @@ import { State } from 'react-automata';
 
 // ==============================
 // The set of six 'color bubbles'
-// at the bottom on the game field
+// at the bottom on the game field.
+
+// The helper arrows only display during 'homeScreenPractice',
+// as indicated by <State is={['homeScreenPractice']}>
 // ==============================
 
 
@@ -37,12 +40,11 @@ export default class ColorBubbleTray extends Component {
 
          let imageIndex = this.props.allColorBubbles.indexOf(item)
 
-        return(
-
-
+         return(
             <div
+              key={imageIndex}
               className="bubble"
-              // id="bubble00"
+              id={"bubble-" + imageIndex}
               style={{'backgroundColor': this.props.allColorBubbles[imageIndex]}}
               onMouseEnter={this.props.currentFieldMouseEnter}
               onMouseLeave={this.props.currentFieldMouseLeave}

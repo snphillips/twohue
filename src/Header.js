@@ -22,7 +22,6 @@ export default class Header extends Component {
 
         <ScoreBoard
           round={this.props.round}
-          maxLossCount={this.props.maxLossCount}
           attempt={this.props.attempt}
           score={this.props.score}
           looseRound={this.props.looseRound}

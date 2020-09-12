@@ -185,7 +185,6 @@ code {
     transform: translateX(-15px);
   }
 }
-
 /* =======================*/
 /* =======================*/
 /* =======================*/
@@ -251,11 +250,15 @@ header {
 }
 
 h1 {
-  font-size: 2.4rem;
+  color: var(--accent-gray, #a6a6a6);
   font-family: 'Oleo Script', cursive;
-  color: #a6a6a6;
+  font-size: 2.4rem;
   text-align: left;
   margin: 0;
+}
+
+h1:hover {
+  color: var(--accent-gray-darker, #666);
 }
 
 .message-board {

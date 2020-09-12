@@ -125,13 +125,12 @@ class App extends React.Component {
   this.state = {
     round: 0,
     maxAttemptCount: 6,
-    // maxLossCount: 10,
-    maxLossCount: 4,
+    maxLossCount: 6,
     looseRound: 0,
     attempt: 0,
     score: 0,
     colorRound: newColorRound,
-    numColorBubbles: 2,
+    numWrongColorBubbles: 0,
     allColorBubbles: [],
     currentField: 'leftField',
     currentFieldHover: 'leftField',
@@ -320,8 +319,13 @@ gameOver() {
   this.setState({confettiFalling: true})
 }
 // *****************************************************
+// ** End State Machine Functions **********************
 // *****************************************************
+
+
+
 // *****************************************************
+// ** Start Regular Functions **************************
 // *****************************************************
 
   generateColorRound(){
@@ -330,13 +334,18 @@ gameOver() {
     var soluColor2;
     var targColor;
     var colorLightness = 19;
+    let numWrongColorBubbles = this.state.numWrongColorBubbles
+    var wrongColorsArray = [];
 
   //=============================
-  // If the target color to be too dark (like blackish),
-  // the game is too hard to play.
-  // First, use a white loop to genereate solution & target
+  // If the target color is too dark (like blackish),
+  // the round is nearly impossible to play.
+  // To solve, we're now allowing rounds with very dark target color.
+
+  // Use a while-loop to genereate solution & target
   // colors. Keep looping until it finds a solution
-  // that ISN'T too dark
+  // that ISN'T too dark. We're using Chroma.js's .get('lab.l')
+  // to determine lightness.
   //=============================
     while (colorLightness <= 20) {
 
@@ -349,7 +358,7 @@ gameOver() {
       targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
       console.log("targColor: ", targColor.hex() )
 
-      colorLightness = chroma(  targColor  ).get('lab.l')
+      colorLightness = chroma( targColor ).get('lab.l')
       console.log("colorLightness: ", colorLightness)
 
     };
@@ -359,15 +368,25 @@ gameOver() {
 
       solutionColor1: soluColor1,
       solutionColor2: soluColor2,
-      wrongColors: [
-        chroma.random().hex(), chroma.random().hex(), chroma.random().hex(), chroma.random().hex()
-      ],
       targetColor: targColor,
+
+      // Only create enough wrongColors to fill in the color bubbles.
+      // For instance, the practice round only has two bubbles total
+      // (therefore no wrong colors are needed).
+      get wrongColors() {
+
+        for (let i = numWrongColorBubbles.length; i > 0; i--) {
+          return this.wrongColorsArray.push(  chroma.random().hex()  );
+        }
+        return wrongColorsArray
+      },
+
+
       get solutionColors() {
         return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
       },
       get allColorBubbles() {
-       return [this.solutionColor1, this.solutionColor2, this.wrongColors[0], this.wrongColors[1], this.wrongColors[2], this.wrongColors[3] ]
+        return this.solutionColors.concat(this.wrongColors);
       }
     };
 
