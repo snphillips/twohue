@@ -3,7 +3,6 @@ import { Action, withStateMachine, State } from 'react-automata'
 import './App.css';
 import Header from './Header';
 import Byline from './Byline';
-// import colorRound from './colorRoundsArray';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
@@ -12,9 +11,6 @@ import {Howl} from 'howler';
 // Color are all generated and mixed using chroma.js
 import chroma from 'chroma-js';
 import Confetti from 'react-confetti'
-// import useWindowSize from 'react-use/lib/useWindowSize'
-
-
 
 // ==============================
 // The withStateMachine higher-order component accepts:
@@ -30,8 +26,6 @@ import Confetti from 'react-confetti'
 
 // https://github.com/MicheleBertoli/react-automata
 // ==============================
-
-
 
 
 // ==============================
@@ -136,14 +130,14 @@ class App extends React.Component {
 
   this.state = {
     round: 0,
-    maxAttemptCount: 6,
-    maxLossCount: 6,
-    looseRound: 0,
     attempt: 0,
+    maxAttemptCount: 6,
+    looseRound: 0,
+    maxLossCount: 6,
     score: 0,
-    colorRound: newColorRound,
-    numWrongColorBubbles: 0,
+    colorRound: {} ,
     allColorBubbles: [],
+    numWrongColorBubbles: 0,
     currentField: 'leftField',
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': '#fff'},
@@ -230,8 +224,8 @@ checkSolution() {
   let solutionColors = this.state.colorRound.solutionColors;
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
-  let wrongColors = this.state.colorRound.wrongColors;
-  console.log("wrongColors: ", wrongColors)
+  let wrongColorBubbles = this.state.colorRound.wrongColors;
+  console.log("wrongColorBubbles: ", wrongColorBubbles)
   console.log("solutionColors: ", solutionColors)
   console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
   console.log("this.state.attempt: ", this.state.attempt)
@@ -245,7 +239,7 @@ checkSolution() {
 
   // incorect
    else if ( (this.state.attempt > 1) &&
-             (wrongColors.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+             (wrongColorBubbles.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
    {
      console.log("INCORRECT_SOLUTION")
      this.props.transition("INCORRECT_SOLUTION")
@@ -390,13 +384,13 @@ gameOver() {
   }
 
   generateColorRound(){
-
-    var soluColor1;
-    var soluColor2;
-    var targColor;
-    var colorLightness = 19;
+    let soluColor1;
+    let soluColor2;
+    let targColor;
+    let colorLightness = 19;
     let numWrongColorBubbles = this.state.numWrongColorBubbles
-    var wrongColorsArray = [];
+    // is this needed?
+    let wrongColorsArray = [];
 
   //=============================
   // If the target color is too dark (like blackish),
@@ -411,14 +405,8 @@ gameOver() {
     while (colorLightness <= 20) {
 
       soluColor1 = chroma.random().hex()
-      // console.log("soluColor1: ", soluColor1)
-
       soluColor2 = chroma.random().hex()
-      // console.log("soluColor2: ", soluColor2)
-
       targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
-      // console.log("targColor: ", targColor.hex() )
-
       colorLightness = chroma( targColor ).get('lab.l')
       // console.log("colorLightness: ", colorLightness)
 
@@ -435,6 +423,8 @@ gameOver() {
       // For instance, the practice round only has two bubbles total
       // (therefore no wrong colors are needed).
       get wrongColors() {
+
+        wrongColorsArray = [];
 
         for (let i = numWrongColorBubbles; i > 0; i--) {
 
