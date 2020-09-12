@@ -63,8 +63,20 @@ const statechart = {
     incrementRoundCounter: {
       onEntry: 'incrementRoundCounter',
       on: {
-        GO_TO_ATTEMPT_N: 'attemptN',
+        SET_UP_COLOR_ROUND: 'setUpColorRound',
+      },
+    },
+    setUpColorRound: {
+      onEntry: 'setUpColorRound',
+      on: {
+        PLAY_ROUND: 'playRound',
         NO_MORE_ROUNDS: 'gameOver',
+      },
+    },
+    playRound: {
+      onEntry: 'playRound',
+      on: {
+        ATTEMPT_N: 'attemptN',
       },
     },
     attemptN: {
@@ -147,7 +159,7 @@ class App extends React.Component {
   this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
   this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
   this.showSolution = this.showSolution.bind(this)
-  this.resetScore = this.resetScore.bind(this)
+  this.resetScoreForNextGame = this.resetScoreForNextGame.bind(this)
   this.startGameClickHandler = this.startGameClickHandler.bind(this)
 }
 
@@ -162,19 +174,16 @@ class App extends React.Component {
 //  =================================
  readyAction = () => {
   this.props.transition('READY')
+  this.generateColorRound()
 }
 
 homeScreenPractice(){
   this.setState({confettiFalling: false})
 }
 
-resetScore(){
-  this.setState({score:0})
-  this.setState({looseRound:0})
-}
-
 roundN(){
-  this.beginGameSound()
+  console.log("round: ", this.state.round)
+  this.beginRoundSound()
   this.setState({confettiFalling: false})
   this.setState({attempt: 0})
   this.props.transition('INCREMENT_ROUND_COUNTER')
@@ -187,14 +196,23 @@ incrementRoundCounter() {
   } else if (this.state.looseRound < this.state.maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
-    this.calculateNumWrongColorBubbles()
     this.setState({"leftField": {'backgroundColor': "#fff"}})
     this.setState({"rightField": {'backgroundColor': "#fff"}})
-    this.props.transition("GO_TO_ATTEMPT_N")
+    this.calculateNumWrongColorBubbles()
+    this.props.transition("SET_UP_COLOR_ROUND")
   } else {
     console.log("incrementRoundCounter() This shouldn't be triggering. Something is wrong.")
     console.log("this.state.looseRound: ", this.state.looseRound, "this.state.maxLossCount: ", this.state.maxLossCount)
   }
+}
+
+setUpColorRound(){
+  this.generateColorRound()
+  this.props.transition('PLAY_ROUND')
+}
+
+playRound(){
+  this.props.transition('ATTEMPT_N')
 }
 
 attemptN() {
@@ -325,17 +343,50 @@ gameOver() {
 
 
 // *****************************************************
+// *****************************************************
+// *****************************************************
 // ** Start Regular Functions **************************
 // *****************************************************
+// *****************************************************
+// *****************************************************
+  handleClick = () => {
+    this.props.transition('READY')
+  }
+
+  componentDidMount() {
+    console.log("machineState: ", this.props.machineState.value )
+  }
+
+  componentDidUpdate() {
+    console.log("machineState: ", this.props.machineState.value )
+    // console.log("this.state.allColorBubbles", this.state.allColorBubbles)
+  }
 
   calculateNumWrongColorBubbles(){
-    if (this.state.round > 1) {
-      this.setState({ numWrongColorBubbles: 4 },()=>{
+
+    // if (this.state.round <= 1) return
+
+    if (this.state.round <= 1) {
+      this.setState({ numWrongColorBubbles: 1 },() => {
         console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-        this.generateColorRound()
+      })
+    } else if (this.state.round === 2) {
+      this.setState({ numWrongColorBubbles: 2 },() => {
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+      })
+    } else if (this.state.round === 3) {
+      this.setState({ numWrongColorBubbles: 3 },() => {
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+      })
+    } else if (this.state.round >= 4) {
+      this.setState({ numWrongColorBubbles: 4 },() => {
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+      })
+    } else if (this.state.round >=10) {
+      this.setState({ numWrongColorBubbles: 5 },() => {
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     }
-
   }
 
   generateColorRound(){
@@ -536,7 +587,7 @@ playerWinsPoints() {
     }
   };
 
-  beginGameSound(){
+  beginRoundSound(){
     // A guard clause if the user has clicked the audio off
     if (this.state.isAudioOn === false) {return}
     const sound = new Howl({
@@ -605,20 +656,13 @@ playerWinsPoints() {
     sound.play()
   };
 
-
-  handleClick = () => {
-    this.props.transition('READY')
+  resetScoreForNextGame(){
+    this.setState({score:0})
+    this.setState({looseRound:0})
   }
 
-  componentDidMount() {
-    console.log("machineState: ", this.props.machineState.value )
-    this.generateColorRound()
-  }
 
-  componentDidUpdate() {
-    console.log("machineState: ", this.props.machineState.value )
-    // console.log("this.state.allColorBubbles", this.state.allColorBubbles)
-  }
+
 
 
 // *****************************************************
@@ -673,8 +717,8 @@ playerWinsPoints() {
           attempt={this.state.attempt}
           score={this.state.score}
           looseRound={this.state.looseRound}
-          resetScore={this.resetScore}
-          beginGameSound={this.beginGameSound}
+          resetScoreForNextGame={this.resetScoreForNextGame}
+          beginRoundSound={this.beginRoundSound}
           isAudioOn={this.state.isAudioOn}
           startGameClickHandler={this.startGameClickHandler}
           />

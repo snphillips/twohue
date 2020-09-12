@@ -17,7 +17,7 @@ export default class Header extends Component {
 
         <MessageBoard
           transition={this.props.transition}
-          resetScore={this.props.resetScore}
+          resetScoreForNextGame={this.props.resetScoreForNextGame}
           />
 
         <ScoreBoard
