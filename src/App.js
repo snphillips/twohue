@@ -372,7 +372,7 @@ gameOver() {
       this.setState({ numWrongColorBubbles: 3 },() => {
         console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
-    } else if (this.state.round >= 4) {
+    } else if ( (this.state.round >= 4) && (this.state.round <= 9) ) {
       this.setState({ numWrongColorBubbles: 4 },() => {
         console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
