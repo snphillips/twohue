@@ -144,7 +144,7 @@ class App extends React.Component {
     rightField: {'backgroundColor': '#fff'},
     isAudioOn: true,
     confettiFalling: false,
-
+    playerWinRound: false,
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -173,12 +173,14 @@ class App extends React.Component {
 
 homeScreenPractice(){
   this.setState({confettiFalling: false})
+  this.setState({playerWinRound: false})
 }
 
 roundN(){
   console.log("round: ", this.state.round)
   this.beginRoundSound()
   this.setState({confettiFalling: false})
+  this.setState({playerWinRound: false})
   this.setState({attempt: 0})
   this.props.transition('INCREMENT_ROUND_COUNTER')
 }
@@ -236,8 +238,8 @@ checkSolution() {
    }
 
   // incorect
-   else if ( (this.state.attempt > 1) &&
-             (wrongColorBubbles.includes(leftFieldBackgroundColor || rightFieldBackgroundColor) ) )
+   else if ( (this.state.attempt >= 2) &&
+             (wrongColorBubbles.includes(chroma(leftFieldBackgroundColor).hex() || chroma(rightFieldBackgroundColor).hex()) ) )
    {
      console.log("INCORRECT_SOLUTION")
      this.props.transition("INCORRECT_SOLUTION")
@@ -252,15 +254,18 @@ checkSolution() {
     console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
 
-   // Ask yourself, "self, why is this triggering?"
+   // TODO: find out why this triggers.
+   // This is the catch-all but I want it to catch none
+   // OR, just but all the win logic in the 'correct block', and not worry about it.
    } else {
     this.props.transition("INCORRECT_SOLUTION")
-    console.log("INCORRECT_SOLUTION - why is this triggering?")
+    console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
    }
  }
 
 playerWinsRound() {
   this.playWinSound();
+  this.setState({playerWinRound: true})
   this.setState({confettiFalling: true})
   // this.setState({score: (this.state.score + 1)})
   this.playerWinsPoints()
@@ -509,6 +514,7 @@ currentFieldMouseLeave(){
 //  ====================================
 //  Toggling between the left and right fields, to determine which
 //  one will get filled in with color.
+//  TODO: can you simplify this?
 //  ====================================
 toggleLeftRightField = () => {
   if (this.state.currentField === "leftField") {
@@ -549,7 +555,8 @@ playerWinsPoints() {
   // guard clause to disable click handler if:
   // 1) round is over,
   // 2) player is out of attempts,
-  // 3) the game is over.
+  // 3) player has won the round,
+  // 4) the round or game is over.
   if (this.state.looseRound > (this.state.maxLossCount)) return
   if (this.state.attempt >= this.state.maxAttemptCount) return
   if (this.state.confettiFalling === true) return
