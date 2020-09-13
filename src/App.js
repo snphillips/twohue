@@ -172,7 +172,7 @@ class App extends React.Component {
 }
 
 homeScreenPractice(){
-
+  console.log("heyyyyy")
 }
 
 roundN(){
@@ -555,9 +555,10 @@ playerWinsPoints() {
   // 1) round is over,
   // 2) player is out of attempts,
   // 3) player has won the round,
-  // 4) the round or game is over.
+  // 4) confetti is falling
   if (this.state.looseRound > (this.state.maxLossCount)) return
   if (this.state.attempt >= this.state.maxAttemptCount) return
+  if (this.state.playerWinsRound === true) return
   if (this.state.confettiFalling === true) return
 
   this.setState({attempt: (this.state.attempt + 1)})
