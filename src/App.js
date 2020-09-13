@@ -42,7 +42,7 @@ const statechart = {
       },
     },
     homeScreenPractice: {
-      onEntry: 'updateMessage',
+      onEntry: 'homeScreenPractice',
       on: {
         SELECT_COLOR: 'homeScreenPractice',
         START_GAME: 'roundN',
@@ -172,8 +172,7 @@ class App extends React.Component {
 }
 
 homeScreenPractice(){
-  this.setState({confettiFalling: false})
-  this.setState({playerWinRound: false})
+
 }
 
 roundN(){

@@ -34,6 +34,8 @@ export default class MessageBoard extends Component {
           <button className="play-again-button"
             onClick={ () => {
             this.props.resetScoreForNextGame()
+            this.setState({confettiFalling: false})
+            this.setState({playerWinRound: false})
             this.props.transition('PLAY_AGAIN')
           }}>
             play again
