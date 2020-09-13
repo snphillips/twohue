@@ -186,21 +186,20 @@ roundN(){
 incrementRoundCounter() {
   if (this.state.looseRound >= this.state.maxLossCount) {
     this.props.transition("NO_MORE_ROUNDS")
-
   } else if (this.state.looseRound < this.state.maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
-    this.setState({"leftField": {'backgroundColor': "#fff"}})
-    this.setState({"rightField": {'backgroundColor': "#fff"}})
     this.calculateNumWrongColorBubbles()
     this.props.transition("SET_UP_COLOR_ROUND")
   } else {
-    console.log("incrementRoundCounter() This shouldn't be triggering. Something is wrong.")
-    console.log("this.state.looseRound: ", this.state.looseRound, "this.state.maxLossCount: ", this.state.maxLossCount)
+    // console.log("incrementRoundCounter() This shouldn't be triggering. Something is wrong.")
+    // console.log("this.state.looseRound: ", this.state.looseRound, "this.state.maxLossCount: ", this.state.maxLossCount)
   }
 }
 
 setUpColorRound(){
+  this.setState({"leftField": {'backgroundColor': "#fff"}})
+  this.setState({"rightField": {'backgroundColor': "#fff"}})
   this.generateColorRound()
   this.props.transition('PLAY_ROUND')
 }
@@ -213,7 +212,7 @@ attemptN() {
   if (this.state.attempt < 6) {
     this.props.transition("CHECK_SOLUTION")
   } else if (this.state.attempt >= 6) {
-    console.log("OUT_OF_ATTEMPTS")
+    // console.log("OUT_OF_ATTEMPTS")
     this.props.transition("OUT_OF_ATTEMPTS")
   }
 }
@@ -225,11 +224,10 @@ checkSolution() {
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
   let wrongColorBubbles = this.state.colorRound.wrongColors;
-  console.log("wrongColorBubbles: ", wrongColorBubbles)
-  console.log("solutionColors: ", solutionColors)
-  console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
-  console.log("this.state.attempt: ", this.state.attempt)
-
+  // console.log("wrongColorBubbles: ", wrongColorBubbles)
+  // console.log("solutionColors: ", solutionColors)
+  // console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
+  // console.log("this.state.attempt: ", this.state.attempt)
 
   // Not enough trys: incorrect
   if (this.state.attempt === 1) {
@@ -376,8 +374,12 @@ gameOver() {
       this.setState({ numWrongColorBubbles: 4 },() => {
         console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
-    } else if (this.state.round >=10) {
+    } else if ( (this.state.round >= 10) && (this.state.round <= 14) ) {
       this.setState({ numWrongColorBubbles: 5 },() => {
+        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+      })
+    } else if (this.state.round >= 15) {
+      this.setState({ numWrongColorBubbles: 6 },() => {
         console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     }

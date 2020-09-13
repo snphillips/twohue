@@ -11,8 +11,6 @@
   --accent-gray-darkest: #333;
 }
 
-
-
 * {
   box-sizing: border-box;
 }
@@ -334,7 +332,6 @@ h1:hover {
   z-index: 0;
 }
 
-
 .target-swatch .tooltiptext {
   font-size: 1rem;
   font-weight: 500;
@@ -364,7 +361,6 @@ section#left-and-right-field {
   height: 13rem;
 }
 
-
 .field   {
   box-sizing: border-box;
   border: 3px solid #abb2b9;
@@ -387,14 +383,16 @@ section#left-and-right-field {
 
 #color-bubble-tray {
   box-sizing: border-box;
+  margin-right: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: center;
+  flex-flow: wrap;
 }
 
 .bubble {
-  width: 5rem;
-  height: 5rem;
+  width: 75px;
+  height: 75px;
   border: 3px solid  #abb2b9;
   text-align: center;
   border-radius: 50%;
@@ -600,8 +598,8 @@ section#left-and-right-field {
   }
 
   .bubble {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
   }
 
   footer {
