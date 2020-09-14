@@ -3,7 +3,7 @@ import { State } from 'react-automata';
 
 
 // ==============================
-// The set of six 'color bubbles'
+// The set of 'color bubbles'
 // at the bottom on the game field.
 
 // The helper arrows only display during 'homeScreenPractice',

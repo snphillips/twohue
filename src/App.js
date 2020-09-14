@@ -44,7 +44,7 @@ const statechart = {
     homeScreenPractice: {
       onEntry: 'homeScreenPractice',
       on: {
-        SELECT_COLOR: 'homeScreenPractice',
+        SELECT_COLOR_PRACTICE: 'homeScreenPractice',
         START_GAME: 'roundN',
       },
     },
@@ -172,7 +172,51 @@ class App extends React.Component {
 }
 
 homeScreenPractice(){
-  console.log("heyyyyy")
+  console.log("hi from homeScreenPractice()")
+
+    let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  let solutionColors = this.state.colorRound.solutionColors;
+  let solutionColor1 = this.state.colorRound.solutionColor1;
+  let solutionColor2 = this.state.colorRound.solutionColor2;
+  let wrongColorBubbles = this.state.colorRound.wrongColors;
+  // console.log("wrongColorBubbles: ", wrongColorBubbles)
+  // console.log("solutionColors: ", solutionColors)
+  // console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
+  // console.log("this.state.attempt: ", this.state.attempt)
+
+  // Not enough trys: incorrect
+  if (this.state.attempt === 1) {
+    console.log("There has only been one guess. => INCORRECT_SOLUTION")
+    this.props.transition("INCORRECT_SOLUTION")
+   }
+
+  // incorect
+   else if ( (this.state.attempt >= 2) &&
+             (wrongColorBubbles.includes(chroma(leftFieldBackgroundColor).hex() || chroma(rightFieldBackgroundColor).hex()) ) )
+   {
+     console.log("INCORRECT_SOLUTION")
+     this.props.transition("INCORRECT_SOLUTION")
+
+  // correct
+   } else if (
+    ( solutionColors.includes(chroma(leftFieldBackgroundColor).hex()) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex())  )
+    // the colors can't be the same on either side
+    && ( chroma(leftFieldBackgroundColor).hex() !== chroma(rightFieldBackgroundColor).hex()  )
+    )
+   {
+    console.log("CORRECT_SOLUTION")
+    this.props.transition("CORRECT_SOLUTION")
+
+   // TODO: find out why this triggers.
+   // This is the catch-all but I want it to catch none
+   // OR, just but all the win logic in the 'correct block', and not worry about it.
+   } else {
+    this.props.transition("INCORRECT_SOLUTION")
+    console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
+   }
+
+
 }
 
 roundN(){
@@ -480,7 +524,9 @@ gameOver() {
 //  ==================================================================
 currentFieldMouseEnter(){
 
-if (this.state.currentField === 'leftField'){
+if (this.state.confettiFalling === true) return
+
+else if (this.state.currentField === 'leftField'){
 this.setState({'leftField': {
   "border": "8px solid #abb2b9",
   "backgroundColor": "this.color",
@@ -495,6 +541,8 @@ this.setState({'leftField': {
 };
 
 currentFieldMouseLeave(){
+
+if (this.state.confettiFalling === true) return
 
   if (this.state.currentField === 'leftField'){
     this.setState({'leftField': {
@@ -552,7 +600,7 @@ playerWinsPoints() {
 //  ===================================
  bubbleClickHandler = (event) =>  {
   // guard clause to disable click handler if:
-  // 1) round is over,
+  // 1) the game is over,
   // 2) player is out of attempts,
   // 3) player has won the round,
   // 4) confetti is falling

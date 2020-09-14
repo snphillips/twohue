@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { State } from 'react-automata'
+import { State } from 'react-automata';
+import CountUp from 'react-countup';
+
 
 
 
@@ -22,8 +24,9 @@ export default class ScoreBoard extends Component {
 
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-          <p className="score">score: {this.props.score}</p>
+          <p className="score">score: <CountUp end={ this.props.score } /> </p>
         </State>
+
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
           <p>attempt: {this.props.attempt}/6</p>
@@ -40,14 +43,13 @@ export default class ScoreBoard extends Component {
 }
 
 
-          // <p>round: {this.props.round}</p>
-          // <p className="score">score: {this.props.score}/12</p>
-
-          // <p>round: {this.props.round}/{this.props.maxRoundCount}</p>
 
 
 
 
+ //       <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
+ //         <p className="score">score: {this.props.score}</p>
+ //       </State>
 
 
 
