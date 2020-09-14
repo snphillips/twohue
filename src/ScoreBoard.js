@@ -24,9 +24,13 @@ export default class ScoreBoard extends Component {
 
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-          <p className="score">score: <CountUp end={ this.props.score } /> </p>
+          <p className="score">score:&nbsp;
+            <CountUp
+              end={this.props.score}
+              duration={2}
+            />
+          </p>
         </State>
-
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
           <p>attempt: {this.props.attempt}/6</p>
