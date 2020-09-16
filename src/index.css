@@ -45,11 +45,11 @@ code {
 .svg-icon path,
 .svg-icon polygon,
 .svg-icon rect {
-  fill: #000;
+  fill: var(--text-color, #222);
 }
 
 .svg-icon circle {
-  stroke: #000;
+  stroke: var(--text-color, #222);
   stroke-width: 1;
 }
 
@@ -202,6 +202,7 @@ p {
   font-family: 'Alata', sans-serif;
   margin-top: .1rem;
   margin-bottom: .1rem;
+  color: var(--text-color, #222);
 }
 
 .twohue {
@@ -215,6 +216,7 @@ p {
 }
 
 button {
+  -webkit-appearance: none; /* for safari ios */
   font-family: 'Alata', sans-serif;
   font-size: 14px;
   border: none;
@@ -222,8 +224,6 @@ button {
   padding: .5rem 1.5rem;
   background-color: var(--accent-gray-light, #ccc);
   transition:  background-color .4s;
-  transition:  color .4s;
-  -webkit-appearance: none;
 }
 
 .audio-button {

@@ -29,9 +29,10 @@ export default class ScoreBoard extends Component {
               <CountUp
                 start={previousScore}
                 end={this.props.score}
+                duration={2}
                 onEnd={() => {
                   previousScore = this.props.score
-                  }}
+                }}
               />
             </span>
 

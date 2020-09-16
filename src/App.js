@@ -223,35 +223,38 @@ attemptN() {
 
 checkSolution() {
   let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+  let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
   let solutionColors = this.state.colorRound.solutionColors;
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
   let wrongColorBubbles = this.state.colorRound.wrongColors;
+  let attempts = this.state.attempt
   // console.log("wrongColorBubbles: ", wrongColorBubbles)
   // console.log("solutionColors: ", solutionColors)
   // console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
   // console.log("this.state.attempt: ", this.state.attempt)
 
   // Not enough trys: incorrect
-  if (this.state.attempt === 1)
+  if (attempts === 1)
   {
     // console.log("There has only been one guess. => INCORRECT_SOLUTION")
     this.props.transition("INCORRECT_SOLUTION")
    }
 
   // incorect
-   else if ( (this.state.attempt >= 2) &&
-             (wrongColorBubbles.includes(chroma(leftFieldBackgroundColor).hex() || chroma(rightFieldBackgroundColor).hex()) ) )
+   else if ( (attempts >= 2) &&
+             (wrongColorBubbles.includes( leftFieldHexColor || rightFieldHexColor ) ) )
    {
      console.log("INCORRECT_SOLUTION")
      this.props.transition("INCORRECT_SOLUTION")
 
   // correct
    } else if (
-    ( solutionColors.includes(chroma(leftFieldBackgroundColor).hex()) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex())  )
+    ( solutionColors.includes( leftFieldHexColor ) && solutionColors.includes( rightFieldHexColor )  )
     // the colors can't be the same on either side
-    && ( chroma(leftFieldBackgroundColor).hex() !== chroma(rightFieldBackgroundColor).hex()  )
+    && ( leftFieldHexColor !== rightFieldHexColor  )
     )
    {
     console.log("CORRECT_SOLUTION")
@@ -262,7 +265,7 @@ checkSolution() {
    // OR, just but all the win logic in the 'correct block', and not worry about it.
    } else {
     this.props.transition("INCORRECT_SOLUTION")
-    // console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
+    // console.log("INCORRECT - why is this triggering?", "attempts:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
    }
  }
 
@@ -287,7 +290,6 @@ playerWinsRound() {
       }
 
     setTimeout(function() {
-      // console.log("setTimeout 2000")
       // function to be executed after 2 seconds
       stateTransition()
 
