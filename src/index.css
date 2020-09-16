@@ -9,6 +9,7 @@
   --accent-gray: #a6a6a6;
   --accent-gray-darker: #666;
   --accent-gray-darkest: #333;
+  --text-color: #222;
 }
 
 * {
@@ -265,6 +266,11 @@ h1:hover {
   order: 2;
 }
 
+.actual-score {
+  display: inline-block;
+  font-size: 1.25rem;
+  width: 14px;
+}
 
 .final-score {
   font-size: 1.2rem;

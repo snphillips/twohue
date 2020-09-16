@@ -4,15 +4,11 @@ import CountUp, { useCountUp } from 'react-countup';
 
 
 let previousScore = 0
-// let score = this.props.score
 
 
 export default class ScoreBoard extends Component {
   render() {
     return (
-
-
-
 
 
       <section className="score-board">
@@ -28,24 +24,16 @@ export default class ScoreBoard extends Component {
 
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
-          <p className="score">score:&nbsp;
-            <CountUp
-              start={previousScore}
-              end={this.props.score}
-              // startOnMount={false}
-              // redraw={false}
-              // preserveValue={true}
-              onEnd={() => {
-                previousScore = this.props.score
-                console.log('CountUp Ended! 👏 score:', this.props.score, 'previousScore:', previousScore)
-                }}
-
-              onStart={() => {
-                console.log('CountUp Started! 💨 score:', this.props.score, 'previousScore:', this.props.previousScore)
-              }}
-              // onEnd={({ pauseResume, reset, start, update }) => reset()}
-              // onpauseResume={({ pauseResume, reset, start, update }) => void}
-            />
+          <p className="score-word">score:&nbsp;
+            <span className="actual-score">
+              <CountUp
+                start={previousScore}
+                end={this.props.score}
+                onEnd={() => {
+                  previousScore = this.props.score
+                  }}
+              />
+            </span>
 
 
           </p>
@@ -64,20 +52,6 @@ export default class ScoreBoard extends Component {
     );
 }
 };
-
-
-
-
-
-
- //       <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver']}>
- //         <p className="score">score: {this.this.props.score}</p>
- //       </State>
-
-
-
-
-
 
 
 

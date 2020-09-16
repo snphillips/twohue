@@ -272,7 +272,6 @@ playerWinsRound() {
   this.playWinSound();
   this.setState({playerWinRound: true})
   this.setState({confettiFalling: true})
-  // why is callback not running after score is updated?
   this.playerWinsPoints()
 
   console.log("player wins round")
@@ -542,7 +541,7 @@ incrementAttempt(){
 }
 
 
-
+// TODO - ternary?
 playerWinsPoints() {
 
   let attempts =  this.state.attempt
