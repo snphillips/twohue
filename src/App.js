@@ -134,6 +134,7 @@ class App extends React.Component {
     maxAttemptCount: 6,
     looseRound: 0,
     maxLossCount: 6,
+    previousScore: 0,
     score: 0,
     colorRound: {} ,
     allColorBubbles: [],
@@ -142,7 +143,7 @@ class App extends React.Component {
     currentFieldHover: 'leftField',
     leftField: {'backgroundColor': '#fff'},
     rightField: {'backgroundColor': '#fff'},
-    isAudioOn: true,
+    isAudioOn: false,
     confettiFalling: false,
     playerWinRound: false,
   };
@@ -174,53 +175,11 @@ class App extends React.Component {
 homeScreenPractice(){
   console.log("hi from homeScreenPractice()")
 
-    let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
-  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
-  let solutionColors = this.state.colorRound.solutionColors;
-  let solutionColor1 = this.state.colorRound.solutionColor1;
-  let solutionColor2 = this.state.colorRound.solutionColor2;
-  let wrongColorBubbles = this.state.colorRound.wrongColors;
-  // console.log("wrongColorBubbles: ", wrongColorBubbles)
-  // console.log("solutionColors: ", solutionColors)
-  // console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
-  // console.log("this.state.attempt: ", this.state.attempt)
-
-  // Not enough trys: incorrect
-  if (this.state.attempt === 1) {
-    console.log("There has only been one guess. => INCORRECT_SOLUTION")
-    this.props.transition("INCORRECT_SOLUTION")
-   }
-
-  // incorect
-   else if ( (this.state.attempt >= 2) &&
-             (wrongColorBubbles.includes(chroma(leftFieldBackgroundColor).hex() || chroma(rightFieldBackgroundColor).hex()) ) )
-   {
-     console.log("INCORRECT_SOLUTION")
-     this.props.transition("INCORRECT_SOLUTION")
-
-  // correct
-   } else if (
-    ( solutionColors.includes(chroma(leftFieldBackgroundColor).hex()) && solutionColors.includes( chroma(rightFieldBackgroundColor).hex())  )
-    // the colors can't be the same on either side
-    && ( chroma(leftFieldBackgroundColor).hex() !== chroma(rightFieldBackgroundColor).hex()  )
-    )
-   {
-    console.log("CORRECT_SOLUTION")
-    this.props.transition("CORRECT_SOLUTION")
-
-   // TODO: find out why this triggers.
-   // This is the catch-all but I want it to catch none
-   // OR, just but all the win logic in the 'correct block', and not worry about it.
-   } else {
-    this.props.transition("INCORRECT_SOLUTION")
-    console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
-   }
-
 
 }
 
 roundN(){
-  console.log("round: ", this.state.round)
+  // console.log("round: ", this.state.round)
   this.beginRoundSound()
   this.setState({confettiFalling: false})
   this.setState({playerWinRound: false})
@@ -275,8 +234,9 @@ checkSolution() {
   // console.log("this.state.attempt: ", this.state.attempt)
 
   // Not enough trys: incorrect
-  if (this.state.attempt === 1) {
-    console.log("There has only been one guess. => INCORRECT_SOLUTION")
+  if (this.state.attempt === 1)
+  {
+    // console.log("There has only been one guess. => INCORRECT_SOLUTION")
     this.props.transition("INCORRECT_SOLUTION")
    }
 
@@ -302,21 +262,24 @@ checkSolution() {
    // OR, just but all the win logic in the 'correct block', and not worry about it.
    } else {
     this.props.transition("INCORRECT_SOLUTION")
-    console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
+    // console.log("INCORRECT - why is this triggering?", "this.state.attempt:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
    }
  }
+
+
 
 playerWinsRound() {
   this.playWinSound();
   this.setState({playerWinRound: true})
   this.setState({confettiFalling: true})
-  // this.setState({score: (this.state.score + 1)})
+  // why is callback not running after score is updated?
   this.playerWinsPoints()
+
   console.log("player wins round")
 
       let stateTransition = () => {
         if (this.state.looseRound < this.state.maxLossCount) {
-          console.log('NEXT_ROUND')
+          // console.log('NEXT_ROUND')
           this.props.transition('NEXT_ROUND')
         } else if (this.state.looseRound >= this.state.maxLossCount){
           console.log('NO_MORE_ROUNDS this.state.maxLossCount:', this.state.maxLossCount)
@@ -325,9 +288,10 @@ playerWinsRound() {
       }
 
     setTimeout(function() {
-      console.log("setTimeout 2000")
+      // console.log("setTimeout 2000")
       // function to be executed after 2 seconds
       stateTransition()
+
     }, 2000);
 }
 
@@ -399,7 +363,6 @@ gameOver() {
 
   componentDidUpdate() {
     console.log("machineState: ", this.props.machineState.value )
-    // console.log("this.state.allColorBubbles", this.state.allColorBubbles)
   }
 
   calculateNumWrongColorBubbles(){
@@ -408,27 +371,27 @@ gameOver() {
 
     if (this.state.round <= 1) {
       this.setState({ numWrongColorBubbles: 1 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     } else if (this.state.round === 2) {
       this.setState({ numWrongColorBubbles: 2 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     } else if (this.state.round === 3) {
       this.setState({ numWrongColorBubbles: 3 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     } else if ( (this.state.round >= 4) && (this.state.round <= 9) ) {
       this.setState({ numWrongColorBubbles: 4 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     } else if ( (this.state.round >= 10) && (this.state.round <= 14) ) {
       this.setState({ numWrongColorBubbles: 5 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     } else if (this.state.round >= 15) {
       this.setState({ numWrongColorBubbles: 6 },() => {
-        console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
+        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
       })
     }
   }
@@ -437,7 +400,7 @@ gameOver() {
     let soluColor1;
     let soluColor2;
     let targColor;
-    let colorLightness = 19;
+    let colorLightness = 29;
     let numWrongColorBubbles = this.state.numWrongColorBubbles
     // is this needed?
     let wrongColorsArray = [];
@@ -452,13 +415,13 @@ gameOver() {
   // that ISN'T too dark. We're using Chroma.js's .get('lab.l')
   // to determine lightness.
   //=============================
-    while (colorLightness <= 20) {
+    while (colorLightness <= 30) {
 
       soluColor1 = chroma.random().hex()
       soluColor2 = chroma.random().hex()
       targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
       colorLightness = chroma( targColor ).get('lab.l')
-      // console.log("colorLightness: ", colorLightness)
+      console.log("colorLightness: ", colorLightness)
 
     };
 
@@ -578,21 +541,27 @@ incrementAttempt(){
   this.setState({attempt: (this.state.attempt + 1)})
 }
 
-playerWinsPoints() {
-  console.log("playerWinsPoints()", this.state.attempt )
 
-  if (this.state.attempt === 6 ) {
-    this.setState({score: (this.state.score + 1)})
-  } else if ( this.state.attempt === 5 ) {
-    this.setState({score: (this.state.score + 2)})
-  } else if ( this.state.attempt === 4 ) {
-    this.setState({score: (this.state.score + 3)})
-  } else if ( this.state.attempt === 3 ) {
-    this.setState({score: (this.state.score + 4)})
-  } else if ( this.state.attempt === 2 ) {
-    this.setState({score: (this.state.score + 6)})
+
+playerWinsPoints() {
+
+  let attempts =  this.state.attempt
+  let score = this.state.score
+
+  if (attempts === 6 ) {
+    score = score + 1
+  } else if ( attempts === 5 ) {
+    score = score + 2
+  } else if ( attempts === 4 ) {
+    score = score + 3
+  } else if ( attempts === 3 ) {
+    score = score + 4
+  } else if ( attempts === 2 ) {
+    score = score + 6
   }
+  this.setState({score: score})
 }
+
 
 
 //  ===================================
@@ -763,6 +732,7 @@ playerWinsPoints() {
           maxLossCount={this.state.maxLossCount}
           attempt={this.state.attempt}
           score={this.state.score}
+          previousScore={this.state.previousScore}
           looseRound={this.state.looseRound}
           resetScoreForNextGame={this.resetScoreForNextGame}
           beginRoundSound={this.beginRoundSound}

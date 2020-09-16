@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import Title from './Title';
 import MessageBoard from './MessageBoard';
 import ScoreBoard from './ScoreBoard';
-import Title from './Title';
 
 
 
@@ -24,6 +24,7 @@ export default class Header extends Component {
           round={this.props.round}
           attempt={this.props.attempt}
           score={this.props.score}
+          previousScore={this.props.previousScore}
           looseRound={this.props.looseRound}
           maxLossCount={this.props.maxLossCount}
           transition={this.props.transition}
