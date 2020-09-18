@@ -269,7 +269,7 @@ h1:hover {
 .actual-score {
   display: inline-block;
   font-size: 1.25rem;
-  width: 14px;
+  width: 22px;
 }
 
 .final-score {
@@ -308,7 +308,7 @@ h1:hover {
   margin: .5rem 0;
   position: absolute;
   top: 49%;
-  z-index: 2;
+  z-index: 1;
   left: 55%;
 }
 

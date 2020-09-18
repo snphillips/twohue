@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { State } from 'react-automata';
-import CountUp, { useCountUp } from 'react-countup';
+import CountUp from 'react-countup';
 
 
 let previousScore = 0
 
+// gotcha: if the duration of the counter is changed,
+// the counter may count down then up again.
 
 export default class ScoreBoard extends Component {
   render() {
@@ -29,9 +31,10 @@ export default class ScoreBoard extends Component {
               <CountUp
                 start={previousScore}
                 end={this.props.score}
-                duration={2}
+                duration={1.5}
                 onEnd={() => {
                   previousScore = this.props.score
+                   // console.log( "Count up done: previousScore:", previousScore, "this.props.score:", this.props.score)
                 }}
               />
             </span>

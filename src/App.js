@@ -11,6 +11,7 @@ import {Howl} from 'howler';
 // Color are all generated and mixed using chroma.js
 import chroma from 'chroma-js';
 import Confetti from 'react-confetti'
+import axios from 'axios';
 
 // ==============================
 // The withStateMachine higher-order component accepts:
@@ -129,6 +130,8 @@ class App extends React.Component {
   super(props);
 
   this.state = {
+    // dataSource: "https://twohue-leaderboard-server.herokuapp.com/", // when you serve the data from Heroku
+    dataSource: "http://localhost:3001", // when you serve the data locally
     round: 0,
     attempt: 0,
     maxAttemptCount: 6,
@@ -137,6 +140,7 @@ class App extends React.Component {
     previousScore: 0,
     score: 0,
     colorRound: {} ,
+    wrongColors: [],
     allColorBubbles: [],
     numWrongColorBubbles: 0,
     currentField: 'leftField',
@@ -146,6 +150,7 @@ class App extends React.Component {
     isAudioOn: false,
     confettiFalling: false,
     playerWinRound: false,
+    leaderboard: []
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -167,14 +172,12 @@ class App extends React.Component {
 //  as arguments. Activities receive a boolean that is true when the activity should start,
 //  and false otherwise.
 //  =================================
- readyAction = () => {
+ readyAction(){
   this.props.transition('READY')
   this.generateColorRound()
-}
+ }
 
-homeScreenPractice(){
-  console.log("hi from homeScreenPractice()")
-
+ homeScreenPractice(){
 
 }
 
@@ -229,43 +232,28 @@ checkSolution() {
   let solutionColors = this.state.colorRound.solutionColors;
   let solutionColor1 = this.state.colorRound.solutionColor1;
   let solutionColor2 = this.state.colorRound.solutionColor2;
-  let wrongColorBubbles = this.state.colorRound.wrongColors;
+  // let wrongColorBubbles = this.state.colorRound.wrongColors;
+  let wrongColorBubbles = this.state.wrongColors;
   let attempts = this.state.attempt
-  // console.log("wrongColorBubbles: ", wrongColorBubbles)
-  // console.log("solutionColors: ", solutionColors)
-  // console.log("leftFieldBackgroundColor: ", leftFieldBackgroundColor, "rightFieldBackgroundColor: ", rightFieldBackgroundColor )
-  // console.log("this.state.attempt: ", this.state.attempt)
 
   // Not enough trys: incorrect
   if (attempts === 1)
   {
-    // console.log("There has only been one guess. => INCORRECT_SOLUTION")
+    console.log("There has only been one guess. => INCORRECT_SOLUTION")
     this.props.transition("INCORRECT_SOLUTION")
-   }
-
-  // incorect
-   else if ( (attempts >= 2) &&
-             (wrongColorBubbles.includes( leftFieldHexColor || rightFieldHexColor ) ) )
-   {
-     console.log("INCORRECT_SOLUTION")
-     this.props.transition("INCORRECT_SOLUTION")
 
   // correct
-   } else if (
-    ( solutionColors.includes( leftFieldHexColor ) && solutionColors.includes( rightFieldHexColor )  )
+   } else if ( ( solutionColors.includes( leftFieldHexColor ) && solutionColors.includes( rightFieldHexColor )  )
     // the colors can't be the same on either side
-    && ( leftFieldHexColor !== rightFieldHexColor  )
-    )
+    && ( leftFieldHexColor !== rightFieldHexColor  ))
    {
-    console.log("CORRECT_SOLUTION")
     this.props.transition("CORRECT_SOLUTION")
+    console.log("CORRECT_SOLUTION")
 
-   // TODO: find out why this triggers.
-   // This is the catch-all but I want it to catch none
-   // OR, just but all the win logic in the 'correct block', and not worry about it.
+   // incorrect
    } else {
     this.props.transition("INCORRECT_SOLUTION")
-    // console.log("INCORRECT - why is this triggering?", "attempts:", this.state.attempt, chroma(leftFieldBackgroundColor).hex(), chroma(rightFieldBackgroundColor).hex())
+    console.log("INCORRECT attempts:", this.state.attempt)
    }
  }
 
@@ -293,7 +281,7 @@ playerWinsRound() {
       // function to be executed after 2 seconds
       stateTransition()
 
-    }, 2000);
+    }, 1500);
 }
 
 playerLoosesRound() {
@@ -330,7 +318,7 @@ showSolution() {
     setTimeout(function() {
     // Transition to next round after X seconds
     transition()
-    }, 2500);
+    }, 1000);
 };
 
 
@@ -354,47 +342,43 @@ gameOver() {
 // *****************************************************
 // *****************************************************
 // *****************************************************
-  handleClick = () => {
+  // handleClick = () => {
+  //   this.props.transition('READY')
+  // }
+
+  handleClick() {
     this.props.transition('READY')
   }
 
   componentDidMount() {
     console.log("machineState: ", this.props.machineState.value )
+    this.axiosAllLeaderboardResults()
   }
 
   componentDidUpdate() {
     console.log("machineState: ", this.props.machineState.value )
   }
 
+
   calculateNumWrongColorBubbles(){
 
-    // if (this.state.round <= 1) return
+    let round = this.state.round
+    let numberWrongColorBubbles = 0
 
-    if (this.state.round <= 1) {
-      this.setState({ numWrongColorBubbles: 1 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
-    } else if (this.state.round === 2) {
-      this.setState({ numWrongColorBubbles: 2 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
-    } else if (this.state.round === 3) {
-      this.setState({ numWrongColorBubbles: 3 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
-    } else if ( (this.state.round >= 4) && (this.state.round <= 9) ) {
-      this.setState({ numWrongColorBubbles: 4 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
-    } else if ( (this.state.round >= 10) && (this.state.round <= 14) ) {
-      this.setState({ numWrongColorBubbles: 5 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
-    } else if (this.state.round >= 15) {
-      this.setState({ numWrongColorBubbles: 6 },() => {
-        // console.log("calculateNumWrongColorBubbles() round: ", this.state.round, "numWrongColorBubbles: ", this.state.numWrongColorBubbles )
-      })
+    if (round <= 1) {
+      numberWrongColorBubbles = 1
+    } else if (round === 2) {
+      numberWrongColorBubbles = 2
+    } else if (round === 3) {
+      numberWrongColorBubbles = 3
+    } else if ( (round >= 4) && (round <= 9) ) {
+      numberWrongColorBubbles = 4
+    } else if ( (round >= 10) && (round <= 14) ) {
+      numberWrongColorBubbles = 5
+    } else if (round >= 15) {
+      numberWrongColorBubbles = 6
     }
+    this.setState({numWrongColorBubbles: numberWrongColorBubbles})
   }
 
   generateColorRound(){
@@ -402,14 +386,13 @@ gameOver() {
     let soluColor2;
     let targColor;
     let colorLightness = 29;
-    let numWrongColorBubbles = this.state.numWrongColorBubbles
-    // is this needed?
+    let numWrongColorBubbles = this.state.numWrongColorBubbles;
     let wrongColorsArray = [];
 
   //=============================
   // If the target color is too dark (like blackish),
   // the round is nearly impossible to play.
-  // To solve, we're now allowing rounds with very dark target color.
+  // To solve this problem, we're not allowing rounds with very dark target color.
 
   // Use a while-loop to genereate solution & target
   // colors. Keep looping until it finds a solution
@@ -422,8 +405,7 @@ gameOver() {
       soluColor2 = chroma.random().hex()
       targColor = chroma.blend( chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
       colorLightness = chroma( targColor ).get('lab.l')
-      console.log("colorLightness: ", colorLightness)
-
+      // console.log("colorLightness: ", colorLightness)
     };
 
 
@@ -436,8 +418,11 @@ gameOver() {
       // Only create enough wrongColors to fill in the color bubbles.
       // For instance, the practice round only has two bubbles total
       // (therefore no wrong colors are needed).
+      // numWrongColorBubbles tells us how many times we generate a
+      // random "wrong color" to push into t
       get wrongColors() {
 
+        // first, empty the array of old colors
         wrongColorsArray = [];
 
         for (let i = numWrongColorBubbles; i > 0; i--) {
@@ -451,6 +436,7 @@ gameOver() {
       get solutionColors() {
         return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
       },
+
       get allColorBubbles() {
         return this.solutionColors.concat(this.wrongColors);
       }
@@ -472,7 +458,10 @@ gameOver() {
     }
 
     shuffleColors(newColorRound.allColorBubbles)
-    this.setState({"colorRound": newColorRound})
+    this.setState({colorRound: newColorRound})
+    this.setState({wrongColors: wrongColorsArray}, () => {
+      console.log("newColorRound.wrongColors:", newColorRound.wrongColors, "wrongColorsArray", wrongColorsArray, "this.state.wrongColors", this.state.wrongColors)
+    })
   }
 
 
@@ -527,13 +516,13 @@ if (this.state.confettiFalling === true) return
 //  one will get filled in with color.
 //  TODO: can you simplify this?
 //  ====================================
-toggleLeftRightField = () => {
+toggleLeftRightField(){
   if (this.state.currentField === "leftField") {
-    this.setState({'currentField': "rightField"})
-    this.setState({'currentFieldHover': "rightField"})
+    this.setState({currentField: "rightField"})
+    this.setState({currentFieldHover: "rightField"})
   } else {
-    this.setState({'currentField': "leftField"})
-    this.setState({'currentFieldHover': "leftField"})
+    this.setState({currentField: "leftField"})
+    this.setState({currentFieldHover: "leftField"})
   }
 }
 
@@ -568,6 +557,7 @@ playerWinsPoints() {
 //  ===================================
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
+ // note: it has to be an arrow style function.
  bubbleClickHandler = (event) =>  {
   // guard clause to disable click handler if:
   // 1) the game is over,
@@ -682,6 +672,21 @@ playerWinsPoints() {
 
 
 
+    axiosAllLeaderboardResults() {
+      axios.get(this.state.dataSource +`/players/`)
+        .then( (response) => {
+          this.setState({leaderboard: response})
+          console.log("leaderboard axios call response: ", response.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+
+
+
+
 // *****************************************************
 // *****************************************************
 // *****************************************************
@@ -712,7 +717,7 @@ playerWinsPoints() {
             tweenDuration={100}
             colors={this.state.colorRound.allColorBubbles}
             opacity={0.6}
-            gravity={0.4}
+            gravity={0.6}
             />
         </State>
 
