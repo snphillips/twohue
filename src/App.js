@@ -746,6 +746,8 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
+        <leaderboard />
+
 
           <div id="game-field">
 
