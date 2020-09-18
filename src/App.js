@@ -6,6 +6,7 @@ import Byline from './Byline';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
+import Leaderboard from './Leaderboard';
 // Howler manages the sound effects
 import {Howl} from 'howler';
 // Color are all generated and mixed using chroma.js
@@ -746,7 +747,7 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
-        <leaderboard />
+        <Leaderboard />
 
 
           <div id="game-field">
