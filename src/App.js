@@ -114,6 +114,14 @@ const statechart = {
       on: {
         PLAY_AGAIN: 'roundN',
         DONT_PLAY_AGAIN: 'homeScreenPractice',
+        LEADERBOARD: 'joinLeaderboard'
+      },
+     },
+    joinLeaderboard: {
+      onEntry: 'joinLeaderboard',
+      on: {
+        PLAY_AGAIN: 'roundN',
+        DONT_PLAY_AGAIN: 'homeScreenPractice'
       }
     }
   }
@@ -137,7 +145,8 @@ class App extends React.Component {
     attempt: 0,
     maxAttemptCount: 6,
     looseRound: 0,
-    maxLossCount: 6,
+    // maxLossCount: 6,
+    maxLossCount: 1,
     previousScore: 0,
     score: 0,
     colorRound: {} ,
@@ -151,7 +160,7 @@ class App extends React.Component {
     isAudioOn: false,
     confettiFalling: false,
     playerWinRound: false,
-    leaderboard: []
+    leaderboardData: []
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -676,8 +685,9 @@ playerWinsPoints() {
     axiosAllLeaderboardResults() {
       axios.get(this.state.dataSource +`/players/`)
         .then( (response) => {
-          this.setState({leaderboard: response})
+          this.setState({leaderboardData: response.data})
           console.log("leaderboard axios call response: ", response.data)
+          console.log("this.state.leaderboardData: ", this.state.leaderboardData)
         })
         .catch(function (error) {
           console.log(error);
@@ -747,7 +757,12 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
-        <Leaderboard />
+        <State is={['gameOver', 'leaderboard']}>
+          <Leaderboard
+            score={this.state.score}
+            leaderboardData={this.state.leaderboardData}
+          />
+        </State>
 
 
           <div id="game-field">
