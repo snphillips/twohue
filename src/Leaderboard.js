@@ -6,7 +6,7 @@ export default class Leaderboard extends Component {
 
 
     <div className="leaderboard-component">
-      <h3>leaderboard</h3>
+      <div>leaderboard</div>
 
         <ul className="leaderboard-list">
 

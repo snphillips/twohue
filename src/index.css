@@ -206,6 +206,7 @@ p {
 }
 
 .twohue {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   max-width: 600px;
@@ -434,11 +435,11 @@ footer {
 
 .footer-link {
   /* centers links vertically within footer */
-  position: relative;
-  bottom: 0;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+  bottom: 0;
   margin-right: 5px;
   color: var(--accent-gray-darkest, #333);
   font-size: .75rem;
@@ -464,10 +465,12 @@ footer {
 /*=======================*/
 
 .leaderboard-component {
-  display: block;
-  position: relative;
-  top: 275px;
-  left: 133px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  top: 120px;
+  /*left: 133px;*/
 }
 
 .leaderboard-list {
@@ -477,6 +480,24 @@ footer {
 .leaderboard-entry {
   display: flex;
 }
+
+
+ul.leaderboard-list {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0;
+}
+
+.player-score {
+  text-align: end;
+
+}
+
+
 
 
 /* *********************************************** */

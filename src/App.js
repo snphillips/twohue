@@ -716,7 +716,6 @@ playerWinsPoints() {
 
 
       <div className="outer-div">
-        <div className="twohue">
 
         <State is={['playerWinsRound']}>
           <Confetti
@@ -743,23 +742,22 @@ playerWinsPoints() {
             />
         </State>
 
+        <div className="twohue">
+
+
         <Header
           transition={this.props.transition}
           round={this.state.round}
           maxLossCount={this.state.maxLossCount}
+          looseRound={this.state.looseRound}
           attempt={this.state.attempt}
           score={this.state.score}
           previousScore={this.state.previousScore}
-          looseRound={this.state.looseRound}
           resetScoreForNextGame={this.resetScoreForNextGame}
           beginRoundSound={this.beginRoundSound}
           isAudioOn={this.state.isAudioOn}
           startGameClickHandler={this.startGameClickHandler}
           />
-
-
-
-          <div id="game-field">
 
         <State is={['gameOver', 'leaderboard']}>
           <Leaderboard
@@ -767,6 +765,10 @@ playerWinsPoints() {
             leaderboardData={this.state.leaderboardData}
           />
         </State>
+
+
+          <div id="game-field">
+
 
             <GameField
               colorRound={this.state.colorRound}
