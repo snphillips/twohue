@@ -458,8 +458,16 @@ footer {
   widows: 102px;
 }
 
-.leaderboard-section {
-  /*display: flex;*/
+
+/*=======================*/
+/* footer */
+/*=======================*/
+
+.leaderboard-component {
+  display: block;
+  position: relative;
+  top: 275px;
+  left: 133px;
 }
 
 .leaderboard-list {

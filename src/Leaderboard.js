@@ -5,10 +5,10 @@ export default class Leaderboard extends Component {
     return (
 
 
-    <div className="leaderboard">
+    <div className="leaderboard-component">
       <h3>leaderboard</h3>
 
-        <section className="leaderboard-list">
+        <ul className="leaderboard-list">
 
         {
          this.props.leaderboardData.map( item => {
@@ -16,18 +16,19 @@ export default class Leaderboard extends Component {
            let playerIndex = this.props.leaderboardData.indexOf(item)
 
            return(
-              <div
+              <li
                 key={playerIndex}
                 className="leaderboard-entry"
                 id={"leaderboard-entry" + playerIndex}
                 >
-                  <span>{item.player} {item.score}</span>
-              </div>
+                  <span className="player-name">{item.player}&nbsp;</span>
+                  <span className="player-score">{item.score}</span>
+              </li>
            )
          })
        }
 
-     </section>
+     </ul>
 
     </div>
 

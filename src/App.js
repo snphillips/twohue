@@ -757,16 +757,16 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
+
+
+          <div id="game-field">
+
         <State is={['gameOver', 'leaderboard']}>
           <Leaderboard
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
           />
         </State>
-
-
-          <div id="game-field">
-
 
             <GameField
               colorRound={this.state.colorRound}
