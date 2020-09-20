@@ -33,6 +33,28 @@ code {
     monospace;
 }
 
+.outer-div {
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.twohue {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 700px;
+  height: 536px;
+  margin: 2rem auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
 /* =======================*/
 /*SVG Icons - svgicons.sparkk.fr*/
 /* =======================*/
@@ -188,32 +210,13 @@ code {
 /* =======================*/
 /* =======================*/
 
-.outer-div {
-  box-sizing: border-box;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 p {
   font-family: 'Alata', sans-serif;
   margin-top: .1rem;
   margin-bottom: .1rem;
   color: var(--text-color, #222);
-}
-
-.twohue {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 600px;
-  margin: 2rem auto;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
 }
 
 button {
@@ -303,14 +306,12 @@ h1:hover {
 
 .game-over {
   margin: .5rem 0;
+  font-size: 1.5rem;
 }
 
 .play-again-button {
-  margin: .5rem 0;
-  position: absolute;
-  top: 49%;
-  z-index: 1;
-  left: 55%;
+  margin: 1rem auto;
+  display: flex;
 }
 
 /*=======================*/
@@ -461,16 +462,22 @@ footer {
 
 
 /*=======================*/
-/* footer */
+/* leaderboard */
 /*=======================*/
-
 .leaderboard-component {
-  position: absolute;
+  position: inherit;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  top: 120px;
-  /*left: 133px;*/
+  font-family: 'Alata', sans-serif;
+  font-size: 1.1rem;
+  width: 25%;
+}
+
+
+.leaderboard-title {
+  text-align: center;
 }
 
 .leaderboard-list {
@@ -479,22 +486,28 @@ footer {
 
 .leaderboard-entry {
   display: flex;
+  justify-content: space-between;
 }
 
 
 ul.leaderboard-list {
   display: block;
   list-style-type: disc;
-  margin-block-start: .5em;
-  margin-block-end: .5em;
+  margin-block-start: 1rem;
+  margin-block-end: .5rem;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 0;
 }
 
 .player-score {
-  text-align: end;
+  display: inline-block;
+  text-align: left;
+}
 
+.player-score {
+  display: inline-block;
+  text-align: right;
 }
 
 
@@ -517,6 +530,7 @@ ul.leaderboard-list {
 
   .twohue {
     max-width: 100%;
+    height: unset;
     padding: 1rem 1rem 0 1rem;
     margin: .5rem auto 1rem auto;
   }

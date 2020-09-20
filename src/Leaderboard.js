@@ -6,7 +6,7 @@ export default class Leaderboard extends Component {
 
 
     <div className="leaderboard-component">
-      <div>leaderboard</div>
+      <div className="leaderboard-title">high scores</div>
 
         <ul className="leaderboard-list">
 
@@ -21,6 +21,7 @@ export default class Leaderboard extends Component {
                 className="leaderboard-entry"
                 id={"leaderboard-entry" + playerIndex}
                 >
+                  <span className="player-rank">{playerIndex + 1}&nbsp;</span>
                   <span className="player-name">{item.player}&nbsp;</span>
                   <span className="player-score">{item.score}</span>
               </li>

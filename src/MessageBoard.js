@@ -33,18 +33,6 @@ export default class MessageBoard extends Component {
           <p className="game-over">game over</p>
         </State>
 
-        <State is={['gameOver']}>
-          <button className="play-again-button"
-            onClick={ () => {
-            this.props.resetScoreForNextGame()
-            this.setState({confettiFalling: false})
-            this.setState({playerWinRound: false})
-            this.props.transition('PLAY_AGAIN')
-          }}>
-            play again
-          </button>
-        </State>
-
     </section>
 
     );
@@ -52,3 +40,17 @@ export default class MessageBoard extends Component {
 };
 
 
+
+
+
+        // <State is={['gameOver']}>
+        //   <button className="play-again-button"
+        //     onClick={ () => {
+        //     this.props.resetScoreForNextGame()
+        //     this.setState({confettiFalling: false})
+        //     this.setState({playerWinRound: false})
+        //     this.props.transition('PLAY_AGAIN')
+        //   }}>
+        //     play again
+        //   </button>
+        // </State>

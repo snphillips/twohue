@@ -6,7 +6,7 @@ import Byline from './Byline';
 import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
-import Leaderboard from './Leaderboard';
+import GameOverScreen from './GameOverScreen';
 // Howler manages the sound effects
 import {Howl} from 'howler';
 // Color are all generated and mixed using chroma.js
@@ -735,7 +735,8 @@ playerWinsPoints() {
           <Confetti
             run={this.state.confettiFalling}
             numberOfPieces={600}
-            recycle={true}
+            // recycle={true}
+            recycle={false}
             tweenDuration={100}
             opacity={0.6}
             gravity={0.08}
@@ -760,16 +761,16 @@ playerWinsPoints() {
           />
 
         <State is={['gameOver', 'leaderboard']}>
-          <Leaderboard
+          <GameOverScreen
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
+            resetScoreForNextGame={this.resetScoreForNextGame}
+            transition={this.props.transition}
           />
         </State>
 
-
           <div id="game-field">
-
-
+            <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
             <GameField
               colorRound={this.state.colorRound}
               currentField={this.state.currentField}
@@ -788,7 +789,7 @@ playerWinsPoints() {
               currentFieldMouseLeave={this.currentFieldMouseLeave}
               bubbleClickHandler={this.bubbleClickHandler}
               />
-
+          </State>
          </div>
 
 
