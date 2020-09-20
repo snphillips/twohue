@@ -1,12 +1,13 @@
 ## About TwoHue with State Machine
 
-TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago, during a web development bootcamp.
+TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago.
 
 In this version I've made several changes, including:
 
-1) I use **react-automata** to create a state machine that manages user flow,
+1) I use **react-automata** to create an X-state machine that manages user flow,
 2) I use the color library **chroma.js** to dynamically create unlimmited game rounds,
-3) I change the game logic so that the game ends when the player looses x rounds
+3) I change the game logic so that the game ends when the player looses x rounds, and 
+4) I added a node/express server to host a leaderboard of top players
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
