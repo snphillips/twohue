@@ -472,7 +472,8 @@ footer {
   flex-direction: column;
   font-family: 'Alata', sans-serif;
   font-size: 1.1rem;
-  width: 25%;
+  width: fit-content;
+  max-width: 38%;
 }
 
 
@@ -500,14 +501,18 @@ ul.leaderboard-list {
   padding-inline-start: 0;
 }
 
-.player-score {
+.player-rank {
+  margin-right: 1rem;
+}
+
+
+.player-name {
   display: inline-block;
-  text-align: left;
 }
 
 .player-score {
   display: inline-block;
-  text-align: right;
+  margin-left: 1rem;
 }
 
 

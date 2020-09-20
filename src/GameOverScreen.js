@@ -10,8 +10,6 @@ export default class GameOverScreen extends Component {
     return (
 
 
-   // button doesn't work
-
     <div className="game-over-screen">
 
        <Leaderboard
