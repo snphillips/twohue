@@ -6,7 +6,7 @@ export default class LeaderboardForm extends Component {
   render() {
     return (
 
-    <State is={['gameOver', 'joinLeaderboard']}>
+    <State is={['joinLeaderboard']}>
       <div className="leaderboard-form">
 
         <form
@@ -29,9 +29,11 @@ export default class LeaderboardForm extends Component {
             defaultValue=""
             value={this.props.value}
             // onKeyPress allows user to hit "enter" to submit form
-            onKeyPress={this.props.handleLeaderboardChange}
-            onChange={() => {
-              console.log("input field", this.props.value)
+            // onKeyPress={this.props.handleLeaderboardChange}
+            onChange={(value) => {
+              // this.props.handleLeaderboardChange()
+              console.log("input field value", this.props.value)
+              // console.log("input field newLeaderboardInductee", this.props.newLeaderboardInductee)
               console.log("handleChange", this.props.handleLeaderboardChange)
             }}
             />
@@ -41,7 +43,10 @@ export default class LeaderboardForm extends Component {
               type="submit"
               value="submit"
               name="button"
-              onSubmit={this.props.handleLeaderboardSubmit}
+              // onSubmit={this.props.handleLeaderboardSubmit}
+              onSubmit={ (value) => {
+                this.props.handleLeaderboardSubmit()
+              }}
               />
           </div>
 

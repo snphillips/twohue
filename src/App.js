@@ -114,7 +114,7 @@ const statechart = {
       on: {
         PLAY_AGAIN: 'roundN',
         DONT_PLAY_AGAIN: 'homeScreenPractice',
-        LEADERBOARD: 'joinLeaderboard'
+        JOIN_LEADERBOARD: 'joinLeaderboard'
       },
      },
     joinLeaderboard: {
@@ -334,6 +334,7 @@ showSolution() {
 
 
 gameOver() {
+  this.evaluateIfLeaderboardMaterial()
   this.gameOverChimes()
   this.setState({attempt: 0})
   this.setState({round: 0})
@@ -680,6 +681,10 @@ playerWinsPoints() {
   }
 
 
+//  ==================================
+//  Leaderboard
+//  ==================================
+
     axiosGetAllLeaderboardResults() {
       axios.get(this.state.dataSource +`/players/`)
         .then( (response) => {
@@ -696,13 +701,10 @@ playerWinsPoints() {
       console.log("axiosPostAllLeaderboardResults")
     }
 
-
-
     handleLeaderboardChange(event) {
-    console.log("The event.target.value is:", event.target.value)
-     this.setState({newLeaderboardInductee: event.target.value})
+      console.log("The event.target.value is:", event.target.value)
+      this.setState({newLeaderboardInductee: event.target.value})
     }
-
 
     handleLeaderboardSubmit(event) {
       event.preventDefault();
@@ -711,6 +713,26 @@ playerWinsPoints() {
       });
       // event.target.reset() clears the form once the item has been submitted
       event.target.reset();
+    }
+
+    evaluateIfLeaderboardMaterial() {
+      console.log("evaluateIfLeaderboardMaterial()")
+      // checking if the player's score in equal to or higher than
+      // the lowest/last score in the array
+
+      let lowestCurrentScore = this.state.leaderboardData[9].score
+      let score = this.state.score
+
+      console.log("lowestLeaderBoard score:", lowestCurrentScore)
+      console.log("current score:", this.state.score)
+
+      if (score >= lowestCurrentScore) {
+        console.log("score is higher than lowestCurrentScore")
+        this.props.transition('JOIN_LEADERBOARD');
+        //
+      } else {
+        console.log("score is lower than lowestCurrentScore")
+      }
     }
 
 
@@ -750,7 +772,7 @@ playerWinsPoints() {
             />
         </State>
 
-        <State is={['gameOver']}>
+        <State is={['gameOver', 'joinLeaderboard']}>
           <Confetti
             run={this.state.confettiFalling}
             numberOfPieces={600}
@@ -779,12 +801,13 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
-        <State is={['gameOver', 'leaderboard']}>
+        <State is={['gameOver', 'leaderboard', 'joinLeaderboard']}>
           <GameOverScreen
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
+            value={this.props.value}
             handleLeaderboardChange={this.handleLeaderboardChange}
             handleLeaderboardSubmit={this.handleLeaderboardSubmit}
           />
