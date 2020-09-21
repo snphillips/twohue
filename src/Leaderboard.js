@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LeaderboardForm from './LeaderboardForm';
 
 export default class Leaderboard extends Component {
   render() {
@@ -9,27 +10,27 @@ export default class Leaderboard extends Component {
       <div className="leaderboard-title">high scores</div>
 
         <ul className="leaderboard-list">
+          {
+           this.props.leaderboardData.map( item => {
 
-        {
-         this.props.leaderboardData.map( item => {
+             let playerIndex = this.props.leaderboardData.indexOf(item)
 
-           let playerIndex = this.props.leaderboardData.indexOf(item)
+             return(
+                <li
+                  key={playerIndex}
+                  className="leaderboard-entry"
+                  id={"leaderboard-entry" + playerIndex}
+                  >
+                    <span className="player-rank">{playerIndex + 1}&nbsp;</span>
+                    <span className="player-name">{item.player}&nbsp;</span>
+                    <span className="player-score">{item.score}</span>
+                </li>
+             )
+           })
+         }
+       </ul>
 
-           return(
-              <li
-                key={playerIndex}
-                className="leaderboard-entry"
-                id={"leaderboard-entry" + playerIndex}
-                >
-                  <span className="player-rank">{playerIndex + 1}&nbsp;</span>
-                  <span className="player-name">{item.player}&nbsp;</span>
-                  <span className="player-score">{item.score}</span>
-              </li>
-           )
-         })
-       }
-
-     </ul>
+       <LeaderboardForm />
 
     </div>
 
