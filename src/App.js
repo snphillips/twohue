@@ -165,13 +165,16 @@ class App extends React.Component {
   };
 
   // This binding is necessary to make `this` work in the callback
-  this.updateFieldColor = this.updateFieldColor.bind(this)
-  this.soundButtonToggle = this.soundButtonToggle.bind(this)
-  this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this)
-  this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this)
-  this.showSolution = this.showSolution.bind(this)
-  this.resetScoreForNextGame = this.resetScoreForNextGame.bind(this)
-  this.startGameClickHandler = this.startGameClickHandler.bind(this)
+  this.updateFieldColor = this.updateFieldColor.bind(this);
+  this.soundButtonToggle = this.soundButtonToggle.bind(this);
+  this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this);
+  this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this);
+  this.showSolution = this.showSolution.bind(this);
+  this.resetScoreForNextGame = this.resetScoreForNextGame.bind(this);
+  this.startGameClickHandler = this.startGameClickHandler.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+  this.handleChange = this.handleChange.bind(this);
+  this.axiosPostNewLeaderboardInductee = this.axiosPostNewLeaderboardInductee.bind(this);
 }
 
 
@@ -706,9 +709,40 @@ playerWinsPoints() {
       this.setState({newLeaderboardInductee: event.target.value})
     }
 
-    handleLeaderboardSubmit(event) {
+  //  ==================================================================
+  //  POST
+  //  As soon as the user interacts with the form, newTodo updates.
+  //  The API call happens once the user clicks the 'submit' button.
+  //  ==================================================================
+    axiosPostNewLeaderboardInductee() {
+      console.log("Hello from axiosPostNewLeaderboardInductee()")
+
+      axios.post(this.state.dataSource +`/players/`, {
+        name: this.state.name,
+        score: this.state.score,
+
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .then( () => {
+        this.axiosGetAllLeaderboardResults()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+
+
+    handleChange(event) {
+     // console.log("The event.target.value is:", event.target.value)
+     this.setState({newLeaderboardInductee: event.target.value})
+    };
+
+    handleSubmit(event) {
       event.preventDefault();
-      this.axiosPostAllLeaderboardResults( () => {
+      this.axiosPostNewLeaderboardInductee( () => {
         this.axiosGetAllLeaderboardResults()
       });
       // event.target.reset() clears the form once the item has been submitted
@@ -809,8 +843,8 @@ playerWinsPoints() {
             resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
             value={this.props.value}
-            handleLeaderboardChange={this.handleLeaderboardChange}
-            handleLeaderboardSubmit={this.handleLeaderboardSubmit}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
           />
         </State>
 

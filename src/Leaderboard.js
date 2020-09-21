@@ -32,7 +32,10 @@ export default class Leaderboard extends Component {
        </ul>
 
        <State is={['joinLeaderboard']}>
-         <LeaderboardForm />
+         <LeaderboardForm
+           handleChange={this.props.handleChange}
+           handleSubmit={this.props.handleSubmit}
+         />
        </State>
 
     </div>
