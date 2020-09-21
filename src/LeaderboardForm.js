@@ -1,48 +1,55 @@
 import React, { Component } from 'react';
+import { State } from 'react-automata';
 
 
 export default class LeaderboardForm extends Component {
   render() {
     return (
 
+    <State is={['gameOver', 'joinLeaderboard']}>
+      <div className="leaderboard-form">
 
-    <div className="leaderboard-form">
+        <form
+          // onSubmit={"return false;"}
+          onSubmit={this.props.handleLeaderboardSubmit}
+          >
 
-      <form
-        // onSubmit={"return false;"}
-        >
+          <label
+            className="leaderboard-form-label"
+            htmlFor="fname"
+            >
+              nickname:
+          </label>
 
-        <label
-          className="leaderboard-form-label"
-          htmlFor="fname">
-            nickname:
-        </label>
-
-        <input
-          type="text"
-          id="fname"
-          name="fname"
-          placeholder="max 12 characters"
-          defaultValue=""
-          onChange={() => {
-            console.log("input field", this.value)
-          }}
-          />
-        <div className="submit-button-div">
           <input
-            className="submit-button"
-            type="submit"
-            value="submit"
-            name="button"
-            onSubmit={ () => {
-              console.log("form action button")
+            type="text"
+            id="fname"
+            name="fname"
+            placeholder="max 12 characters"
+            defaultValue=""
+            value={this.props.value}
+            // onKeyPress allows user to hit "enter" to submit form
+            onKeyPress={this.props.handleLeaderboardChange}
+            onChange={() => {
+              console.log("input field", this.props.value)
+              console.log("handleChange", this.props.handleLeaderboardChange)
             }}
             />
-        </div>
+          <div className="submit-button-div">
+            <input
+              className="submit-button"
+              type="submit"
+              value="submit"
+              name="button"
+              onSubmit={this.props.handleLeaderboardSubmit}
+              />
+          </div>
 
-      </form>
+        </form>
 
-    </div>
+      </div>
+    </State>
+
 
     );
   }

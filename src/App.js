@@ -1,5 +1,5 @@
 import React from 'react';
-import { Action, withStateMachine, State } from 'react-automata'
+import { Action, withStateMachine, State } from 'react-automata';
 import './App.css';
 import Header from './Header';
 import Byline from './Byline';
@@ -160,7 +160,8 @@ class App extends React.Component {
     isAudioOn: false,
     confettiFalling: false,
     playerWinRound: false,
-    leaderboardData: []
+    leaderboardData: [],
+    newLeaderboardInductee: ''
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -362,7 +363,7 @@ gameOver() {
 
   componentDidMount() {
     console.log("machineState: ", this.props.machineState.value )
-    this.axiosAllLeaderboardResults()
+    this.axiosGetAllLeaderboardResults()
   }
 
   componentDidUpdate() {
@@ -679,10 +680,7 @@ playerWinsPoints() {
   }
 
 
-
-
-
-    axiosAllLeaderboardResults() {
+    axiosGetAllLeaderboardResults() {
       axios.get(this.state.dataSource +`/players/`)
         .then( (response) => {
           this.setState({leaderboardData: response.data})
@@ -692,6 +690,27 @@ playerWinsPoints() {
         .catch(function (error) {
           console.log(error);
         });
+    }
+
+    axiosPostAllLeaderboardResults() {
+      console.log("axiosPostAllLeaderboardResults")
+    }
+
+
+
+    handleLeaderboardChange(event) {
+    console.log("The event.target.value is:", event.target.value)
+     this.setState({newLeaderboardInductee: event.target.value})
+    }
+
+
+    handleLeaderboardSubmit(event) {
+      event.preventDefault();
+      this.axiosPostAllLeaderboardResults( () => {
+        this.axiosGetAllLeaderboardResults()
+      });
+      // event.target.reset() clears the form once the item has been submitted
+      event.target.reset();
     }
 
 
@@ -766,6 +785,8 @@ playerWinsPoints() {
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
+            handleLeaderboardChange={this.handleLeaderboardChange}
+            handleLeaderboardSubmit={this.handleLeaderboardSubmit}
           />
         </State>
 

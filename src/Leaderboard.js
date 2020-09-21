@@ -21,8 +21,7 @@ export default class Leaderboard extends Component {
                   className="leaderboard-entry"
                   id={"leaderboard-entry" + playerIndex}
                   >
-                    <span className="player-rank">{playerIndex + 1}&nbsp;</span>
-                    <span className="player-name">{item.player}&nbsp;</span>
+                    <span className="player-rank">{playerIndex + 1}&nbsp;{item.player}</span>
                     <span className="player-score">{item.score}</span>
                 </li>
              )
@@ -39,3 +38,5 @@ export default class Leaderboard extends Component {
 }
 
 
+
+                    // <span className="player-name">{item.player}&nbsp;</span>

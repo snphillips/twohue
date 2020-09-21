@@ -15,6 +15,8 @@ export default class GameOverScreen extends Component {
        <Leaderboard
          leaderboardData={this.props.leaderboardData}
          score={this.props.score}
+         handleLeaderboardChange={this.props.handleLeaderboardChange}
+         handleLeaderboardSubmit={this.props.handleLeaderboardSubmit}
        />
 
         <button
