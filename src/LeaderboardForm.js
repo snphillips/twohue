@@ -1,63 +1,58 @@
 import React, { Component } from 'react';
-import { State } from 'react-automata';
 
 
-export default class LeaderboardForm extends Component {
+
+export default class LeaderboardForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: ''
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+    console.log("value:",  event.target.value)
+  }
+
+  handleSubmit(event) {
+    console.log('A name submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
   render() {
     return (
 
-    <State is={['joinLeaderboard']}>
-      <div className="leaderboard-form">
+        <div className="leaderboard-form">
 
-        <form
-          // onSubmit={"return false;"}
-          onSubmit={this.props.handleLeaderboardSubmit}
-          >
-
-          <label
-            className="leaderboard-form-label"
-            htmlFor="fname"
+          <form
+            onSubmit={this.handleSubmit}
             >
-              nickname:
+
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={this.state.value}
+              onChange={this.handleChange}
+              />
           </label>
 
           <input
-            type="text"
-            id="fname"
-            name="fname"
-            placeholder="max 12 characters"
-            defaultValue=""
-            value={this.props.value}
-            // onKeyPress allows user to hit "enter" to submit form
-            // onKeyPress={this.props.handleLeaderboardChange}
-            onChange={(value) => {
-              // this.props.handleLeaderboardChange()
-              console.log("input field value", this.props.value)
-              // console.log("input field newLeaderboardInductee", this.props.newLeaderboardInductee)
-              console.log("handleChange", this.props.handleLeaderboardChange)
-            }}
-            />
-          <div className="submit-button-div">
-            <input
-              className="submit-button"
-              type="submit"
-              value="submit"
-              name="button"
-              // onSubmit={this.props.handleLeaderboardSubmit}
-              onSubmit={ (value) => {
-                this.props.handleLeaderboardSubmit()
-              }}
-              />
-          </div>
+            type="submit"
+            value="Submit"
+          />
 
-        </form>
-
-      </div>
-    </State>
-
-
+         </form>
+        </div>
     );
   }
 }
+
+
 
 

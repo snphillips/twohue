@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LeaderboardForm from './LeaderboardForm';
+import { State } from 'react-automata';
 
 export default class Leaderboard extends Component {
   render() {
@@ -7,6 +8,7 @@ export default class Leaderboard extends Component {
 
 
     <div className="leaderboard-component">
+
       <div className="leaderboard-title">high scores</div>
 
         <ul className="leaderboard-list">
@@ -29,7 +31,9 @@ export default class Leaderboard extends Component {
          }
        </ul>
 
-       <LeaderboardForm />
+       <State is={['joinLeaderboard']}>
+         <LeaderboardForm />
+       </State>
 
     </div>
 
@@ -39,4 +43,3 @@ export default class Leaderboard extends Component {
 
 
 
-                    // <span className="player-name">{item.player}&nbsp;</span>

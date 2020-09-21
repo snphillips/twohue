@@ -732,6 +732,7 @@ playerWinsPoints() {
         //
       } else {
         console.log("score is lower than lowestCurrentScore")
+        this.props.transition('NO_MORE_ROUNDS');
       }
     }
 
