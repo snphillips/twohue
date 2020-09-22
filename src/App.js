@@ -714,41 +714,6 @@ playerWinsPoints() {
   //  As soon as the user interacts with the form, newTodo updates.
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
-    axiosPostNewLeaderboardInductee() {
-      console.log("Hello from axiosPostNewLeaderboardInductee()")
-
-      axios.post(this.state.dataSource +`/players/`, {
-        name: this.state.name,
-        score: this.state.score,
-
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .then( () => {
-        this.axiosGetAllLeaderboardResults()
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-
-
-
-    handleChange(event) {
-     // console.log("The event.target.value is:", event.target.value)
-     this.setState({newLeaderboardInductee: event.target.value})
-    };
-
-    handleSubmit(event) {
-      event.preventDefault();
-      this.axiosPostNewLeaderboardInductee( () => {
-        this.axiosGetAllLeaderboardResults()
-      });
-      // event.target.reset() clears the form once the item has been submitted
-      event.target.reset();
-    }
-
     evaluateIfLeaderboardMaterial() {
       console.log("evaluateIfLeaderboardMaterial()")
       // checking if the player's score in equal to or higher than
@@ -769,6 +734,45 @@ playerWinsPoints() {
         this.props.transition('NO_MORE_ROUNDS');
       }
     }
+
+    axiosPostNewLeaderboardInductee() {
+      console.log("Hello from axiosPostNewLeaderboardInductee()")
+
+      axios.post(this.state.dataSource +`/players/`, {
+        name: this.state.value,
+        score: this.state.score,
+
+      })
+      .then(function (response) {
+        console.log("response:", response);
+        console.log("leaderboard axios call response: ", response.data)
+        console.log("this.state.leaderboardData: ", this.state.leaderboardData)
+      })
+      .then( () => {
+        this.axiosGetAllLeaderboardResults()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+
+    handleChange(event) {
+      console.log("value:",  event.target.value)
+      this.setState({value: event.target.value});
+      this.setState({newLeaderboardInductee: event.target.value})
+    }
+
+    handleSubmit(event) {
+      console.log('A name submitted: ' + this.state.value);
+      event.preventDefault();
+      this.axiosPostNewLeaderboardInductee( () => {
+        this.axiosGetAllLeaderboardResults()
+      });
+      // event.target.reset() clears the form once the item has been submitted
+      event.target.reset();
+    }
+
 
 
 
@@ -838,6 +842,7 @@ playerWinsPoints() {
 
         <State is={['gameOver', 'leaderboard', 'joinLeaderboard']}>
           <GameOverScreen
+            dataSource={this.state.dataSource}
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
@@ -845,6 +850,7 @@ playerWinsPoints() {
             value={this.props.value}
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
+            newLeaderboardInductee={this.props.newLeaderboardInductee}
           />
         </State>
 
