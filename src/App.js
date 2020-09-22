@@ -139,8 +139,8 @@ class App extends React.Component {
   super(props);
 
   this.state = {
-    // dataSource: "https://twohue-leaderboard-server.herokuapp.com/", // when you serve the data from Heroku
-    dataSource: "http://localhost:3001", // when you serve the data locally
+    // dataSource: "https://twohue-leaderboard-server.herokuapp.com//players/", // when you serve the data from Heroku
+    dataSource: "http://localhost:3001/players/", // when you serve the data locally
     round: 0,
     attempt: 0,
     maxAttemptCount: 6,
@@ -175,6 +175,8 @@ class App extends React.Component {
   this.handleSubmit = this.handleSubmit.bind(this);
   this.handleChange = this.handleChange.bind(this);
   this.axiosPostNewLeaderboardInductee = this.axiosPostNewLeaderboardInductee.bind(this);
+  this.axiosGetAllLeaderboardResults = this.axiosGetAllLeaderboardResults.bind(this);
+  this.evaluateIfLeaderboardMaterial = this.evaluateIfLeaderboardMaterial.bind(this);
 }
 
 
@@ -689,7 +691,7 @@ playerWinsPoints() {
 //  ==================================
 
     axiosGetAllLeaderboardResults() {
-      axios.get(this.state.dataSource +`/players/`)
+      axios.get(this.state.dataSource)
         .then( (response) => {
           this.setState({leaderboardData: response.data})
           console.log("leaderboard axios call response: ", response.data)
@@ -709,11 +711,6 @@ playerWinsPoints() {
       this.setState({newLeaderboardInductee: event.target.value})
     }
 
-  //  ==================================================================
-  //  POST
-  //  As soon as the user interacts with the form, newTodo updates.
-  //  The API call happens once the user clicks the 'submit' button.
-  //  ==================================================================
     evaluateIfLeaderboardMaterial() {
       console.log("evaluateIfLeaderboardMaterial()")
       // checking if the player's score in equal to or higher than
@@ -735,10 +732,15 @@ playerWinsPoints() {
       }
     }
 
+  //  ==================================================================
+  //  POST
+  //  As soon as the user interacts with the form, newTodo updates.
+  //  The API call happens once the user clicks the 'submit' button.
+  //  ==================================================================
     axiosPostNewLeaderboardInductee() {
-      console.log("Hello from axiosPostNewLeaderboardInductee()")
+      console.log("Post- name: ", this.state.value, "score: ", this.state.score)
 
-      axios.post(this.state.dataSource +`/players/`, {
+      axios.post(this.state.dataSource, {
         name: this.state.value,
         score: this.state.score,
 
@@ -842,7 +844,6 @@ playerWinsPoints() {
 
         <State is={['gameOver', 'leaderboard', 'joinLeaderboard']}>
           <GameOverScreen
-            dataSource={this.state.dataSource}
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
