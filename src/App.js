@@ -142,8 +142,8 @@ class App extends React.Component {
   super(props);
 
   this.state = {
-    // dataSource: "https://twohue-leaderboard-server.herokuapp.com//players", // when you serve the data from Heroku
-    dataSource: "http://localhost:3001/players", // when you serve the data locally
+    dataSource: "https://twohue-leaderboard-server.herokuapp.com/players", // when you serve the data from Heroku
+    // dataSource: "http://localhost:3001/players", // when you serve the data locally
     round: 0,
     attempt: 0,
     maxAttemptCount: 6,
@@ -571,7 +571,7 @@ incrementAttempt(){
 }
 
 
-// TODO - ternary?
+// TODO - refactor into ternary?
 playerWinsPoints() {
 
   let attempts =  this.state.attempt
@@ -718,7 +718,7 @@ playerWinsPoints() {
       axios.get(this.state.dataSource)
         .then( (response) => {
           this.setState({leaderboardData: response.data})
-          console.log("leaderboard axios call response: ", response.data)
+          // console.log("leaderboard axios call response: ", response.data)
           console.log("this.state.leaderboardData: ", this.state.leaderboardData)
         })
         .catch(function (error) {
@@ -732,9 +732,17 @@ playerWinsPoints() {
       // checking if the player's score in equal to or higher than
       // the lowest/last score in the array
 
-      let lowestCurrentScore = this.state.leaderboardData[9].score
+      let leaderboardMembers = this.state.leaderboardData
+
+      // What is smaller? 9 or the array length - 1?
+      // Either pick the last item in the array, or the 10th item,
+      // whichever is smaller.
+      // We do this in case the array has fewer than 10 members.
+      let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
+      let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
       let score = this.state.score
 
+      console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
       console.log("lowestLeaderBoard score:", lowestCurrentScore)
       console.log("current score:", score)
 
@@ -859,8 +867,8 @@ playerWinsPoints() {
           <Confetti
             run={this.state.confettiFalling}
             numberOfPieces={600}
-            recycle={true}
-            // recycle={false}
+            // recycle={true}
+            recycle={false}
             tweenDuration={100}
             opacity={0.6}
             gravity={0.08}

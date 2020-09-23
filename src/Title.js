@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { State } from 'react-automata';
 
 export default class Title extends Component {
   render() {
@@ -14,7 +13,3 @@ export default class Title extends Component {
     );
   }
 }
-
-      // <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
-      //   <p className="round-readout">round: {this.props.round}</p>
-      // </State>
