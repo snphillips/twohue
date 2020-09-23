@@ -18,6 +18,7 @@ export default class GameOverScreen extends Component {
          value={this.props.value}
          handleChange={this.props.handleChange}
          handleSubmit={this.props.handleSubmit}
+         newLeaderboardInductee={this.props.newLeaderboardInductee}
        />
 
         <button

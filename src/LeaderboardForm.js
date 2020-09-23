@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 
 
@@ -7,7 +6,7 @@ export default class LeaderboardForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // value: ''
+
     };
 
 
@@ -24,16 +23,17 @@ export default class LeaderboardForm extends React.Component {
             >
 
           <label>
-            Name:
             <input
               type="text"
               name="name"
+              placeholder='nickname (max 12 char)'
               value={this.props.newLeaderboardInductee}
               onChange={this.props.handleChange}
               />
           </label>
 
           <input
+            className="leaderboard-form-button"
             type="submit"
             value="Submit"
           />

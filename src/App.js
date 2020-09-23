@@ -7,11 +7,9 @@ import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 import GameOverScreen from './GameOverScreen';
-// Howler manages the sound effects
-import {Howl} from 'howler';
-// Color are all generated and mixed using chroma.js
-import chroma from 'chroma-js';
-import Confetti from 'react-confetti'
+import {Howl} from 'howler'; // Howler manages the sound effects
+import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
+import Confetti from 'react-confetti';
 import axios from 'axios';
 
 // ==============================
@@ -29,6 +27,110 @@ import axios from 'axios';
 // https://github.com/MicheleBertoli/react-automata
 // ==============================
 
+
+// // ==============================
+// // React Automata State Chart
+// // States, TRANSITIONS, & Functions
+// // ==============================
+// const statechart = {
+//   initial: 'loading',
+//   states: {
+//     loading: {
+//       onEntry: 'readyAction',
+//       on: {
+//         READY: 'homeScreenPractice',
+//       },
+//     },
+//     homeScreenPractice: {
+//       onEntry: 'homeScreenPractice',
+//       on: {
+//         SELECT_COLOR_PRACTICE: 'homeScreenPractice',
+//         START_GAME: 'roundN',
+//       },
+//     },
+//     roundN: {
+//       onEntry: 'roundN',
+//       on: {
+//         INCREMENT_ROUND_COUNTER: 'incrementRoundCounter',
+//       },
+//     },
+//     incrementRoundCounter: {
+//       onEntry: 'incrementRoundCounter',
+//       on: {
+//         SET_UP_COLOR_ROUND: 'setUpColorRound',
+//       },
+//     },
+//     setUpColorRound: {
+//       onEntry: 'setUpColorRound',
+//       on: {
+//         PLAY_ROUND: 'playRound',
+//         NO_MORE_ROUNDS: 'gameOver',
+//       },
+//     },
+//     playRound: {
+//       onEntry: 'playRound',
+//       on: {
+//         ATTEMPT_N: 'attemptN',
+//       },
+//     },
+//     attemptN: {
+//       onEntry: 'attemptN',
+//       on: {
+//         SELECT_COLOR: 'checkSolution',
+//         OUT_OF_ATTEMPTS: 'playerLoosesRound',
+//       },
+//     },
+//     checkSolution: {
+//       onEntry: 'checkSolution',
+//       on: {
+//         CORRECT_SOLUTION: 'playerWinsRound',
+//         INCORRECT_SOLUTION: 'attemptN',
+//       },
+//     },
+//     playerWinsRound: {
+//       onEntry: 'playerWinsRound',
+//       on: {
+//         NEXT_ROUND: 'roundN',
+//         NO_MORE_ROUNDS: 'gameOver'
+//       },
+//     },
+//     playerLoosesRound: {
+//       onEntry: 'playerLoosesRound',
+//       on: {
+//         SHOW_SOLUTION: 'showSolution'
+//       },
+//     },
+//     showSolution: {
+//       onEntry: 'showSolution',
+//       on: {
+//         NEXT_ROUND: 'roundN',
+//         NO_MORE_ROUNDS: 'gameOver'
+//       },
+//     },
+//     gameOver: {
+//       onEntry: 'gameOver',
+//       on: {
+//         VIEW_LEADERBOARD: 'viewLeaderboard'
+//       },
+//      },
+//     viewLeaderboard: {
+//       onEntry: 'viewLeaderboard',
+//       on: {
+//         PLAY_AGAIN: 'roundN',
+//         DONT_PLAY_AGAIN: 'homeScreenPractice',
+//         JOIN_LEADERBOARD: 'joinLeaderboard'
+//       },
+//      },
+//     joinLeaderboard: {
+//       onEntry: 'joinLeaderboard',
+//       on: {
+//         INSERT_ENTRY_INTO_LEADERBOARD: 'viewLeaderboard',
+//         PLAY_AGAIN: 'roundN',
+//         DONT_PLAY_AGAIN: 'homeScreenPractice'
+//       }
+//     }
+//   }
+// }
 
 // ==============================
 // React Automata State Chart
@@ -112,35 +214,39 @@ const statechart = {
     gameOver: {
       onEntry: 'gameOver',
       on: {
-        PLAY_AGAIN: 'roundN',
-        DONT_PLAY_AGAIN: 'homeScreenPractice',
+        DO_NOT_JOIN_LEADERBOARD: 'leaderboard',
         JOIN_LEADERBOARD: 'joinLeaderboard'
       },
      },
     joinLeaderboard: {
       onEntry: 'joinLeaderboard',
       on: {
+        FILLED_OUT_FORM: 'leaderboard'
+      },
+    },
+    leaderboard: {
+      onEntry: 'leaderboard',
+      on: {
         PLAY_AGAIN: 'roundN',
         DONT_PLAY_AGAIN: 'homeScreenPractice'
       }
     }
-  }
+}
 }
 
-
 // ===========================================
 // ===========================================
 // ===========================================
 // ===========================================
-let newColorRound = [];
+// let newColorRound = [];
 
 class App extends React.Component {
   constructor(props) {
   super(props);
 
   this.state = {
-    // dataSource: "https://twohue-leaderboard-server.herokuapp.com//players/", // when you serve the data from Heroku
-    dataSource: "http://localhost:3001/players/", // when you serve the data locally
+    // dataSource: "https://twohue-leaderboard-server.herokuapp.com//players", // when you serve the data from Heroku
+    dataSource: "http://localhost:3001/players", // when you serve the data locally
     round: 0,
     attempt: 0,
     maxAttemptCount: 6,
@@ -339,13 +445,30 @@ showSolution() {
 
 
 gameOver() {
-  this.evaluateIfLeaderboardMaterial()
   this.gameOverChimes()
   this.setState({attempt: 0})
   this.setState({round: 0})
   this.setState({looseRound: 0})
   this.setState({confettiFalling: true})
+  this.evaluateIfLeaderboardMaterial()
+  // this.props.transition('VIEW_LEADERBOARD')
 }
+
+
+joinLeaderboard(){
+
+}
+
+
+
+leaderboard() {
+
+}
+
+
+
+
+
 // *****************************************************
 // ** End State Machine Functions **********************
 // *****************************************************
@@ -426,6 +549,7 @@ gameOver() {
     };
 
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~
     let newColorRound = {
 
       solutionColor1: soluColor1,
@@ -458,6 +582,7 @@ gameOver() {
         return this.solutionColors.concat(this.wrongColors);
       }
     };
+    // ~~~~~~~~~~~~~~~~~~~~~~~~
 
 
     // The function that shuffles the allColorBubbles bubbles
@@ -689,6 +814,8 @@ playerWinsPoints() {
 //  ==================================
 //  Leaderboard
 //  ==================================
+//  GET
+//  ==================================
 
     axiosGetAllLeaderboardResults() {
       axios.get(this.state.dataSource)
@@ -702,14 +829,6 @@ playerWinsPoints() {
         });
     }
 
-    axiosPostAllLeaderboardResults() {
-      console.log("axiosPostAllLeaderboardResults")
-    }
-
-    handleLeaderboardChange(event) {
-      console.log("The event.target.value is:", event.target.value)
-      this.setState({newLeaderboardInductee: event.target.value})
-    }
 
     evaluateIfLeaderboardMaterial() {
       console.log("evaluateIfLeaderboardMaterial()")
@@ -720,7 +839,7 @@ playerWinsPoints() {
       let score = this.state.score
 
       console.log("lowestLeaderBoard score:", lowestCurrentScore)
-      console.log("current score:", this.state.score)
+      console.log("current score:", score)
 
       if (score >= lowestCurrentScore) {
         console.log("score is higher than lowestCurrentScore")
@@ -728,7 +847,7 @@ playerWinsPoints() {
         //
       } else {
         console.log("score is lower than lowestCurrentScore")
-        this.props.transition('NO_MORE_ROUNDS');
+        this.props.transition('DO_NOT_JOIN_LEADERBOARD');
       }
     }
 
@@ -738,17 +857,20 @@ playerWinsPoints() {
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
     axiosPostNewLeaderboardInductee() {
-      console.log("Post- name: ", this.state.value, "score: ", this.state.score)
+      console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
+
+      // let nameValue = this.state.value;
+      let nameValue = this.state.newLeaderboardInductee;
+      let scoreValue = this.state.score;
 
       axios.post(this.state.dataSource, {
-        name: this.state.value,
-        score: this.state.score,
-
+        player: this.state.value,
+        score: this.state.score
       })
       .then(function (response) {
         console.log("response:", response);
         console.log("leaderboard axios call response: ", response.data)
-        console.log("this.state.leaderboardData: ", this.state.leaderboardData)
+        // console.log("this.state.leaderboardData: ", this.state.leaderboardData)
       })
       .then( () => {
         this.axiosGetAllLeaderboardResults()
@@ -758,6 +880,27 @@ playerWinsPoints() {
       });
     }
 
+  //  ==================================================================
+  //  DELETE
+  //  TODO: how do you want to do this?
+  //  NOT WORKING YET
+  //  for instacne, what do you want to select to delete?
+  //  ==================================================================
+    // axiosDeleteLeaderboardEntry() {
+
+    //   axios.delete(this.state.dataSource + `/${this.state.selectedToDelete}`, {
+    //     id: this.state.selectedToDelete
+    //   })
+    //   .then(function (response) {
+    //     // console.log(response);
+    //   })
+    //   .then( () => {
+    //     this.axiosGetToDos()
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+    // }
 
     handleChange(event) {
       console.log("value:",  event.target.value)
@@ -773,6 +916,8 @@ playerWinsPoints() {
       });
       // event.target.reset() clears the form once the item has been submitted
       event.target.reset();
+      // now let's move onto the next state
+      this.props.transition('FILLED_OUT_FORM')
     }
 
 
@@ -813,12 +958,12 @@ playerWinsPoints() {
             />
         </State>
 
-        <State is={['gameOver', 'joinLeaderboard']}>
+        <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
           <Confetti
             run={this.state.confettiFalling}
             numberOfPieces={600}
-            // recycle={true}
-            recycle={false}
+            recycle={true}
+            // recycle={false}
             tweenDuration={100}
             opacity={0.6}
             gravity={0.08}
@@ -848,7 +993,6 @@ playerWinsPoints() {
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
-            value={this.props.value}
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
             newLeaderboardInductee={this.props.newLeaderboardInductee}

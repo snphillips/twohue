@@ -522,6 +522,14 @@ ul.leaderboard-list {
   margin-left: 1rem;
 }
 
+.leaderboard-form {
+  width: 600px;
+}
+
+.leaderboard-form-button {
+  display: inline-block;
+}
+
 
 
 
