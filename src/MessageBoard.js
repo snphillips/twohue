@@ -29,7 +29,7 @@ export default class MessageBoard extends Component {
           <p>Solution</p>
         </State>
 
-        <State is={['gameOver']}>
+        <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
           <p className="game-over">game over</p>
         </State>
 
