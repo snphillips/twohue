@@ -479,7 +479,7 @@ footer {
   flex-direction: column;
   font-family: 'Alata', sans-serif;
   font-size: 1.1rem;
-  width: fit-content;
+  width: 600px;
   max-width: 38%;
 }
 
@@ -524,6 +524,15 @@ ul.leaderboard-list {
 
 .leaderboard-form {
   width: 600px;
+}
+
+input.leaderboard-input-field {
+  margin-right: 10px;
+  border: 2px solid var(--accent-gray-darker, #666);
+  height: 2rem;
+  width: 10.5rem;
+  padding: .5rem;
+  /*background-color: red;*/
 }
 
 .leaderboard-form-button {

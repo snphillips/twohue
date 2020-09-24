@@ -183,7 +183,6 @@ class App extends React.Component {
 }
 
 
-
 //  =================================
 //  State Machine Functions
 //  All the component's methods whose names match the names of actions and activities,
@@ -197,6 +196,7 @@ class App extends React.Component {
  }
 
  homeScreenPractice(){
+
 
 }
 
@@ -841,7 +841,6 @@ playerWinsPoints() {
   // even if user resized window.
   let width = window.innerWidth
   let height = window.innerHeight
-
 
 
     return (

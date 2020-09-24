@@ -24,6 +24,7 @@ export default class LeaderboardForm extends React.Component {
 
           <label>
             <input
+              className="leaderboard-input-field"
               type="text"
               name="name"
               placeholder='nickname (max 12 char)'
