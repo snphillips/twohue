@@ -236,7 +236,7 @@ input[type=submit]{
 }
 
 button:hover,
-input[type=submit] {
+input[type=submit]:hover {
   cursor: pointer;
   background-color: var(--accent-gray, #a6a6a6);
 }
@@ -528,10 +528,11 @@ ul.leaderboard-list {
 
 input.leaderboard-input-field {
   margin-right: 10px;
-  border: 2px solid var(--accent-gray-darker, #666);
+  border: 2px solid var(--accent-gray, #a6a6a6);
   height: 2rem;
   width: 10.5rem;
   padding: .5rem;
+  font-family: 'Alata', sans-serif;
   /*background-color: red;*/
 }
 
