@@ -31,6 +31,7 @@ export default class Leaderboard extends Component {
          }
        </ul>
 
+      <div className="lederboard-form-placeholder">
        <State is={['joinLeaderboard']}>
          <LeaderboardForm
            handleChange={this.props.handleChange}
@@ -38,6 +39,7 @@ export default class Leaderboard extends Component {
            newLeaderboardInductee={this.props.newLeaderboardInductee}
          />
        </State>
+       </div>
 
     </div>
 

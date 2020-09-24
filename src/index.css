@@ -522,6 +522,11 @@ ul.leaderboard-list {
   margin-left: 1rem;
 }
 
+.lederboard-form-placeholder {
+  display: block;
+  min-height: 2rem;
+}
+
 .leaderboard-form {
   width: 600px;
 }
