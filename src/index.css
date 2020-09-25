@@ -528,15 +528,17 @@ ul.leaderboard-list {
 }
 
 .leaderboard-form {
-  width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
 }
 
 input.leaderboard-input-field {
   margin-right: 10px;
   border: 2px solid var(--accent-gray, #a6a6a6);
   height: 2rem;
-  width: 10.5rem;
-  padding: .5rem;
+  width: 10.25rem;
+  padding: 6px;
   font-family: 'Alata', sans-serif;
   /*background-color: red;*/
 }
@@ -553,7 +555,18 @@ input.leaderboard-input-field {
 /* *********************************************** */
 /* *********************************************** */
 /* *********************************************** */
+/*=======================*/
+/* tablets : */
+/*=======================*/
+@media only screen and (max-width: 785px) {
 
+
+  .twohue {
+    max-width: 490px;
+  }
+
+
+}
 /*=======================*/
 /* For phones: */
 /*=======================*/

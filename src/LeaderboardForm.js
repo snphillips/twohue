@@ -36,7 +36,7 @@ export default class LeaderboardForm extends React.Component {
           <input
             className="leaderboard-form-button"
             type="submit"
-            value="Submit"
+            value="submit"
           />
 
          </form>
