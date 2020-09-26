@@ -1,51 +1,48 @@
-import React, { Component } from 'react';
-import LeaderboardForm from './LeaderboardForm';
-import { State } from 'react-automata';
+import React, { Component } from "react";
+import LeaderboardForm from "./LeaderboardForm";
+import { State } from "react-automata";
+
 
 export default class Leaderboard extends Component {
+
+
   render() {
+
     return (
 
+        <div id="leaderboard-component">
+          <div className="leaderboard-title">high scores</div>
 
-    <div className="leaderboard-component">
+          <ul className="leaderboard-list">
+            {this.props.leaderboardData.map((item) => {
+              let playerIndex = this.props.leaderboardData.indexOf(item);
 
-      <div className="leaderboard-title">high scores</div>
-
-        <ul className="leaderboard-list">
-          {
-           this.props.leaderboardData.map( item => {
-
-             let playerIndex = this.props.leaderboardData.indexOf(item)
-
-             return(
+              return (
                 <li
                   key={playerIndex}
                   className="leaderboard-entry"
                   id={"leaderboard-entry" + playerIndex}
-                  >
-                    <span className="player-rank">{playerIndex + 1}&nbsp;{item.player}</span>
-                    <span className="player-score">{item.score}</span>
+                >
+                  <span className="player-rank">
+                    {playerIndex + 1}&nbsp;{item.player}
+                  </span>
+                  <span className="player-score">{item.score}</span>
                 </li>
-             )
-           })
-         }
-       </ul>
+              );
+            })}
+          </ul>
 
-      <div className="lederboard-form-placeholder">
-       <State is={['joinLeaderboard']}>
-         <LeaderboardForm
-           handleChange={this.props.handleChange}
-           handleSubmit={this.props.handleSubmit}
-           newLeaderboardInductee={this.props.newLeaderboardInductee}
-         />
-       </State>
-       </div>
-
-    </div>
+          <div className="lederboard-form-placeholder">
+            <State is={["joinLeaderboard"]}>
+              <LeaderboardForm
+                handleChange={this.props.handleChange}
+                handleSubmit={this.props.handleSubmit}
+                newLeaderboardInductee={this.props.newLeaderboardInductee}
+              />
+            </State>
+          </div>
+        </div>
 
     );
   }
 }
-
-
-

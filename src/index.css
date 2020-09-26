@@ -1,6 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
+
+/* =======================*/
+/* transition between states */
+/* =======================*/
+.transition-enter {
+  opacity: 1 !important;
+  /*color: red;*/
+  /*background: #efefef;*/
+  transition: all 1000ms;
+}
+
+.transition-enter-active {
+  opacity: .5;
+  transition: opacity 300ms;
+}
+
+.transition-enter-done {
+  opacity: 1;
+}
+
+.transition-exit {
+  opacity: 1;
+}
+
+.transition-exit-active {
+  opacity: .5;
+  transition: opacity 300ms;
+}
+
+.transition-exit-done {
+  opacity: 0;
+}
+
+
+
+
+
 /* =======================*/
 /* css variables */
 /* =======================*/
@@ -272,6 +309,7 @@ h1:hover {
 }
 
 .message-board {
+  opacity: 0;
   text-align: center;
   font-size: 16px;
   order: 2;
@@ -317,6 +355,8 @@ h1:hover {
 }
 
 .play-again-button {
+  /* start with opacity: 0; then apply class to go to 1 during transition */
+  opacity: 0;
   margin: 1rem auto;
   display: flex;
 }
@@ -335,7 +375,7 @@ h1:hover {
   margin-bottom: 1rem;
 }
 
-.target-swatch {
+#target-swatch {
   box-sizing: border-box;
   margin: 0 auto;
   border: 3px solid #abb2b9;
@@ -345,9 +385,10 @@ h1:hover {
   cursor: pointer;
   position: relative;
   z-index: 0;
+  transition: all 3s;
 }
 
-.target-swatch .tooltiptext {
+#target-swatch .tooltiptext {
   font-size: 1rem;
   font-weight: 500;
   visibility: hidden;
@@ -365,7 +406,7 @@ h1:hover {
   transition: background .5s;
 }
 
-.target-swatch:hover .tooltiptext {
+#target-swatch:hover .tooltiptext {
   visibility: visible;
 }
 
@@ -411,7 +452,6 @@ section#left-and-right-field {
   border: 3px solid  #abb2b9;
   text-align: center;
   border-radius: 50%;
-  transition: background .5s;
   transition: border .1s;
 }
 
@@ -471,7 +511,9 @@ footer {
 /*=======================*/
 /* leaderboard */
 /*=======================*/
-.leaderboard-component {
+#leaderboard-component {
+  /* begins with opacity: 0 */
+  opacity: 0;
   position: inherit;
   margin: 0 auto;
   display: flex;
@@ -653,7 +695,7 @@ section#left-and-right-field {
     order: 3; /* when mobile, moved to 3rd position in header */
   }
 
-  .target-swatch {
+  #target-swatch {
     width: 22vw;
     height: 22vw;
   }
@@ -691,7 +733,7 @@ section#left-and-right-field {
     order: 3; /* when mobile, moved to 3rd position in header */
   }
 
-  .target-swatch {
+  #target-swatch {
     width: 22vw;
     height: 22vw;
   }
@@ -731,7 +773,7 @@ section#left-and-right-field {
     font-size: 1rem;
   }
 
-  .target-swatch {
+  #target-swatch {
     /*width: 4.5rem;*/
     /*height: 4.5rem;*/
   }

@@ -6,7 +6,8 @@ export default class GameField extends Component {
     return (
 
   <div>
-    <div className="target-swatch"
+    <div id="target-swatch"
+         className=""
          style={{'backgroundColor': this.props.colorRound.targetColor}} >
          &nbsp;
       <span className="tooltiptext">target color</span>

@@ -201,7 +201,11 @@ class App extends React.Component {
 }
 
 roundN(){
-  // console.log("round: ", this.state.round)
+  this.transitionBetweenStates("#color-bubble-tray", "transition-enter")
+  this.transitionBetweenStates("#target-swatch", "transition-enter")
+  this.transitionBetweenStates("#game-field", "transition-enter")
+  this.transitionBetweenStates(".message-board", "transition-enter")
+
   this.beginRoundSound()
   this.setState({confettiFalling: false})
   this.setState({playerWinRound: false})
@@ -348,18 +352,19 @@ gameOver() {
   this.setState({looseRound: 0})
   this.setState({confettiFalling: true})
   this.evaluateIfLeaderboardMaterial()
-  // this.props.transition('VIEW_LEADERBOARD')
 }
 
 
 joinLeaderboard(){
-
+  this.transitionBetweenStates("#leaderboard-component", "transition-enter")
+  this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
 
 
 
 leaderboard() {
-
+  this.transitionBetweenStates("#leaderboard-component", "transition-enter")
+  this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
 
 
@@ -379,9 +384,11 @@ leaderboard() {
 // *****************************************************
 // *****************************************************
 // *****************************************************
-  // handleClick = () => {
-  //   this.props.transition('READY')
-  // }
+  transitionBetweenStates(selector, classToAdd) {
+    console.log("transitioning between states")
+    document.querySelector(selector).classList.add(classToAdd)
+  }
+
 
   handleClick() {
     this.props.transition('READY')
@@ -790,6 +797,7 @@ playerWinsPoints() {
   //  TODO: how do you want to do this?
   //  NOT WORKING YET
   //  for instacne, what do you want to select to delete?
+  //  Also, do you even want to delete?
   //  ==================================================================
     // axiosDeleteLeaderboardEntry() {
 

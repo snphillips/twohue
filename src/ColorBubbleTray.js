@@ -45,7 +45,10 @@ export default class ColorBubbleTray extends Component {
               key={imageIndex}
               className="bubble"
               id={"bubble-" + imageIndex}
-              style={{'backgroundColor': this.props.allColorBubbles[imageIndex]}}
+              style={{
+                'backgroundColor': this.props.allColorBubbles[imageIndex],
+                 transition: 'all 3s'
+              }}
               onMouseEnter={this.props.currentFieldMouseEnter}
               onMouseLeave={this.props.currentFieldMouseLeave}
               onClick={ (event) => {
