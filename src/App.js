@@ -14,15 +14,32 @@ import axios from 'axios';
 import statechart from './statechart';
 
 
-// let newColorRound = [];
+// ==============================
+// The withStateMachine higher-order component accepts:
+// 1) an Xstate configuration object or an Xstate machine,
+// 2) some options,
+// 3) and a component.
+
+// It returns a NEW component with
+// special props, action and activity methods and additional lifecycle hooks.
+
+// The initial machine state and the initial data can be passed to
+// the resulting component through the initialMachineState and initialData props.
+
+// https://github.com/MicheleBertoli/react-automata
+// ==============================
+
+let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
+// let dataSource = "http://localhost:3001/players";
+// let maxLossCount = 0;
+// let maxLossCount = 6;
+
 
 class App extends React.Component {
   constructor(props) {
   super(props);
 
   this.state = {
-    dataSource: "https://twohue-leaderboard-server.herokuapp.com/players", // when you serve the data from Heroku
-    // dataSource: "http://localhost:3001/players", // when you serve the data locally
     round: 0,
     attempt: 0,
     maxAttemptCount: 6,
@@ -601,7 +618,7 @@ playerWinsPoints() {
 //  ==================================
 
     axiosGetAllLeaderboardResults() {
-      axios.get(this.state.dataSource)
+      axios.get(dataSource)
         .then( (response) => {
           this.setState({leaderboardData: response.data})
           // console.log("leaderboard axios call response: ", response.data)
@@ -654,7 +671,7 @@ playerWinsPoints() {
       let nameValue = this.state.newLeaderboardInductee;
       let scoreValue = this.state.score;
 
-      axios.post(this.state.dataSource, {
+      axios.post(dataSource, {
         player: this.state.value,
         score: this.state.score
       })
