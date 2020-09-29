@@ -2,10 +2,18 @@ import React, { Component } from "react";
 import LeaderboardForm from "./LeaderboardForm";
 import { State } from "react-automata";
 
+// ========================
+// Map over the array of leaderboard winners.
+// Return an unordered list <ul>.
+// Each list item <li> contains the players number in the list,
+// their nickname & their score.
+
+// The leaderboard form is only displayed if the player's score is
+// equal to, or more than the last person in the list.
+// ========================
+
 
 export default class Leaderboard extends Component {
-
-
   render() {
 
     return (
@@ -41,8 +49,19 @@ export default class Leaderboard extends Component {
               />
             </State>
           </div>
-        </div>
 
+      <button
+          className="play-again-button"
+          onClick={ () => {
+            this.props.resetScoreForNextGame();
+            this.setState({confettiFalling: false});
+            this.setState({playerWinRound: false});
+            this.props.transition('START_GAME');
+        }}>
+          play again
+     </button>
+
+        </div>
     );
   }
 }

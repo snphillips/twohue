@@ -7,6 +7,7 @@ import GameField from './GameField';
 import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 import GameOverScreen from './GameOverScreen';
+import Leaderboard from './Leaderboard';
 import {Howl} from 'howler'; // Howler manages the sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
@@ -94,6 +95,10 @@ class App extends React.Component {
  homeScreenPractice(){
 
 
+}
+
+fadeInRoundN() {
+  this.props.transition('FADE_IN_ROUND')
 }
 
 roundN(){
@@ -189,7 +194,7 @@ playerWinsRound() {
       let stateTransition = () => {
         if (this.state.looseRound < this.state.maxLossCount) {
           // console.log('NEXT_ROUND')
-          this.props.transition('NEXT_ROUND')
+          this.props.transition('FADE_IN_ROUND')
         } else if (this.state.looseRound >= this.state.maxLossCount){
           console.log('NO_MORE_ROUNDS this.state.maxLossCount:', this.state.maxLossCount)
           this.props.transition('NO_MORE_ROUNDS')
@@ -610,6 +615,10 @@ playerWinsPoints() {
     this.setState({looseRound:0})
   }
 
+  gameOverAnimation() {
+    console.log("game over animation")
+  }
+
 
 //  ==================================
 //  Leaderboard
@@ -795,7 +804,7 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
-        <State is={['gameOver', 'leaderboard', 'joinLeaderboard']}>
+        <State is={['gameOver']}>
           <GameOverScreen
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
@@ -806,6 +815,17 @@ playerWinsPoints() {
             newLeaderboardInductee={this.props.newLeaderboardInductee}
           />
         </State>
+
+         <State is={['leaderboard', 'joinLeaderboard']}>
+           <Leaderboard
+             leaderboardData={this.state.leaderboardData}
+             score={this.state.score}
+             value={this.state.value}
+             handleChange={this.handleChange}
+             handleSubmit={this.handleSubmit}
+             newLeaderboardInductee={this.state.newLeaderboardInductee}
+           />
+          </State>
 
           <div id="game-field">
             <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>

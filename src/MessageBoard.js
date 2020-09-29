@@ -29,9 +29,6 @@ export default class MessageBoard extends Component {
           <p>Solution</p>
         </State>
 
-        <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
-          <p className="game-over">game over</p>
-        </State>
 
     </section>
 
@@ -39,3 +36,7 @@ export default class MessageBoard extends Component {
   }
 };
 
+
+        // <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
+        //   <p className="game-over">game over</p>
+        // </State>

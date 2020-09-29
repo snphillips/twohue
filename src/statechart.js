@@ -32,7 +32,13 @@ const statechart = {
       onEntry: 'homeScreenPractice',
       on: {
         SELECT_COLOR_PRACTICE: 'homeScreenPractice',
-        START_GAME: 'roundN',
+        START_GAME: 'fadeInRoundN',
+      },
+    },
+    fadeInRoundN: {
+      onEntry: 'fadeInRoundN',
+      on: {
+        FADE_IN_ROUND: 'roundN',
       },
     },
     roundN: {
@@ -77,7 +83,7 @@ const statechart = {
     playerWinsRound: {
       onEntry: 'playerWinsRound',
       on: {
-        NEXT_ROUND: 'roundN',
+        FADE_IN_ROUND: 'roundN',
         NO_MORE_ROUNDS: 'gameOver'
       },
     },
@@ -104,13 +110,14 @@ const statechart = {
     joinLeaderboard: {
       onEntry: 'joinLeaderboard',
       on: {
-        FILLED_OUT_FORM: 'leaderboard'
+        FILLED_OUT_FORM: 'leaderboard',
+        START_GAME: 'fadeInRoundN',
       },
     },
     leaderboard: {
       onEntry: 'leaderboard',
       on: {
-        PLAY_AGAIN: 'roundN',
+        START_GAME: 'fadeInRoundN',
         DONT_PLAY_AGAIN: 'homeScreenPractice'
       }
     }
