@@ -5,6 +5,10 @@ import { State } from 'react-automata';
 
 
 
+  let displayGameOver = () => {
+    console.log("game over")
+    document.getElementById("game-over").classList.add("pop-in")
+  }
 
 
 export default class GameOverScreen extends Component {
@@ -12,14 +16,17 @@ export default class GameOverScreen extends Component {
 
     componentDidMount(){
 
+      displayGameOver()
+
       let transition = () => {
-        // document.queryselector(".game-over").classList.add("pop-in")
+        // document.getElementById("game-over").classList.add("pop-in")
         // document.getElementById("game-over").classList.toggle("pop-in");
-        console.log("game over transition")
+        console.log("game over transition to leaderboard")
+        this.props.transition('GAME_OVER_TRANSITION')
       }
 
       setTimeout(function() {
-      // Transition to next round after X seconds
+      // Transition to leaderboard after X seconds
       transition()
       }, 2000);
 

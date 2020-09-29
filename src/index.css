@@ -507,8 +507,8 @@ footer {
 /*=======================*/
 /* game over */
 /*=======================*/
-.game-over {
-  opacity: .5;
+#game-over {
+  /*opacity: .5;*/
   margin: .5rem 0;
   font-size: 1.5rem;
 }

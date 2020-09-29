@@ -103,6 +103,12 @@ const statechart = {
     gameOver: {
       onEntry: 'gameOver',
       on: {
+        GAME_OVER_TRANSITION: 'gameOverTransition',
+      },
+     },
+    gameOverTransition: {
+      onEntry: 'gameOverTransition',
+      on: {
         DO_NOT_JOIN_LEADERBOARD: 'leaderboard',
         JOIN_LEADERBOARD: 'joinLeaderboard'
       },

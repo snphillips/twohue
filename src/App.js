@@ -615,9 +615,12 @@ playerWinsPoints() {
     this.setState({looseRound:0})
   }
 
-  gameOverAnimation() {
-    console.log("game over animation")
-  }
+  // gameOverAnimation() {
+  //   console.log("game over animation")
+
+  // }
+
+
 
 
 //  ==================================
@@ -810,9 +813,9 @@ playerWinsPoints() {
             leaderboardData={this.state.leaderboardData}
             resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
-            handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
-            newLeaderboardInductee={this.props.newLeaderboardInductee}
+            // handleChange={this.handleChange}
+            // handleSubmit={this.handleSubmit}
+            // newLeaderboardInductee={this.props.newLeaderboardInductee}
           />
         </State>
 
