@@ -533,10 +533,14 @@ footer {
 }
 
 .fade-in {
- -webkit-animation:fade-in 3.5s;
+/* -webkit-animation:fade-in 3.5s;
  -moz-animation:fade-in 3.5s;
  -ms-animation:fade-in 3.5s;
- animation: fade-in 3.5s;
+ animation: fade-in 3.5s;*/
+  -webkit-animation:fade-in .5s;
+ -moz-animation:fade-in .5s;
+ -ms-animation:fade-in .5s;
+ animation: fade-in .5s;
 }
 
 @-webkit-keyframes fade-in {
@@ -598,8 +602,8 @@ footer {
   flex-direction: column;
   font-family: 'Alata', sans-serif;
   font-size: 1.1rem;
-  width: 600px;
-  max-width: 38%;
+  width: 50%;
+  max-width: 300px;
 }
 
 
@@ -621,7 +625,7 @@ ul.leaderboard-list {
   display: block;
   list-style-type: disc;
   margin-block-start: 1rem;
-  margin-block-end: 1rem;
+  margin-block-end: .75rem;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 0;
@@ -644,12 +648,12 @@ ul.leaderboard-list {
 .lederboard-form-placeholder {
   display: block;
   min-height: 2rem;
+  width: 100%;
+  max-width: 600px;
 }
 
 .leaderboard-form {
   margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
 }
 
 input.leaderboard-input-field {

@@ -827,7 +827,7 @@ playerWinsPoints() {
             />
         </State>
 
-        <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
+        <State is={['gameOver', 'gameOverTransition', 'joinLeaderboard', 'leaderboard']}>
           <Confetti
             run={this.state.confettiFalling}
             numberOfPieces={600}
