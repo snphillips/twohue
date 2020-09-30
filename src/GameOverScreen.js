@@ -14,8 +14,8 @@ import { State } from 'react-automata';
 
 let displayGameOver = () => {
   console.log("game over")
+  document.getElementById("game-over-container").classList.add("fade-in")
   document.getElementById("game-over").classList.add("fade-in")
-  document.getElementById("game-over-screen").classList.add("fade-in")
 }
 
 
@@ -49,7 +49,7 @@ export default class GameOverScreen extends Component {
     return (
 
 
-      <div id="game-over-screen" className="fade-in">
+      <div id="game-over-container" className="fade-in">
         <p id="game-over" className="fade-in">
            game over
         </p>

@@ -297,7 +297,7 @@ gameOverTransition(){
   setTimeout(function() {
     // Transition to leaderboard after X seconds
     evaluateIfLeaderboardMaterial()
-  }, 30000);
+  }, 5000);
 
 }
 
