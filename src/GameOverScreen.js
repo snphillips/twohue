@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import Leaderboard from './Leaderboard';
+// import Leaderboard from './Leaderboard';
 import { State } from 'react-automata';
 
+//=========================================
+// Xstate is: gameOverTransition
+
+// The word <Game Over> fades in, then pops out.
+// Then, then user is moved onto the next
+// state, either joinLeaderboard or leaderboard
+
+//=========================================
 
 
-
-  let displayGameOver = () => {
-    console.log("game over")
-    document.getElementById("game-over").classList.add("pop-in")
-  }
+let displayGameOver = () => {
+  console.log("game over")
+  document.getElementById("game-over").classList.add("fade-in")
+  document.getElementById("game-over-screen").classList.add("fade-in")
+}
 
 
 export default class GameOverScreen extends Component {
@@ -18,17 +26,15 @@ export default class GameOverScreen extends Component {
 
       displayGameOver()
 
-      let transition = () => {
-        // document.getElementById("game-over").classList.add("pop-in")
-        // document.getElementById("game-over").classList.toggle("pop-in");
-        console.log("game over transition to leaderboard")
-        this.props.transition('GAME_OVER_TRANSITION')
-      }
+      // let transition = () => {
+      //   console.log("game over transition to leaderboard")
+      //   this.props.transition('GAME_OVER_TRANSITION')
+      // }
 
-      setTimeout(function() {
-      // Transition to leaderboard after X seconds
-      transition()
-      }, 2000);
+      // setTimeout(function() {
+      // // Transition to leaderboard after X seconds
+      // transition()
+      // }, 2000);
 
 
 
@@ -43,11 +49,11 @@ export default class GameOverScreen extends Component {
     return (
 
 
-    <State is={['gameOver']}>
-      <div className="game-over-screen">
-        <p id="game-over">game over</p>
+      <div id="game-over-screen" className="fade-in">
+        <p id="game-over" className="fade-in">
+           game over
+        </p>
       </div>
-    </State>
 
     );
   }

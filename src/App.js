@@ -76,7 +76,7 @@ class App extends React.Component {
   this.handleChange = this.handleChange.bind(this);
   this.axiosPostNewLeaderboardInductee = this.axiosPostNewLeaderboardInductee.bind(this);
   this.axiosGetAllLeaderboardResults = this.axiosGetAllLeaderboardResults.bind(this);
-  this.evaluateIfLeaderboardMaterial = this.evaluateIfLeaderboardMaterial.bind(this);
+  // this.evaluateIfLeaderboardMaterial = this.evaluateIfLeaderboardMaterial.bind(this);
 }
 
 
@@ -252,8 +252,57 @@ gameOver() {
   this.setState({round: 0})
   this.setState({looseRound: 0})
   this.setState({confettiFalling: true})
-  this.evaluateIfLeaderboardMaterial()
+  this.props.transition('GAME_OVER_TRANSITION')
 }
+
+
+
+
+
+gameOverTransition(){
+
+  // document.getElementById("game-over").classList.add("fade-in")
+  // document.getElementById("game-over-screen").classList.add("fade-in")
+
+
+    let evaluateIfLeaderboardMaterial = () =>  {
+      console.log("evaluateIfLeaderboardMaterial()")
+      // checking if the player's score in equal to or higher than
+      // the lowest/last score in the array
+
+      let leaderboardMembers = this.state.leaderboardData
+
+      // What is smaller? 9 or the array length - 1?
+      // Either pick the last item in the array, or the 10th item,
+      // whichever is smaller.
+      // We do this in case the array has fewer than 10 members.
+      let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
+      let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
+      let score = this.state.score
+
+      console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
+      console.log("lowestLeaderBoard score:", lowestCurrentScore)
+      console.log("current score:", score)
+
+      if (score >= lowestCurrentScore) {
+        console.log("score is higher than lowestCurrentScore")
+        this.props.transition('JOIN_LEADERBOARD');
+        //
+      } else {
+        console.log("score is lower than lowestCurrentScore")
+        this.props.transition('DO_NOT_JOIN_LEADERBOARD');
+      }
+    }
+
+  setTimeout(function() {
+    // Transition to leaderboard after X seconds
+    evaluateIfLeaderboardMaterial()
+  }, 30000);
+
+}
+
+
+
 
 
 joinLeaderboard(){
@@ -642,34 +691,34 @@ playerWinsPoints() {
     }
 
 
-    evaluateIfLeaderboardMaterial() {
-      console.log("evaluateIfLeaderboardMaterial()")
-      // checking if the player's score in equal to or higher than
-      // the lowest/last score in the array
+    // evaluateIfLeaderboardMaterial() {
+    //   console.log("evaluateIfLeaderboardMaterial()")
+    //   // checking if the player's score in equal to or higher than
+    //   // the lowest/last score in the array
 
-      let leaderboardMembers = this.state.leaderboardData
+    //   let leaderboardMembers = this.state.leaderboardData
 
-      // What is smaller? 9 or the array length - 1?
-      // Either pick the last item in the array, or the 10th item,
-      // whichever is smaller.
-      // We do this in case the array has fewer than 10 members.
-      let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
-      let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
-      let score = this.state.score
+    //   // What is smaller? 9 or the array length - 1?
+    //   // Either pick the last item in the array, or the 10th item,
+    //   // whichever is smaller.
+    //   // We do this in case the array has fewer than 10 members.
+    //   let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
+    //   let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
+    //   let score = this.state.score
 
-      console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
-      console.log("lowestLeaderBoard score:", lowestCurrentScore)
-      console.log("current score:", score)
+    //   console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
+    //   console.log("lowestLeaderBoard score:", lowestCurrentScore)
+    //   console.log("current score:", score)
 
-      if (score >= lowestCurrentScore) {
-        console.log("score is higher than lowestCurrentScore")
-        this.props.transition('JOIN_LEADERBOARD');
-        //
-      } else {
-        console.log("score is lower than lowestCurrentScore")
-        this.props.transition('DO_NOT_JOIN_LEADERBOARD');
-      }
-    }
+    //   if (score >= lowestCurrentScore) {
+    //     console.log("score is higher than lowestCurrentScore")
+    //     this.props.transition('JOIN_LEADERBOARD');
+    //     //
+    //   } else {
+    //     console.log("score is lower than lowestCurrentScore")
+    //     this.props.transition('DO_NOT_JOIN_LEADERBOARD');
+    //   }
+    // }
 
   //  ==================================================================
   //  POST
@@ -807,12 +856,12 @@ playerWinsPoints() {
           startGameClickHandler={this.startGameClickHandler}
           />
 
-        <State is={['gameOver']}>
+        <State is={['gameOver', 'gameOverTransition']}>
           <GameOverScreen
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
-            resetScoreForNextGame={this.resetScoreForNextGame}
             transition={this.props.transition}
+            // resetScoreForNextGame={this.resetScoreForNextGame}
             // handleChange={this.handleChange}
             // handleSubmit={this.handleSubmit}
             // newLeaderboardInductee={this.props.newLeaderboardInductee}
@@ -827,11 +876,13 @@ playerWinsPoints() {
              handleChange={this.handleChange}
              handleSubmit={this.handleSubmit}
              newLeaderboardInductee={this.state.newLeaderboardInductee}
+             resetScoreForNextGame={this.resetScoreForNextGame}
+             transition={this.props.transition}
            />
           </State>
 
           <div id="game-field">
-            <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
+            <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
             <GameField
               colorRound={this.state.colorRound}
               currentField={this.state.currentField}
