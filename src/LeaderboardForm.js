@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
 
+// ================================
+// View handleChange & handleSubmit in App.js
+
+// ================================
+
+
 
 export default class LeaderboardForm extends React.Component {
   constructor(props) {

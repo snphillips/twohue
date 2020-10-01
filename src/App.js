@@ -297,7 +297,7 @@ gameOverTransition(){
   setTimeout(function() {
     // Transition to leaderboard after X seconds
     evaluateIfLeaderboardMaterial()
-  }, 5000);
+  }, 3000);
 
 }
 
@@ -781,6 +781,9 @@ playerWinsPoints() {
     handleSubmit(event) {
       console.log('A name submitted: ' + this.state.value);
       event.preventDefault();
+      // POST a new leaderboard inductee, then GET the results again.
+      // The leaderboard only shows the top 10 results,
+      // so the new inductee will appear in the list
       this.axiosPostNewLeaderboardInductee( () => {
         this.axiosGetAllLeaderboardResults()
       });
@@ -861,10 +864,6 @@ playerWinsPoints() {
             score={this.state.score}
             leaderboardData={this.state.leaderboardData}
             transition={this.props.transition}
-            // resetScoreForNextGame={this.resetScoreForNextGame}
-            // handleChange={this.handleChange}
-            // handleSubmit={this.handleSubmit}
-            // newLeaderboardInductee={this.props.newLeaderboardInductee}
           />
         </State>
 

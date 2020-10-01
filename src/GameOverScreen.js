@@ -1,85 +1,58 @@
-import React, { Component } from 'react';
-// import Leaderboard from './Leaderboard';
-import { State } from 'react-automata';
+import React, { Component } from "react";
+import { State } from "react-automata";
 
 //=========================================
 // Xstate is: gameOverTransition
 
-// The word <Game Over> fades in, then pops out.
+// The word <Game Over> pops-in, then pops-out.
 // Then, then user is moved onto the next
 // state, either joinLeaderboard or leaderboard
-
 //=========================================
 
-
 let displayGameOver = () => {
-  console.log("game over")
-  document.getElementById("game-over-container").classList.add("fade-in")
-  document.getElementById("game-over").classList.add("fade-in")
-}
+  console.log("game over pop-in");
+  document.getElementById("game-over-container").classList.add("pop-in");
+  document.getElementById("game-over").classList.add("pop-in");
+};
+
+let hideGameOver = () => {
+  console.log("game over pop-out");
+  document.getElementById("game-over-container").classList.remove("pop-in");
+  document.getElementById("game-over-container").classList.add("pop-out");
+  document.getElementById("game-over").classList.remove("pop-in");
+  document.getElementById("game-over").classList.add("pop-out");
+};
+
+
 
 
 export default class GameOverScreen extends Component {
 
 
-    componentDidMount(){
+  // Begin animations when the component has mounted
+  componentDidMount() {
 
-      displayGameOver()
+    displayGameOver();
 
-      // let transition = () => {
-      //   console.log("game over transition to leaderboard")
-      //   this.props.transition('GAME_OVER_TRANSITION')
-      // }
-
-      // setTimeout(function() {
-      // // Transition to leaderboard after X seconds
-      // transition()
-      // }, 2000);
+    // setTimeout(function() {
+    // // hideGameOver() to be executed after x seconds
+    // hideGameOver()
+    // }, 2500);
 
 
+  }
 
-    }
+
+
 
 
   render() {
-
-
-
-
     return (
-
-
-      <div id="game-over-container" className="fade-in">
-        <p id="game-over" className="fade-in">
-           game over
+      <div id="game-over-container" className="pop-in">
+        <p id="game-over" className="pop-in">
+          game over
         </p>
       </div>
-
     );
   }
 }
-
-
-
-
-
-
-       // <Leaderboard
-       //   leaderboardData={this.props.leaderboardData}
-       //   score={this.props.score}
-       //   value={this.props.value}
-       //   handleChange={this.props.handleChange}
-       //   handleSubmit={this.props.handleSubmit}
-       //   newLeaderboardInductee={this.props.newLeaderboardInductee}
-       // />
-
-        // <button
-        //   className="play-again-button"
-        //   onClick={ () => {
-        //     this.props.resetScoreForNextGame();
-        //     this.setState({confettiFalling: false});
-        //     this.setState({playerWinRound: false});
-        //     this.props.transition('START_GAME');
-        // }}>
-        //   play again
-        // </button>
