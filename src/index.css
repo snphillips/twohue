@@ -621,7 +621,6 @@ footer {
 /* leaderboard */
 /*=======================*/
 #leaderboard-component {
-  /* begins with opacity: 0 */
   opacity: 0;
   position: inherit;
   margin: 0 auto;
@@ -630,39 +629,30 @@ footer {
   flex-direction: column;
   font-family: 'Alata', sans-serif;
   font-size: 1.1rem;
-  width: 50%;
-  max-width: 300px;
 }
-
 
 .leaderboard-title {
   text-align: center;
 }
 
-.leaderboard-list {
-  /*display: flex;*/
+ul.leaderboard-list {
+  margin: 0 auto;
+  width: 50%;
+  min-width: 180px;
+  max-width: 300px;
+  display: block;
+  margin-block-start: 1rem;
+  margin-block-end: .75rem;
+  padding-inline-start: 0;
 }
 
 .leaderboard-entry {
   display: flex;
   justify-content: space-between;
 }
-
-
-ul.leaderboard-list {
-  display: block;
-  list-style-type: disc;
-  margin-block-start: 1rem;
-  margin-block-end: .75rem;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 0;
-}
-
 .player-rank {
   margin-right: 1rem;
 }
-
 
 .player-name {
   display: inline-block;
