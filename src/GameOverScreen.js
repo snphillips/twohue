@@ -29,7 +29,7 @@ let hideGameOver = () => {
 export default class GameOverScreen extends Component {
 
 
-  // Begin animations when the component has mounted
+  // Begin animations once the component has mounted
   componentDidMount() {
 
     displayGameOver();
@@ -38,8 +38,6 @@ export default class GameOverScreen extends Component {
     // // hideGameOver() to be executed after x seconds
     // hideGameOver()
     // }, 2500);
-
-
   }
 
 
@@ -49,9 +47,8 @@ export default class GameOverScreen extends Component {
   render() {
     return (
       <div id="game-over-container" className="pop-in">
-        <p id="game-over" className="pop-in">
-          game over
-        </p>
+        <p id="game-over">game over</p>
+        <p id="game-over-score">final score: {this.props.score}</p>
       </div>
     );
   }

@@ -525,11 +525,16 @@ footer {
   border: 3px solid #abb2b9;
 }
 
-#game-over {
+#game-over,
+#game-over-score {
   display: inline-block;
   position: relative;
   margin: 0 auto;
   font-size: 1.5rem;
+}
+
+#game-over-score {
+  font-size: 1.15rem;
 }
 
 .pop-in {
