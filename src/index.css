@@ -355,7 +355,7 @@ h1:hover {
 .play-again-button {
   /* start with opacity: 0; then apply class to go to 1 during transition */
   opacity: 0;
-  margin: 1rem auto;
+  margin: .5rem auto;
   display: flex;
 }
 
@@ -665,7 +665,7 @@ ul.leaderboard-list {
 
 .lederboard-form-placeholder {
   display: block;
-  min-height: 2rem;
+  /*min-height: 2rem;*/
   width: 100%;
   max-width: 600px;
 }

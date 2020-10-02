@@ -266,7 +266,7 @@ gameOverTransition(){
 
 
     let evaluateIfLeaderboardMaterial = () =>  {
-      console.log("evaluateIfLeaderboardMaterial()")
+      console.log("evaluateIfLeaderboardMaterial()", this.state.leaderboardData)
       // checking if the player's score in equal to or higher than
       // the lowest/last score in the array
 
