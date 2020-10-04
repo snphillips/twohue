@@ -7,16 +7,15 @@ import React, { Component } from 'react';
 // ================================
 
 
-
 export default class LeaderboardForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
 
-    };
+  //   };
 
 
-  }
+  // }
 
 
   render() {

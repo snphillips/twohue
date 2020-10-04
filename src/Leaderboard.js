@@ -10,6 +10,9 @@ import { State } from "react-automata";
 
 // The leaderboard form is only displayed if the player's score is
 // equal to, or more than the last person in the list.
+
+// If for some reason the leaderboard doesn't load due to
+// a server error, the leaderboard donesn't display.
 // ========================
 
 
@@ -18,7 +21,9 @@ export default class Leaderboard extends Component {
 
     return (
 
-        <div id="leaderboard-component">
+      <div id="leaderboard-component">
+
+        <State is={['leaderboard', 'joinLeaderboard']}>
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">
@@ -39,6 +44,7 @@ export default class Leaderboard extends Component {
               );
             })}
           </ul>
+    </State>
 
           <div className="lederboard-form-placeholder">
             <State is={["joinLeaderboard"]}>
@@ -50,6 +56,7 @@ export default class Leaderboard extends Component {
             </State>
           </div>
 
+    <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain']}>
       <button
           className="play-again-button"
           onClick={ () => {
@@ -60,6 +67,7 @@ export default class Leaderboard extends Component {
         }}>
           play again
      </button>
+    </State>
 
         </div>
     );

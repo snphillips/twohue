@@ -30,8 +30,8 @@ import statechart from './statechart';
 // https://github.com/MicheleBertoli/react-automata
 // ==============================
 
-let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
-// let dataSource = "http://localhost:3001/players";
+// let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
+let dataSource = "http://localhost:3001/players";
 // let maxLossCount = 0;
 // let maxLossCount = 6;
 
@@ -61,7 +61,8 @@ class App extends React.Component {
     confettiFalling: false,
     playerWinRound: false,
     leaderboardData: [],
-    newLeaderboardInductee: ''
+    newLeaderboardInductee: '',
+    leaderboardServerDown: false
   };
 
   // This binding is necessary to make `this` work in the callback
@@ -272,7 +273,7 @@ gameOverTransition(){
 
       let leaderboardMembers = this.state.leaderboardData
 
-      // What is smaller? 9 or the array length - 1?
+      // What is smaller? 9 or the "array length - 1"?
       // Either pick the last item in the array, or the 10th item,
       // whichever is smaller.
       // We do this in case the array has fewer than 10 members.
@@ -687,38 +688,10 @@ playerWinsPoints() {
         })
         .catch(function (error) {
           console.log(error);
+          // this.props.transition('SERVER_ERROR_SKIP_LEADERBOARD')
         });
     }
 
-
-    // evaluateIfLeaderboardMaterial() {
-    //   console.log("evaluateIfLeaderboardMaterial()")
-    //   // checking if the player's score in equal to or higher than
-    //   // the lowest/last score in the array
-
-    //   let leaderboardMembers = this.state.leaderboardData
-
-    //   // What is smaller? 9 or the array length - 1?
-    //   // Either pick the last item in the array, or the 10th item,
-    //   // whichever is smaller.
-    //   // We do this in case the array has fewer than 10 members.
-    //   let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
-    //   let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
-    //   let score = this.state.score
-
-    //   console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
-    //   console.log("lowestLeaderBoard score:", lowestCurrentScore)
-    //   console.log("current score:", score)
-
-    //   if (score >= lowestCurrentScore) {
-    //     console.log("score is higher than lowestCurrentScore")
-    //     this.props.transition('JOIN_LEADERBOARD');
-    //     //
-    //   } else {
-    //     console.log("score is lower than lowestCurrentScore")
-    //     this.props.transition('DO_NOT_JOIN_LEADERBOARD');
-    //   }
-    // }
 
   //  ==================================================================
   //  POST
@@ -728,12 +701,8 @@ playerWinsPoints() {
     axiosPostNewLeaderboardInductee() {
       console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
 
-      // let nameValue = this.state.value;
-      let nameValue = this.state.newLeaderboardInductee;
-      let scoreValue = this.state.score;
-
       axios.post(dataSource, {
-        player: this.state.value,
+        player: this.state.newLeaderboardInductee || "enigma",
         score: this.state.score
       })
       .then(function (response) {
@@ -749,37 +718,16 @@ playerWinsPoints() {
       });
     }
 
-  //  ==================================================================
-  //  DELETE
-  //  TODO: how do you want to do this?
-  //  NOT WORKING YET
-  //  for instacne, what do you want to select to delete?
-  //  Also, do you even want to delete?
-  //  ==================================================================
-    // axiosDeleteLeaderboardEntry() {
-
-    //   axios.delete(this.state.dataSource + `/${this.state.selectedToDelete}`, {
-    //     id: this.state.selectedToDelete
-    //   })
-    //   .then(function (response) {
-    //     // console.log(response);
-    //   })
-    //   .then( () => {
-    //     this.axiosGetToDos()
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // }
-
     handleChange(event) {
-      console.log("value:",  event.target.value)
-      this.setState({value: event.target.value});
+      console.log("leaderboard form value:",  event.target.value)
+      // why both of these?
       this.setState({newLeaderboardInductee: event.target.value})
     }
 
     handleSubmit(event) {
-      console.log('A name submitted: ' + this.state.value);
+      let newLeaderboardInductee = event.target.value
+      this.setState({newLeaderboardInductee: newLeaderboardInductee})
+      console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
       event.preventDefault();
       // POST a new leaderboard inductee, then GET the results again.
       // The leaderboard only shows the top 10 results,
@@ -867,7 +815,7 @@ playerWinsPoints() {
           />
         </State>
 
-         <State is={['leaderboard', 'joinLeaderboard']}>
+         <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain']}>
            <Leaderboard
              leaderboardData={this.state.leaderboardData}
              score={this.state.score}
