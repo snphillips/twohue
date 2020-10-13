@@ -718,13 +718,13 @@ playerWinsPoints() {
       // The leaderboard only shows the top 10 results,
       // so the new inductee will appear in the list
       this.axiosPostNewLeaderboardInductee( () => {
-        this.props.transition('FILLED_OUT_FORM')
+        // this.props.transition('FILLED_OUT_FORM')
         this.axiosGetAllLeaderboardResults()
       });
       // event.target.reset() clears the form once the item has been submitted
       event.target.reset();
       // now let's move onto the next state
-      this.props.transition('API_DATABASE_CALL_COMPLETE')
+      // this.props.transition('API_DATABASE_CALL_COMPLETE')
     }
 
 
