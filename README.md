@@ -47,6 +47,8 @@ start the server:
 
 your browser should open to http://localhost:3000/ !
 
+Visualize your state chart by pasting into this tool: https://xstate.js.org/viz/
+
 
 
 
