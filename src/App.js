@@ -680,6 +680,7 @@ playerWinsPoints() {
       this.setState({newLeaderboardInductee: trimmedString}, () => {
         console.log(string, length, trimmedString)
         console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
+        this.props.transition('FILLED_OUT_FORM')
       })
 
       axios.post(dataSource, {
@@ -800,7 +801,7 @@ playerWinsPoints() {
           />
         </State>
 
-         <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain']}>
+         <State is={['leaderboard', 'joinLeaderboard', 'leaderboardAPICall', 'noLeaderboardPlayAgain']}>
            <Leaderboard
              leaderboardData={this.state.leaderboardData}
              score={this.state.score}

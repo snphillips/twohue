@@ -23,7 +23,7 @@ export default class Leaderboard extends Component {
 
       <div id="leaderboard-component">
 
-        <State is={['leaderboard', 'joinLeaderboard']}>
+        <State is={['leaderboard', 'joinLeaderboard', 'leaderboardAPICall']}>
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">
@@ -56,7 +56,7 @@ export default class Leaderboard extends Component {
             </State>
           </div>
 
-    <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain']}>
+    <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain', 'leaderboardAPICall']}>
       <button
           className="play-again-button"
           onClick={ () => {
