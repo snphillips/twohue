@@ -14,26 +14,8 @@ import Confetti from 'react-confetti';
 import axios from 'axios';
 import statechart from './statechart';
 
-
-// ==============================
-// The withStateMachine higher-order component accepts:
-// 1) an Xstate configuration object or an Xstate machine,
-// 2) some options,
-// 3) and a component.
-
-// It returns a NEW component with
-// special props, action and activity methods and additional lifecycle hooks.
-
-// The initial machine state and the initial data can be passed to
-// the resulting component through the initialMachineState and initialData props.
-
-// https://github.com/MicheleBertoli/react-automata
-// ==============================
-
-// let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
-let dataSource = "http://localhost:3001/players";
-// let maxLossCount = 0;
-// let maxLossCount = 6;
+let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
+// let dataSource = "http://localhost:3001/players";
 
 
 class App extends React.Component {
@@ -262,8 +244,11 @@ gameOver() {
 
 gameOverTransition(){
 
-  // document.getElementById("game-over").classList.add("fade-in")
-  // document.getElementById("game-over-screen").classList.add("fade-in")
+
+     if (this.state.leaderboardServerDown === true) {
+      console.log("leaderboard is not available")
+      this.props.transition('DO_NOT_JOIN_LEADERBOARD');
+     }
 
 
     let evaluateIfLeaderboardMaterial = () =>  {
@@ -303,15 +288,10 @@ gameOverTransition(){
 }
 
 
-
-
-
 joinLeaderboard(){
   this.transitionBetweenStates("#leaderboard-component", "transition-enter")
   this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
-
-
 
 leaderboard() {
   this.transitionBetweenStates("#leaderboard-component", "transition-enter")
@@ -665,12 +645,6 @@ playerWinsPoints() {
     this.setState({looseRound:0})
   }
 
-  // gameOverAnimation() {
-  //   console.log("game over animation")
-
-  // }
-
-
 
 
 //  ==================================
@@ -683,12 +657,12 @@ playerWinsPoints() {
       axios.get(dataSource)
         .then( (response) => {
           this.setState({leaderboardData: response.data})
-          // console.log("leaderboard axios call response: ", response.data)
           console.log("this.state.leaderboardData: ", this.state.leaderboardData)
         })
         .catch(function (error) {
-          console.log(error);
-          // this.props.transition('SERVER_ERROR_SKIP_LEADERBOARD')
+          // If there's an error
+          console.log("error", error);
+          this.setState({leaderboardServerDown: true})
         });
     }
 
@@ -699,19 +673,28 @@ playerWinsPoints() {
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
     axiosPostNewLeaderboardInductee() {
-      console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
+      let string = this.state.newLeaderboardInductee;
+      let length = 12;
+      let trimmedString = string.substring(0, length);
+
+      this.setState({newLeaderboardInductee: trimmedString}, () => {
+        console.log(string, length, trimmedString)
+        console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
+      })
 
       axios.post(dataSource, {
         player: this.state.newLeaderboardInductee || "enigma",
         score: this.state.score
       })
       .then(function (response) {
-        console.log("response:", response);
         console.log("leaderboard axios call response: ", response.data)
-        // console.log("this.state.leaderboardData: ", this.state.leaderboardData)
       })
       .then( () => {
         this.axiosGetAllLeaderboardResults()
+      })
+      .then( () => {
+        console.log("after axiosGetAllLeaderboardResults()")
+        this.props.transition('API_DATABASE_CALL_COMPLETE')
       })
       .catch(function (error) {
         console.log(error);
@@ -720,25 +703,27 @@ playerWinsPoints() {
 
     handleChange(event) {
       console.log("leaderboard form value:",  event.target.value)
-      // why both of these?
       this.setState({newLeaderboardInductee: event.target.value})
     }
 
     handleSubmit(event) {
       let newLeaderboardInductee = event.target.value
-      this.setState({newLeaderboardInductee: newLeaderboardInductee})
-      console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
+
+      this.setState({newLeaderboardInductee: newLeaderboardInductee}, () => {
+        console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
+      })
       event.preventDefault();
       // POST a new leaderboard inductee, then GET the results again.
       // The leaderboard only shows the top 10 results,
       // so the new inductee will appear in the list
       this.axiosPostNewLeaderboardInductee( () => {
+        this.props.transition('FILLED_OUT_FORM')
         this.axiosGetAllLeaderboardResults()
       });
       // event.target.reset() clears the form once the item has been submitted
       event.target.reset();
       // now let's move onto the next state
-      this.props.transition('FILLED_OUT_FORM')
+      this.props.transition('API_DATABASE_CALL_COMPLETE')
     }
 
 

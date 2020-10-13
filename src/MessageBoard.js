@@ -21,9 +21,6 @@ export default class MessageBoard extends Component {
           <p>Practice clicking bubbles before playing.</p>
         </State>
 
-        <State is={['attemptN']}>
-          <p>Select two colors</p>
-        </State>
 
         <State is={['showSolution']}>
           <p>Solution</p>
@@ -36,7 +33,6 @@ export default class MessageBoard extends Component {
   }
 };
 
-
-        // <State is={['gameOver', 'joinLeaderboard', 'leaderboard']}>
-        //   <p className="game-over">game over</p>
+        // <State is={['attemptN']}>
+        //   <p>Select two colors</p>
         // </State>

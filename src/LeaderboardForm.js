@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { State } from 'react-automata';
+// the spinner in an npm package
+import ReactSpinners from './ReactSpinners';
 
 
 // ================================
 // View handleChange & handleSubmit in App.js
-
 // ================================
 
 
@@ -11,7 +13,6 @@ export default class LeaderboardForm extends React.Component {
   // constructor(props) {
   //   super(props);
   //   this.state = {
-
   //   };
 
 
@@ -49,6 +50,12 @@ export default class LeaderboardForm extends React.Component {
           />
 
          </form>
+
+         <State is={['leaderboardAPICall']}>
+           <ReactSpinners loading={this.props.loading} />
+         </State>
+
+
         </div>
     );
   }

@@ -117,8 +117,14 @@ const statechart = {
     joinLeaderboard: {
       onEntry: 'joinLeaderboard',
       on: {
-        FILLED_OUT_FORM: 'leaderboard',
+        FILLED_OUT_FORM: 'leaderboardAPICall',
         START_GAME: 'fadeInRoundN',
+      },
+    },
+    leaderboardAPICall: {
+      onEntry: 'leaderboardAPICall',
+      on: {
+        API_DATABASE_CALL_COMPLETE: 'leaderboard',
       },
     },
     leaderboard: {
