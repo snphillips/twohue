@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import LeaderboardForm from "./LeaderboardForm";
 import { State } from "react-automata";
+// the spinner in a dependency
+import ReactSpinners from './ReactSpinners';
 
 // ========================
 // Map over the array of leaderboard winners.
@@ -23,6 +25,7 @@ export default class Leaderboard extends Component {
 
       <div id="leaderboard-component">
 
+
         <State is={['leaderboard', 'joinLeaderboard', 'leaderboardAPICall']}>
           <div className="leaderboard-title">high scores</div>
 
@@ -44,7 +47,7 @@ export default class Leaderboard extends Component {
               );
             })}
           </ul>
-    </State>
+      </State>
 
           <div className="lederboard-form-placeholder">
             <State is={["joinLeaderboard"]}>
@@ -55,6 +58,10 @@ export default class Leaderboard extends Component {
               />
             </State>
           </div>
+
+      <State is={['leaderboardAPICall']}>
+        <ReactSpinners loading={this.props.loading} />
+      </State>
 
     <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain', 'leaderboardAPICall']}>
       <button
@@ -73,3 +80,4 @@ export default class Leaderboard extends Component {
     );
   }
 }
+

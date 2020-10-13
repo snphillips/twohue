@@ -673,6 +673,7 @@ playerWinsPoints() {
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
     axiosPostNewLeaderboardInductee() {
+      this.props.transition('FILLED_OUT_FORM')
       let string = this.state.newLeaderboardInductee;
       let length = 12;
       let trimmedString = string.substring(0, length);
@@ -680,7 +681,6 @@ playerWinsPoints() {
       this.setState({newLeaderboardInductee: trimmedString}, () => {
         console.log(string, length, trimmedString)
         console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
-        this.props.transition('FILLED_OUT_FORM')
       })
 
       axios.post(dataSource, {

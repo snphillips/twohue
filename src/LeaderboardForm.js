@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { State } from 'react-automata';
-// the spinner in an npm package
-import ReactSpinners from './ReactSpinners';
 
 
 // ================================
@@ -51,16 +49,11 @@ export default class LeaderboardForm extends React.Component {
 
          </form>
 
-         <State is={['leaderboardAPICall']}>
-           <ReactSpinners loading={this.props.loading} />
-         </State>
 
 
         </div>
     );
   }
 }
-
-
 
 

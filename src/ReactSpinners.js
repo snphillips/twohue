@@ -9,7 +9,7 @@ const override = css`
     border-color: red;
 `;
 
-export default class LoadingSpinner extends React.Component {
+export default class ReactSpinner extends React.Component {
   render() {
     return (
       <span className='react-spinner'>
