@@ -57,11 +57,13 @@ export default class Leaderboard extends Component {
                 newLeaderboardInductee={this.props.newLeaderboardInductee}
               />
             </State>
-          </div>
 
       <State is={['leaderboardAPICall']}>
         <ReactSpinners loading={this.props.loading} />
       </State>
+
+          </div>
+
 
     <State is={['leaderboard', 'joinLeaderboard', 'noLeaderboardPlayAgain', 'leaderboardAPICall']}>
       <button

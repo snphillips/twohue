@@ -3,22 +3,18 @@ import { css } from 'emotion';
 //react-spinners is an npm package
 import { BounceLoader} from 'react-spinners';
 
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-`;
+// const override = css`
+//     margin: 0 auto;
+// `;
 
 export default class ReactSpinner extends React.Component {
   render() {
     return (
       <span className='react-spinner'>
         <BounceLoader
-
-          className={override}
+          // className={override}
           sizeUnit={"px"}
-          // size={32}
-          height={32}
+          size={30}
           color={'#000'}
           loading={this.props.loading}
         />

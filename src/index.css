@@ -664,7 +664,7 @@ ul.leaderboard-list {
 }
 
 .lederboard-form-placeholder {
-  display: block;
+  display: flex;
   /*min-height: 2rem;*/
   width: 100%;
   max-width: 600px;
@@ -686,6 +686,10 @@ input.leaderboard-input-field {
 
 .leaderboard-form-button {
   display: inline-block;
+}
+
+.react-spinner {
+  margin-left: .5rem;
 }
 
 
