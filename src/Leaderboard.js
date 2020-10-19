@@ -50,7 +50,7 @@ export default class Leaderboard extends Component {
       </State>
 
           <div className="lederboard-form-placeholder">
-            <State is={["joinLeaderboard"]}>
+            <State is={["joinLeaderboard", 'leaderboardAPICall']}>
               <LeaderboardForm
                 handleChange={this.props.handleChange}
                 handleSubmit={this.props.handleSubmit}
