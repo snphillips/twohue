@@ -298,6 +298,16 @@ leaderboard() {
   this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
 
+leaderboardAPICall() {
+  // POST a new leaderboard inductee, then GET the results again.
+  // The leaderboard only shows the top 10 results,
+  // so the new inductee will appear in the list
+  this.axiosPostNewLeaderboardInductee( () => {
+    // this.props.transition('FILLED_OUT_FORM')
+    this.axiosGetAllLeaderboardResults()
+  });
+}
+
 
 
 
@@ -673,7 +683,7 @@ playerWinsPoints() {
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
     axiosPostNewLeaderboardInductee() {
-      this.props.transition('FILLED_OUT_FORM')
+      // this.props.transition('FILLED_OUT_FORM')
       let string = this.state.newLeaderboardInductee;
       let length = 12;
       let trimmedString = string.substring(0, length);
@@ -704,27 +714,20 @@ playerWinsPoints() {
 
     handleChange(event) {
       console.log("leaderboard form value:",  event.target.value)
-      this.setState({newLeaderboardInductee: event.target.value})
+      this.setState({newLeaderboardInductee: event.target.value}, () => {
+        console.log('1) this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee)
+      })
     }
 
-    handleSubmit(event) {
-      let newLeaderboardInductee = event.target.value
 
-      this.setState({newLeaderboardInductee: newLeaderboardInductee}, () => {
-        console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
-      })
+    handleSubmit(event) {
+      console.log('2) this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
+      // what does this do?
       event.preventDefault();
-      // POST a new leaderboard inductee, then GET the results again.
-      // The leaderboard only shows the top 10 results,
-      // so the new inductee will appear in the list
-      this.axiosPostNewLeaderboardInductee( () => {
-        // this.props.transition('FILLED_OUT_FORM')
-        this.axiosGetAllLeaderboardResults()
-      });
       // event.target.reset() clears the form once the item has been submitted
+      // NOT WORKING
       event.target.reset();
-      // now let's move onto the next state
-      // this.props.transition('API_DATABASE_CALL_COMPLETE')
+      this.props.transition('FILLED_OUT_FORM')
     }
 
 
