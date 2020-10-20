@@ -509,8 +509,9 @@ footer {
 /*=======================*/
 #game-over-container {
   position: absolute;
-  top: 31%;
-  left: 30%;
+  /*top: 31%;*/
+  /*left: 30%;*/
+  transform: translate(133%, 79%);
 
   display: flex;
   flex-direction: column;

@@ -239,11 +239,7 @@ gameOver() {
 }
 
 
-
-
-
 gameOverTransition(){
-
 
      if (this.state.leaderboardServerDown === true) {
       console.log("leaderboard is not available")
@@ -283,12 +279,14 @@ gameOverTransition(){
   setTimeout(function() {
     // Transition to leaderboard after X seconds
     evaluateIfLeaderboardMaterial()
+  // }, 90000);
   }, 3000);
 
 }
 
 
 joinLeaderboard(){
+  this.setState({newLeaderboardInductee: " "})
   this.transitionBetweenStates("#leaderboard-component", "transition-enter")
   this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
@@ -715,18 +713,17 @@ playerWinsPoints() {
     handleChange(event) {
       console.log("leaderboard form value:",  event.target.value)
       this.setState({newLeaderboardInductee: event.target.value}, () => {
-        console.log('1) this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee)
+        console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee)
       })
     }
 
 
     handleSubmit(event) {
-      console.log('2) this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee);
       // what does this do?
       event.preventDefault();
       // event.target.reset() clears the form once the item has been submitted
       // NOT WORKING
-      event.target.reset();
+      // event.target.reset();
       this.props.transition('FILLED_OUT_FORM')
     }
 
