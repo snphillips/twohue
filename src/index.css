@@ -509,14 +509,11 @@ footer {
 /*=======================*/
 #game-over-container {
   position: absolute;
-  /*top: 31%;*/
-  /*left: 30%;*/
-  transform: translate(133%, 79%);
-
+  top: 31%;
+  left: 37%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   z-index: 2;
   height: 190px;
   width: 190px;
@@ -711,6 +708,11 @@ input.leaderboard-input-field {
     max-width: 490px;
   }
 
+  #game-over-container {
+    top: 30%;
+    left: 151px;
+  }
+
 
 }
 /*=======================*/
@@ -774,9 +776,13 @@ section#left-and-right-field {
     height: 4rem;
   }
 
-
   footer {
     border-top: 4px solid #ebedef;
+  }
+
+  #game-over-container {
+    top: 40%;
+    left: 27%;
   }
 
 }

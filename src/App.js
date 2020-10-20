@@ -279,13 +279,14 @@ gameOverTransition(){
   setTimeout(function() {
     // Transition to leaderboard after X seconds
     evaluateIfLeaderboardMaterial()
-  // }, 90000);
+  // }, 120000);
   }, 3000);
 
 }
 
 
 joinLeaderboard(){
+  //
   this.setState({newLeaderboardInductee: " "})
   this.transitionBetweenStates("#leaderboard-component", "transition-enter")
   this.transitionBetweenStates(".play-again-button", "transition-enter")
