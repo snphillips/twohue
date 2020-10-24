@@ -286,7 +286,6 @@ gameOverTransition(){
 
 
 joinLeaderboard(){
-  //
   this.setState({newLeaderboardInductee: " "})
   this.transitionBetweenStates("#leaderboard-component", "transition-enter")
   this.transitionBetweenStates(".play-again-button", "transition-enter")

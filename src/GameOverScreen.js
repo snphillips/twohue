@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 //=========================================
-// Xstate is: gameOverTransition
+// Xstate On Entry States is: gameOverTransition
 
 // The Game Over & Final Score bubble pops-in, then pops-out.
 // Then user is moved onto the next
@@ -26,9 +26,15 @@ let hideGameOver = () => {
 export default class GameOverScreen extends Component {
 
 
-  // Begin animations once the component has mounted
   componentDidMount() {
+  // Begin "game over" animation once the component has mounted
     displayGameOver();
+  // End animation once the component has mounted
+    setTimeout(function(){
+      console.log("game over pop-out");
+      document.getElementById("game-over-container").classList.remove("pop-in");
+      document.getElementById("game-over-container").classList.add("pop-out");
+    }, 2500);
   }
 
 
