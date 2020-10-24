@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { State } from "react-automata";
 
 //=========================================
 // Xstate is: gameOverTransition
 
-// The phrase Game Over pops-in, then pops-out.
+// The Game Over & Final Score bubble pops-in, then pops-out.
 // Then user is moved onto the next
 // state, either joinLeaderboard or leaderboard
 //=========================================
@@ -14,6 +13,9 @@ let displayGameOver = () => {
   document.getElementById("game-over-container").classList.add("pop-in");
 };
 
+
+// Not being used at the moment
+// where should this go?
 let hideGameOver = () => {
   console.log("game over pop-out");
   document.getElementById("game-over-container").classList.remove("pop-in");

@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import { State } from 'react-automata';
-
+import React from 'react';
 
 // ================================
 // View handleChange & handleSubmit in App.js
@@ -8,21 +6,8 @@ import { State } from 'react-automata';
 
 
 export default class LeaderboardForm extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //   };
-
-
-  // }
-
-
   render() {
-
-
-
     return (
-
 
         <div className="leaderboard-form">
 
@@ -48,8 +33,6 @@ export default class LeaderboardForm extends React.Component {
           />
 
          </form>
-
-
 
         </div>
     );

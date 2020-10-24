@@ -1,5 +1,5 @@
 import React from 'react';
-import { Action, withStateMachine, State } from 'react-automata';
+import { withStateMachine, State } from 'react-automata';
 import './App.css';
 import Header from './Header';
 import Byline from './Byline';
@@ -64,18 +64,18 @@ class App extends React.Component {
 
 
 //  =================================
-//  State Machine Functions
+//  State Machine On Entry States
 //  All the component's methods whose names match the names of actions and activities,
 //  are fired when the related transition happen. Actions receive the state and the event
 //  as arguments. Activities receive a boolean that is true when the activity should start,
 //  and false otherwise.
 //  =================================
- readyAction(){
+readyAction(){
   this.props.transition('READY')
   this.generateColorRound()
  }
 
- homeScreenPractice(){
+homeScreenPractice(){
 
 
 }
@@ -137,10 +137,10 @@ checkSolution() {
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
   let solutionColors = this.state.colorRound.solutionColors;
-  let solutionColor1 = this.state.colorRound.solutionColor1;
-  let solutionColor2 = this.state.colorRound.solutionColor2;
+  // let solutionColor1 = this.state.colorRound.solutionColor1;
+  // let solutionColor2 = this.state.colorRound.solutionColor2;
   // let wrongColorBubbles = this.state.colorRound.wrongColors;
-  let wrongColorBubbles = this.state.wrongColors;
+  // let wrongColorBubbles = this.state.wrongColors;
   let attempts = this.state.attempt
 
   // Not enough trys: incorrect
@@ -446,7 +446,7 @@ leaderboardAPICall() {
     shuffleColors(newColorRound.allColorBubbles)
     this.setState({colorRound: newColorRound})
     this.setState({wrongColors: wrongColorsArray}, () => {
-      console.log("newColorRound.wrongColors:", newColorRound.wrongColors, "wrongColorsArray", wrongColorsArray, "this.state.wrongColors", this.state.wrongColors)
+      // console.log("newColorRound.wrongColors:", newColorRound.wrongColors, "wrongColorsArray", wrongColorsArray, "this.state.wrongColors", this.state.wrongColors)
     })
   }
 
