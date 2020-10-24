@@ -18,7 +18,6 @@ export default class ScoreBoard extends Component {
         <State is={['homeScreenPractice']}>
           <button onClick={ () => {
             this.props.startGameClickHandler()
-            // this.this.props.transition('START_GAME')
           }}>
             start
           </button>

@@ -85,10 +85,10 @@ fadeInRoundN() {
 }
 
 roundN(){
-  this.transitionBetweenStates("#color-bubble-tray", "transition-enter")
-  this.transitionBetweenStates("#target-swatch", "transition-enter")
-  this.transitionBetweenStates("#game-field", "transition-enter")
-  this.transitionBetweenStates(".message-board", "transition-enter")
+  // this.transitionBetweenStates("#color-bubble-tray", "transition-enter")
+  // this.transitionBetweenStates("#target-swatch", "transition-enter")
+  // this.transitionBetweenStates("#game-field", "transition-enter")
+  // this.transitionBetweenStates(".message-board", "transition-enter")
 
   this.beginRoundSound()
   this.setState({confettiFalling: false})
@@ -137,10 +137,6 @@ checkSolution() {
   let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
   let solutionColors = this.state.colorRound.solutionColors;
-  // let solutionColor1 = this.state.colorRound.solutionColor1;
-  // let solutionColor2 = this.state.colorRound.solutionColor2;
-  // let wrongColorBubbles = this.state.colorRound.wrongColors;
-  // let wrongColorBubbles = this.state.wrongColors;
   let attempts = this.state.attempt
 
   // Not enough trys: incorrect
@@ -287,13 +283,10 @@ gameOverTransition(){
 
 joinLeaderboard(){
   this.setState({newLeaderboardInductee: " "})
-  this.transitionBetweenStates("#leaderboard-component", "transition-enter")
-  this.transitionBetweenStates(".play-again-button", "transition-enter")
 }
 
 leaderboard() {
-  this.transitionBetweenStates("#leaderboard-component", "transition-enter")
-  this.transitionBetweenStates(".play-again-button", "transition-enter")
+
 }
 
 leaderboardAPICall() {
@@ -324,6 +317,7 @@ leaderboardAPICall() {
 // *****************************************************
 // *****************************************************
   transitionBetweenStates(selector, classToAdd) {
+    // I don't love this. get rid of it?
     console.log("transitioning between states")
     document.querySelector(selector).classList.add(classToAdd)
   }
@@ -511,15 +505,11 @@ toggleLeftRightField(){
   }
 }
 
-
 incrementAttempt(){
   this.setState({attempt: (this.state.attempt + 1)})
 }
 
-
-// TODO - refactor into ternary?
 playerWinsPoints() {
-
   let attempts =  this.state.attempt
   let score = this.state.score
 
@@ -719,11 +709,7 @@ playerWinsPoints() {
 
 
     handleSubmit(event) {
-      // what does this do?
       event.preventDefault();
-      // event.target.reset() clears the form once the item has been submitted
-      // NOT WORKING
-      // event.target.reset();
       this.props.transition('FILLED_OUT_FORM')
     }
 
@@ -746,7 +732,6 @@ playerWinsPoints() {
 
 
     return (
-
 
       <div className="outer-div">
 

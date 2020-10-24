@@ -4,13 +4,10 @@
 
 /* =======================*/
 /* transition between states */
-/* not using yet */
 /* =======================*/
 .transition-enter {
   opacity: 1 !important;
-  /*color: red;*/
-  /*background: #efefef;*/
-  transition: all 1000ms;
+  transition: all 2000ms;
 }
 
 .transition-enter-active {
@@ -312,7 +309,6 @@ h1:hover {
 }
 
 .message-board {
-  /*opacity: 0;*/
   text-align: center;
   font-size: 16px;
   order: 2;
@@ -353,8 +349,6 @@ h1:hover {
 }
 
 .play-again-button {
-  /* start with opacity: 0; then apply class to go to 1 during transition */
-  opacity: 0;
   margin: .5rem auto;
   display: flex;
 }
@@ -646,7 +640,7 @@ footer {
 /* leaderboard */
 /*=======================*/
 #leaderboard-component {
-  opacity: 0;
+  /*opacity: 0;*/
   position: inherit;
   margin: 0 auto;
   display: flex;
