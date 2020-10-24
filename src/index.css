@@ -730,14 +730,12 @@ input.leaderboard-input-field {
 /*=======================*/
 @media only screen and (max-width: 785px) {
 
-
   .twohue {
     max-width: 490px;
   }
 
   #game-over-container {
-/*    top: 30%;
-    left: 151px;*/
+    top: 39%;
   }
 
 
