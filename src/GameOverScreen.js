@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 //=========================================
-// Xstate On Entry States is: gameOverTransition
+// Xstate On Entry State is: gameOverTransition
 
 // The Game Over & Final Score bubble pops-in, then pops-out.
 // Then user is moved onto the next
@@ -14,22 +14,12 @@ let displayGameOver = () => {
 };
 
 
-// Not being used at the moment
-// where should this go?
-let hideGameOver = () => {
-  console.log("game over pop-out");
-  document.getElementById("game-over-container").classList.remove("pop-in");
-  document.getElementById("game-over-container").classList.add("pop-out");
-};
-
-
 export default class GameOverScreen extends Component {
 
-
   componentDidMount() {
-  // Begin "game over" animation once the component has mounted
+    // Begin "game over" animation once the component has mounted
     displayGameOver();
-  // End animation once the component has mounted
+    // End animation once the component has mounted
     setTimeout(function(){
       console.log("game over pop-out");
       document.getElementById("game-over-container").classList.remove("pop-in");
