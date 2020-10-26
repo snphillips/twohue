@@ -103,9 +103,9 @@ roundN(){
 }
 
 incrementRoundCounter() {
-  if (this.state.looseRound >= this.state.maxLossCount) {
+  if (this.state.looseRound >= maxLossCount) {
     this.props.transition("NO_MORE_ROUNDS")
-  } else if (this.state.looseRound < this.state.maxLossCount)
+  } else if (this.state.looseRound < maxLossCount)
   {
     this.setState({round: (this.state.round + 1)})
     this.calculateNumWrongColorBubbles()
@@ -174,11 +174,11 @@ playerWinsRound() {
   console.log("player wins round")
 
       let stateTransition = () => {
-        if (this.state.looseRound < this.state.maxLossCount) {
+        if (this.state.looseRound < maxLossCount) {
           // console.log('NEXT_ROUND')
           this.props.transition('FADE_IN_ROUND')
-        } else if (this.state.looseRound >= this.state.maxLossCount){
-          console.log('NO_MORE_ROUNDS this.state.maxLossCount:', this.state.maxLossCount)
+        } else if (this.state.looseRound >= maxLossCount){
+          console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount)
           this.props.transition('NO_MORE_ROUNDS')
         }
       }
@@ -191,7 +191,7 @@ playerWinsRound() {
 }
 
 playerLoosesRound() {
-  if (this.state.looseRound <= this.state.maxLossCount) {
+  if (this.state.looseRound <= maxLossCount) {
    console.log("player looses round")
    this.playLoseSound()
    this.setState({'looseRound': this.state.looseRound + 1})
@@ -212,10 +212,10 @@ showSolution() {
   }});
 
     let transition = () => {
-      if (this.state.looseRound < this.state.maxLossCount) {
+      if (this.state.looseRound < maxLossCount) {
         console.log(`this.props.transition('NEXT_ROUND')`)
         this.props.transition('NEXT_ROUND')
-      } else if (this.state.looseRound >= this.state.maxLossCount) {
+      } else if (this.state.looseRound >= maxLossCount) {
         console.log(`this.props.transition('NO_MORE_ROUNDS')`)
         this.props.transition('NO_MORE_ROUNDS')
       }
@@ -532,7 +532,7 @@ playerWinsPoints() {
   // 2) player is out of attempts,attemptN
   // 3) player has won the round,
   // 4) confetti is falling
-  if (this.state.looseRound > (this.state.maxLossCount)) return
+  if (this.state.looseRound > (maxLossCount)) return
   if (this.state.attempt >= this.state.maxAttemptCount) return
   if (this.state.playerWinsRound === true) return
   if (this.state.confettiFalling === true) return
@@ -553,7 +553,7 @@ playerWinsPoints() {
   //  Filling in chosen color into left or right fields
   //  ==================================
   updateFieldColor(color){
-    if (this.state.looseRound > (this.state.maxLossCount)) return
+    if (this.state.looseRound > (maxLossCount)) return
     if (this.state.attempt >= this.state.maxAttemptCount) return
     if (this.state.currentField === 'leftField') {
      this.setState({"leftField": {'backgroundColor': color}})
@@ -760,7 +760,7 @@ playerWinsPoints() {
         <Header
           transition={this.props.transition}
           round={this.state.round}
-          maxLossCount={this.state.maxLossCount}
+          maxLossCount={maxLossCount}
           looseRound={this.state.looseRound}
           attempt={this.state.attempt}
           score={this.state.score}
