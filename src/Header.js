@@ -27,6 +27,7 @@ export default class Header extends Component {
           previousScore={this.props.previousScore}
           looseRound={this.props.looseRound}
           maxLossCount={this.props.maxLossCount}
+          maxAttemptCount={this.props.maxAttemptCount}
           transition={this.props.transition}
           isAudioOn={this.props.isAudioOn}
           beginGameSound={this.props.beginGameSound}

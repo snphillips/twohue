@@ -22,6 +22,9 @@ let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 
+
+// A couple things change depending on whether
+// we're in production vs. development
 if (process.env.NODE_ENV === 'production') {
     console.log = function () {};
 } else if (process.env.NODE_ENV === 'development') {
@@ -37,10 +40,8 @@ class App extends React.Component {
   this.state = {
     round: 0,
     attempt: 0,
-    maxAttemptCount: 6,
     looseRound: 0,
     maxLossCount: 6,
-    // maxLossCount: 1,
     previousScore: 0,
     score: 0,
     colorRound: {} ,
@@ -111,8 +112,6 @@ incrementRoundCounter() {
     this.calculateNumWrongColorBubbles()
     this.props.transition("SET_UP_COLOR_ROUND")
   }
-  // else {
-  // }
 }
 
 setUpColorRound(){
@@ -127,9 +126,9 @@ playRound(){
 }
 
 attemptN() {
-  if (this.state.attempt < 6) {
+  if (this.state.attempt < maxAttemptCount) {
     this.props.transition("CHECK_SOLUTION")
-  } else if (this.state.attempt >= 6) {
+  } else if (this.state.attempt >= maxAttemptCount) {
     this.props.transition("OUT_OF_ATTEMPTS")
   }
 }
@@ -533,7 +532,7 @@ playerWinsPoints() {
   // 3) player has won the round,
   // 4) confetti is falling
   if (this.state.looseRound > (maxLossCount)) return
-  if (this.state.attempt >= this.state.maxAttemptCount) return
+  if (this.state.attempt >= maxAttemptCount) return
   if (this.state.playerWinsRound === true) return
   if (this.state.confettiFalling === true) return
 
@@ -554,7 +553,7 @@ playerWinsPoints() {
   //  ==================================
   updateFieldColor(color){
     if (this.state.looseRound > (maxLossCount)) return
-    if (this.state.attempt >= this.state.maxAttemptCount) return
+    if (this.state.attempt >= maxAttemptCount) return
     if (this.state.currentField === 'leftField') {
      this.setState({"leftField": {'backgroundColor': color}})
     } else {
@@ -761,6 +760,7 @@ playerWinsPoints() {
           transition={this.props.transition}
           round={this.state.round}
           maxLossCount={maxLossCount}
+          maxAttemptCount={maxAttemptCount}
           looseRound={this.state.looseRound}
           attempt={this.state.attempt}
           score={this.state.score}
