@@ -14,8 +14,20 @@ import Confetti from 'react-confetti';
 import axios from 'axios';
 import statechart from './statechart';
 
+
+// Leave both server addresses here in case you want to switch
 let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
 // let dataSource = "http://localhost:3001/players";
+
+let maxLossCount = 6;
+let maxAttemptCount = 6;
+
+if (process.env.NODE_ENV === 'production') {
+    console.log = function () {};
+} else if (process.env.NODE_ENV === 'development') {
+  maxLossCount = 1;
+  maxAttemptCount = 3;
+}
 
 
 class App extends React.Component {
@@ -27,8 +39,8 @@ class App extends React.Component {
     attempt: 0,
     maxAttemptCount: 6,
     looseRound: 0,
-    // maxLossCount: 6,
-    maxLossCount: 1,
+    maxLossCount: 6,
+    // maxLossCount: 1,
     previousScore: 0,
     score: 0,
     colorRound: {} ,
@@ -309,6 +321,7 @@ leaderboardAPICall() {
 // *****************************************************
   componentDidMount() {
     console.log("xmachineState: ", this.props.machineState.value )
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV)
     this.axiosGetAllLeaderboardResults()
   }
 
