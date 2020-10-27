@@ -8,7 +8,7 @@ import AudioToggle from './AudioToggle';
 import ColorBubbleTray from './ColorBubbleTray';
 import GameOverScreen from './GameOverScreen';
 import Leaderboard from './Leaderboard';
-import {Howl} from 'howler'; // Howler manages the sound effects
+import {Howl} from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
 import axios from 'axios';
@@ -21,15 +21,17 @@ let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
-
+let confettiRecycling = true;
 
 // A couple things change depending on whether
 // we're in production vs. development
 if (process.env.NODE_ENV === 'production') {
-    console.log = function () {};
+  console.log = function () {};
+  this.setState({isAudioOn: true})
 } else if (process.env.NODE_ENV === 'development') {
   maxLossCount = 1;
   maxAttemptCount = 3;
+  confettiRecycling = false;
 }
 
 
@@ -718,7 +720,8 @@ playerWinsPoints() {
   render() {
 
   // for confetti to fall accross whole window,
-  // even if user resized window.
+  // if user resizes window
+  // TODO: this alone does not work
   let width = window.innerWidth
   let height = window.innerHeight
 
@@ -741,12 +744,13 @@ playerWinsPoints() {
             />
         </State>
 
-        <State is={['gameOver', 'gameOverTransition', 'joinLeaderboard', 'leaderboard']}>
+        <State is={['gameOver', 'gameOverTransition', 'joinLeaderboard', 'leaderboardAPICall', 'leaderboard']}>
           <Confetti
+            width={width}
+            height={height}
             run={this.state.confettiFalling}
             numberOfPieces={600}
-            // recycle={true}
-            recycle={false}
+            recycle={confettiRecycling}
             tweenDuration={100}
             opacity={0.6}
             gravity={0.08}
