@@ -12,8 +12,7 @@ In this version I've made several changes, including:
 View deployed game here: http://twohue-state-machine.surge.sh
 
 <img src="https://i.imgur.com/iaWzlC8.png" width="350">
-<img src="https://i.imgur.com/i91exEK.png" width="350">
-<img src="https://i.imgur.com/hD0Y5QT.png" width="250">
+
 
 ## How to Play
 The player is presented with a brief introduction to the game and a "begin game" button.
