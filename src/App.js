@@ -80,10 +80,11 @@ class App extends React.Component {
 //  =================================
 //  State Machine On Entry States
 //  All the component's methods whose names match the names of actions and activities,
-//  are fired when the related transition happen. Actions receive the state and the event
-//  as arguments. Activities receive a boolean that is true when the activity should start,
-//  and false otherwise.
+//  are fired when the related transition happen.
+
+//  Actions receive the state and the event as arguments.
 //  =================================
+
 readyAction(){
   this.props.transition('READY')
   this.generateColorRound()
@@ -303,10 +304,6 @@ leaderboardAPICall() {
   });
 }
 
-
-
-
-
 // *****************************************************
 // ** End State Machine Functions **********************
 // *****************************************************
@@ -341,13 +338,14 @@ leaderboardAPICall() {
       numberWrongColorBubbles = 2
     } else if (round === 3) {
       numberWrongColorBubbles = 3
-    } else if ( (round >= 4) && (round <= 9) ) {
+    } else if (round === 4) {
       numberWrongColorBubbles = 4
-    } else if ( (round >= 10) && (round <= 14) ) {
+    } else if (round === 5) {
       numberWrongColorBubbles = 5
-    } else if (round >= 15) {
+    } else if (round >= 6) {
       numberWrongColorBubbles = 6
     }
+
     this.setState({numWrongColorBubbles: numberWrongColorBubbles})
   }
 
