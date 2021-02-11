@@ -519,6 +519,7 @@ footer {
 
 #sound-on-icon {
   top: 7px;
+  left: 7px;
 }
 
 .switch {
@@ -569,6 +570,20 @@ input:before {
   -webkit-transition: .4s;
   transition: .4s;
 }
+
+
+/* to deal with user agent stylesheet styles */
+input[type="checkbox" i] {
+  background-color: unset;
+  cursor: unset;
+  appearance: unset;
+  box-sizing: unset;
+  margin: unset;
+  padding: unset;
+  border: unset;
+  display: none;
+}
+
 
 input:checked + .slider {
   background-color: var(--accent-gray-darker, #666);
