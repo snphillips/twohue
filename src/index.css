@@ -97,18 +97,18 @@ code {
 /* =======================*/
 
 .svg-icon {
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.25em;
+  height: 1.25em;
 }
 
 .svg-icon path,
 .svg-icon polygon,
 .svg-icon rect {
-  fill: var(--text-color, #222);
+  fill: #fff;
 }
 
 .svg-icon circle {
-  stroke: var(--text-color, #222);
+  stroke: #fff;
   stroke-width: 1;
 }
 
@@ -513,18 +513,18 @@ footer {
 }
 
 #sound-off-icon {
-  top: 9px;
+  top: 7px;
   right: 7px;
 }
 
 #sound-on-icon {
-  top: .5rem;
+  top: 7px;
 }
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 34px;
 }
 
@@ -552,17 +552,18 @@ input:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #c7c7c7;  /* light gray */
   -webkit-transition: .4s;
   transition: .4s;
+  background-color: var(--accent-gray, #a6a6a6);
 }
 
+/* the white ball when "off" */
 .slider:before {
   position: absolute;
   content: "";
   height: 26px;
   width: 26px;
-  left: 4px;
+  left: 6px;
   bottom: 4px;
   background-color: white;
   -webkit-transition: .4s;
@@ -570,7 +571,7 @@ input:before {
 }
 
 input:checked + .slider {
-  background-color: #2196F3; /* blue */
+  background-color: var(--accent-gray-darker, #666);
 }
 
 input:focus + .slider {
@@ -578,11 +579,12 @@ input:focus + .slider {
   box-shadow: 0 0 1px #2196F3; /* blue */
 }
 
+/* when the ball is "on" to the right */
 input:checked + .slider:before {
   content: "";
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(34px);
+  -ms-transform: translateX(34px);
+  transform: translateX(34px);
 }
 
 /* give the button rounded edges */
