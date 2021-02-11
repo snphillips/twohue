@@ -23,16 +23,6 @@ let maxLossCount = 6;
 let maxAttemptCount = 6;
 let confettiRecycling = true;
 
-// A couple things change depending on whether
-// we're in production vs. development
-if (process.env.NODE_ENV === 'production') {
-  console.log = function () {};
-  this.setState({isAudioOn: true})
-} else if (process.env.NODE_ENV === 'development') {
-  maxLossCount = 1;
-  maxAttemptCount = 3;
-  confettiRecycling = false;
-}
 
 
 class App extends React.Component {
@@ -84,6 +74,7 @@ class App extends React.Component {
 
 //  Actions receive the state and the event as arguments.
 //  =================================
+
 
 readyAction(){
   this.props.transition('READY')
@@ -321,6 +312,18 @@ leaderboardAPICall() {
     console.log("xmachineState: ", this.props.machineState.value )
     console.log("process.env.NODE_ENV", process.env.NODE_ENV)
     this.axiosGetAllLeaderboardResults()
+
+    // A couple things change depending on whether
+    // we're in production vs. development
+    if (process.env.NODE_ENV === 'production') {
+      console.log = function () {};
+      this.setState({isAudioOn: true})
+    } else if (process.env.NODE_ENV === 'development') {
+      maxLossCount = 1;
+      maxAttemptCount = 3;
+      confettiRecycling = false;
+    }
+
   }
 
   componentDidUpdate() {
@@ -704,6 +707,10 @@ playerWinsPoints() {
       event.preventDefault();
       this.props.transition('FILLED_OUT_FORM')
     }
+
+
+
+
 
 
 
