@@ -317,7 +317,7 @@ leaderboardAPICall() {
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
       console.log = function () {};
-      this.setState({isAudioOn: true})
+      // this.setState({isAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 1;
       maxAttemptCount = 3;
@@ -575,7 +575,7 @@ playerWinsPoints() {
 
 
 //  ==================================
-//  Mute button toggle
+//  audio button switch toggle
 //  if audio is on the state of isAudioOn is true,
 //  if audio is off the state of isAudioOn is false,
 //  the ! is the oposite of what it currently is.
