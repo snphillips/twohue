@@ -7,13 +7,12 @@ In this version I've made several changes, including:
 1) I use **react-automata** (an Xstate library) to create a state machine that manages user flow,
 2) I use the color library **chroma.js** to dynamically create unlimmited game rounds,
 3) I change the game logic so that the game ends when the player looses x rounds, and 
-4) I added a node/express server to host a leaderboard of top players
+4) I added a node/express server to host a leaderboard of top players.
 
 View deployed game here: http://twohue-state-machine.surge.sh
 
 <img src="https://i.imgur.com/iaWzlC8.png" width="350">
-<img src="https://i.imgur.com/i91exEK.png" width="350">
-<img src="https://i.imgur.com/hD0Y5QT.png" width="250">
+
 
 ## How to Play
 The player is presented with a brief introduction to the game and a "begin game" button.
@@ -29,6 +28,8 @@ The player selects the two colors they believe mix to create the target color. P
 
 
 ## Getting Started
+note: the backend server for the leaderboard can be found here: https://github.com/snphillips/twohue-state-machine-leaderboard-server
+
 clone this repo:
 
 `git clone https://github.com/snphillips/twohue-state-chart.git`
