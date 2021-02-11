@@ -1,6 +1,6 @@
 ## About TwoHue with State Machine
 
-TwoHue with State Machine is a a refactor of the game TwoHue I created a couple years ago.
+TwoHue with State Machine is a a refactor of the game TwoHue I created in 2018.
 
 In this version I've made several changes, including:
 
