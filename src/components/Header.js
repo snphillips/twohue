@@ -1,41 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Title from './Title';
 import MessageBoard from './MessageBoard';
 import ScoreBoard from './ScoreBoard';
 
 
 
-export default class Header extends Component {
-  render() {
+export default function Header(props)  {
     return (
-
       <header>
 
         <Title
-          round={this.props.round}
+          round={props.round}
         />
 
         <MessageBoard
-          transition={this.props.transition}
-          resetScoreForNextGame={this.props.resetScoreForNextGame}
+          transition={props.transition}
+          resetScoreForNextGame={props.resetScoreForNextGame}
           />
 
         <ScoreBoard
-          round={this.props.round}
-          attempt={this.props.attempt}
-          score={this.props.score}
-          previousScore={this.props.previousScore}
-          looseRound={this.props.looseRound}
-          maxLossCount={this.props.maxLossCount}
-          maxAttemptCount={this.props.maxAttemptCount}
-          transition={this.props.transition}
-          isAudioOn={this.props.isAudioOn}
-          beginGameSound={this.props.beginGameSound}
-          startGameClickHandler={this.props.startGameClickHandler}
+          round={props.round}
+          attempt={props.attempt}
+          score={props.score}
+          previousScore={props.previousScore}
+          looseRound={props.looseRound}
+          maxLossCount={props.maxLossCount}
+          maxAttemptCount={props.maxAttemptCount}
+          transition={props.transition}
+          isAudioOn={props.isAudioOn}
+          beginGameSound={props.beginGameSound}
+          startGameClickHandler={props.startGameClickHandler}
           />
 
       </header>
 
     );
-  }
 }

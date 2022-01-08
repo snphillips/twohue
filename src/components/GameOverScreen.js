@@ -1,22 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 
-//=========================================
-// Xstate On Entry State is: gameOverTransition
+/*
+=========================================
+Xstate On Entry State is: gameOverTransition
 
-// The Game Over & Final Score bubble pops-in, then pops-out.
-// Then user is moved onto the next
-// state, either joinLeaderboard or leaderboard
-//=========================================
+The Game Over & Final Score bubble pops-in, then pops-out.
+Then user is moved onto the next
+state, either joinLeaderboard or leaderboard
+=========================================
+*/
 
 let displayGameOver = () => {
-  console.log("game over pop-in");
+  // console.log("game over pop-in");
   document.getElementById("game-over-container").classList.add("pop-in");
 };
 
 
-export default class GameOverScreen extends Component {
+export default function GameOverScreen(props) {
 
-  componentDidMount() {
+  // componentDidMount() {
     // Begin "game over" animation once the component has mounted
     displayGameOver();
     // End animation once the component has mounted
@@ -25,15 +27,13 @@ export default class GameOverScreen extends Component {
       document.getElementById("game-over-container").classList.remove("pop-in");
       document.getElementById("game-over-container").classList.add("pop-out");
     }, 2500);
-  }
+  // }
 
-
-  render() {
     return (
       <div id="game-over-container" className="pop-in">
         <p id="game-over">game over</p>
-        <p id="game-over-score">final score: {this.props.score}</p>
+        <p id="game-over-score">final score: {props.score}</p>
       </div>
     );
-  }
+
 }
