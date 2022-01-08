@@ -1,13 +1,13 @@
 import React from 'react';
 import { withStateMachine, State } from 'react-automata';
 import './App.css';
-import Header from './Header';
-import Byline from './Byline';
-import GameField from './GameField';
-import AudioToggle from './AudioToggle';
-import ColorBubbleTray from './ColorBubbleTray';
-import GameOverScreen from './GameOverScreen';
-import Leaderboard from './Leaderboard';
+import Header from './components/Header';
+import Byline from './components/Byline';
+import GameField from './components/GameField';
+import AudioToggle from './components/AudioToggle';
+import ColorBubbleTray from './components/ColorBubbleTray';
+import GameOverScreen from './components/GameOverScreen';
+import Leaderboard from './components/Leaderboard';
 import {Howl} from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';

@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 
+/* 
+==============================
+This is the 'audio on/audio off' button which is
+found in the footer.
 
-// ==============================
-// This is the 'audio on/audio off' button which is
-// found in the footer.
+Two things are going on here:
 
-// Two things are going on here:
+1) When the user clicks the button, the sound is turned on
+via the function soundButtonToggle (found in App.js)
 
-// 1) When the user clicks the button, the sound is turned on
-// via the function soundButtonToggle (found in App.js)
-
-// 2) The state 'isAudioOn' is passed in from App.js as a prop.
-// If the state of 'isAudioOn' is true, then the audio-off icon will show
-// If the state of 'isAudioOn' is false, then the audio-on icon will show
-// ==============================
+2) The state 'isAudioOn' is passed in from App.js as a prop.
+If the state of 'isAudioOn' is true, then the audio-off icon will show
+If the state of 'isAudioOn' is false, then the audio-on icon will show
+==============================
+*/
 
 export default class AudioToggle extends Component {
   render() {
