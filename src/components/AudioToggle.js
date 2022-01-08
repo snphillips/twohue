@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 /* 
 ==============================
@@ -16,8 +16,8 @@ If the state of 'isAudioOn' is false, then the audio-on icon will show
 ==============================
 */
 
-export default class AudioToggle extends Component {
-  render() {
+export default function AudioToggle(props) {
+
     return (
 
       <div id="switch-container">
@@ -26,7 +26,7 @@ export default class AudioToggle extends Component {
 
           <input
             type="checkbox"
-            onClick={this.props.soundButtonToggle}/>
+            onClick={props.soundButtonToggle}/>
 
           <span className="slider round"></span>
 
@@ -51,6 +51,5 @@ export default class AudioToggle extends Component {
       </div>
 
     );
-  }
 }
 

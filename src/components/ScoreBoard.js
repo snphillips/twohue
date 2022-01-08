@@ -8,8 +8,7 @@ let previousScore = 0
 // gotcha: if the duration of the counter is changed,
 // the counter may count down then up again.
 
-export default class ScoreBoard extends Component {
-  render() {
+export default function ScoreBoard(props) {
     return (
 
 
@@ -17,7 +16,7 @@ export default class ScoreBoard extends Component {
 
         <State is={['homeScreenPractice']}>
           <button onClick={ () => {
-            this.props.startGameClickHandler()
+            props.startGameClickHandler()
           }}>
             start
           </button>
@@ -29,11 +28,11 @@ export default class ScoreBoard extends Component {
             <span className="actual-score">
               <CountUp
                 start={previousScore}
-                end={this.props.score}
+                end={props.score}
                 duration={1.5}
                 onEnd={() => {
-                  previousScore = this.props.score
-                   // console.log( "Count up done: previousScore:", previousScore, "this.props.score:", this.props.score)
+                  previousScore = props.score
+                   // console.log( "Count up done: previousScore:", previousScore, "props.score:", props.score)
                 }}
               />
             </span>
@@ -43,17 +42,16 @@ export default class ScoreBoard extends Component {
         </State>
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
-          <p>attempt: {this.props.attempt}/{this.props.maxAttemptCount}</p>
+          <p>attempt: {props.attempt}/{props.maxAttemptCount}</p>
         </State>
 
         <State is={['roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound']}>
-          <p className="loses">flops: {this.props.looseRound}/{this.props.maxLossCount}</p>
+          <p className="loses">flops: {props.looseRound}/{props.maxLossCount}</p>
         </State>
 
       </section>
 
     );
-}
 };
 
 
