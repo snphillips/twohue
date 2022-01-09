@@ -72,9 +72,9 @@ function startRoundN() {
 
 function roundN(){
   beginRoundSound()
-  setState({confettiFalling: false})
-  setState({playerWinRound: false})
-  setState({attempt: 0})
+  setConfettiFalling(false)
+  setPlayerWinRound(false)
+  setAttempt(0)
   props.transition('INCREMENT_ROUND_COUNTER')
 };
 
@@ -83,15 +83,16 @@ function incrementRoundCounter() {
     props.transition("NO_MORE_ROUNDS")
   } else if (looseRound < maxLossCount)
   {
-    setState({round: (round + 1)})
+    setRound(round + 1)
     calculateNumWrongColorBubbles()
     props.transition("SET_UP_COLOR_ROUND")
   }
 };
 
 function setUpColorRound(){
-  setState({"leftField": {'backgroundColor': "#fff"}})
-  setState({"rightField": {'backgroundColor': "#fff"}})
+  // Sarah pay attention to this.
+  setLeftField({'backgroundColor': "#fff"})
+  setRightField({'backgroundColor': "#fff"})
   generateColorRound()
   props.transition('PLAY_ROUND')
 };
@@ -141,8 +142,8 @@ function checkSolution() {
 
  function playerWinsRound() {
   playWinSound();
-  setState({playerWinRound: true})
-  setState({confettiFalling: true})
+  setPlayerWinRound(true)
+  setConfettiFalling(true)
   playerWinsPoints()
 
   console.log("player wins round")
@@ -168,7 +169,7 @@ function playerLoosesRound() {
   if (looseRound <= maxLossCount) {
    console.log("player looses round")
    playLoseSound()
-   setState({'looseRound': looseRound + 1})
+   setLooseRound(looseRound + 1)
    props.transition('SHOW_SOLUTION')
  }
 };
@@ -176,14 +177,14 @@ function playerLoosesRound() {
 function showSolution() {
   console.log("showSolution", colorRound.solutionColor1, colorRound.solutionColor2)
 
-  setState({"leftField": {
+  setLeftField({
     'backgroundColor': colorRound.solutionColor1,
     'animation': 'fadein 1.25s'
-  }});
-  setState({"rightField": {
+  });
+  setRightField({
     'backgroundColor': colorRound.solutionColor2,
     'animation': 'fadein 1.25s'
-  }});
+  });
 
     let transition = () => {
       if (looseRound < maxLossCount) {
@@ -204,10 +205,10 @@ function showSolution() {
 
 function gameOver() {
   gameOverChimes()
-  setState({attempt: 0})
-  setState({round: 0})
-  setState({looseRound: 0})
-  setState({confettiFalling: true})
+  setAttempt(0)
+  setRound(0)
+  setLooseRound(0)
+  setConfettiFalling(true)
   props.transition('GAME_OVER_TRANSITION')
 }
 
@@ -259,7 +260,7 @@ function gameOverTransition(){
 
 
 function joinLeaderboard(){
-  setState({newLeaderboardInductee: " "})
+  setNewLeaderboardInductee("")
 }
 
 function leaderboard() {
@@ -298,7 +299,7 @@ function leaderboardAPICall() {
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
       console.log = function () {};
-      // setState({isAudioOn: true})
+      // setisAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 1;
       maxAttemptCount = 3;
@@ -329,7 +330,7 @@ function leaderboardAPICall() {
       numberWrongColorBubbles = 6
     }
 
-    setState({numWrongColorBubbles: numberWrongColorBubbles})
+    setNumWrongColorBubbles(numberWrongColorBubbles);
   }
 
   function generateColorRound(){
@@ -408,12 +409,12 @@ function leaderboardAPICall() {
           array[i] = array[j]
           array[j] = temp
         }
-          setState({"allColorBubbles": array})
+          setAllColorBubbles(array)
       }
 
       shuffleColors(newColorRound.allColorBubbles)
-      setState({colorRound: newColorRound})
-      setState({wrongColors: wrongColorsArray})
+      setcolorRound(newColorRound)
+      setwrongColors(wrongColorsArray)
 
   }
 
@@ -434,16 +435,16 @@ function currentFieldMouseEnter(){
 if (confettiFalling === true) return
 
 else if (currentField === 'leftField'){
-setState({'leftField': {
+setLeftField({
   "border": "8px solid #abb2b9",
   "backgroundColor": "color",
-}});
+});
 
   } else {
-    setState({'rightField':{
+    setRightField({
       "border": "8px solid #abb2b9",
       "backgroundColor": "color",
-    }});
+    });
   }
 };
 
@@ -452,15 +453,15 @@ function currentFieldMouseLeave(){
 if (confettiFalling === true) return
 
   if (currentField === 'leftField'){
-    setState({'leftField': {
+    setLeftField({
       "border": "3px solid #abb2b9",
       "backgroundColor": "color"
-    }});
+    });
   } else {
-    setState({'rightField':{
+    setRightField({
       "border": "3px solid #abb2b9",
       "backgroundColor": "color"
-    }});
+    });
   }
 };
 
@@ -472,16 +473,16 @@ if (confettiFalling === true) return
 //  ====================================
 function toggleLeftRightField(){
   if (currentField === "leftField") {
-    setState({currentField: "rightField"})
-    setState({currentFieldHover: "rightField"})
+    setcurrentField("rightField")
+    setcurrentFieldHover("rightField")
   } else {
-    setState({currentField: "leftField"})
-    setState({currentFieldHover: "leftField"})
+    setcurrentField("leftField")
+    setcurrentFieldHover("leftField")
   }
 }
 
 function incrementAttempt(){
-  setState({attempt: (attempt + 1)})
+  setattempt(attempt + 1)
 }
 
 function playerWinsPoints() {
@@ -499,7 +500,7 @@ function playerWinsPoints() {
   } else if ( attempts === 2 ) {
     score = score + 6
   }
-  setState({score: score})
+  setscore(score)
 }
 
 
@@ -519,7 +520,7 @@ function playerWinsPoints() {
   if (playerWinsRound === true) return
   if (confettiFalling === true) return
 
-  setState({attempt: (attempt + 1)})
+  setattempt(attempt + 1);
   bubbleSound();
   toggleLeftRightField();
   // "event" is the click on a specific color bubble.
@@ -538,9 +539,9 @@ function playerWinsPoints() {
     if (looseRound > (maxLossCount)) return
     if (attempt >= maxAttemptCount) return
     if (currentField === 'leftField') {
-     setState({"leftField": {'backgroundColor': color}})
+     setLeftField( {'backgroundColor': color})
     } else {
-      setState({"rightField": {'backgroundColor': color}})
+      setRightField({'backgroundColor': color})
     }
   };
 
@@ -614,8 +615,8 @@ function soundButtonToggle() {
   };
 
   function resetScoreForNextGame(){
-    setState({score:0})
-    setState({looseRound:0})
+    setscore(0)
+    setlooseRound(0)
   }
 
 
@@ -629,13 +630,13 @@ function soundButtonToggle() {
 function axiosGetAllLeaderboardResults() {
       axios.get(dataSource)
         .then( (response) => {
-          setState({leaderboardData: response.data})
+          setleaderboardData(response.data)
           console.log("leaderboardData: ", leaderboardData)
         })
         .catch(function (error) {
           // If there's an error
           console.log("error", error);
-          setState({leaderboardServerDown: true})
+          setleaderboardServerDown(true)
         });
     }
 
@@ -651,7 +652,7 @@ function axiosGetAllLeaderboardResults() {
       let length = 12;
       let trimmedString = string.substring(0, length);
 
-      setState({newLeaderboardInductee: trimmedString}, () => {
+      setnewLeaderboardInductee(  (trimmedString) => {
         console.log(string, length, trimmedString)
         console.log("Posting new result. name: ", newLeaderboardInductee, "score: ", score)
       })
@@ -677,7 +678,7 @@ function axiosGetAllLeaderboardResults() {
 
     function handleChange(event) {
       // console.log("leaderboard form value:",  event.target.value)
-      setState({newLeaderboardInductee: event.target.value}, () => {
+      setnewLeaderboardInductee(  (event.target.value) => {
         // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
       })
     }
