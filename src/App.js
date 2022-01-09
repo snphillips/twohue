@@ -27,11 +27,7 @@ let previsAudioOn;
 let solutionColors;
 
 
-
-
 function App(props) {
-
-
   const [round, setRound] = useState(0); 
   const [attempt, setAttempt] = useState(0); 
   const [looseRound, setLooseRound] = useState(0);
@@ -64,10 +60,9 @@ transition happen.
  Find the "actions" & "activities" in statechart.js
  ================================= */
 function readyAction() {
-  // why not firing?
-  props.transition('READY')
   console.log("readyAction() hello player")
   generateColorRound()
+  // props.transition('READY')
  };
 
 function homeScreenPractice(){
@@ -298,8 +293,13 @@ function leaderboardAPICall() {
 // *****************************************************
 // *****************************************************
 // *****************************************************
+
+// Here's where the app begins.
+// Run this only on first render (as evidences by empty array) 
   useEffect(() => {
 
+    props.transition('READY')
+    readyAction()
     // console.log("statechart:", statechart)
     console.log("HIHIHI props.machineState.value: ", props.machineState.value )
     // console.log("process.env.NODE_ENV:", process.env.NODE_ENV)
@@ -317,9 +317,9 @@ function leaderboardAPICall() {
     }
   }, [])
   
+  
   useEffect(() => {
-    props.transition('READY')
-    console.log("hey props.machineState.value: ", props.machineState.value )
+    console.log("props.machineState.value: ", props.machineState.value )
   })
 
   function calculateNumWrongColorBubbles(){
@@ -344,13 +344,14 @@ function leaderboardAPICall() {
     setNumWrongColorBubbles(numberWrongColorBubbles);
   }
 
-  function generateColorRound(){
+  function generateColorRound(numberWrongColorBubbles){
     console.log("generate color round")
     let soluColor1;
     let soluColor2;
     let targColor;
     let colorLightness = 29;
-    let numWrongColorBubbles = numWrongColorBubbles;
+    // let numWrongColorBubbles = numberWrongColorBubbles; 
+    // let numWrongColorBubbles;
     let wrongColorsArray = [];
 
     //=============================
@@ -380,32 +381,48 @@ function leaderboardAPICall() {
         solutionColor2: soluColor2,
         targetColor: targColor,
 
-        // Only create enough wrongColors to fill in the color bubbles.
-        // For instance, the practice round only has two bubbles total
-        // (therefore no wrong colors are needed).
-        // numWrongColorBubbles tells us how many times we generate a
-        // random "wrong color" to push into t
+        /*
+        Only create enough wrongColors to fill in the
+        color bubbles. For instance, the practice round only
+        has two bubbles total (therefore no wrong colors 
+        are needed).
+        numWrongColorBubbles tells us how many times we
+        generate a random "wrong color" to push into
+
+        getter methods are used to access the properties of an object
+        */
         get wrongColors() {
 
           // first, empty the array of old colors
           wrongColorsArray = [];
 
           for (let i = numWrongColorBubbles; i > 0; i--) {
-
             wrongColorsArray.push(  chroma.random().hex()  );
           }
           return wrongColorsArray
         },
-
-
+        
+        
         get solutionColors() {
           return [chroma(newColorRound.solutionColor1).hex(), chroma(newColorRound.solutionColor2).hex()]
         },
+        
+        // Mix all the color bubbles together
+        get allColorBubbles() { 
+          console.log("solutionColors:", solutionColors)
+          console.log("wrongColors:", wrongColors)
 
-        get allColorBubbles() {
-          return solutionColors.concat(wrongColors);
+          // The concat() method is used to merge two or more arrays.
+          // This method does not change the existing arrays, 
+          // but instead returns a new array.
+          // We're merging solutionColors & wrongColors
+          return newColorRound.solutionColors.concat(newColorRound.wrongColors);
         }
       };
+      console.log("wrongColors:", wrongColors)
+      console.log("solutionColors:", solutionColors)
+      console.log("newColorRound:", newColorRound)
+      console.log("wrongColorArray:", wrongColorsArray)
       // ~~~~~~~~~~~~~~~~~~~~~~~~
       // ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -433,6 +450,7 @@ function leaderboardAPICall() {
 
 
   function startGameClickHandler(){
+    console.log("start game click handler")
     props.transition('START_GAME')
   }
 
@@ -638,16 +656,16 @@ function soundButtonToggle() {
 //  ==================================
 
 function axiosGetAllLeaderboardResults() {
-      axios.get(dataSource)
-        .then( (response) => {
-          setLeaderboardData(response.data)
-          console.log("leaderboardData: ", leaderboardData)
-        })
-        .catch(function (error) {
-          // If there's an error
-          console.log("axiosGetAllLeaderboardResults() error:", error);
-          setLeaderboardServerDown(true)
-        });
+      // axios.get(dataSource)
+      //   .then( (response) => {
+      //     setLeaderboardData(response.data)
+      //     console.log("leaderboardData: ", leaderboardData)
+      //   })
+      //   .catch(function (error) {
+      //     // If there's an error
+      //     console.log("axiosGetAllLeaderboardResults() error:", error);
+      //     setLeaderboardServerDown(true)
+      //   });
     }
 
 
@@ -794,9 +812,8 @@ function axiosGetAllLeaderboardResults() {
           </State>
 
           <div id="game-field">
-            <State is={['initial', 'homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
+            <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
             <GameField
-              // transition={props.transition}
               colorRound={colorRound}
               currentField={currentField}
               leftField={leftField}

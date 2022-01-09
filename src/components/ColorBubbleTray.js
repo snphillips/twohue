@@ -16,7 +16,7 @@ as indicated by <State is={['homeScreenPractice']}>
 
 export default function ColorBubbleTray(props) {
 
-    // console.log("state.allColorBubbles in ColorBubbleTray", props.allColorBubbles)
+    console.log("state.allColorBubbles in ColorBubbleTray", props.allColorBubbles)
 
     return (
 
