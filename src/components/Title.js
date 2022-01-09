@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-function Title(props) {
+export default function Title(props) {
   return (
 
     <section className="title-and-round-section">
@@ -9,5 +9,3 @@ function Title(props) {
 
   );
 }
-
-export default Title;

@@ -6,7 +6,11 @@ export default function GameField(props) {
     <div>
       <div id="target-swatch"
           className=""
-          style={{'backgroundColor': props.colorRound.targetColor}} >
+          style={
+            {
+              'backgroundColor': props.colorRound.targetColor
+            }
+          } >
           &nbsp;
         <span className="tooltiptext">target color</span>
       </div>

@@ -31,6 +31,7 @@ let solutionColors;
 
 function App(props) {
 
+
   const [round, setRound] = useState(0); 
   const [attempt, setAttempt] = useState(0); 
   const [looseRound, setLooseRound] = useState(0);
@@ -53,20 +54,24 @@ function App(props) {
 
 
 
-//  =================================
-//  State Machine On Entry States
-//  All the component's methods whose names match the names of actions and activities,
-//  are fired when the related transition happen.
+/*  =================================
+State Machine On Entry States
+All the component's methods whose names match the names
+of actions and activities, are fired when the related
+transition happen.
 
-//  Actions receive the state and the event as arguments.
-//  =================================
-function readyAction(){
+ Actions receive the state and the event as arguments.
+ Find the "actions" & "activities" in statechart.js
+ ================================= */
+function readyAction() {
+  // why not firing?
   props.transition('READY')
+  console.log("readyAction() hello player")
   generateColorRound()
  };
 
- function homeScreenPractice(){
-
+function homeScreenPractice(){
+  console.log("homeScreenPractice() Do you want to practice?")
 };
 
 function startRoundN() {
@@ -274,10 +279,10 @@ function leaderboardAPICall() {
   // POST a new leaderboard inductee, then GET the results again.
   // The leaderboard only shows the top 10 results,
   // so the new inductee will appear in the list
-  axiosPostNewLeaderboardInductee( () => {
+  // axiosPostNewLeaderboardInductee( () => {
     // props.transition('FILLED_OUT_FORM')
-    axiosGetAllLeaderboardResults()
-  });
+    // axiosGetAllLeaderboardResults()
+  // });
 }
 
 // *****************************************************
@@ -294,10 +299,12 @@ function leaderboardAPICall() {
 // *****************************************************
 // *****************************************************
   useEffect(() => {
-    console.log("xmachineState: ", props.machinevalue )
-    console.log("process.env.NODE_ENV", process.env.NODE_ENV)
-    axiosGetAllLeaderboardResults()
 
+    // console.log("statechart:", statechart)
+    console.log("HIHIHI props.machineState.value: ", props.machineState.value )
+    // console.log("process.env.NODE_ENV:", process.env.NODE_ENV)
+    axiosGetAllLeaderboardResults()
+    
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
@@ -308,10 +315,11 @@ function leaderboardAPICall() {
       maxAttemptCount = 3;
       confettiRecycling = false;
     }
-  })
-
+  }, [])
+  
   useEffect(() => {
-    console.log("machineState: ", props.machinevalue )
+    props.transition('READY')
+    console.log("hey props.machineState.value: ", props.machineState.value )
   })
 
   function calculateNumWrongColorBubbles(){
@@ -337,6 +345,7 @@ function leaderboardAPICall() {
   }
 
   function generateColorRound(){
+    console.log("generate color round")
     let soluColor1;
     let soluColor2;
     let targColor;
@@ -636,7 +645,7 @@ function axiosGetAllLeaderboardResults() {
         })
         .catch(function (error) {
           // If there's an error
-          console.log("error", error);
+          console.log("axiosGetAllLeaderboardResults() error:", error);
           setLeaderboardServerDown(true)
         });
     }
@@ -761,7 +770,7 @@ function axiosGetAllLeaderboardResults() {
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
-          />
+        />
 
         <State is={['gameOver', 'gameOverTransition']}>
           <GameOverScreen
@@ -785,8 +794,9 @@ function axiosGetAllLeaderboardResults() {
           </State>
 
           <div id="game-field">
-            <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
+            <State is={['initial', 'homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
             <GameField
+              // transition={props.transition}
               colorRound={colorRound}
               currentField={currentField}
               leftField={leftField}
