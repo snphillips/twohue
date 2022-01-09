@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStateMachine, State } from 'react-automata';
 import './App.css';
 import Header from './components/Header';
@@ -22,6 +22,10 @@ let dataSource = "https://twohue-leaderboard-server.herokuapp.com/players";
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let confettiRecycling = true;
+let value;
+let previsAudioOn;
+let solutionColors;
+
 
 
 
@@ -30,7 +34,6 @@ function App(props) {
   const [round, setRound] = useState(0); 
   const [attempt, setAttempt] = useState(0); 
   const [looseRound, setLooseRound] = useState(0);
-  const [maxLossCount, setMaxLossCount] = useState(6);
   const [previousScore, setPreviousScore] = useState(0); 
   const [score, setScore] = useState(0); 
   const [colorRound, setColorRound] = useState({}); 
@@ -387,7 +390,7 @@ function leaderboardAPICall() {
 
 
         get solutionColors() {
-          return [chroma(solutionColor1).hex(), chroma(solutionColor2).hex()]
+          return [chroma(newColorRound.solutionColor1).hex(), chroma(newColorRound.solutionColor2).hex()]
         },
 
         get allColorBubbles() {
@@ -413,8 +416,8 @@ function leaderboardAPICall() {
       }
 
       shuffleColors(newColorRound.allColorBubbles)
-      setcolorRound(newColorRound)
-      setwrongColors(wrongColorsArray)
+      setColorRound(newColorRound)
+      setWrongColors(wrongColorsArray)
 
   }
 
@@ -473,16 +476,16 @@ if (confettiFalling === true) return
 //  ====================================
 function toggleLeftRightField(){
   if (currentField === "leftField") {
-    setcurrentField("rightField")
-    setcurrentFieldHover("rightField")
+    setCurrentField("rightField")
+    setCurrentFieldHover("rightField")
   } else {
-    setcurrentField("leftField")
-    setcurrentFieldHover("leftField")
+    setCurrentField("leftField")
+    setCurrentFieldHover("leftField")
   }
 }
 
 function incrementAttempt(){
-  setattempt(attempt + 1)
+  setAttempt(attempt + 1)
 }
 
 function playerWinsPoints() {
@@ -500,7 +503,7 @@ function playerWinsPoints() {
   } else if ( attempts === 2 ) {
     score = score + 6
   }
-  setscore(score)
+  setScore(score)
 }
 
 
@@ -520,7 +523,7 @@ function playerWinsPoints() {
   if (playerWinsRound === true) return
   if (confettiFalling === true) return
 
-  setattempt(attempt + 1);
+  setAttempt(attempt + 1);
   bubbleSound();
   toggleLeftRightField();
   // "event" is the click on a specific color bubble.
@@ -563,10 +566,8 @@ function playerWinsPoints() {
 //  So, set the state to the 'oposite' of what it is.
 //  ==================================
 function soundButtonToggle() {
-    setState(prevState => ({
-      isAudioOn: !previsAudioOn
-    }));
-  }
+  setIsAudioOn(!isAudioOn)
+}
 
 
   function bubbleSound(){
@@ -615,8 +616,8 @@ function soundButtonToggle() {
   };
 
   function resetScoreForNextGame(){
-    setscore(0)
-    setlooseRound(0)
+    setScore(0)
+    setLooseRound(0)
   }
 
 
@@ -630,13 +631,13 @@ function soundButtonToggle() {
 function axiosGetAllLeaderboardResults() {
       axios.get(dataSource)
         .then( (response) => {
-          setleaderboardData(response.data)
+          setLeaderboardData(response.data)
           console.log("leaderboardData: ", leaderboardData)
         })
         .catch(function (error) {
           // If there's an error
           console.log("error", error);
-          setleaderboardServerDown(true)
+          setLeaderboardServerDown(true)
         });
     }
 
@@ -652,7 +653,7 @@ function axiosGetAllLeaderboardResults() {
       let length = 12;
       let trimmedString = string.substring(0, length);
 
-      setnewLeaderboardInductee(  (trimmedString) => {
+      setNewLeaderboardInductee(  (trimmedString) => {
         console.log(string, length, trimmedString)
         console.log("Posting new result. name: ", newLeaderboardInductee, "score: ", score)
       })
@@ -678,9 +679,9 @@ function axiosGetAllLeaderboardResults() {
 
     function handleChange(event) {
       // console.log("leaderboard form value:",  event.target.value)
-      setnewLeaderboardInductee(  (event.target.value) => {
+      // function setNewLeaderboardInductee (event.target.value) =>  {
         // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
-      })
+      // }
     }
 
 
