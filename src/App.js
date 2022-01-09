@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStateMachine, State } from 'react-automata';
 import './App.css';
 import Header from './components/Header';
@@ -25,46 +25,29 @@ let confettiRecycling = true;
 
 
 
-class App extends React.Component {
-  constructor(props) {
-  super(props);
+function App(props) {
 
-  this.state = {
-    round: 0,
-    attempt: 0,
-    looseRound: 0,
-    maxLossCount: 6,
-    previousScore: 0,
-    score: 0,
-    colorRound: {} ,
-    wrongColors: [],
-    allColorBubbles: [],
-    numWrongColorBubbles: 0,
-    currentField: 'leftField',
-    currentFieldHover: 'leftField',
-    leftField: {'backgroundColor': '#fff'},
-    rightField: {'backgroundColor': '#fff'},
-    isAudioOn: false,
-    confettiFalling: false,
-    playerWinRound: false,
-    leaderboardData: [],
-    newLeaderboardInductee: '',
-    leaderboardServerDown: false
-  };
+  const [round, setRound] = useState(0); 
+  const [attempt, setAttempt] = useState(0); 
+  const [looseRound, setLooseRound] = useState(0);
+  const [maxLossCount, setMaxLossCount] = useState(6);
+  const [previousScore, setPreviousScore] = useState(0); 
+  const [score, setScore] = useState(0); 
+  const [colorRound, setColorRound] = useState({}); 
+  const [wrongColors, setWrongColors] = useState([]);
+  const [allColorBubbles, setAllColorBubbles] = useState([]);
+  const [numWrongColorBubbles, setNumWrongColorBubbles] = useState(0); 
+  const [currentField, setCurrentField] = useState('leftField'); 
+  const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
+  const [leftField, setLeftField] = useState({'backgroundColor': '#fff'}); 
+  const [rightField, setRightField] = useState({'backgroundColor': '#fff'});
+  const [isAudioOn, setIsAudioOn] = useState(false);
+  const [confettiFalling, setConfettiFalling] = useState([]);
+  const [playerWinRound, setPlayerWinRound] = useState([]);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
+  const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
 
-  // This binding is necessary to make `this` work in the callback
-  this.updateFieldColor = this.updateFieldColor.bind(this);
-  this.soundButtonToggle = this.soundButtonToggle.bind(this);
-  this.currentFieldMouseEnter = this.currentFieldMouseEnter.bind(this);
-  this.currentFieldMouseLeave = this.currentFieldMouseLeave.bind(this);
-  this.showSolution = this.showSolution.bind(this);
-  this.resetScoreForNextGame = this.resetScoreForNextGame.bind(this);
-  this.startGameClickHandler = this.startGameClickHandler.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
-  this.handleChange = this.handleChange.bind(this);
-  this.axiosPostNewLeaderboardInductee = this.axiosPostNewLeaderboardInductee.bind(this);
-  this.axiosGetAllLeaderboardResults = this.axiosGetAllLeaderboardResults.bind(this);
-}
 
 
 //  =================================
@@ -74,105 +57,103 @@ class App extends React.Component {
 
 //  Actions receive the state and the event as arguments.
 //  =================================
+function readyAction(){
+  props.transition('READY')
+  generateColorRound()
+ };
 
+ function homeScreenPractice(){
 
-readyAction(){
-  this.props.transition('READY')
-  this.generateColorRound()
- }
+};
 
-homeScreenPractice(){
+function startRoundN() {
+  props.transition('FADE_IN_ROUND')
+};
 
-}
+function roundN(){
+  beginRoundSound()
+  setState({confettiFalling: false})
+  setState({playerWinRound: false})
+  setState({attempt: 0})
+  props.transition('INCREMENT_ROUND_COUNTER')
+};
 
-startRoundN() {
-  this.props.transition('FADE_IN_ROUND')
-}
-
-roundN(){
-  this.beginRoundSound()
-  this.setState({confettiFalling: false})
-  this.setState({playerWinRound: false})
-  this.setState({attempt: 0})
-  this.props.transition('INCREMENT_ROUND_COUNTER')
-}
-
-incrementRoundCounter() {
-  if (this.state.looseRound >= maxLossCount) {
-    this.props.transition("NO_MORE_ROUNDS")
-  } else if (this.state.looseRound < maxLossCount)
+function incrementRoundCounter() {
+  if (looseRound >= maxLossCount) {
+    props.transition("NO_MORE_ROUNDS")
+  } else if (looseRound < maxLossCount)
   {
-    this.setState({round: (this.state.round + 1)})
-    this.calculateNumWrongColorBubbles()
-    this.props.transition("SET_UP_COLOR_ROUND")
+    setState({round: (round + 1)})
+    calculateNumWrongColorBubbles()
+    props.transition("SET_UP_COLOR_ROUND")
   }
-}
+};
 
-setUpColorRound(){
-  this.setState({"leftField": {'backgroundColor': "#fff"}})
-  this.setState({"rightField": {'backgroundColor': "#fff"}})
-  this.generateColorRound()
-  this.props.transition('PLAY_ROUND')
-}
+function setUpColorRound(){
+  setState({"leftField": {'backgroundColor': "#fff"}})
+  setState({"rightField": {'backgroundColor': "#fff"}})
+  generateColorRound()
+  props.transition('PLAY_ROUND')
+};
 
-playRound(){
-  this.props.transition('ATTEMPT_N')
-}
+function playRound(){
+  props.transition('ATTEMPT_N')
+};
 
-attemptN() {
-  if (this.state.attempt < maxAttemptCount) {
-    this.props.transition("CHECK_SOLUTION")
-  } else if (this.state.attempt >= maxAttemptCount) {
-    this.props.transition("OUT_OF_ATTEMPTS")
+function attemptN() {
+  if (attempt < maxAttemptCount) {
+    props.transition("CHECK_SOLUTION")
+  } else if (attempt >= maxAttemptCount) {
+    props.transition("OUT_OF_ATTEMPTS")
   }
-}
+};
 
-checkSolution() {
-  let leftFieldBackgroundColor = this.state.leftField.backgroundColor;
+function checkSolution() {
+  let leftFieldBackgroundColor = leftField.backgroundColor;
   let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-  let rightFieldBackgroundColor = this.state.rightField.backgroundColor;
+  let rightFieldBackgroundColor = rightField.backgroundColor;
   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-  let solutionColors = this.state.colorRound.solutionColors;
-  let attempts = this.state.attempt
+  let solutionColors = colorRound.solutionColors;
+  let attempts = attempt
 
   // Not enough trys: incorrect
   if (attempts === 1)
   {
     console.log("There has only been one guess. => INCORRECT_SOLUTION")
-    this.props.transition("INCORRECT_SOLUTION")
+    props.transition("INCORRECT_SOLUTION")
 
   // correct
    } else if ( ( solutionColors.includes( leftFieldHexColor ) && solutionColors.includes( rightFieldHexColor )  )
     // the colors can't be the same on either side
     && ( leftFieldHexColor !== rightFieldHexColor  ))
    {
-    this.props.transition("CORRECT_SOLUTION")
+    props.transition("CORRECT_SOLUTION")
     console.log("CORRECT_SOLUTION")
 
    // incorrect
    } else {
-    this.props.transition("INCORRECT_SOLUTION")
-    console.log("INCORRECT attempts:", this.state.attempt)
+    props.transition("INCORRECT_SOLUTION")
+    console.log("INCORRECT attempts:", attempt)
    }
- }
+ };
 
 
 
-playerWinsRound() {
-  this.playWinSound();
-  this.setState({playerWinRound: true})
-  this.setState({confettiFalling: true})
-  this.playerWinsPoints()
+ function playerWinsRound() {
+  playWinSound();
+  setState({playerWinRound: true})
+  setState({confettiFalling: true})
+  playerWinsPoints()
 
   console.log("player wins round")
 
       let stateTransition = () => {
-        if (this.state.looseRound < maxLossCount) {
+        if (looseRound < maxLossCount) {
           // console.log('NEXT_ROUND')
-          this.props.transition('FADE_IN_ROUND')
-        } else if (this.state.looseRound >= maxLossCount){
+          props.transition('FADE_IN_ROUND')
+        } else if (looseRound >= maxLossCount){
           console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount)
-          this.props.transition('NO_MORE_ROUNDS')
+          props.transition('NO_MORE_ROUNDS')
         }
       }
 
@@ -181,36 +162,36 @@ playerWinsRound() {
       stateTransition()
 
     }, 1500);
-}
+};
 
-playerLoosesRound() {
-  if (this.state.looseRound <= maxLossCount) {
+function playerLoosesRound() {
+  if (looseRound <= maxLossCount) {
    console.log("player looses round")
-   this.playLoseSound()
-   this.setState({'looseRound': this.state.looseRound + 1})
-   this.props.transition('SHOW_SOLUTION')
+   playLoseSound()
+   setState({'looseRound': looseRound + 1})
+   props.transition('SHOW_SOLUTION')
  }
-}
+};
 
-showSolution() {
-  console.log("showSolution", this.state.colorRound.solutionColor1, this.state.colorRound.solutionColor2)
+function showSolution() {
+  console.log("showSolution", colorRound.solutionColor1, colorRound.solutionColor2)
 
-  this.setState({"leftField": {
-    'backgroundColor': this.state.colorRound.solutionColor1,
+  setState({"leftField": {
+    'backgroundColor': colorRound.solutionColor1,
     'animation': 'fadein 1.25s'
   }});
-  this.setState({"rightField": {
-    'backgroundColor': this.state.colorRound.solutionColor2,
+  setState({"rightField": {
+    'backgroundColor': colorRound.solutionColor2,
     'animation': 'fadein 1.25s'
   }});
 
     let transition = () => {
-      if (this.state.looseRound < maxLossCount) {
-        console.log(`this.props.transition('NEXT_ROUND')`)
-        this.props.transition('NEXT_ROUND')
-      } else if (this.state.looseRound >= maxLossCount) {
-        console.log(`this.props.transition('NO_MORE_ROUNDS')`)
-        this.props.transition('NO_MORE_ROUNDS')
+      if (looseRound < maxLossCount) {
+        console.log(`props.transition('NEXT_ROUND')`)
+        props.transition('NEXT_ROUND')
+      } else if (looseRound >= maxLossCount) {
+        console.log(`props.transition('NO_MORE_ROUNDS')`)
+        props.transition('NO_MORE_ROUNDS')
       }
     }
 
@@ -221,30 +202,30 @@ showSolution() {
 };
 
 
-gameOver() {
-  this.gameOverChimes()
-  this.setState({attempt: 0})
-  this.setState({round: 0})
-  this.setState({looseRound: 0})
-  this.setState({confettiFalling: true})
-  this.props.transition('GAME_OVER_TRANSITION')
+function gameOver() {
+  gameOverChimes()
+  setState({attempt: 0})
+  setState({round: 0})
+  setState({looseRound: 0})
+  setState({confettiFalling: true})
+  props.transition('GAME_OVER_TRANSITION')
 }
 
 
-gameOverTransition(){
+function gameOverTransition(){
 
-     if (this.state.leaderboardServerDown === true) {
+     if (leaderboardServerDown === true) {
       console.log("leaderboard is not available")
-      this.props.transition('DO_NOT_JOIN_LEADERBOARD');
+      props.transition('DO_NOT_JOIN_LEADERBOARD');
      }
 
 
     let evaluateIfLeaderboardMaterial = () =>  {
-      console.log("evaluateIfLeaderboardMaterial()", this.state.leaderboardData)
+      console.log("evaluateIfLeaderboardMaterial()", leaderboardData)
       // checking if the player's score in equal to or higher than
       // the lowest/last score in the array
 
-      let leaderboardMembers = this.state.leaderboardData
+      let leaderboardMembers = leaderboardData
 
       // What is smaller? 9 or the "array length - 1"?
       // Either pick the last item in the array, or the 10th item,
@@ -252,7 +233,7 @@ gameOverTransition(){
       // We do this in case the array has fewer than 10 members.
       let lowestCurrentScoreIndex = Math.min(9, (leaderboardMembers.length - 1));
       let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score
-      let score = this.state.score
+      let score = score
 
       console.log("lowestCurrentScoreIndex:", lowestCurrentScoreIndex)
       console.log("lowestLeaderBoard score:", lowestCurrentScore)
@@ -260,11 +241,11 @@ gameOverTransition(){
 
       if (score >= lowestCurrentScore) {
         console.log("score is higher than lowestCurrentScore")
-        this.props.transition('JOIN_LEADERBOARD');
+        props.transition('JOIN_LEADERBOARD');
         //
       } else {
         console.log("score is lower than lowestCurrentScore")
-        this.props.transition('DO_NOT_JOIN_LEADERBOARD');
+        props.transition('DO_NOT_JOIN_LEADERBOARD');
       }
     }
 
@@ -277,21 +258,21 @@ gameOverTransition(){
 }
 
 
-joinLeaderboard(){
-  this.setState({newLeaderboardInductee: " "})
+function joinLeaderboard(){
+  setState({newLeaderboardInductee: " "})
 }
 
-leaderboard() {
+function leaderboard() {
 
 }
 
-leaderboardAPICall() {
+function leaderboardAPICall() {
   // POST a new leaderboard inductee, then GET the results again.
   // The leaderboard only shows the top 10 results,
   // so the new inductee will appear in the list
-  this.axiosPostNewLeaderboardInductee( () => {
-    // this.props.transition('FILLED_OUT_FORM')
-    this.axiosGetAllLeaderboardResults()
+  axiosPostNewLeaderboardInductee( () => {
+    // props.transition('FILLED_OUT_FORM')
+    axiosGetAllLeaderboardResults()
   });
 }
 
@@ -308,31 +289,30 @@ leaderboardAPICall() {
 // *****************************************************
 // *****************************************************
 // *****************************************************
-  componentDidMount() {
-    console.log("xmachineState: ", this.props.machineState.value )
+  useEffect(() => {
+    console.log("xmachineState: ", props.machinevalue )
     console.log("process.env.NODE_ENV", process.env.NODE_ENV)
-    this.axiosGetAllLeaderboardResults()
+    axiosGetAllLeaderboardResults()
 
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
       console.log = function () {};
-      // this.setState({isAudioOn: true})
+      // setState({isAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 1;
       maxAttemptCount = 3;
       confettiRecycling = false;
     }
+  })
 
-  }
+  useEffect(() => {
+    console.log("machineState: ", props.machinevalue )
+  })
 
-  componentDidUpdate() {
-    console.log("machineState: ", this.props.machineState.value )
-  }
+  function calculateNumWrongColorBubbles(){
 
-  calculateNumWrongColorBubbles(){
-
-    let round = this.state.round
+    let round = round
     let numberWrongColorBubbles = 0
 
     if (round <= 1) {
@@ -349,15 +329,15 @@ leaderboardAPICall() {
       numberWrongColorBubbles = 6
     }
 
-    this.setState({numWrongColorBubbles: numberWrongColorBubbles})
+    setState({numWrongColorBubbles: numberWrongColorBubbles})
   }
 
-  generateColorRound(){
+  function generateColorRound(){
     let soluColor1;
     let soluColor2;
     let targColor;
     let colorLightness = 29;
-    let numWrongColorBubbles = this.state.numWrongColorBubbles;
+    let numWrongColorBubbles = numWrongColorBubbles;
     let wrongColorsArray = [];
 
     //=============================
@@ -406,11 +386,11 @@ leaderboardAPICall() {
 
 
         get solutionColors() {
-          return [chroma(this.solutionColor1).hex(), chroma(this.solutionColor2).hex()]
+          return [chroma(solutionColor1).hex(), chroma(solutionColor2).hex()]
         },
 
         get allColorBubbles() {
-          return this.solutionColors.concat(this.wrongColors);
+          return solutionColors.concat(wrongColors);
         }
       };
       // ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -428,19 +408,19 @@ leaderboardAPICall() {
           array[i] = array[j]
           array[j] = temp
         }
-          this.setState({"allColorBubbles": array})
+          setState({"allColorBubbles": array})
       }
 
       shuffleColors(newColorRound.allColorBubbles)
-      this.setState({colorRound: newColorRound})
-      this.setState({wrongColors: wrongColorsArray})
+      setState({colorRound: newColorRound})
+      setState({wrongColors: wrongColorsArray})
 
   }
 
 
 
-  startGameClickHandler(){
-    this.props.transition('START_GAME')
+  function startGameClickHandler(){
+    props.transition('START_GAME')
   }
 
 
@@ -449,37 +429,37 @@ leaderboardAPICall() {
 //  two fields is currently active. Note: we have to set the backgroundColor
 //  otherwise it will revert to none.
 //  ==================================================================
-currentFieldMouseEnter(){
+function currentFieldMouseEnter(){
 
-if (this.state.confettiFalling === true) return
+if (confettiFalling === true) return
 
-else if (this.state.currentField === 'leftField'){
-this.setState({'leftField': {
+else if (currentField === 'leftField'){
+setState({'leftField': {
   "border": "8px solid #abb2b9",
-  "backgroundColor": "this.color",
+  "backgroundColor": "color",
 }});
 
   } else {
-    this.setState({'rightField':{
+    setState({'rightField':{
       "border": "8px solid #abb2b9",
-      "backgroundColor": "this.color",
+      "backgroundColor": "color",
     }});
   }
 };
 
-currentFieldMouseLeave(){
+function currentFieldMouseLeave(){
 
-if (this.state.confettiFalling === true) return
+if (confettiFalling === true) return
 
-  if (this.state.currentField === 'leftField'){
-    this.setState({'leftField': {
+  if (currentField === 'leftField'){
+    setState({'leftField': {
       "border": "3px solid #abb2b9",
-      "backgroundColor": "this.color"
+      "backgroundColor": "color"
     }});
   } else {
-    this.setState({'rightField':{
+    setState({'rightField':{
       "border": "3px solid #abb2b9",
-      "backgroundColor": "this.color"
+      "backgroundColor": "color"
     }});
   }
 };
@@ -490,23 +470,23 @@ if (this.state.confettiFalling === true) return
 //  one will get filled in with color.
 //  TODO: can you simplify this?
 //  ====================================
-toggleLeftRightField(){
-  if (this.state.currentField === "leftField") {
-    this.setState({currentField: "rightField"})
-    this.setState({currentFieldHover: "rightField"})
+function toggleLeftRightField(){
+  if (currentField === "leftField") {
+    setState({currentField: "rightField"})
+    setState({currentFieldHover: "rightField"})
   } else {
-    this.setState({currentField: "leftField"})
-    this.setState({currentFieldHover: "leftField"})
+    setState({currentField: "leftField"})
+    setState({currentFieldHover: "leftField"})
   }
 }
 
-incrementAttempt(){
-  this.setState({attempt: (this.state.attempt + 1)})
+function incrementAttempt(){
+  setState({attempt: (attempt + 1)})
 }
 
-playerWinsPoints() {
-  let attempts =  this.state.attempt
-  let score = this.state.score
+function playerWinsPoints() {
+  let attempts =  attempt
+  let score = score
 
   if (attempts === 6 ) {
     score = score + 1
@@ -519,7 +499,7 @@ playerWinsPoints() {
   } else if ( attempts === 2 ) {
     score = score + 6
   }
-  this.setState({score: score})
+  setState({score: score})
 }
 
 
@@ -528,45 +508,45 @@ playerWinsPoints() {
 //  Click handler for the color bubbles at bottom of screen
 //  ===================================
  // note: it has to be an arrow style function.
- bubbleClickHandler = (event) =>  {
+ function bubbleClickHandler(event){
   // guard clause to disable click handler if:
   // 1) the game is over,
   // 2) player is out of attempts,attemptN
   // 3) player has won the round,
   // 4) confetti is falling
-  if (this.state.looseRound > (maxLossCount)) return
-  if (this.state.attempt >= maxAttemptCount) return
-  if (this.state.playerWinsRound === true) return
-  if (this.state.confettiFalling === true) return
+  if (looseRound > (maxLossCount)) return
+  if (attempt >= maxAttemptCount) return
+  if (playerWinsRound === true) return
+  if (confettiFalling === true) return
 
-  this.setState({attempt: (this.state.attempt + 1)})
-  this.bubbleSound();
-  this.toggleLeftRightField();
+  setState({attempt: (attempt + 1)})
+  bubbleSound();
+  toggleLeftRightField();
   // "event" is the click on a specific color bubble.
   // "currentTarget" is whatever color bubble is clicked.
   // "style.backgroundColor" takes whatever background color
   // the clicked color bubble has, and applies that to color field
-  this.updateFieldColor(event.currentTarget.style.backgroundColor);
-  this.props.transition('SELECT_COLOR');
+  updateFieldColor(event.currentTarget.style.backgroundColor);
+  props.transition('SELECT_COLOR');
 };
 
 
   //  ==================================
   //  Filling in chosen color into left or right fields
   //  ==================================
-  updateFieldColor(color){
-    if (this.state.looseRound > (maxLossCount)) return
-    if (this.state.attempt >= maxAttemptCount) return
-    if (this.state.currentField === 'leftField') {
-     this.setState({"leftField": {'backgroundColor': color}})
+  function updateFieldColor(color){
+    if (looseRound > (maxLossCount)) return
+    if (attempt >= maxAttemptCount) return
+    if (currentField === 'leftField') {
+     setState({"leftField": {'backgroundColor': color}})
     } else {
-      this.setState({"rightField": {'backgroundColor': color}})
+      setState({"rightField": {'backgroundColor': color}})
     }
   };
 
-  beginRoundSound(){
+  function beginRoundSound(){
     // A guard clause if the user has clicked the audio off
-    if (this.state.isAudioOn === false) {return}
+    if (isAudioOn === false) {return}
     const sound = new Howl({
       src: ['/sound/finger-snap.wav']
     });
@@ -581,61 +561,61 @@ playerWinsPoints() {
 //  the ! is the oposite of what it currently is.
 //  So, set the state to the 'oposite' of what it is.
 //  ==================================
-   soundButtonToggle() {
-    this.setState(prevState => ({
-      isAudioOn: !prevState.isAudioOn
+function soundButtonToggle() {
+    setState(prevState => ({
+      isAudioOn: !previsAudioOn
     }));
   }
 
 
-  bubbleSound(){
+  function bubbleSound(){
   // Using the Howler npm package for sound
   // There are two distinct sounds. One for the left, one for the right.
   // a guard clause if the player has toggled sound to be off
-  if (this.state.isAudioOn === false) {return}
+  if (isAudioOn === false) {return}
 
-    if (this.state.currentField === "leftField") {
+    if (currentField === "leftField") {
       const sound = new Howl({
       src: ['/sound/moogy73_perc14.wav']});
       sound.play()
 
-    } else if (this.state.currentField === "rightField") {
+    } else if (currentField === "rightField") {
       const sound = new Howl({
       src: ['/sound/moogy73_perc15.wav']});
       sound.play()
     }
  };
 
-  playWinSound(){
+ function playWinSound(){
     // a guard clause if the player has toggled sound to be off
-    if (this.state.isAudioOn === false) {return}
+    if (isAudioOn === false) {return}
     const sound = new Howl({
       src: ['/sound/success.wav']
     });
     sound.play()
   };
 
-  playLoseSound(){
+  function playLoseSound(){
     // a guard clause if the player has toggled sound to be off
-    if (this.state.isAudioOn === false) {return}
+    if (isAudioOn === false) {return}
     const sound = new Howl({
       src: ['/sound/wrong-guess.wav']
     });
     sound.play()
   };
 
-  gameOverChimes(){
+  function gameOverChimes(){
       // A guard clause if the user has clicked the audio off
-    if (this.state.isAudioOn === false) {return}
+    if (isAudioOn === false) {return}
     const sound = new Howl({
       src: ['/sound/windchimes.mp3']
     });
     sound.play()
   };
 
-  resetScoreForNextGame(){
-    this.setState({score:0})
-    this.setState({looseRound:0})
+  function resetScoreForNextGame(){
+    setState({score:0})
+    setState({looseRound:0})
   }
 
 
@@ -646,16 +626,16 @@ playerWinsPoints() {
 //  GET
 //  ==================================
 
-    axiosGetAllLeaderboardResults() {
+function axiosGetAllLeaderboardResults() {
       axios.get(dataSource)
         .then( (response) => {
-          this.setState({leaderboardData: response.data})
-          console.log("this.state.leaderboardData: ", this.state.leaderboardData)
+          setState({leaderboardData: response.data})
+          console.log("leaderboardData: ", leaderboardData)
         })
         .catch(function (error) {
           // If there's an error
           console.log("error", error);
-          this.setState({leaderboardServerDown: true})
+          setState({leaderboardServerDown: true})
         });
     }
 
@@ -665,47 +645,47 @@ playerWinsPoints() {
   //  As soon as the user interacts with the form, newTodo updates.
   //  The API call happens once the user clicks the 'submit' button.
   //  ==================================================================
-    axiosPostNewLeaderboardInductee() {
-      // this.props.transition('FILLED_OUT_FORM')
-      let string = this.state.newLeaderboardInductee;
+  function axiosPostNewLeaderboardInductee() {
+      // props.transition('FILLED_OUT_FORM')
+      let string = newLeaderboardInductee;
       let length = 12;
       let trimmedString = string.substring(0, length);
 
-      this.setState({newLeaderboardInductee: trimmedString}, () => {
+      setState({newLeaderboardInductee: trimmedString}, () => {
         console.log(string, length, trimmedString)
-        console.log("Posting new result. name: ", this.state.newLeaderboardInductee, "score: ", this.state.score)
+        console.log("Posting new result. name: ", newLeaderboardInductee, "score: ", score)
       })
 
       axios.post(dataSource, {
-        player: this.state.newLeaderboardInductee || "enigma",
-        score: this.state.score
+        player: newLeaderboardInductee || "enigma",
+        score: score
       })
       .then(function (response) {
         console.log("leaderboard axios call response: ", response.data)
       })
       .then( () => {
-        this.axiosGetAllLeaderboardResults()
+        axiosGetAllLeaderboardResults()
       })
       .then( () => {
         console.log("after axiosGetAllLeaderboardResults()")
-        this.props.transition('API_DATABASE_CALL_COMPLETE')
+        props.transition('API_DATABASE_CALL_COMPLETE')
       })
       .catch(function (error) {
         console.log(error);
       });
     }
 
-    handleChange(event) {
+    function handleChange(event) {
       // console.log("leaderboard form value:",  event.target.value)
-      this.setState({newLeaderboardInductee: event.target.value}, () => {
-        // console.log('this.state.newLeaderboardInductee: ', this.state.newLeaderboardInductee)
+      setState({newLeaderboardInductee: event.target.value}, () => {
+        // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
       })
     }
 
 
-    handleSubmit(event) {
+    function handleSubmit(event) {
       event.preventDefault();
-      this.props.transition('FILLED_OUT_FORM')
+      props.transition('FILLED_OUT_FORM')
     }
 
 
@@ -722,11 +702,12 @@ playerWinsPoints() {
 // *****************************************************
 // *****************************************************
 
-  render() {
+  
 
   // for confetti to fall accross whole window,
   // if user resizes window
   // TODO: this alone does not work
+  // could use a hook for this ***
   let width = window.innerWidth
   let height = window.innerHeight
 
@@ -739,11 +720,11 @@ playerWinsPoints() {
           <Confetti
             width={width}
             height={height}
-            run={this.state.confettiFalling}
+            run={confettiFalling}
             numberOfPieces={300}
             recycle={false}
             tweenDuration={100}
-            colors={this.state.colorRound.allColorBubbles}
+            colors={colorRound.allColorBubbles}
             opacity={0.6}
             gravity={0.6}
             />
@@ -753,7 +734,7 @@ playerWinsPoints() {
           <Confetti
             width={width}
             height={height}
-            run={this.state.confettiFalling}
+            run={confettiFalling}
             numberOfPieces={600}
             recycle={confettiRecycling}
             tweenDuration={100}
@@ -766,60 +747,60 @@ playerWinsPoints() {
 
 
         <Header
-          transition={this.props.transition}
-          round={this.state.round}
+          transition={props.transition}
+          round={round}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
-          looseRound={this.state.looseRound}
-          attempt={this.state.attempt}
-          score={this.state.score}
-          previousScore={this.state.previousScore}
-          resetScoreForNextGame={this.resetScoreForNextGame}
-          beginRoundSound={this.beginRoundSound}
-          isAudioOn={this.state.isAudioOn}
-          startGameClickHandler={this.startGameClickHandler}
+          looseRound={looseRound}
+          attempt={attempt}
+          score={score}
+          previousScore={previousScore}
+          resetScoreForNextGame={resetScoreForNextGame}
+          beginRoundSound={beginRoundSound}
+          isAudioOn={isAudioOn}
+          startGameClickHandler={startGameClickHandler}
           />
 
         <State is={['gameOver', 'gameOverTransition']}>
           <GameOverScreen
-            score={this.state.score}
-            leaderboardData={this.state.leaderboardData}
-            transition={this.props.transition}
+            score={score}
+            leaderboardData={leaderboardData}
+            transition={props.transition}
           />
         </State>
 
          <State is={['leaderboard', 'joinLeaderboard', 'leaderboardAPICall', 'noLeaderboardPlayAgain']}>
            <Leaderboard
-             leaderboardData={this.state.leaderboardData}
-             score={this.state.score}
-             value={this.state.value}
-             handleChange={this.handleChange}
-             handleSubmit={this.handleSubmit}
-             newLeaderboardInductee={this.state.newLeaderboardInductee}
-             resetScoreForNextGame={this.resetScoreForNextGame}
-             transition={this.props.transition}
+             leaderboardData={leaderboardData}
+             score={score}
+             value={value}
+             handleChange={handleChange}
+             handleSubmit={handleSubmit}
+             newLeaderboardInductee={newLeaderboardInductee}
+             resetScoreForNextGame={resetScoreForNextGame}
+             transition={props.transition}
            />
           </State>
 
           <div id="game-field">
             <State is={['homeScreenPractice','roundN', 'roundFinal', 'incrementRoundCounter', 'attemptN', 'checkColor', 'colorGuessCorrect', 'colorGuessIncorrect', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution', 'playerWinsRoundFinalRound', 'playerLoosesRoundFinalRound', 'gameOver', 'gameOverTransition']}>
             <GameField
-              colorRound={this.state.colorRound}
-              currentField={this.state.currentField}
-              leftField={this.state.leftField}
-              rightField={this.state.rightField}
+              colorRound={colorRound}
+              currentField={currentField}
+              leftField={leftField}
+              rightField={rightField}
               />
 
             <ColorBubbleTray
-              round={this.state.round}
-              allColorBubbles={this.state.allColorBubbles}
-              updateFieldColor={this.updateFieldColor}
-              currentField={this.state.currentField}
-              leftField={this.state.leftField}
-              rightField={this.state.rightField}
-              currentFieldMouseEnter={this.currentFieldMouseEnter}
-              currentFieldMouseLeave={this.currentFieldMouseLeave}
-              bubbleClickHandler={this.bubbleClickHandler}
+              round={round}
+              allColorBubbles={allColorBubbles}
+              updateFieldColor={updateFieldColor}
+              currentField={currentField}
+              leftField={leftField}
+              rightField={rightField}
+              currentFieldMouseEnter={currentFieldMouseEnter}
+              currentFieldMouseLeave={currentFieldMouseLeave}
+              bubbleClickHandler={bubbleClickHandler}
               />
           </State>
          </div>
@@ -830,8 +811,8 @@ playerWinsPoints() {
              <Byline />
 
              <AudioToggle
-               soundButtonToggle={this.soundButtonToggle}
-               isAudioOn={this.state.isAudioOn}
+               soundButtonToggle={soundButtonToggle}
+               isAudioOn={isAudioOn}
                />
 
          </footer>
@@ -839,7 +820,6 @@ playerWinsPoints() {
       </div>
     </div>
     )
-  }
 };
 
 export default withStateMachine(statechart)(App);

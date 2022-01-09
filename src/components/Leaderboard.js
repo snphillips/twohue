@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import LeaderboardForm from "./LeaderboardForm";
 import { State } from "react-automata";
 // the spinner in a dependency
 import ReactSpinners from "./ReactSpinners";
 
-/* ========================
+/*
+========================
 Map over the array of leaderboard winners.
 Return an unordered list <ul>.
 Each list item <li> contains the players number in the list,
@@ -18,16 +19,15 @@ a server error, the leaderboard donesn't display.
 ========================
 */
 
-export default class Leaderboard extends Component {
-  render() {
+export default function Leaderboard(props) {
     return (
       <div id="leaderboard-component">
         <State is={["leaderboard", "joinLeaderboard", "leaderboardAPICall"]}>
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">
-            {this.props.leaderboardData.map((item) => {
-              let playerIndex = this.props.leaderboardData.indexOf(item);
+            {props.leaderboardData.map((item) => {
+              let playerIndex = props.leaderboardData.indexOf(item);
 
               return (
                 <li
@@ -48,14 +48,14 @@ export default class Leaderboard extends Component {
         <div className="lederboard-form-placeholder">
           <State is={["joinLeaderboard", "leaderboardAPICall"]}>
             <LeaderboardForm
-              handleChange={this.props.handleChange}
-              handleSubmit={this.props.handleSubmit}
-              newLeaderboardInductee={this.props.newLeaderboardInductee}
+              handleChange={props.handleChange}
+              handleSubmit={props.handleSubmit}
+              newLeaderboardInductee={props.newLeaderboardInductee}
             />
           </State>
 
           <State is={["leaderboardAPICall"]}>
-            <ReactSpinners loading={this.props.loading} />
+            <ReactSpinners loading={props.loading} />
           </State>
         </div>
 
@@ -70,10 +70,10 @@ export default class Leaderboard extends Component {
           <button
             className="play-again-button"
             onClick={() => {
-              this.props.resetScoreForNextGame();
-              this.setState({ confettiFalling: false });
-              this.setState({ playerWinRound: false });
-              this.props.transition("START_GAME");
+              props.resetScoreForNextGame();
+              // setState({ confettiFalling: false });
+              // setState({ playerWinRound: false });
+              props.transition("START_GAME");
             }}
           >
             play again
@@ -81,5 +81,4 @@ export default class Leaderboard extends Component {
         </State>
       </div>
     );
-  }
 }
