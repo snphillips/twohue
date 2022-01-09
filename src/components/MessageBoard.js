@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { State } from 'react-automata';
 
 
-// ==================================
-// Using react-automata's "State"
-// (yes- we have React-state & State-maching-state...it gets confusing)
-// UI elements will only display when the game is in certain states.
-// Note: you can have multiple states in the State arrays
-// ==================================
+/*
+==================================
+Using react-automata's "State"
+(yes- we have React-state & State-maching-state...
+it gets confusing) UI elements will only display when
+the game is in certain states. Note: you can have
+multiple states in the State arrays
+==================================
+*/
 
 
-export default class MessageBoard extends Component {
-  render() {
+export default function MessageBoard(props) {
     return (
 
       <section className="message-board">
@@ -30,9 +32,5 @@ export default class MessageBoard extends Component {
     </section>
 
     );
-  }
 };
 
-        // <State is={['attemptN']}>
-        //   <p>Select two colors</p>
-        // </State>

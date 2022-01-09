@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { State } from 'react-automata';
 
 
-// ==============================
-// The set of 'color bubbles'
-// at the bottom on the game field.
+/*
+==============================
+The set of 'color bubbles'
+at the bottom on the game field.
 
-// The helper arrows only display during 'homeScreenPractice',
-// as indicated by <State is={['homeScreenPractice']}>
-// ==============================
+The helper arrows only display during 'homeScreenPractice',
+as indicated by <State is={['homeScreenPractice']}>
+==============================
+*/
 
 
 
-export default class ColorBubbleTray extends Component {
-  render() {
+export default function ColorBubbleTray(props) {
 
-    // console.log("this.state.allColorBubbles in ColorBubbleTray", this.props.allColorBubbles)
+    // console.log("state.allColorBubbles in ColorBubbleTray", props.allColorBubbles)
 
     return (
 
@@ -36,9 +37,9 @@ export default class ColorBubbleTray extends Component {
         </State>
 
        {
-       this.props.allColorBubbles.map( item => {
+       props.allColorBubbles.map( item => {
 
-         let imageIndex = this.props.allColorBubbles.indexOf(item)
+         let imageIndex = props.allColorBubbles.indexOf(item)
 
          return(
             <div
@@ -46,13 +47,13 @@ export default class ColorBubbleTray extends Component {
               className="bubble"
               id={"bubble-" + imageIndex}
               style={{
-                'backgroundColor': this.props.allColorBubbles[imageIndex],
+                'backgroundColor': props.allColorBubbles[imageIndex],
                  transition: 'all 3s'
               }}
-              onMouseEnter={this.props.currentFieldMouseEnter}
-              onMouseLeave={this.props.currentFieldMouseLeave}
+              onMouseEnter={props.currentFieldMouseEnter}
+              onMouseLeave={props.currentFieldMouseLeave}
               onClick={ (event) => {
-                this.props.bubbleClickHandler(event)
+                props.bubbleClickHandler(event)
               }}
                 >
                 &nbsp;
@@ -71,12 +72,10 @@ export default class ColorBubbleTray extends Component {
               S18.707,9.212,18.271,9.212z"></path>
            </svg>
           </div>
-      </State>
+        </State>
 
 
-    </section>
-
+      </section>
 
     );
-  }
 }

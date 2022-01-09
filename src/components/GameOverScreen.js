@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react';
 
 /*
 =========================================
@@ -18,7 +18,9 @@ let displayGameOver = () => {
 
 export default function GameOverScreen(props) {
 
-  // componentDidMount() {
+  // useEffect has empty array as dependency.
+  // Will only run upon render
+    useEffect(() => {
     // Begin "game over" animation once the component has mounted
     displayGameOver();
     // End animation once the component has mounted
@@ -28,6 +30,7 @@ export default function GameOverScreen(props) {
       document.getElementById("game-over-container").classList.add("pop-out");
     }, 2500);
   // }
+}, []);
 
     return (
       <div id="game-over-container" className="pop-in">

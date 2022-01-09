@@ -3,8 +3,7 @@ import React from 'react';
 import { BounceLoader} from 'react-spinners';
 
 
-export default class ReactSpinner extends React.Component {
-  render() {
+export default function ReactSpinner(props) {
     return (
       <span className='react-spinner'>
         <BounceLoader
@@ -15,5 +14,4 @@ export default class ReactSpinner extends React.Component {
         />
       </span>
     )
-  }
-}
+};

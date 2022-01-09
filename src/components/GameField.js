@@ -1,35 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
-export default class GameField extends Component {
-  render() {
-    return (
+export default function GameField(props) {
+  return (
+    <div>
+      <div id="target-swatch"
+          className=""
+          style={{'backgroundColor': props.colorRound.targetColor}} >
+          &nbsp;
+        <span className="tooltiptext">target color</span>
+      </div>
 
-  <div>
-    <div id="target-swatch"
-         className=""
-         style={{'backgroundColor': this.props.colorRound.targetColor}} >
-         &nbsp;
-      <span className="tooltiptext">target color</span>
+      <section id="left-and-right-field">
+
+        <div className="field"
+            id="left-field"
+            style={props.leftField}
+            >&nbsp;
+        </div>
+
+        <div className="field"
+            id="right-field"
+            style={props.rightField}
+            >&nbsp;
+        </div>
+      </section>
     </div>
-
-    <section id="left-and-right-field">
-
-      <div className="field"
-           id="left-field"
-           style={this.props.leftField}
-           >&nbsp;
-      </div>
-
-      <div className="field"
-           id="right-field"
-           style={this.props.rightField}
-           >&nbsp;
-      </div>
-    </section>
-
-  </div>
-
-    );
-  }
+  );
 }

@@ -1,18 +1,15 @@
 import React from 'react';
 
-// ================================
-// View handleChange & handleSubmit in App.js
-// ================================
+// Find  handleChange & handleSubmit in App.js
 
 
-export default class LeaderboardForm extends React.Component {
-  render() {
+export default function LeaderboardForm(props) {
     return (
 
         <div className="leaderboard-form">
 
           <form
-            onSubmit={this.props.handleSubmit}
+            onSubmit={props.handleSubmit}
             >
 
           <label>
@@ -21,8 +18,8 @@ export default class LeaderboardForm extends React.Component {
               type="text"
               name="name"
               placeholder='nickname (max 12 char)'
-              value={this.props.newLeaderboardInductee}
-              onChange={this.props.handleChange}
+              value={props.newLeaderboardInductee}
+              onChange={props.handleChange}
               />
           </label>
 
@@ -36,7 +33,6 @@ export default class LeaderboardForm extends React.Component {
 
         </div>
     );
-  }
 }
 
 
