@@ -19,8 +19,15 @@ a server error, the leaderboard donesn't display.
 */
 
 export default function Leaderboard(props) {
+
+  let displayLeaderboardStyle;
+  props.displayLeaderboard ? displayLeaderboardStyle = 'block' : displayLeaderboardStyle = 'none'
+
     return (
-      <div id="leaderboard-component">
+      <div 
+        id="leaderboard-component"
+        style={{display: displayLeaderboardStyle}}
+      >
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">

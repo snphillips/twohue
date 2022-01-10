@@ -35,6 +35,8 @@ export default function App(props) {
   const [displayConfetti, setDisplayConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displayGameOver, setDisplayGameOver] = useState(false);
+  // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
+  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -782,6 +784,7 @@ export default function App(props) {
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             gameState={gameState}
+            displayLeaderboard={displayLeaderboard}
           />
 
         <div id='game-field'>
