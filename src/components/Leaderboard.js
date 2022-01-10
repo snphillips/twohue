@@ -49,16 +49,9 @@ export default function Leaderboard(props) {
               newLeaderboardInductee={props.newLeaderboardInductee}
             />
 
-            <ReactSpinners loading={props.loading} />
+            <ReactSpinners loadingSpinner={props.loadingSpinner} />
         </div>
 
-          is={[
-            "leaderboard",
-            "joinLeaderboard",
-            "noLeaderboardPlayAgain",
-            "leaderboardAPICall",
-          ]}
-        >
           <button
             className="play-again-button"
             onClick={() => {

@@ -10,7 +10,7 @@ export default function ReactSpinner(props) {
           sizeUnit={"px"}
           size={30}
           color={'#000'}
-          loading={props.loading}
+          loading={props.loadingSpinner}
         />
       </span>
     )

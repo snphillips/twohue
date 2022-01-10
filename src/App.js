@@ -25,6 +25,14 @@ let previsAudioOn;
 let solutionColors;
 
 export default function App(props) {
+  // gameStates: 'loading', 'homeScreenPractice', 'startRoundN',
+  // 'roundN', 'incrementRound', 'setUpColorRound', 'playRound',
+  // 'attemptN', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution',
+  // 'gameOver', 'gameOverTransition', 'joinLeaderboard',
+  // 'viewLeaderboard', 'leaderboardAPICall' 
+  const [gameState, setGameState] = useState('loading');
+  const [confettiFalling, setConfettiFalling] = useState(false);
+  const [loadingSpinner, setLoadingSpinner] = useState(false)
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [looseRound, setLooseRound] = useState(0);
@@ -39,26 +47,50 @@ export default function App(props) {
   const [leftField, setLeftField] = useState({ backgroundColor: '#fff' });
   const [rightField, setRightField] = useState({ backgroundColor: '#fff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
-  const [confettiFalling, setConfettiFalling] = useState([]);
-  const [playerWinRound, setPlayerWinRound] = useState([]);
+  const [playerWinRound, setPlayerWinRound] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
 
-  /*  =================================
-State Machine On Entry States
-All the component's methods whose names match the names
-of actions and activities, are fired when the related
-transition happen.
+  /*
+   =================================
+  State Machine On Entry States
+  All the component's methods whose names match the names
+  of actions and activities, are fired when the related
+  transition happen.
 
- Actions receive the state and the event as arguments.
- Find the 'actions' & 'activities' in statechart.js
- ================================= */
-  function readyAction() {
-    console.log('readyAction() hello player');
+   Actions receive the state and the event as arguments.
+   Find the 'actions' & 'activities' in statechart.js
+ ================================= 
+ */
+  function initializeGame() {
+    console.log('initializeGame() hello player');
     generateColorRound();
     // props.transition('READY')
   }
+
+  // Here's where the app begins.
+  // Run this only on first render (as evidences by empty array)
+  useEffect(() => {
+    // props.transition('READY');
+    initializeGame();
+    // console.log('statechart:', statechart)
+    // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
+    axiosGetAllLeaderboardResults();
+
+    // A couple things change depending on whether
+    // we're in production vs. development
+    if (process.env.NODE_ENV === 'production') {
+      console.log = function () {};
+      // setisAudioOn: true})
+    } else if (process.env.NODE_ENV === 'development') {
+      maxLossCount = 1;
+      maxAttemptCount = 3;
+      confettiRecycling = false;
+    }
+  }, []);
+
+
 
   function homeScreenPractice() {
     console.log('homeScreenPractice() Do you want to practice?');
@@ -281,26 +313,7 @@ transition happen.
   // *****************************************************
   // *****************************************************
 
-  // Here's where the app begins.
-  // Run this only on first render (as evidences by empty array)
-  useEffect(() => {
-    // props.transition('READY');
-    readyAction();
-    // console.log('statechart:', statechart)
-    // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
-    axiosGetAllLeaderboardResults();
 
-    // A couple things change depending on whether
-    // we're in production vs. development
-    if (process.env.NODE_ENV === 'production') {
-      console.log = function () {};
-      // setisAudioOn: true})
-    } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 1;
-      maxAttemptCount = 3;
-      confettiRecycling = false;
-    }
-  }, []);
 
 
   function calculateNumWrongColorBubbles() {
@@ -428,7 +441,7 @@ transition happen.
 
   function startGameClickHandler() {
     console.log('start game click handler');
-    props.transition('START_GAME');
+    // props.transition('START_GAME');
   }
 
   //  ==================================================================
@@ -527,7 +540,6 @@ transition happen.
     // 'style.backgroundColor' takes whatever background color
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
-    props.transition('SELECT_COLOR');
   }
 
   //  ==================================
@@ -721,15 +733,6 @@ transition happen.
           opacity={0.6}
           gravity={0.6}
         />
-
-        is={[
-          'gameOver',
-          'gameOverTransition',
-          'joinLeaderboard',
-          'leaderboardAPICall',
-          'leaderboard',
-        ]}
-      >
         <Confetti
           width={width}
           height={height}
@@ -760,7 +763,6 @@ transition happen.
           <GameOverScreen
             score={score}
             leaderboardData={leaderboardData}
-            transition={props.transition}
           />
 
           <Leaderboard
@@ -771,7 +773,7 @@ transition happen.
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
             resetScoreForNextGame={resetScoreForNextGame}
-            transition={props.transition}
+            loadingSpinner={loadingSpinner}
           />
 
         <div id='game-field'>
