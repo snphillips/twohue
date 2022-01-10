@@ -25,13 +25,15 @@ let previsAudioOn;
 let solutionColors;
 
 export default function App(props) {
-  // gameStates: 'loading', 'homeScreenPractice', 'startRoundN',
+  // gameStates: 
+  // 'loading', 'homeScreenPractice', 'startRoundN',
   // 'roundN', 'incrementRound', 'setUpColorRound', 'playRound',
   // 'attemptN', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution',
   // 'gameOver', 'gameOverTransition', 'joinLeaderboard',
   // 'viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
-  const [confettiFalling, setConfettiFalling] = useState(false);
+  const [displayConfetti, setDisplayConfetti] = useState(false);
+  const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -65,19 +67,19 @@ export default function App(props) {
  */
   function initializeGame() {
     console.log('initializeGame() hello player');
-    generateColorRound();
-    // props.transition('READY')
+    generateColorRound( ( () => {
+      setGameState('homeScreenPractice')
+    }));
   }
-
+  
+  
   // Here's where the app begins.
   // Run this only on first render (as evidences by empty array)
   useEffect(() => {
-    // props.transition('READY');
     initializeGame();
-    // console.log('statechart:', statechart)
     // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
     axiosGetAllLeaderboardResults();
-
+    
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
@@ -89,9 +91,11 @@ export default function App(props) {
       confettiRecycling = false;
     }
   }, []);
-
-
-
+  
+  useEffect(() => {
+    console.log('gameSate is:', gameState)
+  })
+    
   function homeScreenPractice() {
     console.log('homeScreenPractice() Do you want to practice?');
   }
@@ -102,7 +106,7 @@ export default function App(props) {
 
   function roundN() {
     beginRoundSound();
-    setConfettiFalling(false);
+    setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
     // props.transition('INCREMENT_ROUND_COUNTER');
@@ -171,7 +175,7 @@ export default function App(props) {
   function playerWinsRound() {
     playWinSound();
     setPlayerWinRound(true);
-    setConfettiFalling(true);
+    setDisplayConfetti(true);
     playerWinsPoints();
 
     console.log('player wins round');
@@ -238,14 +242,12 @@ export default function App(props) {
     setAttempt(0);
     setRound(0);
     setLooseRound(0);
-    setConfettiFalling(true);
-    props.transition('GAME_OVER_TRANSITION');
+    setDisplayConfetti(true);
   }
 
   function gameOverTransition() {
     if (leaderboardServerDown === true) {
       console.log('leaderboard is not available');
-      props.transition('DO_NOT_JOIN_LEADERBOARD');
     }
 
     let evaluateIfLeaderboardMaterial = () => {
@@ -274,7 +276,6 @@ export default function App(props) {
         //
       } else {
         console.log('score is lower than lowestCurrentScore');
-        props.transition('DO_NOT_JOIN_LEADERBOARD');
       }
     };
 
@@ -441,7 +442,6 @@ export default function App(props) {
 
   function startGameClickHandler() {
     console.log('start game click handler');
-    // props.transition('START_GAME');
   }
 
   //  ==================================================================
@@ -450,7 +450,7 @@ export default function App(props) {
   //  otherwise it will revert to none.
   //  ==================================================================
   function currentFieldMouseEnter() {
-    if (confettiFalling === true) return;
+    if (displayConfetti === true) return;
     else if (currentField === 'leftField') {
       setLeftField({
         border: '8px solid #abb2b9',
@@ -465,7 +465,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (confettiFalling === true) return;
+    if (displayConfetti === true) return;
 
     if (currentField === 'leftField') {
       setLeftField({
@@ -530,7 +530,7 @@ export default function App(props) {
     if (looseRound > maxLossCount) return;
     if (attempt >= maxAttemptCount) return;
     if (playerWinsRound === true) return;
-    if (confettiFalling === true) return;
+    if (displayConfetti === true) return;
 
     setAttempt(attempt + 1);
     bubbleSound();
@@ -725,23 +725,25 @@ export default function App(props) {
         <Confetti
           width={width}
           height={height}
-          run={confettiFalling}
+          run={displayConfetti}
           numberOfPieces={300}
           recycle={false}
           tweenDuration={100}
           colors={colorRound.allColorBubbles}
           opacity={0.6}
           gravity={0.6}
+          gameState={gameState}
         />
         <Confetti
           width={width}
           height={height}
-          run={confettiFalling}
+          run={displayConfetti}
           numberOfPieces={600}
           recycle={confettiRecycling}
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
+          gameState={gameState}
         />
 
       <div className='twohue'>
@@ -758,11 +760,14 @@ export default function App(props) {
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
+          gameState={gameState}
+          displayScoreBoard={displayScoreBoard}
         />
 
           <GameOverScreen
             score={score}
             leaderboardData={leaderboardData}
+            gameState={gameState}
           />
 
           <Leaderboard
@@ -774,6 +779,7 @@ export default function App(props) {
             newLeaderboardInductee={newLeaderboardInductee}
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
+            gameState={gameState}
           />
 
         <div id='game-field'>
@@ -783,6 +789,7 @@ export default function App(props) {
               currentField={currentField}
               leftField={leftField}
               rightField={rightField}
+              gameState={gameState}
             />
 
             <ColorBubbleTray
@@ -795,6 +802,7 @@ export default function App(props) {
               currentFieldMouseEnter={currentFieldMouseEnter}
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
+              gameState={gameState}
             />
         </div>
 
