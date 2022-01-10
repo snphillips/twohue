@@ -27,6 +27,7 @@ export default function Header(props) {
         startGameClickHandler={props.startGameClickHandler}
         gameState={props.gameState}
         displayScoreBoard={props.displayScoreBoard}
+        displayStartButton={props.displayStartButton}
       />
     </header>
   );

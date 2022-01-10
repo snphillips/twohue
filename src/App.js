@@ -35,6 +35,8 @@ export default function App(props) {
   const [displayConfetti, setDisplayConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displayGameOver, setDisplayGameOver] = useState(false);
+  const [displaySolution, setDisplaySolution] = useState(false);
+  const [displayStartButton, setDisplayStartButton] = useState(true);
   // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
@@ -64,8 +66,8 @@ export default function App(props) {
   of actions and activities, are fired when the related
   transition happen.
 
-   Actions receive the state and the event as arguments.
-   Find the 'actions' & 'activities' in statechart.js
+  Actions receive the state and the event as arguments.
+  Find the 'actions' & 'activities' in statechart.js
  ================================= 
  */
   function initializeGame() {
@@ -98,21 +100,29 @@ export default function App(props) {
   useEffect(() => {
     console.log('gameSate is:', gameState)
   })
+
+  function startGameClickHandler() {
+    console.log('start game click handler');
+    roundN()
+  }
     
   function homeScreenPractice() {
     console.log('homeScreenPractice() Do you want to practice?');
   }
 
   function startRoundN() {
-    // props.transition('FADE_IN_ROUND');
+
   }
 
   function roundN() {
+    generateColorRound();
+    setGameState('roundN')
+    setDisplayStartButton(false)
+    setDisplayScoreBoard(true)
     beginRoundSound();
     setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
-    // props.transition('INCREMENT_ROUND_COUNTER');
   }
 
   function incrementRoundCounter() {
@@ -443,9 +453,7 @@ export default function App(props) {
     setWrongColors(wrongColorsArray);
   }
 
-  function startGameClickHandler() {
-    console.log('start game click handler');
-  }
+
 
   //  ==================================================================
   //  Hover handler for color bubbles - shows player which field of the
@@ -765,6 +773,7 @@ export default function App(props) {
           startGameClickHandler={startGameClickHandler}
           gameState={gameState}
           displayScoreBoard={displayScoreBoard}
+          displayStartButton={displayStartButton}
         />
 
           <GameOverScreen
@@ -795,6 +804,7 @@ export default function App(props) {
               leftField={leftField}
               rightField={rightField}
               gameState={gameState}
+              displaySolution={displaySolution}
             />
 
             <ColorBubbleTray

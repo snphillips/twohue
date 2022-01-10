@@ -14,12 +14,22 @@ homeScreenPractice or showSolution
 */
 
 export default function MessageBoard(props) {
+
+  let solutionStyle;
+  props.displayScoreBoard ? solutionStyle = 'block' : solutionStyle = 'none'
+
   return (
     <section className="message-board">
       <p>Twohue is a color mixing game.</p>
       <p>Practice clicking bubbles before playing.</p>
 
-      <p>Solution</p>
+      <p
+        className="solution-label"
+        style={{
+          display: solutionStyle
+        }}>
+        Solution
+      </p>
     </section>
   );
 }

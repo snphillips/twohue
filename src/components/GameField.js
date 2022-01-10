@@ -6,11 +6,9 @@ export default function GameField(props) {
   console.log('props.colorRound.targetColor:', props.colorRound.targetColor)
   console.log('props.colorRound:', props.colorRound)
   
-  
   return (
     <div>
       <div id="target-swatch"
-          className=""
           style={
             {
               'backgroundColor': props.colorRound.targetColor
