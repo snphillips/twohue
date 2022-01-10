@@ -18,6 +18,9 @@ let displayGameOver = () => {
 
 export default function GameOverScreen(props) {
 
+  let gameOverDisplay;
+  props.displayGameOver ? gameOverDisplay = 'block' : gameOverDisplay = 'none'
+
   // useEffect has empty array as dependency.
   // Will only run upon render
     useEffect(() => {
@@ -33,7 +36,11 @@ export default function GameOverScreen(props) {
 }, []);
 
     return (
-      <div id="game-over-container" className="pop-in">
+      <div 
+        id="game-over-container"
+        className="pop-in"
+        style={{display: gameOverDisplay}}
+        >
         <p id="game-over">game over</p>
         <p id="game-over-score">final score: {props.score}</p>
       </div>

@@ -34,6 +34,7 @@ export default function App(props) {
   const [gameState, setGameState] = useState('loading');
   const [displayConfetti, setDisplayConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
+  const [displayGameOver, setDisplayGameOver] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -768,6 +769,7 @@ export default function App(props) {
             score={score}
             leaderboardData={leaderboardData}
             gameState={gameState}
+            displayGameOver={displayGameOver}
           />
 
           <Leaderboard
