@@ -13,8 +13,6 @@
 // https://github.com/MicheleBertoli/react-automata
 // ==============================
 
-
-
 // ==============================
 // React Automata State Chart
 // States, TRANSITIONS, & Functions
@@ -84,20 +82,20 @@ const statechart = {
       onEntry: 'playerWinsRound',
       on: {
         FADE_IN_ROUND: 'roundN',
-        NO_MORE_ROUNDS: 'gameOver'
+        NO_MORE_ROUNDS: 'gameOver',
       },
     },
     playerLoosesRound: {
       onEntry: 'playerLoosesRound',
       on: {
-        SHOW_SOLUTION: 'showSolution'
+        SHOW_SOLUTION: 'showSolution',
       },
     },
     showSolution: {
       onEntry: 'showSolution',
       on: {
         NEXT_ROUND: 'roundN',
-        NO_MORE_ROUNDS: 'gameOver'
+        NO_MORE_ROUNDS: 'gameOver',
       },
     },
     gameOver: {
@@ -105,15 +103,15 @@ const statechart = {
       on: {
         GAME_OVER_TRANSITION: 'gameOverTransition',
       },
-     },
+    },
     gameOverTransition: {
       onEntry: 'gameOverTransition',
       on: {
         JOIN_LEADERBOARD: 'joinLeaderboard',
         DO_NOT_JOIN_LEADERBOARD: 'leaderboard',
-        SERVER_ERROR_SKIP_LEADERBOARD: 'noLeaderboardPlayAgain'
+        SERVER_ERROR_SKIP_LEADERBOARD: 'noLeaderboardPlayAgain',
       },
-     },
+    },
     joinLeaderboard: {
       onEntry: 'joinLeaderboard',
       on: {
@@ -131,10 +129,10 @@ const statechart = {
       onEntry: 'leaderboard',
       on: {
         START_GAME: 'startRoundN',
-        DONT_PLAY_AGAIN: 'homeScreenPractice'
-      }
-    }
-}
-}
+        DONT_PLAY_AGAIN: 'homeScreenPractice',
+      },
+    },
+  },
+};
 
 export default statechart;

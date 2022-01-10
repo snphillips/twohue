@@ -1,6 +1,5 @@
 import React from "react";
 import LeaderboardForm from "./LeaderboardForm";
-import { State } from "react-automata";
 // the spinner in a dependency
 import ReactSpinners from "./ReactSpinners";
 
@@ -22,7 +21,6 @@ a server error, the leaderboard donesn't display.
 export default function Leaderboard(props) {
     return (
       <div id="leaderboard-component">
-        <State is={["leaderboard", "joinLeaderboard", "leaderboardAPICall"]}>
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">
@@ -43,23 +41,17 @@ export default function Leaderboard(props) {
               );
             })}
           </ul>
-        </State>
 
         <div className="lederboard-form-placeholder">
-          <State is={["joinLeaderboard", "leaderboardAPICall"]}>
             <LeaderboardForm
               handleChange={props.handleChange}
               handleSubmit={props.handleSubmit}
               newLeaderboardInductee={props.newLeaderboardInductee}
             />
-          </State>
 
-          <State is={["leaderboardAPICall"]}>
             <ReactSpinners loading={props.loading} />
-          </State>
         </div>
 
-        <State
           is={[
             "leaderboard",
             "joinLeaderboard",
@@ -78,7 +70,6 @@ export default function Leaderboard(props) {
           >
             play again
           </button>
-        </State>
       </div>
     );
 }

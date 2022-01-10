@@ -1,6 +1,6 @@
 import React from 'react';
 //react-spinners is an npm package
-import { BounceLoader} from 'react-spinners';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 
 export default function ReactSpinner(props) {
@@ -10,7 +10,7 @@ export default function ReactSpinner(props) {
           sizeUnit={"px"}
           size={30}
           color={'#000'}
-          loading={this.props.loading}
+          loading={props.loading}
         />
       </span>
     )

@@ -1,6 +1,4 @@
-import React from 'react';
-import { State } from 'react-automata';
-
+import React from "react";
 
 /*
 ==================================
@@ -15,25 +13,13 @@ homeScreenPractice or showSolution
 ==================================
 */
 
-
 export default function MessageBoard(props) {
-    return (
+  return (
+    <section className="message-board">
+      <p>Twohue is a color mixing game.</p>
+      <p>Practice clicking bubbles before playing.</p>
 
-      <section className="message-board">
-
-        <State is={['homeScreenPractice']}>
-          <p>Twohue is a color mixing game.</p>
-          <p>Practice clicking bubbles before playing.</p>
-        </State>
-
-
-        <State is={['showSolution']}>
-          <p>Solution</p>
-        </State>
-
-
+      <p>Solution</p>
     </section>
-
-    );
-};
-
+  );
+}
