@@ -28,7 +28,7 @@ export default function GameOverScreen(props) {
     displayGameOver();
     // End animation once the component has mounted
     setTimeout(function(){
-      console.log("game over pop-out");
+      // console.log("game over pop-out");
       document.getElementById("game-over-container").classList.remove("pop-in");
       document.getElementById("game-over-container").classList.add("pop-out");
     }, 2500);

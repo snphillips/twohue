@@ -42,7 +42,7 @@ export default function App(props) {
   // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
-  const [round, setRound] = useState(0);
+  const [round, setRound] = useState(7);
   const [attempt, setAttempt] = useState(0);
   const [looseRound, setLooseRound] = useState(0);
   const [previousScore, setPreviousScore] = useState(0);
@@ -74,9 +74,9 @@ export default function App(props) {
  */
   function initializeGame() {
     console.log('initializeGame() hello player');
-    generateColorRound( ( () => {
+    generateColorRound(  () => {
       setGameState('homeScreenPractice')
-    }));
+    });
   }
   
   
@@ -94,13 +94,13 @@ export default function App(props) {
       // setisAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 2;
-      maxAttemptCount = 3;
+      maxAttemptCount = 4;
       confettiRecycling = false;
     }
   }, []);
   
   useEffect(() => {
-    console.log('gameSate is:', gameState)
+    console.log('!!!!!!! gameState is:', gameState)
   })
   
   function startGameClickHandler() {
@@ -111,9 +111,10 @@ export default function App(props) {
     setDisplayScoreBoard(true)
     roundN()
   }
+
     
   function homeScreenPractice() {
-    console.log('homeScreenPractice() Do you want to practice?');
+    console.log('**** homeScreenPractice() Do you want to practice?');
   }
 
   function startRoundN() {
@@ -121,29 +122,37 @@ export default function App(props) {
   }
 
   function roundN() {
-    generateColorRound();
     setGameState('roundN')
+    incrementRoundCounter()
     beginRoundSound();
     setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
+    // generateColorRound();
+    console.log("&&&&&& round & numWrongColorBubbles:", round, numWrongColorBubbles)
   }
 
   function incrementRoundCounter() {
     if (looseRound >= maxLossCount) {
-      props.transition('NO_MORE_ROUNDS');
     } else if (looseRound < maxLossCount) {
-      setRound(round + 1);
-      calculateNumWrongColorBubbles();
-      // props.transition('SET_UP_COLOR_ROUND');
+      setRound(round => round + 1);
     }
   }
+
+  useEffect(() => {
+    calculateNumWrongColorBubbles();
+  }, [round])
+
+  useEffect(() => {
+    console.log("nuWrongColorBubbles changed. Generate color bubbles:", numWrongColorBubbles)
+    generateColorRound();
+  }, [numWrongColorBubbles])
 
   function setUpColorRound() {
     // Sarah pay attention to this.
     setLeftField({ backgroundColor: '#fff' });
     setRightField({ backgroundColor: '#fff' });
-    generateColorRound();
+    // generateColorRound();
     // props.transition('PLAY_ROUND');
   }
 
@@ -333,36 +342,35 @@ export default function App(props) {
 
 
 
-
+  /*
+  The game gets harder by increasing the number of 
+  "wrong color bubbles" to choose from. The first round has 1 
+  wrong bubble (therefore 3 bubbles total), the second round has  
+  2 wrong bubbles (therefore 4 bubbles total) and so on.
+  The max number of wrong bubbles is 6.
+  */
   function calculateNumWrongColorBubbles() {
-    let round = round;
-    let numberWrongColorBubbles = 0;
-
     if (round <= 1) {
-      numberWrongColorBubbles = 1;
+      setNumWrongColorBubbles(1);
     } else if (round === 2) {
-      numberWrongColorBubbles = 2;
+      setNumWrongColorBubbles(2);
     } else if (round === 3) {
-      numberWrongColorBubbles = 3;
+      setNumWrongColorBubbles(3);
     } else if (round === 4) {
-      numberWrongColorBubbles = 4;
+      setNumWrongColorBubbles(4);
     } else if (round === 5) {
-      numberWrongColorBubbles = 5;
+      setNumWrongColorBubbles(5);
     } else if (round >= 6) {
-      numberWrongColorBubbles = 6;
+      setNumWrongColorBubbles(6);
     }
-
-    setNumWrongColorBubbles(numberWrongColorBubbles);
   }
 
-  function generateColorRound(numberWrongColorBubbles) {
-    console.log('generate color round');
+  function generateColorRound() {
+    console.log('generate color round with this many numWrongColorBubbles:', numWrongColorBubbles);
     let soluColor1;
     let soluColor2;
     let targColor;
     let colorLightness = 29;
-    // let numWrongColorBubbles = numberWrongColorBubbles;
-    // let numWrongColorBubbles;
     let wrongColorsArray = [];
 
     //=============================
@@ -408,10 +416,13 @@ export default function App(props) {
         // first, empty the array of old colors
         wrongColorsArray = [];
 
+        console.log("numWrongColorBubbles:", numWrongColorBubbles)
+
         for (let i = numWrongColorBubbles; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
         }
         return wrongColorsArray;
+        console.log("wrongColorsArray:", wrongColorsArray)
       },
 
       get solutionColors() {
@@ -423,8 +434,8 @@ export default function App(props) {
 
       // Mix all the color bubbles together
       get allColorBubbles() {
-        console.log('solutionColors:', solutionColors);
-        console.log('wrongColors:', wrongColors);
+        // console.log('solutionColors:', solutionColors);
+        // console.log('wrongColors:', wrongColors);
 
         // The concat() method is used to merge two or more arrays.
         // This method does not change the existing arrays,
@@ -433,10 +444,10 @@ export default function App(props) {
         return newColorRound.solutionColors.concat(newColorRound.wrongColors);
       },
     };
-    console.log('wrongColors:', wrongColors);
-    console.log('solutionColors:', solutionColors);
     console.log('newColorRound:', newColorRound);
+    console.log('wrongColors:', newColorRound.wrongColors);
     console.log('wrongColorArray:', wrongColorsArray);
+    console.log('solutionColors:', solutionColors);
     // ~~~~~~~~~~~~~~~~~~~~~~~~
     // ~~~~~~~~~~~~~~~~~~~~~~~~
 
