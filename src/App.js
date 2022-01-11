@@ -128,6 +128,8 @@ export default function App(props) {
     setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
+    setLeftField({background: 'white'})
+    setRightField({background: 'white'})
     generateColorRound();
     console.log("&&&&&& round & numWrongColorBubbles:", round, numWrongColorBubbles)
   }
@@ -410,7 +412,7 @@ export default function App(props) {
         // first, empty the array of old colors
         wrongColorsArray = [];
 
-        console.log("numWrongColorBubbles:", numWrongColorBubbles)
+        // console.log("numWrongColorBubbles:", numWrongColorBubbles)
 
         for (let i = numWrongColorBubbles; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
