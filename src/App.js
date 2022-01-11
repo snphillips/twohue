@@ -42,7 +42,7 @@ export default function App(props) {
   // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
-  const [round, setRound] = useState(7);
+  const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [looseRound, setLooseRound] = useState(0);
   const [previousScore, setPreviousScore] = useState(0);
@@ -93,8 +93,8 @@ export default function App(props) {
       console.log = function () {};
       // setisAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 2;
-      maxAttemptCount = 4;
+      maxLossCount = 3;
+      maxAttemptCount = 6;
       confettiRecycling = false;
     }
   }, []);
@@ -128,7 +128,7 @@ export default function App(props) {
     setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
-    // generateColorRound();
+    generateColorRound();
     console.log("&&&&&& round & numWrongColorBubbles:", round, numWrongColorBubbles)
   }
 
@@ -142,11 +142,6 @@ export default function App(props) {
   useEffect(() => {
     calculateNumWrongColorBubbles();
   }, [round])
-
-  useEffect(() => {
-    console.log("nuWrongColorBubbles changed. Generate color bubbles:", numWrongColorBubbles)
-    generateColorRound();
-  }, [numWrongColorBubbles])
 
   function setUpColorRound() {
     // Sarah pay attention to this.
@@ -366,7 +361,6 @@ export default function App(props) {
   }
 
   function generateColorRound() {
-    console.log('generate color round with this many numWrongColorBubbles:', numWrongColorBubbles);
     let soluColor1;
     let soluColor2;
     let targColor;
@@ -850,4 +844,3 @@ export default function App(props) {
     </div>
   );
 }
-
