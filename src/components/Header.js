@@ -10,6 +10,7 @@ export default function Header(props) {
 
       <MessageBoard
         transition={props.transition}
+        displayIntroMessage={props.displayIntroMessage}
         resetScoreForNextGame={props.resetScoreForNextGame}
       />
 

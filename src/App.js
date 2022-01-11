@@ -37,6 +37,8 @@ export default function App(props) {
   const [displayGameOver, setDisplayGameOver] = useState(false);
   const [displaySolution, setDisplaySolution] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
+  const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
+  const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
   // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
@@ -91,7 +93,7 @@ export default function App(props) {
       console.log = function () {};
       // setisAudioOn: true})
     } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 1;
+      maxLossCount = 2;
       maxAttemptCount = 3;
       confettiRecycling = false;
     }
@@ -100,9 +102,13 @@ export default function App(props) {
   useEffect(() => {
     console.log('gameSate is:', gameState)
   })
-
+  
   function startGameClickHandler() {
     console.log('start game click handler');
+    setDisplayIntroAnimation(false)
+    setDisplayStartButton(false)
+    setDisplayIntroMessage(false)
+    setDisplayScoreBoard(true)
     roundN()
   }
     
@@ -117,8 +123,6 @@ export default function App(props) {
   function roundN() {
     generateColorRound();
     setGameState('roundN')
-    setDisplayStartButton(false)
-    setDisplayScoreBoard(true)
     beginRoundSound();
     setDisplayConfetti(false);
     setPlayerWinRound(false);
@@ -774,6 +778,7 @@ export default function App(props) {
           gameState={gameState}
           displayScoreBoard={displayScoreBoard}
           displayStartButton={displayStartButton}
+          displayIntroMessage={displayIntroMessage}
         />
 
           <GameOverScreen
@@ -818,6 +823,7 @@ export default function App(props) {
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
               gameState={gameState}
+              displayIntroAnimation={displayIntroAnimation}
             />
         </div>
 
