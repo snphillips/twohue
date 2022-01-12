@@ -65,9 +65,8 @@ export default function App(props) {
   /*
   We can make a useEffect hook not run on initial render
   by creating a variable with useRef hook to keep track
-  of when the first render is done.
-  Set the variable’s value to true initially.
-  When the component is rendered the first time,
+  of when the first render is done. Set the variable’s value
+  to true initially. When the component is rendered the first time,
   set the variable to false.
   */
   const firstUpdate = useRef(true);
@@ -103,7 +102,7 @@ export default function App(props) {
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
       console.log = function () {};
-      // setisAudioOn: true})
+      setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 3;
       maxAttemptCount = 6;
@@ -123,19 +122,15 @@ export default function App(props) {
     setDisplayScoreBoard(true)
     roundN()
   }
-
     
   function homeScreenPractice() {
     console.log('**** homeScreenPractice() Do you want to practice?');
   }
 
-  function startRoundN() {
-
-  }
 
   function roundN() {
-    setGameState('roundN')
     incrementRoundCounter()
+    setGameState('roundN')
     beginRoundSound();
     setDisplayRoundConfetti(false);
     setPlayerWinRound(false);
@@ -177,7 +172,7 @@ export default function App(props) {
       checkSolution()
     } else if (attempt >= maxAttemptCount) {
       // props.transition('OUT_OF_ATTEMPTS');
-      // add out of attempts logic
+      playerLoosesRound()
     }
   }
 
@@ -207,25 +202,25 @@ export default function App(props) {
       // incorrect
     } else {
       // props.transition('INCORRECT_SOLUTION');
-      console.log('INCORRECT attempt:', attempt);
+      console.log('INCORRECT attempt:', attempt);      
     }
   }
 
   function playerWinsRound() {
+    console.log('player wins round');
     playWinSound();
     setPlayerWinRound(true);
     setDisplayRoundConfetti(true);
     playerWinsPoints();
 
-    console.log('player wins round');
-
     let stateTransition = () => {
       if (looseRound < maxLossCount) {
-        // console.log('NEXT_ROUND')
-        // props.transition('FADE_IN_ROUND');
+        console.log('Game not over yet. Onto RoundN')
+        roundN()
       } else if (looseRound >= maxLossCount) {
         console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
         // props.transition('NO_MORE_ROUNDS');
+        gameOver()
       }
     };
 
@@ -239,17 +234,13 @@ export default function App(props) {
     if (looseRound <= maxLossCount) {
       console.log('player looses round');
       playLoseSound();
-      setLooseRound(looseRound + 1);
-      // props.transition('SHOW_SOLUTION');
+      showSolution()
+      setLooseRound(looseRound => looseRound + 1);
     }
   }
 
   function showSolution() {
-    console.log(
-      'showSolution',
-      colorRound.solutionColor1,
-      colorRound.solutionColor2
-    );
+    console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
 
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
@@ -263,10 +254,12 @@ export default function App(props) {
     let transition = () => {
       if (looseRound < maxLossCount) {
         console.log(`props.transition('NEXT_ROUND')`);
-        props.transition('NEXT_ROUND');
+        // props.transition('NEXT_ROUND');
+        roundN()
       } else if (looseRound >= maxLossCount) {
         console.log(`props.transition('NO_MORE_ROUNDS')`);
-        props.transition('NO_MORE_ROUNDS');
+        // props.transition('NO_MORE_ROUNDS');
+        gameOver()
       }
     };
 
@@ -282,6 +275,7 @@ export default function App(props) {
     setRound(0);
     setLooseRound(0);
     setDisplayGameOverConfetti(true);
+    gameOverTransition()
   }
 
   function gameOverTransition() {
@@ -340,20 +334,6 @@ export default function App(props) {
     // axiosGetAllLeaderboardResults()
     // });
   }
-
-  // *****************************************************
-  // ** End State Machine Functions **********************
-  // *****************************************************
-
-  // *****************************************************
-  // *****************************************************
-  // *****************************************************
-  // ** Regular Functions **************************
-  // *****************************************************
-  // *****************************************************
-  // *****************************************************
-
-
 
   /*
   The game gets harder by increasing the number of 
@@ -449,7 +429,7 @@ export default function App(props) {
         // console.log('solutionColors:', solutionColors);
         // console.log('wrongColors:', wrongColors);
 
-        // The concat() method is used to merge two or more arrays.
+        // The concat() method merges two or more arrays.
         // This method does not change the existing arrays,
         // but instead returns a new array.
         // We're merging solutionColors & wrongColors
@@ -518,11 +498,11 @@ export default function App(props) {
     }
   }
 
-  //  ====================================
-  //  Toggling between the left and right fields,
-  //  to determine which
-  //  one will get filled in with color.
-  //  ====================================
+   /* ====================================
+   Toggling between the left and right fields,
+   to determine which
+   one will get filled in with color.
+   ==================================== */
   function toggleLeftRightField() {
     if (currentField === 'leftField') {
       setCurrentField('rightField');
@@ -553,8 +533,8 @@ export default function App(props) {
 
   //  ===================================
   //  Click handler for the color bubbles at bottom of screen
+  //  note: it has to be an arrow style function.
   //  ===================================
-  // note: it has to be an arrow style function.
   function bubbleClickHandler(event) {
     // guard clause to disable click handler if:
     // 1) the game is over,
