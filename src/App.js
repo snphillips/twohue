@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import './App.css';
 import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
@@ -39,7 +39,6 @@ export default function App(props) {
   const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
-  // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [loadingSpinner, setLoadingSpinner] = useState(false)
   const [round, setRound] = useState(0);
@@ -53,13 +52,24 @@ export default function App(props) {
   const [numWrongColorBubbles, setNumWrongColorBubbles] = useState(0);
   const [currentField, setCurrentField] = useState('leftField');
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
-  const [leftField, setLeftField] = useState({ backgroundColor: '#fff' });
-  const [rightField, setRightField] = useState({ backgroundColor: '#fff' });
+  const [leftFieldStyle, setLeftFieldStyle] = useState({ backgroundColor: '#ffffff' });
+  const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [playerWinRound, setPlayerWinRound] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
+  // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
+
+  /*
+  We can make a useEffect hook not run on initial render
+  by creating a variable with useRef hook to keep track
+  of when the first render is done.
+  Set the variable’s value to true initially.
+  When the component is rendered the first time,
+  set the variable to false.
+  */
+  const firstUpdate = useRef(true);
 
   /*
    =================================
@@ -79,9 +89,10 @@ export default function App(props) {
     });
   }
   
-  
+  // ***********************************
   // Here's where the app begins.
   // Run this only on first render (as evidences by empty array)
+  // ***********************************
   useEffect(() => {
     initializeGame();
     // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
@@ -128,10 +139,9 @@ export default function App(props) {
     setDisplayConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
-    setLeftField({background: 'white'})
-    setRightField({background: 'white'})
+    setLeftFieldStyle({backgroundColor: '#ffffff'})
+    setRightFieldStyle({backgroundColor: '#ffffff'})
     generateColorRound();
-    console.log("&&&&&& round & numWrongColorBubbles:", round, numWrongColorBubbles)
   }
 
   function incrementRoundCounter() {
@@ -145,13 +155,18 @@ export default function App(props) {
     calculateNumWrongColorBubbles();
   }, [round])
 
-  function setUpColorRound() {
-    // Sarah pay attention to this.
-    setLeftField({ backgroundColor: '#fff' });
-    setRightField({ backgroundColor: '#fff' });
-    // generateColorRound();
-    // props.transition('PLAY_ROUND');
-  }
+ // Check the solution everytime the attempt changes
+ // Does this work here?
+ // Don't run on first render
+  useEffect( () => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    } else {
+    attemptN()
+    }
+  }, [attempt])
+
 
   function playRound() {
     // props.transition('ATTEMPT_N');
@@ -159,22 +174,26 @@ export default function App(props) {
 
   function attemptN() {
     if (attempt < maxAttemptCount) {
-      // props.transition('CHECK_SOLUTION');
+      checkSolution()
     } else if (attempt >= maxAttemptCount) {
       // props.transition('OUT_OF_ATTEMPTS');
+      // add out of attempts logic
     }
   }
 
   function checkSolution() {
-    let leftFieldBackgroundColor = leftField.backgroundColor;
+    console.log("HIHIHIHI colorRound.solutionColors", colorRound.solutionColors)
+    console.log("rightFieldStyle.backgroundColor", rightFieldStyle.backgroundColor)
+    let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-    let rightFieldBackgroundColor = rightField.backgroundColor;
+    console.log("chroma(leftFieldBackgroundColor).hex();", chroma(leftFieldBackgroundColor).hex())
+    let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
     let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+    console.log("chroma(rightFieldBackgroundColor).hex();", chroma(rightFieldBackgroundColor).hex())
     let solutionColors = colorRound.solutionColors;
-    let attempts = attempt;
 
     // Not enough trys: incorrect
-    if (attempts === 1) {
+    if (attempt === 1) {
       console.log('There has only been one guess. => INCORRECT_SOLUTION');
       // props.transition('INCORRECT_SOLUTION');
 
@@ -191,7 +210,7 @@ export default function App(props) {
       // incorrect
     } else {
       // props.transition('INCORRECT_SOLUTION');
-      console.log('INCORRECT attempts:', attempt);
+      console.log('INCORRECT attempt:', attempt);
     }
   }
 
@@ -235,11 +254,11 @@ export default function App(props) {
       colorRound.solutionColor2
     );
 
-    setLeftField({
+    setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
       animation: 'fadein 1.25s',
     });
-    setRightField({
+    setRightFieldStyle({
       backgroundColor: colorRound.solutionColor2,
       animation: 'fadein 1.25s',
     });
@@ -440,10 +459,10 @@ export default function App(props) {
         return newColorRound.solutionColors.concat(newColorRound.wrongColors);
       },
     };
-    console.log('newColorRound:', newColorRound);
-    console.log('wrongColors:', newColorRound.wrongColors);
-    console.log('wrongColorArray:', wrongColorsArray);
-    console.log('solutionColors:', solutionColors);
+    // console.log('newColorRound:', newColorRound);
+    // console.log('wrongColors:', newColorRound.wrongColors);
+    // console.log('wrongColorArray:', wrongColorsArray);
+    // console.log('solutionColors:', solutionColors);
     // ~~~~~~~~~~~~~~~~~~~~~~~~
     // ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -474,12 +493,12 @@ export default function App(props) {
   function currentFieldMouseEnter() {
     if (displayConfetti === true) return;
     else if (currentField === 'leftField') {
-      setLeftField({
+      setLeftFieldStyle({
         border: '8px solid #abb2b9',
         backgroundColor: 'color',
       });
     } else {
-      setRightField({
+      setRightFieldStyle({
         border: '8px solid #abb2b9',
         backgroundColor: 'color',
       });
@@ -490,12 +509,12 @@ export default function App(props) {
     if (displayConfetti === true) return;
 
     if (currentField === 'leftField') {
-      setLeftField({
+      setLeftFieldStyle({
         border: '3px solid #abb2b9',
         backgroundColor: 'color',
       });
     } else {
-      setRightField({
+      setRightFieldStyle({
         border: '3px solid #abb2b9',
         backgroundColor: 'color',
       });
@@ -503,9 +522,9 @@ export default function App(props) {
   }
 
   //  ====================================
-  //  Toggling between the left and right fields, to determine which
+  //  Toggling between the left and right fields,
+  //  to determine which
   //  one will get filled in with color.
-  //  TODO: can you simplify this?
   //  ====================================
   function toggleLeftRightField() {
     if (currentField === 'leftField') {
@@ -518,25 +537,21 @@ export default function App(props) {
   }
 
   function incrementAttempt() {
-    setAttempt(attempt + 1);
+    setAttempt(attempt => attempt + 1);
   }
 
   function playerWinsPoints() {
-    let attempts = attempt;
-    let score = score;
-
-    if (attempts === 6) {
-      score = score + 1;
-    } else if (attempts === 5) {
-      score = score + 2;
-    } else if (attempts === 4) {
-      score = score + 3;
-    } else if (attempts === 3) {
-      score = score + 4;
-    } else if (attempts === 2) {
-      score = score + 6;
+    if (attempt === 6) {
+      setScore(score => score + 1);
+    } else if (attempt === 5) {
+      setScore(score => score + 2);
+    } else if (attempt === 4) {
+      setScore(score => score + 3);
+    } else if (attempt === 3) {
+      setScore(score => score + 4);
+    } else if (attempt === 2) {
+      setScore(score => score + 6);
     }
-    setScore(score);
   }
 
   //  ===================================
@@ -562,6 +577,7 @@ export default function App(props) {
     // 'style.backgroundColor' takes whatever background color
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
+
   }
 
   //  ==================================
@@ -571,9 +587,9 @@ export default function App(props) {
     if (looseRound > maxLossCount) return;
     if (attempt >= maxAttemptCount) return;
     if (currentField === 'leftField') {
-      setLeftField({ backgroundColor: color });
+      setLeftFieldStyle({ backgroundColor: color });
     } else {
-      setRightField({ backgroundColor: color });
+      setRightFieldStyle({ backgroundColor: color });
     }
   }
 
@@ -754,7 +770,6 @@ export default function App(props) {
           colors={colorRound.allColorBubbles}
           opacity={0.6}
           gravity={0.6}
-          gameState={gameState}
         />
         <Confetti
           width={width}
@@ -765,7 +780,6 @@ export default function App(props) {
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
-          gameState={gameState}
         />
 
       <div className='twohue'>
@@ -782,7 +796,6 @@ export default function App(props) {
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
-          gameState={gameState}
           displayScoreBoard={displayScoreBoard}
           displayStartButton={displayStartButton}
           displayIntroMessage={displayIntroMessage}
@@ -791,7 +804,6 @@ export default function App(props) {
           <GameOverScreen
             score={score}
             leaderboardData={leaderboardData}
-            gameState={gameState}
             displayGameOver={displayGameOver}
           />
 
@@ -804,7 +816,6 @@ export default function App(props) {
             newLeaderboardInductee={newLeaderboardInductee}
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
-            gameState={gameState}
             displayLeaderboard={displayLeaderboard}
           />
 
@@ -813,9 +824,8 @@ export default function App(props) {
             <GameField
               colorRound={colorRound}
               currentField={currentField}
-              leftField={leftField}
-              rightField={rightField}
-              gameState={gameState}
+              leftFieldStyle={leftFieldStyle}
+              rightFieldStyle={rightFieldStyle}
               displaySolution={displaySolution}
             />
 
@@ -824,12 +834,11 @@ export default function App(props) {
               allColorBubbles={allColorBubbles}
               updateFieldColor={updateFieldColor}
               currentField={currentField}
-              leftField={leftField}
-              rightField={rightField}
+              leftFieldStyle={leftFieldStyle}
+              rightFieldStyle={rightFieldStyle}
               currentFieldMouseEnter={currentFieldMouseEnter}
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
-              gameState={gameState}
               displayIntroAnimation={displayIntroAnimation}
             />
         </div>

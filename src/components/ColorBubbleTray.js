@@ -12,7 +12,7 @@ as indicated by <State is={['homeScreenPractice']}>
 
 export default function ColorBubbleTray(props) {
 
-  console.log("props.allColorBubbles:", props.allColorBubbles);
+  // console.log("props.allColorBubbles:", props.allColorBubbles);
 
   let animationDisplay;
   (props.displayIntroAnimation ? animationDisplay = 'flex' : animationDisplay = 'none')
