@@ -32,7 +32,8 @@ export default function App(props) {
   // 'gameOver', 'gameOverTransition', 'joinLeaderboard',
   // 'viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
-  const [displayConfetti, setDisplayConfetti] = useState(false);
+  const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
+  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displayGameOver, setDisplayGameOver] = useState(false);
   const [displaySolution, setDisplaySolution] = useState(false);
@@ -136,7 +137,7 @@ export default function App(props) {
     setGameState('roundN')
     incrementRoundCounter()
     beginRoundSound();
-    setDisplayConfetti(false);
+    setDisplayRoundConfetti(false);
     setPlayerWinRound(false);
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'})
@@ -156,8 +157,7 @@ export default function App(props) {
   }, [round])
 
  // Check the solution everytime the attempt changes
- // Does this work here?
- // Don't run on first render
+ // Don't run on first render (firstUpdate)
   useEffect( () => {
     if (firstUpdate.current) {
       firstUpdate.current = false;
@@ -182,14 +182,10 @@ export default function App(props) {
   }
 
   function checkSolution() {
-    console.log("HIHIHIHI colorRound.solutionColors", colorRound.solutionColors)
-    console.log("rightFieldStyle.backgroundColor", rightFieldStyle.backgroundColor)
     let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-    console.log("chroma(leftFieldBackgroundColor).hex();", chroma(leftFieldBackgroundColor).hex())
     let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
     let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-    console.log("chroma(rightFieldBackgroundColor).hex();", chroma(rightFieldBackgroundColor).hex())
     let solutionColors = colorRound.solutionColors;
 
     // Not enough trys: incorrect
@@ -206,6 +202,7 @@ export default function App(props) {
     ) {
       // props.transition('CORRECT_SOLUTION');
       console.log('CORRECT_SOLUTION');
+      playerWinsRound()
 
       // incorrect
     } else {
@@ -217,7 +214,7 @@ export default function App(props) {
   function playerWinsRound() {
     playWinSound();
     setPlayerWinRound(true);
-    setDisplayConfetti(true);
+    setDisplayRoundConfetti(true);
     playerWinsPoints();
 
     console.log('player wins round');
@@ -284,7 +281,7 @@ export default function App(props) {
     setAttempt(0);
     setRound(0);
     setLooseRound(0);
-    setDisplayConfetti(true);
+    setDisplayGameOverConfetti(true);
   }
 
   function gameOverTransition() {
@@ -485,13 +482,13 @@ export default function App(props) {
 
 
 
-  //  ==================================================================
-  //  Hover handler for color bubbles - shows player which field of the
-  //  two fields is currently active. Note: we have to set the backgroundColor
-  //  otherwise it will revert to none.
-  //  ==================================================================
+  //  =============================================================
+  //  Hover handler for color bubbles - shows player which 
+  //  field of the two fields is currently active. Note: we have
+  //  to set the backgroundColor otherwise it will revert to none.
+  //  =============================================================
   function currentFieldMouseEnter() {
-    if (displayConfetti === true) return;
+    if (displayRoundConfetti === true) return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -506,7 +503,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (displayConfetti === true) return;
+    if (displayRoundConfetti === true) return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
@@ -567,7 +564,8 @@ export default function App(props) {
     if (looseRound > maxLossCount) return;
     if (attempt >= maxAttemptCount) return;
     if (playerWinsRound === true) return;
-    if (displayConfetti === true) return;
+    if (displayRoundConfetti === true) return;
+    if (displayGameOverConfetti === true) return;
 
     setAttempt(attempt + 1);
     bubbleSound();
@@ -760,10 +758,11 @@ export default function App(props) {
 
   return (
     <div className='outer-div'>
+      <div className='win-round-confetti'>
         <Confetti
           width={width}
           height={height}
-          run={displayConfetti}
+          run={displayRoundConfetti}
           numberOfPieces={300}
           recycle={false}
           tweenDuration={100}
@@ -771,17 +770,19 @@ export default function App(props) {
           opacity={0.6}
           gravity={0.6}
         />
+      </div>
+      <div className='win-game-confetti'>
         <Confetti
           width={width}
           height={height}
-          run={displayConfetti}
+          run={displayGameOverConfetti}
           numberOfPieces={600}
           recycle={confettiRecycling}
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
         />
-
+      </div>
       <div className='twohue'>
         <Header
           transition={props.transition}
