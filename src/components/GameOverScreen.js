@@ -19,7 +19,7 @@ let displayGameOver = () => {
 export default function GameOverScreen(props) {
 
   let gameOverDisplay;
-  props.displayGameOver ? gameOverDisplay = 'block' : gameOverDisplay = 'none'
+  props.displayGameOver ? gameOverDisplay = 'flex' : gameOverDisplay = 'none'
 
   // useEffect has empty array as dependency.
   // Will only run upon render

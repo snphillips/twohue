@@ -26,22 +26,23 @@ let solutionColors;
 
 export default function App(props) {
   // gameStates: 
-  // 'loading', 'homeScreenPractice', 'startRoundN',
-  // 'roundN', 'incrementRound', 'setUpColorRound', 'playRound',
-  // 'attemptN', 'checkSolution', 'playerWinsRound', 'playerLoosesRound', 'showSolution',
-  // 'gameOver', 'gameOverTransition', 'joinLeaderboard',
-  // 'viewLeaderboard', 'leaderboardAPICall' 
+  // 'loading', 'homeScreenPractice', 'setUpColorRound',
+  // 'roundN', 'attemptN', 'checkSolution',  
+  // 'playerWinsRound', 'playerLoosesRound', 'showSolution', 
+  // 'incrementRound', 'gameOver', 'gameOverTransition', 
+  // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
-  const [displayGameOver, setDisplayGameOver] = useState(false);
   const [displaySolution, setDisplaySolution] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
-  const [loadingSpinner, setLoadingSpinner] = useState(false)
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
+  const [displayGameOver, setDisplayGameOver] = useState(false);
+  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [looseRound, setLooseRound] = useState(0);
@@ -60,7 +61,6 @@ export default function App(props) {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
-  // const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
 
   /*
   We can make a useEffect hook not run on initial render
@@ -84,9 +84,8 @@ export default function App(props) {
  */
   function initializeGame() {
     console.log('initializeGame() hello player');
-    generateColorRound(  () => {
-      setGameState('homeScreenPractice')
-    });
+    setGameState('homeScreenPractice');
+    generateColorRound();
   }
   
   // ***********************************
@@ -118,6 +117,7 @@ export default function App(props) {
     console.log('start game click handler');
     setDisplayIntroAnimation(false)
     setDisplayStartButton(false)
+    setDisplayPlayAgainButton(false)
     setDisplayIntroMessage(false)
     setDisplayScoreBoard(true)
     roundN()
@@ -162,12 +162,8 @@ export default function App(props) {
     }
   }, [attempt])
 
-
-  function playRound() {
-    // props.transition('ATTEMPT_N');
-  }
-
   function attemptN() {
+    setGameState('attemptN');
     if (attempt < maxAttemptCount) {
       checkSolution()
     } else if (attempt >= maxAttemptCount) {
@@ -177,6 +173,7 @@ export default function App(props) {
   }
 
   function checkSolution() {
+    setGameState('checkSolution');
     let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
     let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
@@ -240,6 +237,7 @@ export default function App(props) {
   }
 
   function showSolution() {
+    setGameState('showSolution');
     console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
 
     setLeftFieldStyle({
@@ -254,11 +252,11 @@ export default function App(props) {
     let transition = () => {
       if (looseRound < maxLossCount) {
         console.log(`props.transition('NEXT_ROUND')`);
-        // props.transition('NEXT_ROUND');
+        // Transition to 'NEXT_ROUND'
         roundN()
       } else if (looseRound >= maxLossCount) {
         console.log(`props.transition('NO_MORE_ROUNDS')`);
-        // props.transition('NO_MORE_ROUNDS');
+        // Transition to 'NO_MORE_ROUNDS'
         gameOver()
       }
     };
@@ -270,12 +268,15 @@ export default function App(props) {
   }
 
   function gameOver() {
+    setGameState('gameOver');
     gameOverChimes();
     setAttempt(0);
     setRound(0);
+    setScore(0);
     setLooseRound(0);
+    setDisplayGameOver(true);
     setDisplayGameOverConfetti(true);
-    gameOverTransition()
+    gameOverTransition();
   }
 
   function gameOverTransition() {
@@ -297,7 +298,7 @@ export default function App(props) {
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
       let lowestCurrentScore =
         leaderboardMembers[lowestCurrentScoreIndex].score;
-      let score = score;
+      // let score = score;
 
       console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
       console.log('lowestLeaderBoard score:', lowestCurrentScore);
@@ -320,6 +321,7 @@ export default function App(props) {
   }
 
   function joinLeaderboard() {
+    setGameState('joinLeaderboard');
     setNewLeaderboardInductee('');
   }
 
@@ -659,17 +661,23 @@ export default function App(props) {
   //  ==================================
 
   function axiosGetAllLeaderboardResults() {
-    // axios.get(dataSource)
-    //   .then( (response) => {
-    //     setLeaderboardData(response.data)
-    //     console.log('leaderboardData: ', leaderboardData)
-    //   })
-    //   .catch(function (error) {
-    //     // If there's an error
-    //     console.log('axiosGetAllLeaderboardResults() error:', error);
-    //     setLeaderboardServerDown(true)
-    //   });
+    axios.get(dataSource)
+      .then( (response) => {
+        setLeaderboardData(response.data)
+        console.log('leaderboardData: ', leaderboardData)
+      })
+      .catch(function (error) {
+        // If there's an error
+        console.log('axiosGetAllLeaderboardResults() error:', error);
+        setLeaderboardServerDown(true)
+
+        if (leaderboardServerDown === true) {
+          displayPlayAgainButton(true)
+        }
+      });
   }
+
+  
 
   //  ==================================================================
   //  POST
@@ -798,6 +806,7 @@ export default function App(props) {
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             displayLeaderboard={displayLeaderboard}
+            displayPlayAgainButton={displayPlayAgainButton}
           />
 
         <div id='game-field'>
