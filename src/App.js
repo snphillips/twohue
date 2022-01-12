@@ -4,10 +4,10 @@ import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
 import axios from 'axios';
-import Header from './components/Header-Dir/Header';
-import Byline from './components/Byline';
+import Header from './components/header/Header';
+import Byline from './components/footer/Byline';
 import GameField from './components/GameField';
-import AudioToggle from './components/AudioToggle';
+import AudioToggle from './components/footer/AudioToggle';
 import ColorBubbleTray from './components/ColorBubbleTray';
 import GameOverScreen from './components/GameOverScreen';
 import Leaderboard from './components/Leaderboard';

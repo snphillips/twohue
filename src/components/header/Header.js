@@ -27,7 +27,6 @@ export default function Header(props) {
         transition={props.transition}
         isAudioOn={props.isAudioOn}
         beginGameSound={props.beginGameSound}
-        startGameClickHandler={props.startGameClickHandler}
         gameState={props.gameState}
         displayScoreBoard={props.displayScoreBoard}
         />
@@ -35,6 +34,7 @@ export default function Header(props) {
       <StartButtons
         displayStartButton={props.displayStartButton}
         displayPlayAgainButton={props.displayPlayAgainButton}
+        startGameClickHandler={props.startGameClickHandler}
       />
     </header>
   
