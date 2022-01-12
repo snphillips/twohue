@@ -19,7 +19,7 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
-let confettiRecycling = true;
+// let confettiRecycling = true;
 let value;
 let previsAudioOn;
 let solutionColors;
@@ -34,6 +34,7 @@ export default function App(props) {
   const [gameState, setGameState] = useState('loading');
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
+  // const [confettiRecycling, setConfettiRecycling] = useState(true)
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displaySolution, setDisplaySolution] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
@@ -105,7 +106,7 @@ export default function App(props) {
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 3;
       maxAttemptCount = 6;
-      confettiRecycling = false;
+      // confettiRecycling = false;
     }
   }, []);
   
@@ -123,11 +124,6 @@ export default function App(props) {
     roundN()
   }
     
-  function homeScreenPractice() {
-    console.log('**** homeScreenPractice() Do you want to practice?');
-  }
-
-
   function roundN() {
     incrementRoundCounter()
     setGameState('roundN')
@@ -672,7 +668,7 @@ export default function App(props) {
         setLeaderboardServerDown(true)
 
         if (leaderboardServerDown === true) {
-          displayPlayAgainButton(true)
+          setDisplayPlayAgainButton(true)
         }
       });
   }
@@ -765,7 +761,7 @@ export default function App(props) {
           height={height}
           run={displayGameOverConfetti}
           numberOfPieces={600}
-          recycle={confettiRecycling}
+          recycle={true}
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}

@@ -256,6 +256,10 @@ p {
   color: var(--text-color, #222);
 }
 
+.scoreboard p {
+  color: var(--text-color, #222);
+}
+
 button,
 input[type=submit]{
   -webkit-appearance: none; /* for safari ios */
