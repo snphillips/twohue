@@ -11,6 +11,7 @@ import AudioToggle from './components/footer/AudioToggle';
 import ColorBubbleTray from './components/ColorBubbleTray';
 import GameOverScreen from './components/GameOverScreen';
 import Leaderboard from './components/Leaderboard';
+import useWindowSize from 'react-use/lib/useWindowSize'
 // import statechart from './statechart';
 
 // Leave both server addresses here in case you want to switch
@@ -21,6 +22,7 @@ let maxLossCount = 6;
 let value;
 let previsAudioOn;
 let solutionColors;
+
 
 
 
@@ -760,12 +762,9 @@ export default function App(props) {
   // *****************************************************
   // *****************************************************
 
-  // for confetti to fall accross whole window,
-  // if user resizes window
-  // TODO: this alone does not work
-  // could use a hook for this ***
-  let width = window.innerWidth;
-  let height = window.innerHeight;
+  // Confetti falls accross whole window
+  // even if window is resized
+  const { width, height } = useWindowSize()
 
   return (
     <div className='outer-div'>
