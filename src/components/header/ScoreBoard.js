@@ -17,7 +17,7 @@ export default function StartButtons(props) {
       <div
         className='scoreboard'
         style={{
-          display: scoreDisplay,
+          display: scoreDisplay
         }}
       >
         <p className="score-word">

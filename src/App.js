@@ -18,10 +18,11 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 // let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
-let maxAttemptCount = 6;
 let value;
 let previsAudioOn;
 let solutionColors;
+
+
 
 export default function App(props) {
   // gameStates: 
@@ -50,17 +51,17 @@ export default function App(props) {
   const [leftFieldStyle, setLeftFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
-
-  const [leaderboardData, setLeaderboardData] = useState([]);
-  const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
-  const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
-  const [previousScore, setPreviousScore] = useState(0);
-  const [loadingSpinner, setLoadingSpinner] = useState(false);
+  const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
+
   const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [playerWinRound, setPlayerWinRound] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState([]);
   const [displaySolution, setDisplaySolution] = useState(false);
+  const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
+  const [previousScore, setPreviousScore] = useState(0);
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
 
   /*
   We can make a useEffect hook not run on initial render
@@ -71,19 +72,14 @@ export default function App(props) {
   */
   const firstUpdate = useRef(true);
 
-  /*
-   =================================
-  State Machine On Entry States
-  All the component's methods whose names match the names
-  of actions and activities, are fired when the related
-  transition happen.
+  let maxAttemptCount = 6;
+    if (gameState === 'homeScreenPractice') {
+    maxAttemptCount = 30; 
+  }
 
-  Actions receive the state and the event as arguments.
-  Find the 'actions' & 'activities' in statechart.js
- ================================= 
- */
+
   function initializeGame() {
-    console.log('initializeGame() hello player');
+    console.log('📐 initializeGame() hello player');
     setDisplayPlayAgainButton(false)
     setGameState('homeScreenPractice');
     generateColorRound();
@@ -101,31 +97,30 @@ export default function App(props) {
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
-      console.log = function () {};
+      // console.log = function () {};
       setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 3;
       maxAttemptCount = 6;
-      // confettiRecycling = false;
     }
   }, []);
   
   useEffect(() => {
-    console.log('!!!!!!! gameState is:', gameState)
+    console.log('🚦 gameState is:', gameState)
   })
   
   function startGameClickHandler() {
-    console.log('start game click handler');
+    console.log('🏁 start game click handler');
     setDisplayIntroAnimation(false)
     setDisplayStartButton(false)
     setDisplayIntroMessage(false)
     setDisplayScoreBoard(true)
-    roundN()
+    setGameState('setUpColorRound')
+    setUpRoundN()
   }
-    
-  function roundN() {
+  
+  function setUpRoundN() {
     incrementRoundCounter()
-    setGameState('roundN')
     beginRoundSound();
     setDisplayRoundConfetti(false);
     setPlayerWinRound(false);
@@ -133,6 +128,13 @@ export default function App(props) {
     setLeftFieldStyle({backgroundColor: '#ffffff'})
     setRightFieldStyle({backgroundColor: '#ffffff'})
     generateColorRound();
+    roundN()
+    setGameState('roundN')
+  }
+  
+  function roundN() {
+    setGameState('checkSolution')
+    attemptN()
   }
 
   function incrementRoundCounter() {
@@ -158,17 +160,25 @@ export default function App(props) {
   }, [attempt])
 
   function attemptN() {
+    if (gameState === 'homeScreenPractice') {
+      console.log("🎬 practice round. keep making attempts")
+      return
+    };
+
     setGameState('attemptN');
-    if (attempt < maxAttemptCount) {
+    if (attempt <= maxAttemptCount) {
       checkSolution()
-    } else if (attempt >= maxAttemptCount) {
-      // props.transition('OUT_OF_ATTEMPTS');
+    } else if (attempt > maxAttemptCount) {
+      // Transition to 'playerLooses Round;
       playerLoosesRound()
     }
   }
 
   function checkSolution() {
-    setGameState('checkSolution');
+    if (gameState === 'homeScreenPractice') {
+      console.log("practice round. not checking soution")
+      return
+    };
     let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
     let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
@@ -177,8 +187,8 @@ export default function App(props) {
 
     // Not enough trys: incorrect
     if (attempt === 1) {
-      console.log('There has only been one guess. => INCORRECT_SOLUTION');
-      // props.transition('INCORRECT_SOLUTION');
+      console.log('👎 There has only been one guess. => INCORRECT_SOLUTION');
+      // No need for transition. Player continues to play
 
       // correct
     } else if (
@@ -188,18 +198,31 @@ export default function App(props) {
       leftFieldHexColor !== rightFieldHexColor
     ) {
       // props.transition('CORRECT_SOLUTION');
-      console.log('CORRECT_SOLUTION');
-      playerWinsRound()
+      console.log('👍 correct solution');
+      setGameState('playerWinsRound');
+      playerWinsRound();
 
       // incorrect
     } else {
-      // props.transition('INCORRECT_SOLUTION');
       console.log('INCORRECT attempt:', attempt);      
+      // Transition to ('INCORRECT_SOLUTION');
+      playerMadeWrongGuess()
     }
   }
 
+  function playerMadeWrongGuess() {
+    console.log("👎 wrong guess")
+    if (attempt < maxAttemptCount) {
+      console.log("player makes an other guess")
+    } else {
+      console.log("😖 player out of guesses - show solution")
+      showSolution()
+    }
+
+  }
+
   function playerWinsRound() {
-    console.log('player wins round');
+    console.log('💃 player wins round');
     playWinSound();
     setPlayerWinRound(true);
     setDisplayRoundConfetti(true);
@@ -208,7 +231,7 @@ export default function App(props) {
     let stateTransition = () => {
       if (looseRound < maxLossCount) {
         console.log('Game not over yet. Onto RoundN')
-        roundN()
+        setUpRoundN();
       } else if (looseRound >= maxLossCount) {
         console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
         // props.transition('NO_MORE_ROUNDS');
@@ -224,7 +247,7 @@ export default function App(props) {
 
   function playerLoosesRound() {
     if (looseRound <= maxLossCount) {
-      console.log('player looses round');
+      console.log('😖 player looses round');
       playLoseSound();
       showSolution()
       setLooseRound(looseRound => looseRound + 1);
@@ -341,7 +364,9 @@ export default function App(props) {
   The max number of wrong bubbles is 6.
   */
   function calculateNumWrongColorBubbles() {
-    if (round <= 1) {
+    if (gameState === 'homeScreenPractice') {
+      setNumWrongColorBubbles(0);
+    } else if (round <= 1) {
       setNumWrongColorBubbles(1);
     } else if (round === 2) {
       setNumWrongColorBubbles(2);

@@ -8,34 +8,40 @@ export default function Header(props) {
   return (
     
     <header>
-      <Title round={props.round} />
+      <Title 
+        style={{order: 1}}
+        round={props.round}
+      />
 
       <MessageBoard
+        style={{order: 2}}
         transition={props.transition}
         displayIntroMessage={props.displayIntroMessage}
         resetScoreForNextGame={props.resetScoreForNextGame}
       />
 
-      <ScoreBoard
-        round={props.round}
-        attempt={props.attempt}
-        score={props.score}
-        previousScore={props.previousScore}
-        looseRound={props.looseRound}
-        maxLossCount={props.maxLossCount}
-        maxAttemptCount={props.maxAttemptCount}
-        transition={props.transition}
-        isAudioOn={props.isAudioOn}
-        beginGameSound={props.beginGameSound}
-        gameState={props.gameState}
-        displayScoreBoard={props.displayScoreBoard}
-        />
+      <div style={{order: 3}}>
+        <ScoreBoard
+          round={props.round}
+          attempt={props.attempt}
+          score={props.score}
+          previousScore={props.previousScore}
+          looseRound={props.looseRound}
+          maxLossCount={props.maxLossCount}
+          maxAttemptCount={props.maxAttemptCount}
+          transition={props.transition}
+          isAudioOn={props.isAudioOn}
+          beginGameSound={props.beginGameSound}
+          gameState={props.gameState}
+          displayScoreBoard={props.displayScoreBoard}
+          />
 
-      <StartButtons
-        displayStartButton={props.displayStartButton}
-        displayPlayAgainButton={props.displayPlayAgainButton}
-        startGameClickHandler={props.startGameClickHandler}
-      />
+        <StartButtons
+          displayStartButton={props.displayStartButton}
+          displayPlayAgainButton={props.displayPlayAgainButton}
+          startGameClickHandler={props.startGameClickHandler}
+        />
+      </div>
     </header>
   
   );
