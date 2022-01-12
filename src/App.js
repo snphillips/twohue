@@ -4,7 +4,7 @@ import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
 import axios from 'axios';
-import Header from './components/Header';
+import Header from './components/Header-Dir/Header';
 import Byline from './components/Byline';
 import GameField from './components/GameField';
 import AudioToggle from './components/AudioToggle';
@@ -19,7 +19,6 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
-// let confettiRecycling = true;
 let value;
 let previsAudioOn;
 let solutionColors;
@@ -34,34 +33,34 @@ export default function App(props) {
   const [gameState, setGameState] = useState('loading');
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
-  // const [confettiRecycling, setConfettiRecycling] = useState(true)
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
-  const [displaySolution, setDisplaySolution] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
-  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
-  const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [displayGameOver, setDisplayGameOver] = useState(false);
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [looseRound, setLooseRound] = useState(0);
-  const [previousScore, setPreviousScore] = useState(0);
   const [score, setScore] = useState(0);
   const [colorRound, setColorRound] = useState({});
-  const [wrongColors, setWrongColors] = useState([]);
   const [allColorBubbles, setAllColorBubbles] = useState([]);
   const [numWrongColorBubbles, setNumWrongColorBubbles] = useState(0);
   const [currentField, setCurrentField] = useState('leftField');
-  const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [leftFieldStyle, setLeftFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
-  const [playerWinRound, setPlayerWinRound] = useState(false);
+
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
+  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
+  const [previousScore, setPreviousScore] = useState(0);
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
+  const [wrongColors, setWrongColors] = useState([]);
+  const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
+  const [playerWinRound, setPlayerWinRound] = useState(false);
+  const [displaySolution, setDisplaySolution] = useState(false);
 
   /*
   We can make a useEffect hook not run on initial render
@@ -85,6 +84,7 @@ export default function App(props) {
  */
   function initializeGame() {
     console.log('initializeGame() hello player');
+    setDisplayPlayAgainButton(false)
     setGameState('homeScreenPractice');
     generateColorRound();
   }
@@ -118,7 +118,6 @@ export default function App(props) {
     console.log('start game click handler');
     setDisplayIntroAnimation(false)
     setDisplayStartButton(false)
-    setDisplayPlayAgainButton(false)
     setDisplayIntroMessage(false)
     setDisplayScoreBoard(true)
     roundN()
@@ -318,6 +317,7 @@ export default function App(props) {
 
   function joinLeaderboard() {
     setGameState('joinLeaderboard');
+    setDisplayLeaderboard(true)
     setNewLeaderboardInductee('');
   }
 
@@ -327,10 +327,10 @@ export default function App(props) {
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
-    // axiosPostNewLeaderboardInductee( () => {
-    // props.transition('FILLED_OUT_FORM')
-    // axiosGetAllLeaderboardResults()
-    // });
+    axiosPostNewLeaderboardInductee( () => {
+      // props.transition('FILLED_OUT_FORM')
+    axiosGetAllLeaderboardResults()
+    });
   }
 
   /*
@@ -363,16 +363,18 @@ export default function App(props) {
     let colorLightness = 29;
     let wrongColorsArray = [];
 
-    //=============================
-    // If the target color is too dark (like blackish),
-    // the round is nearly impossible to play.
-    // To solve this problem, we're not allowing rounds with very dark target color.
+    /* 
+    =============================
+    If the target color is too dark (like blackish),
+    the round is nearly impossible to play.
+    To solve this problem, we're not allowing rounds with very dark target color.
 
-    // Use a while-loop to genereate solution & target
-    // colors. Keep looping until it finds a solution
-    // that ISN'T too dark. We're using Chroma.js's .get('lab.l')
-    // to determine lightness.
-    //=============================
+    Use a while-loop to genereate solution & target
+    colors. Keep looping until it finds a solution
+    that ISN'T too dark. We're using Chroma.js's .get('lab.l')
+    to determine lightness.
+    ============================= 
+    */
     while (colorLightness <= 30) {
       soluColor1 = chroma.random().hex();
       soluColor2 = chroma.random().hex();
@@ -657,20 +659,20 @@ export default function App(props) {
   //  ==================================
 
   function axiosGetAllLeaderboardResults() {
-    axios.get(dataSource)
-      .then( (response) => {
-        setLeaderboardData(response.data)
-        console.log('leaderboardData: ', leaderboardData)
-      })
-      .catch(function (error) {
-        // If there's an error
-        console.log('axiosGetAllLeaderboardResults() error:', error);
-        setLeaderboardServerDown(true)
+    // axios.get(dataSource)
+    //   .then( (response) => {
+    //     setLeaderboardData(response.data)
+    //     console.log('leaderboardData: ', leaderboardData)
+    //   })
+    //   .catch(function (error) {
+    //     // If there's an error
+    //     console.log('axiosGetAllLeaderboardResults() error:', error);
+    //     setLeaderboardServerDown(true)
 
-        if (leaderboardServerDown === true) {
-          setDisplayPlayAgainButton(true)
-        }
-      });
+    //     if (leaderboardServerDown === true) {
+    //       setDisplayPlayAgainButton(true)
+    //     }
+    //   });
   }
 
   
@@ -717,9 +719,9 @@ export default function App(props) {
   }
 
   function handleChange(event) {
-    // console.log('leaderboard form value:',  event.target.value)
+    console.log('leaderboard form value:',  event.target.value)
     // function setNewLeaderboardInductee (event.target.value) =>  {
-    // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
+      // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
     // }
   }
 
@@ -783,6 +785,7 @@ export default function App(props) {
           startGameClickHandler={startGameClickHandler}
           displayScoreBoard={displayScoreBoard}
           displayStartButton={displayStartButton}
+          displayPlayAgainButton={displayPlayAgainButton}
           displayIntroMessage={displayIntroMessage}
         />
 
@@ -802,7 +805,6 @@ export default function App(props) {
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             displayLeaderboard={displayLeaderboard}
-            displayPlayAgainButton={displayPlayAgainButton}
           />
 
         <div id='game-field'>

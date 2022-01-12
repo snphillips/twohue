@@ -1,10 +1,12 @@
-import React from "react";
-import Title from "./Title";
-import MessageBoard from "./MessageBoard";
-import ScoreBoard from "./ScoreBoard";
+import React from 'react';
+import Title from './Title';
+import MessageBoard from './MessageBoard';
+import ScoreBoard from './ScoreBoard';
+import StartButtons from './StartButtons';
 
 export default function Header(props) {
   return (
+    
     <header>
       <Title round={props.round} />
 
@@ -28,8 +30,13 @@ export default function Header(props) {
         startGameClickHandler={props.startGameClickHandler}
         gameState={props.gameState}
         displayScoreBoard={props.displayScoreBoard}
+        />
+
+      <StartButtons
         displayStartButton={props.displayStartButton}
+        displayPlayAgainButton={props.displayPlayAgainButton}
       />
     </header>
+  
   );
 }

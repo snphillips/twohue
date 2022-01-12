@@ -7,27 +7,13 @@ let previousScore = 0;
 // the counter may count down then up again.
 
 
-export default function ScoreBoard(props) {
+export default function StartButtons(props) {
   
   let scoreDisplay;
   (props.displayScoreBoard ? scoreDisplay = 'block' : scoreDisplay = 'none')
 
-  let startButtonDisplayStyle;
-  (props.displayStartButton ? startButtonDisplayStyle = 'block' : startButtonDisplayStyle = 'none')
-
   return (
     <section className="score-board">
-      <button
-        style={{
-          display: startButtonDisplayStyle
-        }}
-        onClick={() => {
-          props.startGameClickHandler();
-        }}
-      >
-        start
-      </button>
-
       <div
         className='scoreboard'
         style={{

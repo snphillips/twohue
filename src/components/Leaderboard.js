@@ -23,8 +23,8 @@ export default function Leaderboard(props) {
   let displayLeaderboardStyle;
   props.displayLeaderboard ? displayLeaderboardStyle = 'block' : displayLeaderboardStyle = 'none'
 
-  let displayPlayAgainButtonStyle;
-  props.displayPlayAgainButton ? displayPlayAgainButtonStyle = 'block' : displayPlayAgainButtonStyle = 'none'
+  // let displayPlayAgainButtonStyle;
+  // props.displayPlayAgainButton ? displayPlayAgainButtonStyle = 'block' : displayPlayAgainButtonStyle = 'none'
 
     return (
       <div>
@@ -64,17 +64,16 @@ export default function Leaderboard(props) {
         </div>
       </div>
 
-          <button
+          {/* <button
             className="play-again-button"
             style={{display: displayPlayAgainButtonStyle }}
             onClick={() => {
               props.resetScoreForNextGame();
               props.startGameClickHandler();
-              // props.transition("START_GAME");
             }}
           >
             play again
-          </button>
+          </button> */}
       </div>
     );
 }
