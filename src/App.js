@@ -793,6 +793,7 @@ export default function App(props) {
           width={width}
           height={height}
           numberOfPieces={300}
+          // run={displayRoundConfetti}
           run={displayRoundConfetti}
           recycle={false}
           tweenDuration={100}
@@ -806,8 +807,10 @@ export default function App(props) {
           width={width}
           height={height}
           run={displayGameOverConfetti}
+          // run={false}
           numberOfPieces={600}
           recycle={true}
+          // recycle={false}
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}

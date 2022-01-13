@@ -11,6 +11,7 @@ export default function Header(props) {
       <Title 
         style={{order: 1}}
         round={props.round}
+        displayScoreBoard={props.displayScoreBoard}
       />
 
       <MessageBoard
@@ -22,7 +23,6 @@ export default function Header(props) {
 
       <div style={{order: 3}}>
         <ScoreBoard
-          round={props.round}
           attempt={props.attempt}
           score={props.score}
           previousScore={props.previousScore}
