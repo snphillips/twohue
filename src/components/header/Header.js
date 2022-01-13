@@ -26,7 +26,7 @@ export default function Header(props) {
           attempt={props.attempt}
           score={props.score}
           previousScore={props.previousScore}
-          looseRound={props.looseRound}
+          lostRounds={props.lostRounds}
           maxLossCount={props.maxLossCount}
           maxAttemptCount={props.maxAttemptCount}
           transition={props.transition}

@@ -20,10 +20,8 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 
 let maxLossCount = 6;
 let value;
-let previsAudioOn;
+// let previsAudioOn;
 let solutionColors;
-
-
 
 
 export default function App(props) {
@@ -34,6 +32,7 @@ export default function App(props) {
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
   // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
+  const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
@@ -44,7 +43,7 @@ export default function App(props) {
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
-  const [looseRound, setLooseRound] = useState(0);
+  const [lostRounds, setLostRounds] = useState(0);
   const [score, setScore] = useState(0);
   const [colorRound, setColorRound] = useState({});
   const [allColorBubbles, setAllColorBubbles] = useState([]);
@@ -58,6 +57,7 @@ export default function App(props) {
 
   const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
+  // is there a reason to this?
   const [playerWinRound, setPlayerWinRound] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [displaySolution, setDisplaySolution] = useState(false);
@@ -67,7 +67,7 @@ export default function App(props) {
 
   /*
   We can make a useEffect hook not run on initial render
-  by creating a variable with useRef hook to keep track
+  by creating a variable with the useRef hook to keep track
   of when the first render is done. Set the variable’s value
   to true initially. When the component is rendered the first time,
   set the variable to false.
@@ -79,17 +79,9 @@ export default function App(props) {
     maxAttemptCount = 30; 
   }
 
-
-  function initializeGame() {
-    console.log('📐 initializeGame() hello player');
-    setDisplayPlayAgainButton(false)
-    setGameState('homeScreenPractice');
-    generateColorRound();
-  }
-  
   // ***********************************
   // Here's where the app begins.
-  // Run this only on first render (as evidences by empty array)
+  // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
     initializeGame();
@@ -107,110 +99,108 @@ export default function App(props) {
     }
   }, []);
   
+  function initializeGame() {
+    console.log('🪄 initializeGame() hello player');
+    setDisplayPlayAgainButton(false);
+    setGameState('homeScreenPractice');
+    generateColorRound();
+  }
+
   useEffect(() => {
+    // keep this for development
     console.log('🚦 gameState is:', gameState)
-  })
+  }, [gameState]);
   
   function startGameClickHandler() {
     console.log('🏁 start game click handler');
-    setDisplayIntroAnimation(false)
-    setDisplayStartButton(false)
-    setDisplayIntroMessage(false)
-    setDisplayScoreBoard(true)
-    setGameState('setUpColorRound')
-    setUpRoundN()
+    setDisplayIntroAnimation(false);
+    setDisplayStartButton(false);
+    setDisplayIntroMessage(false);
+    setDisplayScoreBoard(true);
+    setUpRoundN();
   }
   
   function setUpRoundN() {
-    incrementRoundCounter()
     beginRoundSound();
+    setGameState('setUpColorRound')
     setDisplayRoundConfetti(false);
+    // sarah I'm confused about how the grafitti works
+    setConfettiRecycle(false);
     setPlayerWinRound(false);
-    setAttempt(0);
-    setLeftFieldStyle({backgroundColor: '#ffffff'})
-    setRightFieldStyle({backgroundColor: '#ffffff'})
     generateColorRound();
-    roundN()
-    setGameState('roundN')
-  }
-  
-  function roundN() {
-    setGameState('checkSolution')
-    attemptN()
+    incrementRoundCounter()
+    setAttempt(0);
+    setLeftFieldStyle({backgroundColor: '#ffffff'});
+    setRightFieldStyle({backgroundColor: '#ffffff'});
   }
 
   function incrementRoundCounter() {
-    if (looseRound >= maxLossCount) {
-    } else if (looseRound < maxLossCount) {
+    if (lostRounds >= maxLossCount) {
+    } else if (lostRounds < maxLossCount) {
       setRound(round => round + 1);
     }
   }
 
+  // =================================================
+  // Every time the round changes, recalculate the 
+  // number of "wrong" color bubbles
+  // =================================================
   useEffect(() => {
+    // We cap out at 8 color bubbles so return after
+    // round 7
+    if (round > 7) {return}
     calculateNumWrongColorBubbles();
   }, [round])
 
- // Check the solution everytime the attempt changes
- // Don't run on first render (firstUpdate)
-  useEffect( () => {
+   // =================================================
+   // Check the solution after every attempt
+   // =================================================
+   useEffect( () => {
+    // Don't run on first render (firstUpdate)
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
-    } else {
-    attemptN()
     }
-  }, [attempt])
-
-  function attemptN() {
     if (gameState === 'homeScreenPractice') {
       console.log("🎬 practice round. keep making attempts")
       return
-    };
-
-    setGameState('attemptN');
-    if (attempt <= maxAttemptCount) {
-      checkSolution()
-    } else if (attempt > maxAttemptCount) {
-      // Transition to 'playerLooses Round;
-      playerLoosesRound()
     }
-  }
-
-  function checkSolution() {
-    if (gameState === 'homeScreenPractice') {
-      console.log("practice round. not checking soution")
+    // Guard clause: return whe attempt resets to 0
+    if (attempt === 0 ) {
       return
-    };
-    let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-    let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-    let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-    let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-    let solutionColors = colorRound.solutionColors;
-
-    // Not enough trys: incorrect
-    if (attempt === 1) {
-      console.log('👎 There has only been one guess. => INCORRECT_SOLUTION');
-      // No need for transition. Player continues to play
-
-      // correct
-    } else if (
-      solutionColors.includes(leftFieldHexColor) &&
-      solutionColors.includes(rightFieldHexColor) &&
-      // the colors can't be the same on either side
-      leftFieldHexColor !== rightFieldHexColor
-    ) {
-      // props.transition('CORRECT_SOLUTION');
-      console.log('👍 correct solution');
-      setGameState('playerWinsRound');
-      playerWinsRound();
-
-      // incorrect
-    } else {
-      console.log('INCORRECT attempt:', attempt);      
-      // Transition to ('INCORRECT_SOLUTION');
-      playerMadeWrongGuess()
     }
-  }
+      let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+      let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+      let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+      let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+      let solutionColors = colorRound.solutionColors;
+    
+      // Not enough trys for solution
+      if (attempt === 1) {
+        console.log('👆 First guess.');
+        // No need for transition. Player continues to play
+    
+        // correct
+      } else if (
+        solutionColors.includes(leftFieldHexColor) &&
+        solutionColors.includes(rightFieldHexColor) &&
+        // the colors can't be the same on either side
+        leftFieldHexColor !== rightFieldHexColor
+      ) {
+        // Transition'CORRECT_SOLUTION';
+        console.log('👍 correct solution');
+        setGameState('playerWinsRound');
+        playerWinsRound();
+    
+        // incorrect
+      } else {
+        console.log('INCORRECT attempt:', attempt);      
+        // Transition to 'INCORRECT_SOLUTION';
+        playerMadeWrongGuess()
+      }
+  
+  }, [attempt])
+
 
   function playerMadeWrongGuess() {
     console.log("👎 wrong guess")
@@ -219,24 +209,25 @@ export default function App(props) {
     } else {
       console.log("😖 player out of guesses - show solution")
       showSolution()
+      playerLoosesRound()
     }
-
   }
 
   function playerWinsRound() {
-    console.log('💃 player wins round');
+    setDisplayRoundConfetti(true);
+    setConfettiRecycle(true);
+    console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
     playWinSound();
     setPlayerWinRound(true);
-    setDisplayRoundConfetti(true);
-    playerWinsPoints();
+    increasePlayerScore();
 
     let stateTransition = () => {
-      if (looseRound < maxLossCount) {
-        console.log('Game not over yet. Onto RoundN')
+      if (lostRounds < maxLossCount) {
+        console.log('Game not over. Onto RoundN')
         setUpRoundN();
-      } else if (looseRound >= maxLossCount) {
+      } else if (lostRounds >= maxLossCount) {
         console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
-        // props.transition('NO_MORE_ROUNDS');
+        // Transition to 'NO_MORE_ROUNDS';
         gameOver()
       }
     };
@@ -244,15 +235,15 @@ export default function App(props) {
     setTimeout(function () {
       // function to be executed after 2 seconds
       stateTransition();
-    }, 1500);
+    }, 2500);
   }
 
   function playerLoosesRound() {
-    if (looseRound <= maxLossCount) {
+    if (lostRounds <= maxLossCount) {
       console.log('😖 player looses round');
       playLoseSound();
       showSolution()
-      setLooseRound(looseRound => looseRound + 1);
+      setLostRounds(lostRounds => lostRounds + 1);
     }
   }
 
@@ -270,11 +261,11 @@ export default function App(props) {
     });
 
     let transition = () => {
-      if (looseRound < maxLossCount) {
-        console.log(`props.transition('NEXT_ROUND')`);
-        // Transition to 'NEXT_ROUND'
-        roundN()
-      } else if (looseRound >= maxLossCount) {
+      if (lostRounds < maxLossCount) {
+        console.log(`🌗 Set up next round`);
+        // Set up next round
+        setUpRoundN()
+      } else if (lostRounds >= maxLossCount) {
         console.log(`props.transition('NO_MORE_ROUNDS')`);
         // Transition to 'NO_MORE_ROUNDS'
         gameOver()
@@ -284,7 +275,7 @@ export default function App(props) {
     setTimeout(function () {
       // Transition to next round after X seconds
       transition();
-    }, 1000);
+    }, 1200);
   }
 
   function gameOver() {
@@ -293,7 +284,8 @@ export default function App(props) {
     setAttempt(0);
     setRound(0);
     setScore(0);
-    setLooseRound(0);
+    setPreviousScore(0);
+    setLostRounds(0);
     setDisplayGameOver(true);
     setDisplayGameOverConfetti(true);
     gameOverTransition();
@@ -544,7 +536,10 @@ export default function App(props) {
     setAttempt(attempt => attempt + 1);
   }
 
-  function playerWinsPoints() {
+  function increasePlayerScore() {
+    // update previous score for react-countup
+    setPreviousScore(score)
+
     if (attempt === 6) {
       setScore(score => score + 1);
     } else if (attempt === 5) {
@@ -568,7 +563,7 @@ export default function App(props) {
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
     // 4) confetti is falling
-    if (looseRound > maxLossCount) return;
+    if (lostRounds > maxLossCount) return;
     if (attempt >= maxAttemptCount) return;
     if (playerWinsRound === true) return;
     if (displayRoundConfetti === true) return;
@@ -589,7 +584,7 @@ export default function App(props) {
   //  Filling in chosen color into left or right fields
   //  ==================================
   function updateFieldColor(color) {
-    if (looseRound > maxLossCount) return;
+    if (lostRounds > maxLossCount) return;
     if (attempt >= maxAttemptCount) return;
     if (currentField === 'leftField') {
       setLeftFieldStyle({ backgroundColor: color });
@@ -676,7 +671,7 @@ export default function App(props) {
 
   function resetScoreForNextGame() {
     setScore(0);
-    setLooseRound(0);
+    setLostRounds(0);
   }
 
   //  ==================================
@@ -799,10 +794,11 @@ export default function App(props) {
           round={round}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
-          looseRound={looseRound}
+          lostRounds={lostRounds}
           attempt={attempt}
           score={score}
           previousScore={previousScore}
+          setPreviousScore={setPreviousScore}
           resetScoreForNextGame={resetScoreForNextGame}
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}

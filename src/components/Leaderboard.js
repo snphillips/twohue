@@ -23,9 +23,6 @@ export default function Leaderboard(props) {
   let displayLeaderboardStyle;
   props.displayLeaderboard ? displayLeaderboardStyle = 'block' : displayLeaderboardStyle = 'none'
 
-  // let displayPlayAgainButtonStyle;
-  // props.displayPlayAgainButton ? displayPlayAgainButtonStyle = 'block' : displayPlayAgainButtonStyle = 'none'
-
     return (
       <div>
         <div 
@@ -63,18 +60,7 @@ export default function Leaderboard(props) {
             <ReactSpinners loadingSpinner={props.loadingSpinner} />
         </div>
       </div>
-
-          {/* <button
-            className="play-again-button"
-            style={{display: displayPlayAgainButtonStyle }}
-            onClick={() => {
-              props.resetScoreForNextGame();
-              props.startGameClickHandler();
-            }}
-          >
-            play again
-          </button> */}
-      </div>
+    </div>
     );
 }
 

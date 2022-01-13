@@ -47,7 +47,6 @@ export default function ColorBubbleTray(props) {
             id={"bubble-" + imageIndex}
             style={{
               backgroundColor: props.allColorBubbles[imageIndex],
-              transition: "all 3s",
             }}
             onMouseEnter={props.currentFieldMouseEnter}
             onMouseLeave={props.currentFieldMouseLeave}

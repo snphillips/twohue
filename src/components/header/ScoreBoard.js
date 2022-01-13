@@ -1,14 +1,12 @@
 import React from "react";
 import CountUp from "react-countup";
 
-let previousScore = 0;
-
 // gotcha: if the duration of the counter is changed,
 // the counter may count down then up again.
 
 
 export default function StartButtons(props) {
-  
+    
   let scoreDisplay;
   (props.displayScoreBoard ? scoreDisplay = 'block' : scoreDisplay = 'none')
 
@@ -21,14 +19,14 @@ export default function StartButtons(props) {
         }}
       >
         <p className="score-word">
-          score:&nbsp;
+          score:
           <span className="actual-score">
             <CountUp
-              start={previousScore}
+              start={props.previousScore}
               end={props.score}
               duration={1.5}
               onEnd={() => {
-                previousScore = props.score;
+                // props.previousScore = props.score;
                 // console.log( "Count up done: previousScore:", previousScore, "props.score:", props.score)
               }}
             />
@@ -40,7 +38,7 @@ export default function StartButtons(props) {
         </p>
 
         <p className="loses">
-          flops: {props.looseRound}/{props.maxLossCount}
+          flops: {props.lostRounds}/{props.maxLossCount}
         </p>
       </div>
     </section>

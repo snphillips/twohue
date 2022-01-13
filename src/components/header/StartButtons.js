@@ -1,10 +1,4 @@
 import React from "react";
-import CountUp from "react-countup";
-
-let previousScore = 0;
-
-// gotcha: if the duration of the counter is changed,
-// the counter may count down then up again.
 
 
 export default function StartButtons(props) {
