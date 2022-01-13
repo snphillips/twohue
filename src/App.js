@@ -156,17 +156,31 @@ export default function App(props) {
   }
 
   // =================================================
-  // Every time the round changes, do things:
-  // 1) 
-  // 2) recalculate the number of "wrong" color bubbles
+  // Every time the round changes recalculate the number
+  // of "wrong" color bubbles for the next round
   // =================================================
   useEffect(() => {
-    // We cap out at 8 color bubbles so return after
+    // We cap out at 8 color bubbles so return after round 7
     // round 7
     if (round > 7) {return}
     // why does this not 
     calculateNumWrongColorBubbles();
   }, [round])
+  
+  // =================================================
+  // Every time the lostRound changes, determine if
+  // player has run out of rounds to loose
+  // =================================================
+  useEffect(()=> {
+
+    if (lostRounds === maxLossCount) {
+      // Transition to game over
+      console.log("😣 player reaches max lost rounds. Game over.")
+      gameOver();
+    }
+
+  }, [lostRounds])
+  
 
    // =================================================
    // Check the solution after every attempt
@@ -286,7 +300,7 @@ export default function App(props) {
         // Set up next round
         setUpRoundN()
       } else if (lostRounds >= maxLossCount) {
-        console.log(`props.transition('NO_MORE_ROUNDS')`);
+        console.log(`Transition to gameOver()`);
         // Transition to 'NO_MORE_ROUNDS'
         gameOver()
       }
