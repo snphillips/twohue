@@ -26,9 +26,12 @@ export default function StartButtons(props) {
 
       <button
         className="play-again-button"
-        style={{display: displayPlayAgainButtonStyle }}
+        style={{
+          display: displayPlayAgainButtonStyle,
+          zIndex: 3
+        }}
         onClick={() => {
-          props.resetScoreForNextGame();
+          // props.resetScoreForNextGame();
           props.startGameClickHandler();
         }}
       >

@@ -39,7 +39,7 @@ export default function App(props) {
   const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
-  const [displayGameOver, setDisplayGameOver] = useState(false);
+  const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -94,8 +94,8 @@ export default function App(props) {
       // console.log = function () {};
       setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 3;
-      maxAttemptCount = 6;
+      maxLossCount = 2;
+      maxAttemptCount = 4;
     }
   }, []);
   
@@ -103,6 +103,11 @@ export default function App(props) {
     console.log('🪄 initializeGame() hello player');
     setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
+    setAttempt(0);
+    setRound(0);
+    setScore(0);
+    setPreviousScore(0);
+    setLostRounds(0);
     generateColorRound();
   }
 
@@ -124,7 +129,7 @@ export default function App(props) {
     beginRoundSound();
     setGameState('setUpColorRound')
     setDisplayRoundConfetti(false);
-    // sarah I'm confused about how the grafitti works
+    // stop confetti falling if 
     setConfettiRecycle(false);
     setPlayerWinRound(false);
     generateColorRound();
@@ -201,6 +206,10 @@ export default function App(props) {
   
   }, [attempt])
 
+  if (gameState === 'playweWinsRound') {
+    setDisplayRoundConfetti(true)
+  }
+
 
   function playerMadeWrongGuess() {
     console.log("👎 wrong guess")
@@ -215,27 +224,27 @@ export default function App(props) {
 
   function playerWinsRound() {
     setDisplayRoundConfetti(true);
-    setConfettiRecycle(true);
-    console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
     playWinSound();
     setPlayerWinRound(true);
     increasePlayerScore();
-
+    
     let stateTransition = () => {
       if (lostRounds < maxLossCount) {
         console.log('Game not over. Onto RoundN')
         setUpRoundN();
       } else if (lostRounds >= maxLossCount) {
         console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
-        // Transition to 'NO_MORE_ROUNDS';
+        // Transition to gameOver();
         gameOver()
       }
     };
-
+    
     setTimeout(function () {
       // function to be executed after 2 seconds
+      console.log("🎉 hihihi from player wins round")
+      console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
       stateTransition();
-    }, 2500);
+    }, 3000);
   }
 
   function playerLoosesRound() {
@@ -274,19 +283,16 @@ export default function App(props) {
 
     setTimeout(function () {
       // Transition to next round after X seconds
+      console.log('🎉')
       transition();
-    }, 1200);
+    }, 3200);
   }
 
   function gameOver() {
     setGameState('gameOver');
     gameOverChimes();
-    setAttempt(0);
-    setRound(0);
-    setScore(0);
-    setPreviousScore(0);
-    setLostRounds(0);
-    setDisplayGameOver(true);
+    setDisplayGameOverMessage(true);
+    setDisplayPlayAgainButton(true);
     setDisplayGameOverConfetti(true);
     gameOverTransition();
   }
@@ -558,7 +564,7 @@ export default function App(props) {
   //  note: it has to be an arrow style function.
   //  ===================================
   function bubbleClickHandler(event) {
-    // guard clause to disable click handler if:
+    // guard clauses to disable click handler if:
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
@@ -681,20 +687,21 @@ export default function App(props) {
   //  ==================================
 
   function axiosGetAllLeaderboardResults() {
-    // axios.get(dataSource)
-    //   .then( (response) => {
-    //     setLeaderboardData(response.data)
-    //     console.log('leaderboardData: ', leaderboardData)
-    //   })
-    //   .catch(function (error) {
-    //     // If there's an error
-    //     console.log('axiosGetAllLeaderboardResults() error:', error);
-    //     setLeaderboardServerDown(true)
+    axios.get(dataSource)
+      .then( (response) => {
+        setLeaderboardData(response.data)
+        console.log('leaderboardData: ', leaderboardData)
+      })
+      .catch(function (error) {
+        // If there's an error
+        console.log('axiosGetAllLeaderboardResults() error:', error);
+        setLeaderboardServerDown(true)
 
-    //     if (leaderboardServerDown === true) {
-    //       setDisplayPlayAgainButton(true)
-    //     }
-    //   });
+        if (leaderboardServerDown === true) {
+         console.log("leaderboard down but here's the play again button")
+          setDisplayPlayAgainButton(true);
+        }
+      });
   }
 
   
@@ -767,8 +774,8 @@ export default function App(props) {
         <Confetti
           width={width}
           height={height}
-          run={displayRoundConfetti}
           numberOfPieces={300}
+          run={displayRoundConfetti}
           recycle={false}
           tweenDuration={100}
           colors={colorRound.allColorBubbles}
@@ -812,7 +819,7 @@ export default function App(props) {
           <GameOverScreen
             score={score}
             leaderboardData={leaderboardData}
-            displayGameOver={displayGameOver}
+            displayGameOverMessage={displayGameOverMessage}
           />
 
           <Leaderboard
