@@ -33,7 +33,6 @@ export default function App(props) {
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
   // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
-  const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
@@ -55,7 +54,8 @@ export default function App(props) {
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
-
+  
+  const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   // is there a reason to this?
@@ -105,6 +105,8 @@ export default function App(props) {
     console.log('🪄 initializeGame() hello player');
     setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
+    // we generateColorRound in two places: once when 
+    // we initializeGame and onece in setUpRound
     generateColorRound();
   }
   
@@ -123,62 +125,68 @@ export default function App(props) {
     setDisplayGameOverConfetti(false);
     setConfettiRecycle(false);
     setDisplayGameOverMessage(false);
-    calculateNumWrongColorBubbles()
+    setRound(0);
     setLostRounds(0);
     setAttempt(0);
-    setRound(0);
     setPreviousScore(0);
     setScore(0);
     setUpRoundN();
+    // console.log("1) round in startGameClickHandler():", round)
   }
   
   function setUpRoundN() {
-    beginRoundSound();
     setGameState('setUpColorRound')
+    setRound(round => round + 1);
+    beginRoundSound();
     setDisplayRoundConfetti(false);
     // stop confetti falling if 
     setConfettiRecycle(false);
     setPlayerWinRound(false);
-    incrementRoundCounter()
+    // calculateNumWrongColorBubbles();
     generateColorRound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
-  }
 
-  function incrementRoundCounter() {
-    if (lostRounds >= maxLossCount) {
-      console.log("🙀 GAME OVER lostRounds >= maxLossCount, lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
-    } else if (lostRounds < maxLossCount) {
-      console.log("+ 1 increment round")
-      setRound(round + 1);
-    }
+    // console.log("2) round in setUpRoundN():", round)
   }
-
+  // Sarah, can we count on this to make right number of bubbles?
   // =================================================
   // Every time the round changes recalculate the number
   // of "wrong" color bubbles for the next round
   // =================================================
   useEffect(() => {
     // We cap out at 8 color bubbles so return after round 7
-    // round 7
-    if (round > 7) {return}
-    // why does this not 
-    calculateNumWrongColorBubbles();
+    if (round >= 7) {return}
+    if (gameState === 'homeScreenPractice') {
+      setNumWrongColorBubbles(0);
+    } else if (round <= 1) {
+      setNumWrongColorBubbles(1);
+    } else if (round === 2) {
+      setNumWrongColorBubbles(2);
+    } else if (round === 3) {
+      setNumWrongColorBubbles(3);
+    } else if (round === 4) {
+      setNumWrongColorBubbles(4);
+    } else if (round === 5) {
+      setNumWrongColorBubbles(5);
+    } else if (round === 6) {
+      setNumWrongColorBubbles(6);
+    }
+    console.log("🎈 calculating # color bubbles. Round: ", round, numWrongColorBubbles)
+
   }, [round])
   
   // =================================================
   // Every time the lostRound changes, determine if
   // player has run out of rounds to loose
   // =================================================
-  useEffect(()=> {
-
+  useEffect(() => {
     if (lostRounds === maxLossCount) {
       // Transition to game over
       console.log("😣 player reaches max lost rounds. Game over.")
       gameOver();
     }
-
   }, [lostRounds])
   
 
@@ -245,7 +253,7 @@ export default function App(props) {
       showSolution()
       playerLoosesRound()
     }
-  }
+  };
 
   function playerWinsRound() {
     setDisplayRoundConfetti(true);
@@ -308,9 +316,9 @@ export default function App(props) {
 
     setTimeout(function () {
       // Transition to next round after X seconds
-      console.log('🎉')
+      console.log('Transition to setUpRoundN() or gameOver()')
       transition();
-    }, 3200);
+    }, 3000);
   }
 
   function gameOver() {
@@ -360,7 +368,6 @@ export default function App(props) {
     setTimeout(function () {
       // Transition to leaderboard after X seconds
       evaluateIfLeaderboardMaterial();
-      // }, 120000);
     }, 3000);
   }
 
@@ -389,23 +396,23 @@ export default function App(props) {
   2 wrong bubbles (therefore 4 bubbles total) and so on.
   The max number of wrong bubbles is 6.
   */
-  function calculateNumWrongColorBubbles() {
-    if (gameState === 'homeScreenPractice') {
-      setNumWrongColorBubbles(0);
-    } else if (round <= 1) {
-      setNumWrongColorBubbles(1);
-    } else if (round === 2) {
-      setNumWrongColorBubbles(2);
-    } else if (round === 3) {
-      setNumWrongColorBubbles(3);
-    } else if (round === 4) {
-      setNumWrongColorBubbles(4);
-    } else if (round === 5) {
-      setNumWrongColorBubbles(5);
-    } else if (round >= 6) {
-      setNumWrongColorBubbles(6);
-    }
-  }
+  // function calculateNumWrongColorBubbles() {
+  //   if (gameState === 'homeScreenPractice') {
+  //     setNumWrongColorBubbles(0);
+  //   } else if (round <= 1) {
+  //     setNumWrongColorBubbles(1);
+  //   } else if (round === 2) {
+  //     setNumWrongColorBubbles(2);
+  //   } else if (round === 3) {
+  //     setNumWrongColorBubbles(3);
+  //   } else if (round === 4) {
+  //     setNumWrongColorBubbles(4);
+  //   } else if (round === 5) {
+  //     setNumWrongColorBubbles(5);
+  //   } else if (round >= 6) {
+  //     setNumWrongColorBubbles(6);
+  //   }
+  // }
 
   function generateColorRound() {
     let soluColor1;
@@ -464,8 +471,8 @@ export default function App(props) {
         for (let i = numWrongColorBubbles; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
         }
+        // console.log("wrongColorsArray:", numWrongColorBubbles, wrongColorsArray)
         return wrongColorsArray;
-        console.log("wrongColorsArray:", wrongColorsArray)
       },
 
       get solutionColors() {
@@ -711,10 +718,6 @@ export default function App(props) {
     sound.play();
   }
 
-  function resetScoreForNextGame() {
-    setScore(0);
-    setLostRounds(0);
-  }
 
   //  ==================================
   //  Leaderboard
@@ -845,7 +848,6 @@ export default function App(props) {
           score={score}
           previousScore={previousScore}
           setPreviousScore={setPreviousScore}
-          resetScoreForNextGame={resetScoreForNextGame}
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
@@ -868,7 +870,6 @@ export default function App(props) {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
-            resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             displayLeaderboard={displayLeaderboard}
           />
@@ -908,4 +909,4 @@ export default function App(props) {
       </div>
     </div>
   );
-}
+};
