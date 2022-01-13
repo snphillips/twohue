@@ -37,7 +37,7 @@ export default function StartButtons(props) {
         </p>
 
         <p className="loses">
-          flops: {props.lostRounds}/{props.maxLossCount}
+          lost rounds: {props.lostRounds}/{props.maxLossCount}
         </p>
       </div>
     </section>

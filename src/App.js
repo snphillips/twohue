@@ -148,7 +148,7 @@ export default function App(props) {
     if (lostRounds >= maxLossCount) {
       console.log("lostRounds larger or equal to maxLossCount")
     } else if (lostRounds < maxLossCount) {
-      setRound(round => round + 1);
+      setRound(round + 1);
     }
   }
 
