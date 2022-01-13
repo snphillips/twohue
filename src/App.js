@@ -19,6 +19,7 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 // let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
+let maxAttemptCount = 6;
 let value;
 // let previsAudioOn;
 let solutionColors;
@@ -74,10 +75,11 @@ export default function App(props) {
   */
   const firstUpdate = useRef(true);
 
-  let maxAttemptCount = 6;
     if (gameState === 'homeScreenPractice') {
-    maxAttemptCount = 30; 
-  }
+      maxAttemptCount = 30; 
+    } else {
+      maxAttemptCount = 6;
+    }
 
   // ***********************************
   // Here's where the app begins.
@@ -121,12 +123,12 @@ export default function App(props) {
     setDisplayGameOverConfetti(false);
     setConfettiRecycle(false);
     setDisplayGameOverMessage(false);
+    calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
     setRound(0);
     setPreviousScore(0);
     setScore(0);
-    calculateNumWrongColorBubbles()
     setUpRoundN();
   }
   
@@ -146,15 +148,17 @@ export default function App(props) {
 
   function incrementRoundCounter() {
     if (lostRounds >= maxLossCount) {
-      console.log("lostRounds larger or equal to maxLossCount")
+      console.log("🙀 GAME OVER lostRounds >= maxLossCount, lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
     } else if (lostRounds < maxLossCount) {
+      console.log("+ 1 increment round")
       setRound(round + 1);
     }
   }
 
   // =================================================
-  // Every time the round changes, recalculate the 
-  // number of "wrong" color bubbles
+  // Every time the round changes, do things:
+  // 1) 
+  // 2) recalculate the number of "wrong" color bubbles
   // =================================================
   useEffect(() => {
     // We cap out at 8 color bubbles so return after
@@ -256,7 +260,7 @@ export default function App(props) {
 
   function playerLoosesRound() {
     if (lostRounds <= maxLossCount) {
-      console.log('😖 player looses round');
+      console.log('😭 player looses round');
       playLoseSound();
       showSolution()
       setLostRounds(lostRounds => lostRounds + 1);

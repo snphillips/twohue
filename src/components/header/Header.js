@@ -10,21 +10,21 @@ export default function Header(props) {
     <header>
       <Title 
         style={{order: 1}}
-        round={props.round}
         displayScoreBoard={props.displayScoreBoard}
-      />
+        />
 
       <MessageBoard
         style={{order: 2}}
         transition={props.transition}
         displayIntroMessage={props.displayIntroMessage}
         resetScoreForNextGame={props.resetScoreForNextGame}
-      />
+        />
 
       <div style={{order: 3}}>
         <ScoreBoard
           attempt={props.attempt}
           score={props.score}
+          round={props.round}
           previousScore={props.previousScore}
           lostRounds={props.lostRounds}
           maxLossCount={props.maxLossCount}

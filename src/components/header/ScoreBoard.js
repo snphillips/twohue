@@ -33,6 +33,10 @@ export default function StartButtons(props) {
         </p>
 
         <p>
+          round: {props.round}
+        </p>
+        
+        <p>
           attempt: {props.attempt}/{props.maxAttemptCount}
         </p>
 
