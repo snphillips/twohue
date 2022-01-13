@@ -26,11 +26,14 @@ export default function StartButtons(props) {
               end={props.score}
               duration={1.5}
               onEnd={() => {
-                // props.previousScore = props.score;
-                // console.log( "Count up done: previousScore:", previousScore, "props.score:", props.score)
+              // can I remove this onEnd?
               }}
             />
           </span>
+        </p>
+
+        <p>
+          round: {props.round}
         </p>
 
         <p>

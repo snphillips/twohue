@@ -103,14 +103,9 @@ export default function App(props) {
     console.log('🪄 initializeGame() hello player');
     setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
-    setAttempt(0);
-    setRound(0);
-    setScore(0);
-    setPreviousScore(0);
-    setLostRounds(0);
     generateColorRound();
   }
-
+  
   useEffect(() => {
     // keep this for development
     console.log('🚦 gameState is:', gameState)
@@ -122,6 +117,16 @@ export default function App(props) {
     setDisplayStartButton(false);
     setDisplayIntroMessage(false);
     setDisplayScoreBoard(true);
+    setDisplayPlayAgainButton(false);
+    setDisplayGameOverConfetti(false);
+    setConfettiRecycle(false);
+    setDisplayGameOverMessage(false);
+    setLostRounds(0);
+    setAttempt(0);
+    setRound(0);
+    setPreviousScore(0);
+    setScore(0);
+    calculateNumWrongColorBubbles()
     setUpRoundN();
   }
   
@@ -132,8 +137,8 @@ export default function App(props) {
     // stop confetti falling if 
     setConfettiRecycle(false);
     setPlayerWinRound(false);
-    generateColorRound();
     incrementRoundCounter()
+    generateColorRound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
@@ -141,6 +146,7 @@ export default function App(props) {
 
   function incrementRoundCounter() {
     if (lostRounds >= maxLossCount) {
+      console.log("lostRounds larger or equal to maxLossCount")
     } else if (lostRounds < maxLossCount) {
       setRound(round => round + 1);
     }
@@ -154,6 +160,7 @@ export default function App(props) {
     // We cap out at 8 color bubbles so return after
     // round 7
     if (round > 7) {return}
+    // why does this not 
     calculateNumWrongColorBubbles();
   }, [round])
 
@@ -291,6 +298,7 @@ export default function App(props) {
   function gameOver() {
     setGameState('gameOver');
     gameOverChimes();
+    setDisplayScoreBoard(false);
     setDisplayGameOverMessage(true);
     setDisplayPlayAgainButton(true);
     setDisplayGameOverConfetti(true);
@@ -564,16 +572,26 @@ export default function App(props) {
   //  note: it has to be an arrow style function.
   //  ===================================
   function bubbleClickHandler(event) {
+    console.log("🧚‍♀️ bubble click handler")
     // guard clauses to disable click handler if:
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
     // 4) confetti is falling
-    if (lostRounds > maxLossCount) return;
-    if (attempt >= maxAttemptCount) return;
-    if (playerWinsRound === true) return;
-    if (displayRoundConfetti === true) return;
-    if (displayGameOverConfetti === true) return;
+    if (lostRounds > maxLossCount) {
+      console.log("✋ lostRounds > maxLossCount - click handler disabled")
+      return
+    };
+    if (attempt >= maxAttemptCount) {
+      console.log("✋ attempt >= maxAttemptCount - click handler disabled")
+      return
+    };
+    if (playerWinsRound === true) {
+      console.log("✋ playerWinsRound === true - click handler disabled")
+      return
+    };
+    // if (displayRoundConfetti === true) return;
+    // if (displayGameOverConfetti === true) return;
 
     setAttempt(attempt + 1);
     bubbleSound();
