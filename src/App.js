@@ -59,7 +59,7 @@ export default function App(props) {
   const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   // is there a reason to this?
-  const [playerWinRound, setPlayerWinRound] = useState(false);
+  // const [playerWinRound, setPlayerWinRound] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [displaySolution, setDisplaySolution] = useState(false);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
@@ -96,7 +96,7 @@ export default function App(props) {
       // console.log = function () {};
       setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 2;
+      maxLossCount = 4;
       maxAttemptCount = 4;
     }
   }, []);
@@ -106,7 +106,9 @@ export default function App(props) {
     setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
     // we generateColorRound in two places: once when 
-    // we initializeGame and onece in setUpRound
+    // we initializeGame and in setUpRound.
+    // In therory, the user only initializes game once at load.
+    // Future games are initiated by startGameClickHandler()
     generateColorRound();
   }
   
@@ -130,51 +132,37 @@ export default function App(props) {
     setAttempt(0);
     setPreviousScore(0);
     setScore(0);
+    setNumWrongColorBubbles(0);
     setUpRoundN();
     // console.log("1) round in startGameClickHandler():", round)
   }
   
+  // why is this running twice?
   function setUpRoundN() {
+    console.log("🧵 setUpRoundN")
     setGameState('setUpColorRound')
     setRound(round => round + 1);
+    // setNumWrongColorBubbles(round => round + 1);
     beginRoundSound();
     setDisplayRoundConfetti(false);
-    // stop confetti falling if 
     setConfettiRecycle(false);
-    setPlayerWinRound(false);
-    // calculateNumWrongColorBubbles();
     generateColorRound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
-
-    // console.log("2) round in setUpRoundN():", round)
   }
-  // Sarah, can we count on this to make right number of bubbles?
+
   // =================================================
   // Every time the round changes recalculate the number
   // of "wrong" color bubbles for the next round
   // =================================================
   useEffect(() => {
-    // We cap out at 8 color bubbles so return after round 7
-    if (round >= 7) {return}
-    if (gameState === 'homeScreenPractice') {
-      setNumWrongColorBubbles(0);
-    } else if (round <= 1) {
-      setNumWrongColorBubbles(1);
-    } else if (round === 2) {
-      setNumWrongColorBubbles(2);
-    } else if (round === 3) {
-      setNumWrongColorBubbles(3);
-    } else if (round === 4) {
-      setNumWrongColorBubbles(4);
-    } else if (round === 5) {
-      setNumWrongColorBubbles(5);
-    } else if (round === 6) {
-      setNumWrongColorBubbles(6);
-    }
-    console.log("🎈 calculating # color bubbles. Round: ", round, numWrongColorBubbles)
-
+    // We cap out at 8 color bubbles so return after round 6
+      if (round > 6) {
+        return
+      }
+      else {setNumWrongColorBubbles(round)}
+    console.log("🎈 round:", round, "numWrongColorBubbles:", numWrongColorBubbles)    
   }, [round])
   
   // =================================================
@@ -255,33 +243,30 @@ export default function App(props) {
     }
   };
 
+   // =================================================
+   // Player Wins Round 😎
+   // =================================================
   function playerWinsRound() {
+    setGameState('playerWinsRound')
     setDisplayRoundConfetti(true);
     playWinSound();
-    setPlayerWinRound(true);
+    // setPlayerWinRound(true);
     increasePlayerScore();
-    
-    let stateTransition = () => {
-      if (lostRounds < maxLossCount) {
-        console.log('Game not over. Onto RoundN')
-        setUpRoundN();
-      } else if (lostRounds >= maxLossCount) {
-        console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
-        // Transition to gameOver();
-        gameOver()
-      }
-    };
-    
+
     setTimeout(function () {
       // function to be executed after 2 seconds
-      console.log("🎉 hihihi from player wins round")
-      console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
-      stateTransition();
-    }, 3000);
+      setUpRoundN();
+    }, 2000);
+
+    console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
   }
 
+   // =================================================
+   // Player Looses Round 😭 
+   // =================================================
   function playerLoosesRound() {
     if (lostRounds <= maxLossCount) {
+      setGameState('playerLoosesRound')
       console.log('😭 player looses round');
       playLoseSound();
       showSolution()
@@ -289,9 +274,9 @@ export default function App(props) {
     }
   }
 
+
   function showSolution() {
     setGameState('showSolution');
-    console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
 
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
@@ -301,24 +286,17 @@ export default function App(props) {
       backgroundColor: colorRound.solutionColor2,
       animation: 'fadein 1.25s',
     });
-
-    let transition = () => {
+    
+    // Transition to next round or game over after X seconds
+    setTimeout(function () {
       if (lostRounds < maxLossCount) {
-        console.log(`🌗 Set up next round`);
-        // Set up next round
+        console.log(`⏳ Transition to setUpRoundN`);
         setUpRoundN()
       } else if (lostRounds >= maxLossCount) {
-        console.log(`Transition to gameOver()`);
-        // Transition to 'NO_MORE_ROUNDS'
+        console.log(`⏳ Transition to gameOver()`);
         gameOver()
       }
-    };
-
-    setTimeout(function () {
-      // Transition to next round after X seconds
-      console.log('Transition to setUpRoundN() or gameOver()')
-      transition();
-    }, 3000);
+    }, 2000);
   }
 
   function gameOver() {
@@ -396,23 +374,6 @@ export default function App(props) {
   2 wrong bubbles (therefore 4 bubbles total) and so on.
   The max number of wrong bubbles is 6.
   */
-  // function calculateNumWrongColorBubbles() {
-  //   if (gameState === 'homeScreenPractice') {
-  //     setNumWrongColorBubbles(0);
-  //   } else if (round <= 1) {
-  //     setNumWrongColorBubbles(1);
-  //   } else if (round === 2) {
-  //     setNumWrongColorBubbles(2);
-  //   } else if (round === 3) {
-  //     setNumWrongColorBubbles(3);
-  //   } else if (round === 4) {
-  //     setNumWrongColorBubbles(4);
-  //   } else if (round === 5) {
-  //     setNumWrongColorBubbles(5);
-  //   } else if (round >= 6) {
-  //     setNumWrongColorBubbles(6);
-  //   }
-  // }
 
   function generateColorRound() {
     let soluColor1;
@@ -484,9 +445,6 @@ export default function App(props) {
 
       // Mix all the color bubbles together
       get allColorBubbles() {
-        // console.log('solutionColors:', solutionColors);
-        // console.log('wrongColors:', wrongColors);
-
         // The concat() method merges two or more arrays.
         // This method does not change the existing arrays,
         // but instead returns a new array.
@@ -494,10 +452,6 @@ export default function App(props) {
         return newColorRound.solutionColors.concat(newColorRound.wrongColors);
       },
     };
-    // console.log('newColorRound:', newColorRound);
-    // console.log('wrongColors:', newColorRound.wrongColors);
-    // console.log('wrongColorArray:', wrongColorsArray);
-    // console.log('solutionColors:', solutionColors);
     // ~~~~~~~~~~~~~~~~~~~~~~~~
     // ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -724,7 +678,6 @@ export default function App(props) {
   //  ==================================
   //  GET
   //  ==================================
-
   function axiosGetAllLeaderboardResults() {
     axios.get(dataSource)
       .then( (response) => {
@@ -735,15 +688,12 @@ export default function App(props) {
         // If there's an error
         console.log('axiosGetAllLeaderboardResults() error:', error);
         setLeaderboardServerDown(true)
-
-        if (leaderboardServerDown === true) {
-         console.log("leaderboard down but here's the play again button")
-          setDisplayPlayAgainButton(true);
-        }
+        // if (leaderboardServerDown === true) {
+        //  console.log("leaderboard down but here's the play again button")
+        //   setDisplayPlayAgainButton(true);
+        // }
       });
   }
-
-  
 
   //  ==================================================================
   //  POST
