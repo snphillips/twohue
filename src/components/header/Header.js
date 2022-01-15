@@ -40,6 +40,7 @@ export default function Header(props) {
           displayStartButton={props.displayStartButton}
           displayPlayAgainButton={props.displayPlayAgainButton}
           startGameClickHandler={props.startGameClickHandler}
+          setUpRoundN={props.setUpRoundN}
         />
       </div>
     </header>

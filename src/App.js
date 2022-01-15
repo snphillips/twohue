@@ -22,7 +22,7 @@ let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
 // let previsAudioOn;
-let solutionColors;
+// let solutionColors;
 
 
 export default function App(props) {
@@ -130,10 +130,12 @@ export default function App(props) {
     setRound(0);
     setPreviousScore(0);
     setScore(0);
-    setUpRoundN();
+    // setUpRoundN();
+    console.log("🚜 startGameClickHandler round:", round)
   }
-  
+
   function setUpRoundN() {
+    console.log("🚜 setUpRoundN. round:", round)
     beginRoundSound();
     setGameState('setUpColorRound')
     setDisplayRoundConfetti(false);
@@ -146,8 +148,8 @@ export default function App(props) {
   }
 
   function incrementRound() {
-    console.log("+ 1 increment round")
-    setRound(round + 1);
+    setRound(round => round + 1);
+    console.log("+ 1 increment round to: ", round)
   }
 
   // =================================================
@@ -274,11 +276,11 @@ export default function App(props) {
       animation: 'fadein 1.25s',
     });
   }
-  
+
   useEffect( () => {
     // Transition to next round or game over after X seconds
     setTimeout(function () {
-      console.log("lostRounds:", lostRounds, "maxLossCount:". maxLossCount)
+      console.log("lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
         setUpRoundN()
@@ -298,12 +300,13 @@ export default function App(props) {
     setDisplayGameOverMessage(true);
     setDisplayPlayAgainButton(true);
     setDisplayGameOverConfetti(true);
+    setConfettiRecycle(true);
     gameOverTransition();
   }
 
   function gameOverTransition() {
     if (leaderboardServerDown === true) {
-      console.log('leaderboard is not available');
+      console.log('🚨 leaderboard is not available');
     }
 
     let evaluateIfLeaderboardMaterial = () => {
@@ -335,10 +338,9 @@ export default function App(props) {
       }
     };
 
+    // Transition to leaderboard after X seconds
     setTimeout(function () {
-      // Transition to leaderboard after X seconds
       evaluateIfLeaderboardMaterial();
-      // }, 120000);
     }, 3000);
   }
 
@@ -560,8 +562,8 @@ export default function App(props) {
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
     // 4) confetti is falling
-    if (lostRounds > maxLossCount) {
-      console.log("✋ lostRounds > maxLossCount - click handler disabled")
+    if (gameState === "game-over") {
+      console.log("✋ game-over - click handler disabled")
       return
     };
     if (attempt >= maxAttemptCount) {
@@ -817,6 +819,7 @@ export default function App(props) {
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
           displayIntroMessage={displayIntroMessage}
+          setUpRoundN={setUpRoundN}
         />
 
           <GameOverScreen

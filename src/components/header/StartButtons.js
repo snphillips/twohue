@@ -17,8 +17,10 @@ export default function StartButtons(props) {
         style={{
           display: startButtonDisplayStyle
         }}
-        onClick={() => {
-          props.startGameClickHandler();
+        onClick={ () => {
+          props.startGameClickHandler( () => {
+            props.setUpRoundN();
+          });
         }}
       >
         start
@@ -31,8 +33,9 @@ export default function StartButtons(props) {
           zIndex: 3
         }}
         onClick={() => {
-          // props.resetScoreForNextGame();
-          props.startGameClickHandler();
+          props.startGameClickHandler( () => {
+            props.setUpRoundN();
+          });
         }}
       >
         play again
