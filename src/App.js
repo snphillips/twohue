@@ -137,11 +137,9 @@ export default function App(props) {
     beginRoundSound();
     setGameState('setUpColorRound')
     setDisplayRoundConfetti(false);
-    // stop confetti falling if 
     setConfettiRecycle(false);
     setPlayerWinRound(false);
     incrementRound()
-    // generateColorRound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
@@ -164,14 +162,12 @@ export default function App(props) {
   // Every time the lostRound changes, determine if
   // player has run out of rounds to loose
   // =================================================
-  useEffect(()=> {
-
+  useEffect( ()=> {
     if (lostRounds === maxLossCount) {
       // Transition to game over
       console.log("😣 player reaches max lost rounds. Game over.")
       gameOver();
     }
-
   }, [lostRounds])
   
 
@@ -240,44 +236,35 @@ export default function App(props) {
     }
   }
 
+  //  ===================================
+  //  Player Wins Round
+  //  ===================================
   function playerWinsRound() {
     setDisplayRoundConfetti(true);
     playWinSound();
     setPlayerWinRound(true);
-    increasePlayerScore();
-    
-    let stateTransition = () => {
-      if (lostRounds < maxLossCount) {
-        console.log('Game not over. Onto RoundN')
-        setUpRoundN();
-      } else if (lostRounds >= maxLossCount) {
-        console.log('NO_MORE_ROUNDS maxLossCount:', maxLossCount);
-        // Transition to gameOver();
-        gameOver()
-      }
-    };
-    
+    increasePlayerScore();    
+    // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
-      // function to be executed after 2 seconds
       console.log("🎉 hihihi from player wins round")
-      console.log('💃 player wins round. displayRoundConfetti:', displayRoundConfetti);
-      stateTransition();
+      setUpRoundN();
     }, 3000);
-  }
+  };
 
-  function playerLoosesRound() {
-    if (lostRounds <= maxLossCount) {
-      console.log('😭 player looses round');
-      playLoseSound();
-      showSolution()
-      setLostRounds(lostRounds => lostRounds + 1);
-    }
+  //  ===================================
+  //  Player Looses Round
+  //  ===================================
+  function playerLoosesRound(maxLossCount) {
+    console.log('😭 player looses round');
+    playLoseSound();
+    showSolution()
+    setLostRounds(lostRounds => lostRounds + 1)
   }
-
+  
   function showSolution() {
     setGameState('showSolution');
     console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
-
+    
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
       animation: 'fadein 1.25s',
@@ -286,25 +273,23 @@ export default function App(props) {
       backgroundColor: colorRound.solutionColor2,
       animation: 'fadein 1.25s',
     });
-
-    let transition = () => {
+  }
+  
+  useEffect( () => {
+    // Transition to next round or game over after X seconds
+    setTimeout(function () {
+      console.log("lostRounds:", lostRounds, "maxLossCount:". maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
-        // Set up next round
         setUpRoundN()
       } else if (lostRounds >= maxLossCount) {
-        console.log(`Transition to gameOver()`);
-        // Transition to 'NO_MORE_ROUNDS'
+        console.log(`🌑 Transition to gameOver()`);
         gameOver()
       }
-    };
+    }, 2000);
 
-    setTimeout(function () {
-      // Transition to next round after X seconds
-      console.log('🎉')
-      transition();
-    }, 3200);
-  }
+  }, [lostRounds])
+   
 
   function gameOver() {
     setGameState('game-over');
@@ -425,21 +410,21 @@ export default function App(props) {
       solutionColor1: soluColor1,
       solutionColor2: soluColor2,
       targetColor: targColor,
-
+      
       /*
         Only create enough wrongColors to fill in the
         color bubbles. For instance, the practice round only
         has two bubbles total (therefore no wrong colors 
-        are needed).
-        numWrongColorBubbles tells us how many times we
-        generate a random 'wrong color' to push into
-        getter methods are used to access the properties of an object
-        */
-      get wrongColors() {
-        // first, empty the array of old colors
-        wrongColorsArray = [];
-
-        console.log("🎠 round:", round)
+          are needed).
+          numWrongColorBubbles tells us how many times we
+          generate a random 'wrong color' to push into
+          getter methods are used to access the properties of an object
+          */
+         get wrongColors() {
+           // first, empty the array of old colors
+           wrongColorsArray = [];
+           
+        console.log("🎠 Hello from newColorRound. round:", round)
 
         for (let i = round; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
