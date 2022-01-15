@@ -35,13 +35,14 @@ export default function App(props) {
   const [gameState, setGameState] = useState('loading');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
-  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
+  const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
   const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
+  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none')
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -121,7 +122,8 @@ export default function App(props) {
     setDisplayIntroMessage(false);
     setDisplayScoreBoard(true);
     setDisplayPlayAgainButton(false);
-    setDisplayGameOverConfetti(false);
+    setrunGameOverConfetti(false);
+    setDisplayGameOverConfetti('none');
     setConfettiRecycle(false);
     setDisplayGameOverMessage(false);
     calculateNumWrongColorBubbles()
@@ -299,7 +301,8 @@ export default function App(props) {
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(true);
     setDisplayPlayAgainButton(true);
-    setDisplayGameOverConfetti(true);
+    setrunGameOverConfetti(true);
+    setDisplayGameOverConfetti('block');
     setConfettiRecycle(true);
     gameOverTransition();
   }
@@ -575,7 +578,7 @@ export default function App(props) {
       return
     };
     // if (displayRoundConfetti === true) return;
-    // if (displayGameOverConfetti === true) return;
+    // if (runGameOverConfetti === true) return;
 
     setAttempt(attempt + 1);
     bubbleSound();
@@ -777,7 +780,6 @@ export default function App(props) {
           width={width}
           height={height}
           numberOfPieces={300}
-          // run={displayRoundConfetti}
           run={displayRoundConfetti}
           recycle={false}
           tweenDuration={100}
@@ -786,15 +788,16 @@ export default function App(props) {
           gravity={0.6}
         />
       </div>
-      <div className='win-game-confetti'>
+      <div
+        className='win-game-confetti'
+        style={{display: displayGameOverConfetti}} 
+      >
         <Confetti
           width={width}
           height={height}
-          run={displayGameOverConfetti}
-          // run={false}
+          run={runGameOverConfetti}
           numberOfPieces={600}
           recycle={confettiRecycle}
-          // recycle={false}
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
