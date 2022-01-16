@@ -12,18 +12,11 @@ as indicated by <State is={['homeScreenPractice']}>
 
 export default function ColorBubbleTray(props) {
 
-  // console.log("props.allColorBubbles:", props.allColorBubbles);
-
-  let animationDisplay;
-  (props.displayIntroAnimation ? animationDisplay = 'flex' : animationDisplay = 'none')
-
   return (
     <section id="color-bubble-tray">
       <div 
         className="arrow-container arrow-container-left"
-        style={{
-          display: animationDisplay
-        }}
+        style={{display: props.displayIntroAnimation}}
         >
         <svg className="svg-icon arrow" viewBox="0 0 20 20">
           <path
@@ -61,9 +54,7 @@ export default function ColorBubbleTray(props) {
 
       <div 
         className="arrow-container arrow-container-right"
-        style={{
-          display: animationDisplay
-        }}
+        style={{display: props.displayIntroAnimation}}
       >
         <svg className="svg-icon arrow" viewBox="0 0 20 20">
           <path

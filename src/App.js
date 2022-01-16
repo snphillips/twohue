@@ -88,10 +88,9 @@ export default function App(props) {
   // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
-    initializeGame();
-    // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
-    axiosGetAllLeaderboardResults();
-    
+    (console.log("🎃🎃🎃🎃🎃 first render only"))
+    initializeGame( generateColorRound );
+
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
@@ -101,17 +100,23 @@ export default function App(props) {
       maxLossCount = 2;
       maxAttemptCount = 4;
     }
+    // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
+    axiosGetAllLeaderboardResults();
+    generateColorRound()
   }, []);
   
-  function initializeGame() {
-    console.log('🪄 initializeGame() hello player');
-    setGameState('homeScreenPractice');
+  function initializeGame(callback) {
+    console.log('🪄 initializeGame() hello player', gameState);
     setDisplayPlayAgainButton('none');
     setDisplayStartButton('block');
     setDisplayScoreBoard('none');
     setDisplayGameOverMessage('none');
-    generateColorRound();
+    setGameState('homeScreenPractice');
+    callback();
+    // generateColorRound();
   }
+
+
   
   useEffect(() => {
     // keep this for development
@@ -164,6 +169,7 @@ export default function App(props) {
     if (gameState === "game-over") {return}
     generateColorRound();
     setGameState('roundN')
+    console.log("this use effect shouldn't be firing", gameState)
   }, [round])
   
   // =================================================
@@ -728,7 +734,7 @@ export default function App(props) {
         score: score,
       })
       .then(function (response) {
-        console.log('leaderboard axios call response: ', response.data);
+        console.log('leaderboard axios call response: ', response.data.data);
       })
       .then(() => {
         axiosGetAllLeaderboardResults();
