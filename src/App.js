@@ -15,8 +15,8 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 // import statechart from './statechart';
 
 // Leave both server addresses here in case you want to switch
-let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
-// let dataSource = 'http://localhost:3001/players';
+// let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
@@ -34,7 +34,7 @@ export default function App(props) {
   // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
-  const [displayRoundConfetti, setDisplayRoundConfetti] = useState(false);
+  const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
   const [displayStartButton, setDisplayStartButton] = useState(true);
@@ -106,25 +106,21 @@ export default function App(props) {
     console.log('🪄 initializeGame() hello player');
     setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
-    // We call 
     generateColorRound();
   }
   
   useEffect(() => {
     // keep this for development
-    console.log('🚦 gameState is:', gameState)
+    console.log('🚦🚦🚦 gameState is:', gameState)
   }, [gameState]);
   
   function startGameClickHandler() {
-    console.log('🏁 start game click handler');
     setDisplayIntroAnimation(false);
     setDisplayStartButton(false);
+    setDisplayPlayAgainButton(false);
     setDisplayIntroMessage(false);
     setDisplayScoreBoard(true);
-    setDisplayPlayAgainButton(false);
-    setrunGameOverConfetti(false);
     setDisplayGameOverConfetti('none');
-    setConfettiRecycle(false);
     setDisplayGameOverMessage(false);
     calculateNumWrongColorBubbles()
     setLostRounds(0);
@@ -132,15 +128,14 @@ export default function App(props) {
     setRound(0);
     setPreviousScore(0);
     setScore(0);
-    // setUpRoundN();
-    console.log("🚜 startGameClickHandler round:", round)
+    console.log('🏁 start game click handler', round);
   }
 
   function setUpRoundN() {
     console.log("🚜 setUpRoundN. round:", round)
     beginRoundSound();
     setGameState('setUpColorRound')
-    setDisplayRoundConfetti(false);
+    setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setPlayerWinRound(false);
     incrementRound()
@@ -158,8 +153,11 @@ export default function App(props) {
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
+    if (gameState === 'loading') {return}
+    if (gameState === "homeScreenPractice") {return}
     if (gameState === "game-over") {return}
     generateColorRound();
+    setGameState('roundN')
   }, [round])
   
   // =================================================
@@ -201,8 +199,6 @@ export default function App(props) {
       // Not enough trys for solution
       if (attempt === 1) {
         console.log('👆 First guess.');
-        // No need for transition. Player continues to play
-    
         // correct
       } else if (
         solutionColors.includes(leftFieldHexColor) &&
@@ -210,25 +206,17 @@ export default function App(props) {
         // the colors can't be the same on either side
         leftFieldHexColor !== rightFieldHexColor
       ) {
-        // Transition'CORRECT_SOLUTION';
-        console.log('👍 correct solution');
         setGameState('playerWinsRound');
         playerWinsRound();
     
         // incorrect
       } else {
-        console.log('INCORRECT attempt:', attempt);      
-        // Transition to 'INCORRECT_SOLUTION';
         playerMadeWrongGuess()
       }
   
   }, [attempt])
 
-  if (gameState === 'playweWinsRound') {
-    setDisplayRoundConfetti(true)
-  }
-
-
+ 
   function playerMadeWrongGuess() {
     console.log("👎 wrong guess")
     if (attempt < maxAttemptCount) {
@@ -244,22 +232,30 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWinsRound() {
-    setDisplayRoundConfetti(true);
+    console.log("Player wins round 🎉 🎉 🎉 🎉 🎉")
+    setGameState('playerWinsRound')
     playWinSound();
     setPlayerWinRound(true);
     increasePlayerScore();    
     // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
-      console.log("🎉 hihihi from player wins round")
       setUpRoundN();
     }, 3000);
   };
+  
+  // useLayoutEffect( () => {
+  //   console.log("player wins. Here's confetti")
+  //   if (playerWinsRound) {
+  //     setRunRoundConfetti(true);
+  //   }
+  // }, [playerWinsRound])
 
   //  ===================================
   //  Player Looses Round
   //  ===================================
   function playerLoosesRound(maxLossCount) {
     console.log('😭 player looses round');
+    setGameState('playerLoosesRound')
     playLoseSound();
     showSolution()
     setLostRounds(lostRounds => lostRounds + 1)
@@ -334,8 +330,7 @@ export default function App(props) {
 
       if (score >= lowestCurrentScore) {
         console.log('score is higher than lowestCurrentScore');
-        props.transition('JOIN_LEADERBOARD');
-        //
+        joinLeaderboard()
       } else {
         console.log('score is lower than lowestCurrentScore');
       }
@@ -367,8 +362,8 @@ export default function App(props) {
 
   /*
   The game gets harder by increasing the number of 
-  "wrong color bubbles" to choose from. The first round has 1 
-  wrong bubble (therefore 3 bubbles total), the second round has  
+  "wrong color bubbles" to choose from. Round 1 has 1 
+  wrong bubble (therefore 3 bubbles total), Round 2 has  
   2 wrong bubbles (therefore 4 bubbles total) and so on.
   The max number of wrong bubbles is 6.
   */
@@ -380,6 +375,7 @@ export default function App(props) {
    }}
 
   function generateColorRound() {
+    setGameState('generateColorRound')
     let soluColor1;
     let soluColor2;
     let targColor;
@@ -416,10 +412,10 @@ export default function App(props) {
       solutionColor2: soluColor2,
       targetColor: targColor,
       
-      /*
-        Only create enough wrongColors to fill in the
-        color bubbles. For instance, the practice round only
-        has two bubbles total (therefore no wrong colors 
+          /*
+          Only create enough wrongColors to fill in the
+          color bubbles. For instance, the practice round only
+          has two bubbles total (therefore no wrong colors 
           are needed).
           numWrongColorBubbles tells us how many times we
           generate a random 'wrong color' to push into
@@ -446,9 +442,6 @@ export default function App(props) {
 
       // Mix all the color bubbles together
       get allColorBubbles() {
-        // console.log('solutionColors:', solutionColors);
-        // console.log('wrongColors:', wrongColors);
-
         // The concat() method merges two or more arrays.
         // This method does not change the existing arrays,
         // but instead returns a new array.
@@ -456,10 +449,6 @@ export default function App(props) {
         return newColorRound.solutionColors.concat(newColorRound.wrongColors);
       },
     };
-    // console.log('newColorRound:', newColorRound);
-    // console.log('wrongColors:', newColorRound.wrongColors);
-    // console.log('wrongColorArray:', wrongColorsArray);
-    // console.log('solutionColors:', solutionColors);
     // ~~~~~~~~~~~~~~~~~~~~~~~~
     // ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -482,13 +471,16 @@ export default function App(props) {
 
 
 
-  //  =============================================================
-  //  Hover handler for color bubbles - shows player which 
-  //  field of the two fields is currently active. Note: we have
-  //  to set the backgroundColor otherwise it will revert to none.
-  //  =============================================================
+   /* 
+   ============================================
+   Hover handler for color bubbles - shows player which 
+   field of the two fields is currently active.
+   Note: we have to set the backgroundColor otherwise
+   it will revert to none.
+   ============================================
+   */
   function currentFieldMouseEnter() {
-    if (displayRoundConfetti === true) return;
+    if (gameState === 'playerWinsRound') return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -503,7 +495,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (displayRoundConfetti === true) return;
+    if (gameState === 'playerWinsRound') return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
@@ -556,7 +548,6 @@ export default function App(props) {
 
   //  ===================================
   //  Click handler for the color bubbles at bottom of screen
-  //  note: it has to be an arrow style function.
   //  ===================================
   function bubbleClickHandler(event) {
     console.log("🧚‍♀️ bubble click handler")
@@ -564,7 +555,6 @@ export default function App(props) {
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
-    // 4) confetti is falling
     if (gameState === "game-over") {
       console.log("✋ game-over - click handler disabled")
       return
@@ -577,8 +567,6 @@ export default function App(props) {
       console.log("✋ playerWinsRound === true - click handler disabled")
       return
     };
-    // if (displayRoundConfetti === true) return;
-    // if (runGameOverConfetti === true) return;
 
     setAttempt(attempt + 1);
     bubbleSound();
@@ -616,7 +604,7 @@ export default function App(props) {
   }
 
   //  ==================================
-  //  audio button switch toggle
+  //  🎶 audio button switch toggle
   //  if audio is on the state of isAudioOn is true,
   //  if audio is off the state of isAudioOn is false,
   //  the ! is the oposite of what it currently is.
@@ -709,13 +697,9 @@ export default function App(props) {
       });
   }
 
-  
-
-  //  ==================================================================
+  //  =================================
   //  POST
-  //  As soon as the user interacts with the form, newTodo updates.
-  //  The API call happens once the user clicks the 'submit' button.
-  //  ==================================================================
+  //  =================================
   function axiosPostNewLeaderboardInductee() {
     // props.transition('FILLED_OUT_FORM')
     let string = newLeaderboardInductee;
@@ -780,7 +764,7 @@ export default function App(props) {
           width={width}
           height={height}
           numberOfPieces={300}
-          run={displayRoundConfetti}
+          run={runRoundConfetti}
           recycle={false}
           tweenDuration={100}
           colors={colorRound.allColorBubbles}
