@@ -356,8 +356,6 @@ export default function App(props) {
     setNewLeaderboardInductee('');
   }
 
-  function leaderboard() {}
-
   function leaderboardAPICall() {
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
@@ -726,7 +724,7 @@ export default function App(props) {
 
     axios
       .post(dataSource, {
-        player: newLeaderboardInductee || 'enigma',
+        player: newLeaderboardInductee || 'bubble boy',
         score: score,
       })
       .then(function (response) {
@@ -738,7 +736,7 @@ export default function App(props) {
       .then(() => {
         console.log('after axiosGetAllLeaderboardResults()');
         // props.transition('API_DATABASE_CALL_COMPLETE');
-        // TODO: sarah, you need to post the data
+        // TODO: sarah what happens here?
       })
       .catch(function (error) {
         console.log(error);
@@ -754,7 +752,9 @@ export default function App(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.transition('FILLED_OUT_FORM');
+    // props.transition('FILLED_OUT_FORM');
+    // handleChange(event.target.value);
+    leaderboardAPICall()
   }
 
   // *****************************************************
