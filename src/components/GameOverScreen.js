@@ -18,11 +18,8 @@ let displayGameOver = () => {
 
 export default function GameOverScreen(props) {
 
-  let gameOverDisplay;
-  props.displayGameOverMessage ? gameOverDisplay = 'flex' : gameOverDisplay = 'none'
-
   // useEffect has empty array as dependency.
-  // Will only run upon render
+  // Will only run upon first render
     useEffect(() => {
     // Begin "game over" animation once the component has mounted
     displayGameOver();
@@ -39,7 +36,7 @@ export default function GameOverScreen(props) {
       <div 
         id="game-over-container"
         className="pop-in"
-        style={{display: gameOverDisplay}}
+        style={{display: props.displayGameOverMessage}}
         >
         <p id="game-over">game over</p>
         <p id="game-over-score">final score: {props.score}</p>

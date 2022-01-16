@@ -15,33 +15,23 @@ homeScreenPractice or showSolution
 
 export default function MessageBoard(props) {
 
-  let solutionStyle;
-  props.displayScoreBoard ? solutionStyle = 'block' : solutionStyle = 'none'
-
-  let introMessageStyle;
-  props.displayIntroMessage ? introMessageStyle = 'block' : introMessageStyle = 'none'
-
   return (
     <section className="message-board">
 
       <div 
       className="into-message"
-      style={{
-        display: introMessageStyle
-      }}
+      style={{display: props.displayIntroMessage}}
       >
         <p>Twohue is a color mixing game.</p>
         <p>Practice clicking bubbles before playing.</p>
       </div>
-
+{/* 
       <p
         className="solution-label"
-        style={{
-          display: solutionStyle
-        }}
+        style={{display: props.solutionStyle}}
         >
         Solution
-      </p>
+      </p> */}
     </section>
   );
 }

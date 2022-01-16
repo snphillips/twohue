@@ -36,15 +36,15 @@ export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  const [displayScoreBoard, setDisplayScoreBoard] = useState(false);
-  const [displayStartButton, setDisplayStartButton] = useState(true);
-  const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
-  const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
-  const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
-  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
+  const [displayScoreBoard, setDisplayScoreBoard] = useState('block');
+  const [displayStartButton, setDisplayStartButton] = useState('block');
+  const [displayIntroMessage, setDisplayIntroMessage] = useState('block');
+  const [displayIntroAnimation, setDisplayIntroAnimation] = useState('flex');
+  const [displayGameOverMessage, setDisplayGameOverMessage] = useState('none');
+  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState('none');
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
+  const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
   const [displayGameField, setDisplayGameField] = useState('flex');
-  const [displayColorBubbles, setDisplayColorBubbles] = useState('flex');
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -56,7 +56,6 @@ export default function App(props) {
   const [leftFieldStyle, setLeftFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
-  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
 
   const [wrongColors, setWrongColors] = useState([]);
@@ -106,8 +105,11 @@ export default function App(props) {
   
   function initializeGame() {
     console.log('🪄 initializeGame() hello player');
-    setDisplayPlayAgainButton(false);
     setGameState('homeScreenPractice');
+    setDisplayPlayAgainButton('none');
+    setDisplayStartButton('block');
+    setDisplayScoreBoard('none');
+    setDisplayGameOverMessage('none');
     generateColorRound();
   }
   
@@ -117,13 +119,15 @@ export default function App(props) {
   }, [gameState]);
   
   function startGameClickHandler() {
-    setDisplayIntroAnimation(false);
-    setDisplayStartButton(false);
-    setDisplayPlayAgainButton(false);
-    setDisplayIntroMessage(false);
-    setDisplayScoreBoard(true);
+    setDisplayGameField('flex');
+    setDisplayLeaderboard('none');
+    setDisplayIntroAnimation('none');
+    setDisplayStartButton('none');
+    setDisplayPlayAgainButton('none');
+    setDisplayIntroMessage('none');
+    setDisplayScoreBoard('block');
     setDisplayGameOverConfetti('none');
-    setDisplayGameOverMessage(false);
+    setDisplayGameOverMessage('none');
     calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
@@ -296,9 +300,9 @@ export default function App(props) {
   function gameOver() {
     setGameState('game-over');
     gameOverChimes();
-    setDisplayScoreBoard(false);
-    setDisplayGameOverMessage(true);
-    setDisplayPlayAgainButton(true);
+    setDisplayScoreBoard('none');
+    setDisplayGameOverMessage('flex');
+    setDisplayPlayAgainButton('block');
     setrunGameOverConfetti(true);
     setDisplayGameOverConfetti('block');
     setConfettiRecycle(true);
@@ -346,9 +350,9 @@ export default function App(props) {
 
   function joinLeaderboard() {
     setDisplayGameField('none');
-    setDisplayColorBubbles('none');
+    setDisplayGameOverMessage('none');
     setGameState('joinLeaderboard');
-    setDisplayLeaderboard(true);
+    setDisplayLeaderboard('block');
     setNewLeaderboardInductee('');
   }
 
@@ -696,7 +700,7 @@ export default function App(props) {
 
         if (leaderboardServerDown === true) {
          console.log("leaderboard down but here's the play again button")
-          setDisplayPlayAgainButton(true);
+          setDisplayPlayAgainButton('block');
         }
       });
   }
@@ -733,7 +737,8 @@ export default function App(props) {
       })
       .then(() => {
         console.log('after axiosGetAllLeaderboardResults()');
-        props.transition('API_DATABASE_CALL_COMPLETE');
+        // props.transition('API_DATABASE_CALL_COMPLETE');
+        // TODO: sarah, you need to post the data
       })
       .catch(function (error) {
         console.log(error);
@@ -742,9 +747,9 @@ export default function App(props) {
 
   function handleChange(event) {
     console.log('leaderboard form value:',  event.target.value)
-    // function setNewLeaderboardInductee (event.target.value) =>  {
-      // console.log('newLeaderboardInductee: ', newLeaderboardInductee)
-    // }
+    setNewLeaderboardInductee(event.target.value) 
+    console.log('newLeaderboardInductee: ', newLeaderboardInductee)
+
   }
 
   function handleSubmit(event) {
@@ -842,7 +847,6 @@ export default function App(props) {
               leftFieldStyle={leftFieldStyle}
               rightFieldStyle={rightFieldStyle}
               displaySolution={displaySolution}
-              displayGameField={displayGameField}
               />
 
             <ColorBubbleTray
@@ -856,7 +860,6 @@ export default function App(props) {
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
               displayIntroAnimation={displayIntroAnimation}
-              displayColorBubbles={displayColorBubbles}
             />
         </div>
 

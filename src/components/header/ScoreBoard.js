@@ -7,16 +7,11 @@ import CountUp from "react-countup";
 
 export default function StartButtons(props) {
     
-  let scoreDisplay;
-  (props.displayScoreBoard ? scoreDisplay = 'block' : scoreDisplay = 'none')
-
   return (
     <section className="score-board">
       <div
         className='scoreboard'
-        style={{
-          display: scoreDisplay
-        }}
+        style={{display: props.displayScoreBoard}}
       >
         <p className="score-word">
           score:

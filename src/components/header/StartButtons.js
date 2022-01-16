@@ -3,20 +3,12 @@ import React from "react";
 
 export default function StartButtons(props) {
   
-  let displayPlayAgainButtonStyle;
-  (props.displayPlayAgainButton ? displayPlayAgainButtonStyle = 'block' : displayPlayAgainButtonStyle = 'none')
-
-  let startButtonDisplayStyle;
-  (props.displayStartButton ? startButtonDisplayStyle = 'block' : startButtonDisplayStyle = 'none')
-
   return (
     <section className="start-buttons">
 
       <button
         className="start-button"
-        style={{
-          display: startButtonDisplayStyle
-        }}
+        style={{display: props.displayStartButton}}
         onClick={ () => {
           props.startGameClickHandler( () => {
             props.setUpRoundN();
@@ -29,7 +21,7 @@ export default function StartButtons(props) {
       <button
         className="play-again-button"
         style={{
-          display: displayPlayAgainButtonStyle,
+          display: props.displayPlayAgainButton,
           zIndex: 3
         }}
         onClick={() => {
