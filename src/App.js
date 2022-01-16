@@ -42,7 +42,9 @@ export default function App(props) {
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
   const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
-  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none')
+  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
+  const [displayGameField, setDisplayGameField] = useState('flex');
+  const [displayColorBubbles, setDisplayColorBubbles] = useState('flex');
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -343,8 +345,10 @@ export default function App(props) {
   }
 
   function joinLeaderboard() {
+    setDisplayGameField('none');
+    setDisplayColorBubbles('none');
     setGameState('joinLeaderboard');
-    setDisplayLeaderboard(true)
+    setDisplayLeaderboard(true);
     setNewLeaderboardInductee('');
   }
 
@@ -827,7 +831,10 @@ export default function App(props) {
             displayLeaderboard={displayLeaderboard}
           />
 
-        <div id='game-field'>
+        <div 
+          id='game-field'
+          style={{display: displayGameField}}
+        >
 
             <GameField
               colorRound={colorRound}
@@ -835,7 +842,8 @@ export default function App(props) {
               leftFieldStyle={leftFieldStyle}
               rightFieldStyle={rightFieldStyle}
               displaySolution={displaySolution}
-            />
+              displayGameField={displayGameField}
+              />
 
             <ColorBubbleTray
               round={round}
@@ -848,6 +856,7 @@ export default function App(props) {
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
               displayIntroAnimation={displayIntroAnimation}
+              displayColorBubbles={displayColorBubbles}
             />
         </div>
 

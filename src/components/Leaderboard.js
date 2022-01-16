@@ -42,7 +42,7 @@ export default function Leaderboard(props) {
                   id={"leaderboard-entry" + playerIndex}
                 >
                   <span className="player-rank">
-                    {playerIndex + 1}&nbsp;{item.player}
+                    {item.player}
                   </span>
                   <span className="player-score">{item.score}</span>
                 </li>
