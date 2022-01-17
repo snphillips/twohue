@@ -105,7 +105,7 @@ export default function App(props) {
   
   function initializeGame() {
     return new Promise(function(resolve) {
-      console.log('🪄 initializeGame() hello player. gamestate is:', gameState);
+      console.log('🪄 initializeGame() hello player');
       setDisplayPlayAgainButton('none');
       setDisplayStartButton('block');
       setDisplayScoreBoard('none');
@@ -121,7 +121,6 @@ export default function App(props) {
       });
   }
 
-
   useLayoutEffect(() => {
     // keep this for development
     console.log('🚦🚦🚦 gameState is:', gameState)
@@ -129,20 +128,23 @@ export default function App(props) {
   
   function startGameClickHandler() {
     setDisplayGameField('flex');
+    setDisplayScoreBoard('block');
+
     setDisplayLeaderboard('none');
     setDisplayIntroAnimation('none');
     setDisplayStartButton('none');
     setDisplayPlayAgainButton('none');
     setDisplayIntroMessage('none');
-    setDisplayScoreBoard('block');
     setDisplayGameOverConfetti('none');
     setDisplayGameOverMessage('none');
+
     calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
     setRound(1);
     setPreviousScore(0);
     setScore(0);
+    setUpRoundN();
     console.log('🏁 start game click handler', round);
   }
 
@@ -174,7 +176,7 @@ export default function App(props) {
     if (prevRound.current === round) {return}
     generateColorRound();
     setGameState('roundN')
-    console.log("🌶 A round updated. round: ", round, "prevRound.current:", prevRound.current)
+    console.log("🎡 Round updated. round: ",round,"prevRound.current: ",prevRound.current)
   }, [round])
   
    // =================================================
@@ -246,13 +248,6 @@ export default function App(props) {
       setUpRoundN();
     }, 3000);
   };
-  
-  // useLayoutEffect( () => {
-  //   console.log("player wins. Here's confetti")
-  //   if (playerWinsRound) {
-  //     setRunRoundConfetti(true);
-  //   }
-  // }, [playerWinsRound])
 
   //  ===================================
   //  Player Looses Round
@@ -283,11 +278,11 @@ export default function App(props) {
   useEffect( () => {
     // Do not transition if gameState is "homescreenpractice"
     if (gameState === "homeScreenPractice") {return}
-    // Do not transition if prevLostRounds is equal to lostRounds 
+    // Do not transition if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
     // Transition to next round or game over after X seconds
     setTimeout(function () {
-      console.log("prevLostRounds", prevLostRounds, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount.current)
+      console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
         setUpRoundN()
@@ -566,18 +561,17 @@ export default function App(props) {
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
-    if (gameState === "game-over") {
-      console.log("✋ game-over - click handler disabled")
+    if ((gameState === "game-over") ||
+       (gameState === 'playerWinsRound') ||
+       (gameState === 'setUpRoundN')) {
+      console.log("✋ click handler disabled")
       return
-    };
+    }
     if (attempt >= maxAttemptCount) {
       console.log("✋ attempt >= maxAttemptCount - click handler disabled")
       return
     };
-    if (playerWinsRound === true) {
-      console.log("✋ playerWinsRound === true - click handler disabled")
-      return
-    };
+
 
     setAttempt(attempt + 1);
     bubbleSound();
