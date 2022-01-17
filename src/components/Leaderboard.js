@@ -52,6 +52,7 @@ export default function Leaderboard(props) {
               handleChange={props.handleChange}
               handleSubmit={props.handleSubmit}
               newLeaderboardInductee={props.newLeaderboardInductee}
+              displayLeaderboardForm={props.displayLeaderboardForm}
             />
 
             <ReactSpinners loadingSpinner={props.loadingSpinner} />

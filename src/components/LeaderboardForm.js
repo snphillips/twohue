@@ -6,7 +6,10 @@ import React from 'react';
 export default function LeaderboardForm(props) {
     return (
 
-        <div className="leaderboard-form">
+        <div 
+          style={{display: props.displayLeaderboardForm}}
+          className="leaderboard-form"
+          >
 
           <form
             onSubmit={props.handleSubmit}

@@ -3,15 +3,10 @@ import React from 'react';
 
 export default function GameField(props) {
   
-  // console.log('props.colorRound.targetColor:', props.colorRound.targetColor)
-  // console.log('props.colorRound:', props.colorRound)
-  
   return (
     <div>
       <div id="target-swatch"
-          style={
-            {'backgroundColor': props.colorRound.targetColor}
-          } >
+          style={{'backgroundColor': props.colorRound.targetColor}}>
           &nbsp;
         <span className="tooltiptext">target color</span>
       </div>

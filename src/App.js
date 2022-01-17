@@ -44,6 +44,7 @@ export default function App(props) {
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState('none');
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
   const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
+  const [displayLeaderboardForm, setdisplayLeaderboardForm] = useState('flex');
   const [displayGameField, setDisplayGameField] = useState('flex');
   const [round, setRound] = useState(0);
   const prevRound = useRef(0);
@@ -62,10 +63,7 @@ export default function App(props) {
 
   const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
-  // is there a reason to this?
-  const [playerWinRound, setPlayerWinRound] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
-  const [displaySolution, setDisplaySolution] = useState(false);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
   const [loadingSpinner, setLoadingSpinner] = useState(false);
@@ -121,7 +119,7 @@ export default function App(props) {
       });
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // keep this for development
     console.log('🚦🚦🚦 gameState is:', gameState)
   }, [gameState]);
@@ -156,7 +154,7 @@ export default function App(props) {
     beginRoundSound();
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
-    setPlayerWinRound(false);
+    // (false);
     incrementRound()
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
@@ -165,7 +163,8 @@ export default function App(props) {
 
   function incrementRound() {
     if (gameState === "homeScreenPractice") {return}
-    setRound(round => round + 1);
+    // setRound(round => round + 1);
+    setRound(prevRound => prevRound + 1);
     console.log("+ 1 increment")
   }
 
@@ -173,6 +172,7 @@ export default function App(props) {
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
+    // working but only by accident. Find a better solution
     if (prevRound.current === round) {return}
     generateColorRound();
     setGameState('roundN')
@@ -238,10 +238,10 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWinsRound() {
-    console.log("Player wins round 🎉 🎉 🎉 🎉 🎉")
-    setGameState('playerWinsRound')
+    console.log("Player wins round 🎉 🎉 🎉 🎉 🎉");
+    setGameState('playerWinsRound');
+    setRunRoundConfetti(true);
     playWinSound();
-    setPlayerWinRound(true);
     increasePlayerScore();    
     // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
@@ -254,10 +254,10 @@ export default function App(props) {
   //  ===================================
   function playerLoosesRound(maxLossCount) {
     console.log('😭 player looses round');
-    setGameState('playerLoosesRound')
+    setGameState('playerLoosesRound');
     playLoseSound();
-    showSolution()
-    setLostRounds(lostRounds => lostRounds + 1)
+    showSolution();
+    setLostRounds(lostRounds => lostRounds + 1);
   }
   
   function showSolution() {
@@ -687,8 +687,8 @@ export default function App(props) {
   function axiosGetAllLeaderboardResults() {
     axios.get(dataSource)
       .then( (response) => {
-        setLeaderboardData(response.data)
-        console.log('leaderboardData: ', leaderboardData)
+        setLeaderboardData(response.data);
+        console.log('leaderboardData: ', leaderboardData);
       })
       .catch(function (error) {
         // If there's an error
@@ -696,8 +696,7 @@ export default function App(props) {
         setLeaderboardServerDown(true)
 
         if (leaderboardServerDown === true) {
-         console.log("leaderboard down but here's the play again button")
-          setDisplayPlayAgainButton('block');
+         console.log("leaderboard down")
         }
       });
   }
@@ -746,15 +745,19 @@ export default function App(props) {
     console.log('leaderboard form value:',  event.target.value)
     setNewLeaderboardInductee(event.target.value) 
     console.log('newLeaderboardInductee: ', newLeaderboardInductee)
-
   }
-
+  
   function handleSubmit(event) {
     event.preventDefault();
     // props.transition('FILLED_OUT_FORM');
     // handleChange(event.target.value);
-    leaderboardAPICall()
+    leaderboardAPICall( () => {
+      // not working here
+      setDisplayLeaderboardForm('none');
+    });
   }
+  
+
 
   // *****************************************************
   // *****************************************************
@@ -767,7 +770,9 @@ export default function App(props) {
 
   return (
     <div className='outer-div'>
-      <div className='win-round-confetti'>
+      <div 
+      className='win-round-confetti'
+      >
         <Confetti
           width={width}
           height={height}
@@ -833,6 +838,7 @@ export default function App(props) {
             resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             displayLeaderboard={displayLeaderboard}
+            displayLeaderboardForm={displayLeaderboardForm}
           />
 
         <div 
@@ -845,7 +851,6 @@ export default function App(props) {
               currentField={currentField}
               leftFieldStyle={leftFieldStyle}
               rightFieldStyle={rightFieldStyle}
-              displaySolution={displaySolution}
               />
 
             <ColorBubbleTray
