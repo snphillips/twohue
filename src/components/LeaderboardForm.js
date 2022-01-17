@@ -4,38 +4,39 @@ import React from 'react';
 
 
 export default function LeaderboardForm(props) {
-    return (
 
-        <div 
-          style={{display: props.displayLeaderboardForm}}
-          className="leaderboard-form"
+  return (
+      <div 
+        style={{display: props.displayLeaderboardForm}}
+        // style={{display: 'none'}}
+        className="leaderboard-form"
+        >
+
+        <form
+          onSubmit={props.handleSubmit}
           >
 
-          <form
-            onSubmit={props.handleSubmit}
-            >
-
-          <label>
-            <input
-              className="leaderboard-input-field"
-              type="text"
-              name="name"
-              placeholder='nickname (max 12 char)'
-              value={props.newLeaderboardInductee}
-              onChange={props.handleChange}
-              />
-          </label>
-
+        <label>
           <input
-            className="leaderboard-form-button"
-            type="submit"
-            value="submit"
-          />
+            className="leaderboard-input-field"
+            type="text"
+            name="name"
+            placeholder='nickname (max 12 char)'
+            value={props.newLeaderboardInductee}
+            onChange={props.handleChange}
+            />
+        </label>
 
-         </form>
+        <input
+          className="leaderboard-form-button"
+          type="submit"
+          value="submit"
+        />
 
-        </div>
-    );
+        </form>
+
+      </div>
+  );
 }
 
 

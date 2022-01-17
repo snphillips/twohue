@@ -44,7 +44,7 @@ export default function App(props) {
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState('none');
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
   const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
-  const [displayLeaderboardForm, setdisplayLeaderboardForm] = useState('flex');
+  const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState('flex');
   const [displayGameField, setDisplayGameField] = useState('flex');
   const [round, setRound] = useState(0);
   const prevRound = useRef(0);
@@ -66,6 +66,7 @@ export default function App(props) {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
+  // have to insert this during leaderboard api calls
   const [loadingSpinner, setLoadingSpinner] = useState(false);
 
   /*
@@ -351,19 +352,23 @@ export default function App(props) {
     setDisplayGameOverMessage('none');
     setGameState('joinLeaderboard');
     setDisplayLeaderboard('block');
+    setDisplayLeaderboardForm('flex');
     setNewLeaderboardInductee('');
   }
 
   function leaderboardAPICall() {
+    setDisplayLeaderboardForm('none');
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
     axiosPostNewLeaderboardInductee( () => {
       // props.transition('FILLED_OUT_FORM')
-    axiosGetAllLeaderboardResults()
+      console.log('🫒 displayLeaderboardForm: ', displayLeaderboardForm)
+      axiosGetAllLeaderboardResults();
+  
     });
   }
-
+ 
   /*
   The game gets harder by increasing the number of 
   "wrong color bubbles" to choose from. Round 1 has 1 
@@ -726,7 +731,7 @@ export default function App(props) {
         score: score,
       })
       .then(function (response) {
-        console.log('leaderboard axios call response: ', response.data.data);
+        console.log('leaderboard axios call response: ', response);
       })
       .then(() => {
         axiosGetAllLeaderboardResults();
@@ -752,7 +757,8 @@ export default function App(props) {
     // props.transition('FILLED_OUT_FORM');
     // handleChange(event.target.value);
     leaderboardAPICall( () => {
-      // not working here
+      // TODO: find a way to hide leaderboard form.
+      // it's not working here.
       setDisplayLeaderboardForm('none');
     });
   }
