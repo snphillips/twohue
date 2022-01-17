@@ -27,7 +27,7 @@ let value;
 
 export default function App(props) {
   // gameStates: 
-  // 'loading', 'homeScreenPractice', 'setUpColorRound',
+  // 'loading', 'homeScreenPractice'  'setUpNolorRound',
   // 'roundN', 'attemptN', 'checkSolution',  
   // 'playerWinsRound', 'playerLoosesRound', 'showSolution', 
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
@@ -46,8 +46,10 @@ export default function App(props) {
   const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
   const [displayGameField, setDisplayGameField] = useState('flex');
   const [round, setRound] = useState(0);
+  const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
+  const prevLostRounds = useRef(0);
   const [score, setScore] = useState(0);
   const [colorRound, setColorRound] = useState({});
   const [allColorBubbles, setAllColorBubbles] = useState([]);
@@ -88,37 +90,39 @@ export default function App(props) {
   // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
-    (console.log("🎃🎃🎃🎃🎃 first render only"))
-    initializeGame( generateColorRound );
-
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
-      // console.log = function () {};
       setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 2;
       maxAttemptCount = 4;
     }
-    // console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
+    setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    generateColorRound()
+    initializeGame().then(afterGameHasInitialized)
   }, []);
   
-  function initializeGame(callback) {
-    console.log('🪄 initializeGame() hello player', gameState);
-    setDisplayPlayAgainButton('none');
-    setDisplayStartButton('block');
-    setDisplayScoreBoard('none');
-    setDisplayGameOverMessage('none');
-    setGameState('homeScreenPractice');
-    callback();
-    // generateColorRound();
+  function initializeGame() {
+    return new Promise(function(resolve) {
+      console.log('🪄 initializeGame() hello player. gamestate is:', gameState);
+      setDisplayPlayAgainButton('none');
+      setDisplayStartButton('block');
+      setDisplayScoreBoard('none');
+      setDisplayGameOverMessage('none');
+      resolve();
+    });
+}
+
+  function afterGameHasInitialized() {
+      return new Promise(function(resolve) {
+        generateColorRound();
+        resolve();
+      });
   }
 
 
-  
-  useEffect(() => {
+  useLayoutEffect(() => {
     // keep this for development
     console.log('🚦🚦🚦 gameState is:', gameState)
   }, [gameState]);
@@ -136,7 +140,7 @@ export default function App(props) {
     calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
-    setRound(0);
+    setRound(1);
     setPreviousScore(0);
     setScore(0);
     console.log('🏁 start game click handler', round);
@@ -144,8 +148,10 @@ export default function App(props) {
 
   function setUpRoundN() {
     console.log("🚜 setUpRoundN. round:", round)
+    if (gameState != 'homeScreenPractice') {
+      setGameState('setUpRoundN')
+    }
     beginRoundSound();
-    setGameState('setUpColorRound')
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setPlayerWinRound(false);
@@ -156,35 +162,21 @@ export default function App(props) {
   }
 
   function incrementRound() {
+    if (gameState === "homeScreenPractice") {return}
     setRound(round => round + 1);
-    console.log("+ 1 increment round to: ", round)
+    console.log("+ 1 increment")
   }
 
   // =================================================
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
-    if (gameState === 'loading') {return}
-    if (gameState === "homeScreenPractice") {return}
-    if (gameState === "game-over") {return}
+    if (prevRound.current === round) {return}
     generateColorRound();
     setGameState('roundN')
-    console.log("this use effect shouldn't be firing", gameState)
+    console.log("🌶 A round updated. round: ", round, "prevRound.current:", prevRound.current)
   }, [round])
   
-  // =================================================
-  // Every time the lostRound changes, determine if
-  // player has run out of rounds to loose
-  // =================================================
-  useEffect( ()=> {
-    if (lostRounds === maxLossCount) {
-      // Transition to game over
-      console.log("😣 player reaches max lost rounds. Game over.")
-      gameOver();
-    }
-  }, [lostRounds])
-  
-
    // =================================================
    // Check the solution after every attempt
    // =================================================
@@ -287,10 +279,15 @@ export default function App(props) {
     });
   }
 
+
   useEffect( () => {
+    // Do not transition if gameState is "homescreenpractice"
+    if (gameState === "homeScreenPractice") {return}
+    // Do not transition if prevLostRounds is equal to lostRounds 
+    if (prevLostRounds.current === lostRounds) {return}
     // Transition to next round or game over after X seconds
     setTimeout(function () {
-      console.log("lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
+      console.log("prevLostRounds", prevLostRounds, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount.current)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
         setUpRoundN()
@@ -387,7 +384,11 @@ export default function App(props) {
    }}
 
   function generateColorRound() {
-    setGameState('generateColorRound')
+    console.log("🎨 generate color round. round:", round, gameState)
+    if (gameState != 'homeScreenPractice' && gameState != 'loading') {
+      console.log('gameState isnt loading or practice, right?', gameState)
+      setGameState('generateColorRound')
+    }
     let soluColor1;
     let soluColor2;
     let targColor;
@@ -437,8 +438,6 @@ export default function App(props) {
            // first, empty the array of old colors
            wrongColorsArray = [];
            
-        console.log("🎠 Hello from newColorRound. round:", round)
-
         for (let i = round; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
         }
