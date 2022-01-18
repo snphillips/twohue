@@ -15,8 +15,8 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 // import statechart from './statechart';
 
 // Leave both server addresses here in case you want to switch
-// let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
-let dataSource = 'http://localhost:3001/players';
+let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+// let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
@@ -126,9 +126,9 @@ export default function App(props) {
   }, [gameState]);
   
   function startGameClickHandler() {
+    // setGameState('startGame')
     setDisplayGameField('flex');
     setDisplayScoreBoard('block');
-
     setDisplayLeaderboard('none');
     setDisplayIntroAnimation('none');
     setDisplayStartButton('none');
@@ -136,7 +136,8 @@ export default function App(props) {
     setDisplayIntroMessage('none');
     setDisplayGameOverConfetti('none');
     setDisplayGameOverMessage('none');
-
+    setRunRoundConfetti(false);
+    setConfettiRecycle(false);
     calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
@@ -148,33 +149,30 @@ export default function App(props) {
   }
 
   function setUpRoundN() {
-    console.log("🚜 setUpRoundN. round:", round)
+    console.log("🚜 setUpRoundN")
     if (gameState != 'homeScreenPractice') {
       setGameState('setUpRoundN')
+      // If the previous round is equal to the current round, 
+      // say, in the context of a game starting, then don't 
+      // increment by a round. It will get its chance to increment.
+      // TODO: come back to this
+      // prevRound.current = round
+      // if (prevRound.current != round) {
+        setRound(round => round + 1);
+      // }
+      console.log("+ 1 increment round")
     }
     beginRoundSound();
-    setRunRoundConfetti(false);
-    setConfettiRecycle(false);
-    // (false);
-    incrementRound()
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
   }
 
-  function incrementRound() {
-    if (gameState === "homeScreenPractice") {return}
-    // setRound(round => round + 1);
-    setRound(prevRound => prevRound + 1);
-    console.log("+ 1 increment")
-  }
 
   // =================================================
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
-    // working but only by accident. Find a better solution
-    if (prevRound.current === round) {return}
     generateColorRound();
     setGameState('roundN')
     console.log("🎡 Round updated. round: ",round,"prevRound.current: ",prevRound.current)
@@ -281,7 +279,8 @@ export default function App(props) {
     if (gameState === "homeScreenPractice") {return}
     // Do not transition if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
-    // Transition to next round or game over after X seconds
+    // Player lost this round. 
+    // Transition to either the next round or game over after X seconds
     setTimeout(function () {
       console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
@@ -381,11 +380,12 @@ export default function App(props) {
       setNumWrongColorBubbles(0);
     } else {
       setNumWrongColorBubbles(round);
-   }}
+   }
+  }
 
   function generateColorRound() {
     console.log("🎨 generate color round. round:", round, gameState)
-    if (gameState != 'homeScreenPractice' && gameState != 'loading') {
+    if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
       console.log('gameState isnt loading or practice, right?', gameState)
       setGameState('generateColorRound')
     }
@@ -832,6 +832,7 @@ export default function App(props) {
             score={score}
             leaderboardData={leaderboardData}
             displayGameOverMessage={displayGameOverMessage}
+            setDisplayGameOverMessage={setDisplayGameOverMessage}
           />
 
           <Leaderboard

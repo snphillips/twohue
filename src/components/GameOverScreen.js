@@ -10,36 +10,44 @@ state, either joinLeaderboard or leaderboard
 =========================================
 */
 
-let displayGameOver = () => {
-  // console.log("game over pop-in");
-  document.getElementById("game-over-container").classList.add("pop-in");
-};
-
-
 export default function GameOverScreen(props) {
+
+  // let displayGameOver = () => {
+  //   console.log("game over pop-in");
+  //   document.getElementById("game-over-container").classList.add("pop-in");
+  // };
 
   // useEffect has empty array as dependency.
   // Will only run upon first render
     useEffect(() => {
-    // Begin "game over" animation once the component has mounted
-    displayGameOver();
-    // End animation once the component has mounted
+       
+      if (props.displayGameOverMessage === 'none') {
+        return
+      }
+    // Begin "game over" pop-out once the component has mounted
+    // displayGameOver();
+    console.log("game over pop-in");
+    document.getElementById("game-over-container").classList.add("pop-in");
+    // Pop-in after x seconds
     setTimeout(function(){
-      // console.log("game over pop-out");
+      console.log("game over pop-out");
       document.getElementById("game-over-container").classList.remove("pop-in");
       document.getElementById("game-over-container").classList.add("pop-out");
-    }, 2500);
+    }, 2750);
   // }
-}, []);
+}, [props.displayGameOverMessage]);
 
     return (
       <div 
         id="game-over-container"
         className="pop-in"
-        style={{display: props.displayGameOverMessage}}
+        style={{
+          display: props.displayGameOverMessage
+          // opacity: 0
+        }}
         >
-        <p id="game-over">game over</p>
-        <p id="game-over-score">final score: {props.score}</p>
+          <p id="game-over">game over</p>
+          <p id="game-over-score">final score: {props.score}</p>
       </div>
     );
 
