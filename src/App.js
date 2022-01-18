@@ -123,10 +123,15 @@ export default function App(props) {
   useEffect(() => {
     // keep this for development
     console.log('🚦🚦🚦 gameState is:', gameState)
+
+    if (gameState === 'setUpRoundN') {
+        setRound(round => round + 1);
+        console.log("+ 1 increment round")
+      }
   }, [gameState]);
   
   function startGameClickHandler() {
-    // setGameState('startGame')
+    setGameState('setUpRoundN')
     setDisplayGameField('flex');
     setDisplayScoreBoard('block');
     setDisplayLeaderboard('none');
@@ -141,7 +146,7 @@ export default function App(props) {
     calculateNumWrongColorBubbles()
     setLostRounds(0);
     setAttempt(0);
-    setRound(1);
+    setRound(0);
     setPreviousScore(0);
     setScore(0);
     setUpRoundN();
@@ -149,19 +154,8 @@ export default function App(props) {
   }
 
   function setUpRoundN() {
+    setGameState('setUpRoundN')
     console.log("🚜 setUpRoundN")
-    if (gameState != 'homeScreenPractice') {
-      setGameState('setUpRoundN')
-      // If the previous round is equal to the current round, 
-      // say, in the context of a game starting, then don't 
-      // increment by a round. It will get its chance to increment.
-      // TODO: come back to this
-      // prevRound.current = round
-      // if (prevRound.current != round) {
-        setRound(round => round + 1);
-      // }
-      console.log("+ 1 increment round")
-    }
     beginRoundSound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
