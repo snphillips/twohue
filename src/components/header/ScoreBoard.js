@@ -9,10 +9,11 @@ export default function StartButtons(props) {
     
   return (
     <section className="score-board">
+    { props.displayScoreBoard &&
       <div
         className='scoreboard'
         style={{display: props.displayScoreBoard}}
-      >
+        >
         <p className="score-word">
           score:
           <span className="actual-score">
@@ -21,9 +22,9 @@ export default function StartButtons(props) {
               end={props.score}
               duration={1.5}
               onEnd={() => {
-              // can I remove this onEnd?
+                // can I remove this onEnd?
               }}
-            />
+              />
           </span>
         </p>
 
@@ -35,10 +36,11 @@ export default function StartButtons(props) {
           attempt: {props.attempt}/{props.maxAttemptCount}
         </p>
 
-        <p className="loses">
+<p className="loses">
           lost rounds: {props.lostRounds}/{props.maxLossCount}
         </p>
       </div>
-    </section>
-  );
+    }
+      </section>
+      );
 }

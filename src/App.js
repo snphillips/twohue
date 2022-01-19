@@ -12,7 +12,9 @@ import ColorBubbleTray from './components/ColorBubbleTray';
 import GameOverScreen from './components/GameOverScreen';
 import Leaderboard from './components/Leaderboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
-// import statechart from './statechart';
+import twohueMachine from './twohueMachine';
+import { useMachine } from '@xstate/react';
+import { Machine} from 'xstate';
 
 // Leave both server addresses here in case you want to switch
 let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
@@ -21,22 +23,24 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
-// let previsAudioOn;
-// let solutionColors;
 
 
 export default function App(props) {
+
+  const [currentState, send] = useMachine(twohueMachine);
+  console.log("currentState", currentState)
   // gameStates: 
-  // 'loading', 'homeScreenPractice'  'setUpNolorRound',
-  // 'roundN', 'attemptN', 'checkSolution',  
-  // 'playerWinsRound', 'playerLoosesRound', 'showSolution', 
+  // 'loading', 'homeScreenPractice'  'setUpRoundN', 
+  // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
+  // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
   // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('loading');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  const [displayScoreBoard, setDisplayScoreBoard] = useState('block');
+  // const [displayScoreBoard, setDisplayScoreBoard] = useState('block');
+  const [displayScoreBoard, setDisplayScoreBoard] = useState(true);
   const [displayStartButton, setDisplayStartButton] = useState('block');
   const [displayIntroMessage, setDisplayIntroMessage] = useState('block');
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState('flex');
@@ -107,7 +111,7 @@ export default function App(props) {
       console.log('🪄 initializeGame() hello player');
       setDisplayPlayAgainButton('none');
       setDisplayStartButton('block');
-      setDisplayScoreBoard('none');
+      setDisplayScoreBoard(false);
       setDisplayGameOverMessage('none');
       resolve();
     });
@@ -133,7 +137,7 @@ export default function App(props) {
   function startGameClickHandler() {
     setGameState('setUpRoundN')
     setDisplayGameField('flex');
-    setDisplayScoreBoard('block');
+    setDisplayScoreBoard(true);
     setDisplayLeaderboard('none');
     setDisplayIntroAnimation('none');
     setDisplayStartButton('none');
@@ -205,8 +209,8 @@ export default function App(props) {
         // the colors can't be the same on either side
         leftFieldHexColor !== rightFieldHexColor
       ) {
-        setGameState('playerWinsRound');
-        playerWinsRound();
+        setGameState('playerWins');
+        playerWins();
     
         // incorrect
       } else {
@@ -223,16 +227,16 @@ export default function App(props) {
     } else {
       console.log("😖 player out of guesses - show solution")
       showSolution()
-      playerLoosesRound()
+      playerLoosesShowSolution()
     }
   }
 
   //  ===================================
   //  Player Wins Round
   //  ===================================
-  function playerWinsRound() {
+  function playerWins() {
     console.log("Player wins round 🎉 🎉 🎉 🎉 🎉");
-    setGameState('playerWinsRound');
+    setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
     increasePlayerScore();    
@@ -245,9 +249,9 @@ export default function App(props) {
   //  ===================================
   //  Player Looses Round
   //  ===================================
-  function playerLoosesRound(maxLossCount) {
+  function playerLoosesShowSolution(maxLossCount) {
     console.log('😭 player looses round');
-    setGameState('playerLoosesRound');
+    setGameState('playerLoosesShowSolution');
     playLoseSound();
     showSolution();
     setLostRounds(lostRounds => lostRounds + 1);
@@ -292,7 +296,7 @@ export default function App(props) {
   function gameOver() {
     setGameState('game-over');
     gameOverChimes();
-    setDisplayScoreBoard('none');
+    setDisplayScoreBoard(false);
     setDisplayGameOverMessage('flex');
     setDisplayPlayAgainButton('block');
     setrunGameOverConfetti(true);
@@ -485,7 +489,7 @@ export default function App(props) {
    ============================================
    */
   function currentFieldMouseEnter() {
-    if (gameState === 'playerWinsRound') return;
+    if (gameState === 'playerWins') return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -500,7 +504,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (gameState === 'playerWinsRound') return;
+    if (gameState === 'playerWins') return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
@@ -561,7 +565,7 @@ export default function App(props) {
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
     if ((gameState === "game-over") ||
-       (gameState === 'playerWinsRound') ||
+       (gameState === 'playerWins') ||
        (gameState === 'setUpRoundN')) {
       console.log("✋ click handler disabled")
       return
