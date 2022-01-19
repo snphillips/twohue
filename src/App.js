@@ -39,13 +39,12 @@ export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  // const [displayScoreBoard, setDisplayScoreBoard] = useState('block');
   const [displayScoreBoard, setDisplayScoreBoard] = useState(true);
-  const [displayStartButton, setDisplayStartButton] = useState('block');
+  const [displayStartButton, setDisplayStartButton] = useState(true);
   const [displayIntroMessage, setDisplayIntroMessage] = useState('block');
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState('flex');
   const [displayGameOverMessage, setDisplayGameOverMessage] = useState('none');
-  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState('none');
+  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
   const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState('flex');
@@ -109,8 +108,8 @@ export default function App(props) {
   function initializeGame() {
     return new Promise(function(resolve) {
       console.log('🪄 initializeGame() hello player');
-      setDisplayPlayAgainButton('none');
-      setDisplayStartButton('block');
+      setDisplayPlayAgainButton(false);
+      setDisplayStartButton(true);
       setDisplayScoreBoard(false);
       setDisplayGameOverMessage('none');
       resolve();
@@ -140,8 +139,8 @@ export default function App(props) {
     setDisplayScoreBoard(true);
     setDisplayLeaderboard('none');
     setDisplayIntroAnimation('none');
-    setDisplayStartButton('none');
-    setDisplayPlayAgainButton('none');
+    setDisplayStartButton(false);
+    setDisplayPlayAgainButton(false);
     setDisplayIntroMessage('none');
     setDisplayGameOverConfetti('none');
     setDisplayGameOverMessage('none');
@@ -298,7 +297,7 @@ export default function App(props) {
     gameOverChimes();
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage('flex');
-    setDisplayPlayAgainButton('block');
+    setDisplayPlayAgainButton(true);
     setrunGameOverConfetti(true);
     setDisplayGameOverConfetti('block');
     setConfettiRecycle(true);

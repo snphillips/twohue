@@ -267,6 +267,7 @@ input[type=submit]{
   padding: .5rem 1.5rem;
   background-color: var(--accent-gray-light, #ccc);
   transition:  background-color .4s;
+  display: block;
 }
 
 .audio-button {
