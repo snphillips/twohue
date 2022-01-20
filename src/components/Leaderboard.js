@@ -22,10 +22,9 @@ export default function Leaderboard(props) {
 
     return (
       <div>
-        <div 
-          id="leaderboard-component"
-          style={{display: props.displayLeaderboard}}
-        >
+        {props.displayLeaderboard &&
+        <div id="leaderboard-component">
+        
           <div className="leaderboard-title">high scores</div>
 
           <ul className="leaderboard-list">
@@ -58,6 +57,7 @@ export default function Leaderboard(props) {
             <ReactSpinners loadingSpinner={props.loadingSpinner} />
         </div>
       </div>
+      }
     </div>
     );
 }

@@ -5,6 +5,7 @@ import CountUp from "react-countup";
 // the counter may count down then up again.
 
 
+
 export default function StartButtons(props) {
     
   return (

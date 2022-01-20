@@ -776,7 +776,7 @@ ul.leaderboard-list {
 }
 
 .lederboard-form-placeholder {
-  display: flex;
+  display: block;
   /*min-height: 2rem;*/
   width: 100%;
   max-width: 600px;
@@ -784,10 +784,12 @@ ul.leaderboard-list {
 }
 
 .leaderboard-form {
+  display: flex;
   margin: 0 auto;
 }
 
 input.leaderboard-input-field {
+  /* display: flex; */
   margin-right: 10px;
   border: 2px solid var(--accent-gray, #a6a6a6);
   height: 2rem;

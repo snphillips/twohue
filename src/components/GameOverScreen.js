@@ -21,7 +21,7 @@ export default function GameOverScreen(props) {
   // Will only run upon first render
     useEffect(() => {
        
-      if (props.displayGameOverMessage === 'none') {
+      if (props.displayGameOverMessage === false) {
         return
       }
     // Begin "game over" pop-out once the component has mounted
@@ -38,16 +38,20 @@ export default function GameOverScreen(props) {
 }, [props.displayGameOverMessage]);
 
     return (
-      <div 
-        id="game-over-container"
-        className="pop-in"
-        style={{
-          display: props.displayGameOverMessage
-          // opacity: 0
-        }}
-        >
-          <p id="game-over">game over</p>
-          <p id="game-over-score">final score: {props.score}</p>
+      <div>
+        {props.displayGameOverMessage &&
+          <div 
+          id="game-over-container"
+          className="pop-in"
+          style={{
+            display: props.displayGameOverMessage
+            // opacity: 0
+          }}
+          >
+              <p id="game-over">game over</p>
+              <p id="game-over-score">final score: {props.score}</p>
+          </div>
+        }      
       </div>
     );
 

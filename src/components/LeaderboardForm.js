@@ -6,12 +6,9 @@ import React from 'react';
 export default function LeaderboardForm(props) {
 
   return (
-      <div 
-        style={{display: props.displayLeaderboardForm}}
-        // style={{display: 'none'}}
-        className="leaderboard-form"
-        >
-
+    <div style={{display: 'flex'}}>
+      { props.displayLeaderboardForm &&
+      <div className="leaderboard-form">
         <form
           onSubmit={props.handleSubmit}
           >
@@ -34,8 +31,9 @@ export default function LeaderboardForm(props) {
         />
 
         </form>
-
       </div>
+     }
+    </div>
   );
 }
 

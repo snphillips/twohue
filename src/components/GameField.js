@@ -4,27 +4,29 @@ import React from 'react';
 export default function GameField(props) {
   
   return (
-    <div>
-      <div id="target-swatch"
-          style={{'backgroundColor': props.colorRound.targetColor}}>
-          &nbsp;
-        <span className="tooltiptext">target color</span>
-      </div>
+    <section>
+        <div>
+          <div id="target-swatch"
+              style={{'backgroundColor': props.colorRound.targetColor}}>
+              &nbsp;
+            <span className="tooltiptext">target color</span>
+          </div>
 
-      <section id="left-and-right-field">
+          <section id="left-and-right-field">
 
-        <div className="field"
-            id="left-field"
-            style={props.leftFieldStyle}
-            >&nbsp;
+            <div className="field"
+                id="left-field"
+                style={props.leftFieldStyle}
+                >&nbsp;
+            </div>
+
+            <div className="field"
+                id="right-field"
+                style={props.rightFieldStyle}
+                >&nbsp;
+            </div>
+          </section>
         </div>
-
-        <div className="field"
-            id="right-field"
-            style={props.rightFieldStyle}
-            >&nbsp;
-        </div>
-      </section>
-    </div>
+    </section>
   );
 }

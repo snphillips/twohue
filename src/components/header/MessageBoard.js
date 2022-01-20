@@ -17,6 +17,7 @@ export default function MessageBoard(props) {
 
   return (
     <section className="message-board">
+      { props.displayIntroMessage &&
 
       <div 
       className="into-message"
@@ -25,6 +26,7 @@ export default function MessageBoard(props) {
         <p>Twohue is a color mixing game.</p>
         <p>Practice clicking bubbles before playing.</p>
       </div>
+      }
 {/* 
       <p
         className="solution-label"

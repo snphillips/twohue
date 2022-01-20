@@ -3,7 +3,7 @@ import { Machine } from 'xstate';
 // ==============================
 // https://xstate.js.org/viz/?gist=164f6bb8dff9841e0b57f244f214826c
 // ==============================
-const stateMachine = new Machine({
+const twohueMachine = new Machine({
   id: 'twohue',
   initial: 'loading',
   states: {
@@ -75,4 +75,4 @@ const stateMachine = new Machine({
 }
 });
 
-export default stateMachine;
+export default twohueMachine;

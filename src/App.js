@@ -41,14 +41,14 @@ export default function App(props) {
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
   const [displayScoreBoard, setDisplayScoreBoard] = useState(true);
   const [displayStartButton, setDisplayStartButton] = useState(true);
-  const [displayIntroMessage, setDisplayIntroMessage] = useState('block');
-  const [displayIntroAnimation, setDisplayIntroAnimation] = useState('flex');
-  const [displayGameOverMessage, setDisplayGameOverMessage] = useState('none');
+  const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
+  const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
+  const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
   const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
-  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState('none');
-  const [displayLeaderboard, setDisplayLeaderboard] = useState('none');
-  const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState('flex');
-  const [displayGameField, setDisplayGameField] = useState('flex');
+  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
+  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
+  const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
+  const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
   const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
@@ -135,15 +135,15 @@ export default function App(props) {
   
   function startGameClickHandler() {
     setGameState('setUpRoundN')
-    setDisplayGameField('flex');
+    setDisplayGameField(true);
     setDisplayScoreBoard(true);
-    setDisplayLeaderboard('none');
-    setDisplayIntroAnimation('none');
+    setDisplayLeaderboard(false);
+    setDisplayIntroAnimation(false);
     setDisplayStartButton(false);
     setDisplayPlayAgainButton(false);
-    setDisplayIntroMessage('none');
-    setDisplayGameOverConfetti('none');
-    setDisplayGameOverMessage('none');
+    setDisplayIntroMessage(false);
+    setDisplayGameOverConfetti(false);
+    setDisplayGameOverMessage(false);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     calculateNumWrongColorBubbles()
@@ -296,10 +296,10 @@ export default function App(props) {
     setGameState('game-over');
     gameOverChimes();
     setDisplayScoreBoard(false);
-    setDisplayGameOverMessage('flex');
+    setDisplayGameOverMessage(true);
     setDisplayPlayAgainButton(true);
     setrunGameOverConfetti(true);
-    setDisplayGameOverConfetti('block');
+    setDisplayGameOverConfetti(true);
     setConfettiRecycle(true);
     gameOverTransition();
   }
@@ -344,16 +344,16 @@ export default function App(props) {
   }
 
   function joinLeaderboard() {
-    setDisplayGameField('none');
+    setDisplayGameField(false);
     setDisplayGameOverMessage('none');
     setGameState('joinLeaderboard');
-    setDisplayLeaderboard('block');
-    setDisplayLeaderboardForm('flex');
+    setDisplayLeaderboard(true);
+    setDisplayLeaderboardForm(true);
     setNewLeaderboardInductee('');
   }
 
   function leaderboardAPICall() {
-    setDisplayLeaderboardForm('none');
+    setDisplayLeaderboardForm(false);
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
@@ -756,7 +756,7 @@ export default function App(props) {
     leaderboardAPICall( () => {
       // TODO: find a way to hide leaderboard form.
       // it's not working here.
-      setDisplayLeaderboardForm('none');
+      setDisplayLeaderboardForm(false);
     });
   }
   
@@ -844,10 +844,11 @@ export default function App(props) {
             displayLeaderboard={displayLeaderboard}
             displayLeaderboardForm={displayLeaderboardForm}
           />
-
+      
+      {displayGameField &&
         <div 
           id='game-field'
-          style={{display: displayGameField}}
+          // style={{display: displayGameField}}
         >
 
             <GameField
@@ -870,6 +871,7 @@ export default function App(props) {
               displayIntroAnimation={displayIntroAnimation}
             />
         </div>
+      }
 
         <footer>
           <Byline />
