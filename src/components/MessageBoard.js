@@ -17,7 +17,10 @@ export default function MessageBoard(props) {
 
   return (
 
-    <section className="message-board" >
+    <section 
+      className="message-board" 
+      style={{height: '2.5rem'}}
+      >
 
       {props.displayIntroMessage &&
       <div className="into-message">

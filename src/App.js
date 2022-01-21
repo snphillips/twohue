@@ -61,7 +61,6 @@ export default function App(props) {
   const [score, setScore] = useState(0);
   const [colorRound, setColorRound] = useState({});
   const [allColorBubbles, setAllColorBubbles] = useState([]);
-  const [numWrongColorBubbles, setNumWrongColorBubbles] = useState(0);
   const [currentField, setCurrentField] = useState('leftField');
   const [leftFieldStyle, setLeftFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
@@ -150,8 +149,6 @@ export default function App(props) {
     setDisplayGameOverMessage(false);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
-    // calculateNumWrongColorBubbles()
-    setNumWrongColorBubbles(0);
     setLostRounds(0);
     setAttempt(0);
     setRound(0);
@@ -371,30 +368,6 @@ export default function App(props) {
     });
   }
  
-  /*
-  The game gets harder by increasing the number of 
-  "wrong color bubbles" to choose from. Round 1 has 1 
-  wrong bubble (therefore 3 bubbles total), Round 2 has  
-  2 wrong bubbles (therefore 4 bubbles total) and so on.
-  The max number of wrong bubbles is 6.
-  */
-  function calculateNumWrongColorBubbles() {
-    if (gameState === 'homeScreenPractice') {
-      setNumWrongColorBubbles(0);
-    } else if (round <= 6) {
-      console.log("🍄 🍄 round is fewer than 7. Make more bublbles")
-      setNumWrongColorBubbles(round);
-   } else {
-     console.log("round over 6")
-    setNumWrongColorBubbles(6);
-   }
-  }
-
-  // useEffect( () => {
-  //   generateColorRound();
-  // }, [numWrongColorBubbles])
-
-
   function generateColorRound() {
     console.log("🎨 generate color round. round:", round, gameState)
     if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
@@ -441,8 +414,8 @@ export default function App(props) {
           Only create enough wrongColors to fill in the
           color bubbles. For instance, the practice round only
           has two bubbles total (therefore no wrong colors 
-          // are needed).
-          // numWrongColorBubbles tells us how many times we
+          are needed).
+          numWrongColors tells us how many times we
           generate a random 'wrong color' to push into
           getter methods are used to access the properties of an object
           */
@@ -450,11 +423,10 @@ export default function App(props) {
            // first, empty the array of old colors
            wrongColorsArray = [];
 
-           let numWrongs;
-           (round <= 6 ? numWrongs = round: numWrongs = 6);   
+           let numWrongColors;
+           (round <= 6 ? numWrongColors = round: numWrongColors = 6);   
            
-        // for (let i = round; i > 0; i--) {
-        for (let i = numWrongs; i > 0; i--) {
+        for (let i = numWrongColors; i > 0; i--) {
 
         wrongColorsArray.push(chroma.random().hex());
         }
@@ -832,7 +804,7 @@ export default function App(props) {
         className='left-side' 
         style={{
           display: 'block',
-          width: '15%',
+          width: '20%',
           flexGrow: 1,
           flexBasis: 'auto'
         }}
@@ -848,7 +820,7 @@ export default function App(props) {
       <main
         style={{
           display: 'block',
-          width: '70%',
+          width: '60%',
           flexGrow: 3,
           flexBasis: 'auto'
         }}
@@ -898,7 +870,7 @@ export default function App(props) {
         className='right-side'
         style={{
           display: 'block',
-          width: '15%',
+          width: '20%',
           flexGrow: 1,
           flexBasis: 'auto'
         }}
@@ -935,7 +907,7 @@ export default function App(props) {
       className='gamefield-bottom'
       style={{
         display: 'block',
-        border: '1px solid gold'
+        // border: '1px solid gold'
       }}
       >
           <ColorBubbleTray
