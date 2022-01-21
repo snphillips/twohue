@@ -820,7 +820,7 @@ export default function App(props) {
         className='twohue'
         >
       <div 
-      className='top-part'
+      className='gamefield-top'
       style={{
         display: 'flex',
         flexDirection: 'row'
@@ -889,18 +889,6 @@ export default function App(props) {
               rightFieldStyle={rightFieldStyle}
               />
 
-            <ColorBubbleTray
-              round={round}
-              allColorBubbles={allColorBubbles}
-              updateFieldColor={updateFieldColor}
-              currentField={currentField}
-              leftFieldStyle={leftFieldStyle}
-              rightFieldStyle={rightFieldStyle}
-              currentFieldMouseEnter={currentFieldMouseEnter}
-              currentFieldMouseLeave={currentFieldMouseLeave}
-              bubbleClickHandler={bubbleClickHandler}
-              displayIntroAnimation={displayIntroAnimation}
-              />
         </div>
       }
       </main>
@@ -939,6 +927,27 @@ export default function App(props) {
         />
 
       </aside>
+
+    </div>
+    <div 
+      className='gamefield-bottom'
+      style={{
+        display: 'block',
+        border: '1px solid gold'
+      }}
+      >
+          <ColorBubbleTray
+            round={round}
+            allColorBubbles={allColorBubbles}
+            updateFieldColor={updateFieldColor}
+            currentField={currentField}
+            leftFieldStyle={leftFieldStyle}
+            rightFieldStyle={rightFieldStyle}
+            currentFieldMouseEnter={currentFieldMouseEnter}
+            currentFieldMouseLeave={currentFieldMouseLeave}
+            bubbleClickHandler={bubbleClickHandler}
+            displayIntroAnimation={displayIntroAnimation}
+            />
 
     </div>
         <footer>
