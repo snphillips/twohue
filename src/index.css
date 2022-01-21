@@ -72,7 +72,7 @@ code {
   position: absolute;
   height: 100%;
   width: 100%;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
 }
@@ -87,6 +87,11 @@ code {
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  border-top: 5px solid var(--accent-gray-light, #a6a6a6);
+  padding-top: 1rem;
+  /* vertically aligns it */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* =======================*/
@@ -257,6 +262,12 @@ p {
   color: var(--text-color, #222);
 }
 
+.start-buttons {
+  text-align: end;
+  position: absolute;
+  right: 0;
+}
+
 button,
 input[type=submit]{
   -webkit-appearance: none; /* for safari ios */
@@ -290,12 +301,11 @@ input[type=submit] {
 /* Header */
 /* =======================*/
 header {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  border-top: 5px solid var(--accent-gray-light, #ccc);
-  height: 100px;
+  display: block;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+  /* align-items: center; */
+  /* height: 100px; */
 }
 
 h1 {
@@ -303,13 +313,14 @@ h1 {
   font-family: 'Oleo Script', cursive;
   font-size: 2.4rem;
   text-align: left;
-  margin: 1.25rem 0;
+  margin: .25rem 0;
 }
 
 .message-board {
   text-align: center;
   font-size: 16px;
   order: 2;
+  margin-bottom: 1rem
 }
 
 .actual-score {
@@ -331,7 +342,6 @@ h1 {
 .score-board {
   display: flex;
   flex-direction: column;
-  padding-right: 2rem;
 }
 
 .title-and-round-section {
@@ -342,8 +352,8 @@ h1 {
   order: 3;
   text-align: end;
   padding-right: 0;
-  width: 118px;
-  margin: .25rem 0;
+  /* width: 118px; */
+  /* margin: .25rem 0; */
 }
 
 .play-again-button {
@@ -434,7 +444,7 @@ section#left-and-right-field {
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  flex-flow: wrap;
+  /* flex-flow: wrap; */
 }
 
 .bubble {

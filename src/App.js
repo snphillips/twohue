@@ -4,17 +4,21 @@ import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
 import axios from 'axios';
-import Header from './components/header/Header';
+import Header from './components/Header';
 import Byline from './components/footer/Byline';
 import GameField from './components/GameField';
 import AudioToggle from './components/footer/AudioToggle';
 import ColorBubbleTray from './components/ColorBubbleTray';
-import GameOverScreen from './components/GameOverScreen';
+import GameOverMessage from './components/GameOverMessage';
+import MessageBoard from './components/MessageBoard';
 import Leaderboard from './components/Leaderboard';
+import StartButtons from './components/StartButtons';
+import Scoreboard from './components/Scoreboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import twohueMachine from './twohueMachine';
 import { useMachine } from '@xstate/react';
 import { Machine} from 'xstate';
+import { GridLoader } from 'react-spinners';
 
 // Leave both server addresses here in case you want to switch
 let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
@@ -146,7 +150,8 @@ export default function App(props) {
     setDisplayGameOverMessage(false);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
-    calculateNumWrongColorBubbles()
+    // calculateNumWrongColorBubbles()
+    setNumWrongColorBubbles(0);
     setLostRounds(0);
     setAttempt(0);
     setRound(0);
@@ -164,13 +169,14 @@ export default function App(props) {
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
   }
-
-
+  
+  
   // =================================================
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
-    generateColorRound();
+    calculateNumWrongColorBubbles();
+    // generateColorRound();
     setGameState('roundN')
     console.log("🎡 Round updated. round: ",round,"prevRound.current: ",prevRound.current)
   }, [round])
@@ -375,12 +381,22 @@ export default function App(props) {
   function calculateNumWrongColorBubbles() {
     if (gameState === 'homeScreenPractice') {
       setNumWrongColorBubbles(0);
-    } else {
+    } else if (round <= 6) {
+      console.log("🍄 🍄 round is fewer than 7. Make more bublbles", round)
+      console.log("🍄 numWrongColorBubbles:", numWrongColorBubbles)
       setNumWrongColorBubbles(round);
+   } else {
+    setNumWrongColorBubbles(6);
    }
   }
 
+  useEffect( () => {
+    generateColorRound();
+  }, [numWrongColorBubbles])
+
   function generateColorRound() {
+
+    
     console.log("🎨 generate color round. round:", round, gameState)
     if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
       console.log('gameState isnt loading or practice, right?', gameState)
@@ -426,8 +442,8 @@ export default function App(props) {
           Only create enough wrongColors to fill in the
           color bubbles. For instance, the practice round only
           has two bubbles total (therefore no wrong colors 
-          are needed).
-          numWrongColorBubbles tells us how many times we
+          // are needed).
+          // numWrongColorBubbles tells us how many times we
           generate a random 'wrong color' to push into
           getter methods are used to access the properties of an object
           */
@@ -435,7 +451,9 @@ export default function App(props) {
            // first, empty the array of old colors
            wrongColorsArray = [];
            
-        for (let i = round; i > 0; i--) {
+          for (let i = 0; i < numWrongColorBubbles; i++) {   
+        // for (let i = round; i > 0; i--) {
+        // for (let i = numWrongColorBubbles; i > 0; i--) {
           wrongColorsArray.push(chroma.random().hex());
         }
         return wrongColorsArray;
@@ -675,11 +693,6 @@ export default function App(props) {
     sound.play();
   }
 
-  function resetScoreForNextGame() {
-    setScore(0);
-    setLostRounds(0);
-  }
-
   //  ==================================
   //  Leaderboard
   //  ==================================
@@ -773,9 +786,7 @@ export default function App(props) {
 
   return (
     <div className='outer-div'>
-      <div 
-      className='win-round-confetti'
-      >
+      <div className='win-round-confetti'>
         <Confetti
           width={width}
           height={height}
@@ -803,34 +814,55 @@ export default function App(props) {
           gravity={0.08}
         />
       </div>
-      <div className='twohue'>
-        <Header
-          transition={props.transition}
-          round={round}
-          maxLossCount={maxLossCount}
-          maxAttemptCount={maxAttemptCount}
-          lostRounds={lostRounds}
-          attempt={attempt}
-          score={score}
-          previousScore={previousScore}
-          setPreviousScore={setPreviousScore}
-          resetScoreForNextGame={resetScoreForNextGame}
-          beginRoundSound={beginRoundSound}
-          isAudioOn={isAudioOn}
-          startGameClickHandler={startGameClickHandler}
-          displayScoreBoard={displayScoreBoard}
-          displayStartButton={displayStartButton}
-          displayPlayAgainButton={displayPlayAgainButton}
-          displayIntroMessage={displayIntroMessage}
-          setUpRoundN={setUpRoundN}
-        />
 
-          <GameOverScreen
+      
+      <div 
+        className='twohue'
+        >
+      <div 
+      className='top-part'
+      style={{
+        display: 'flex',
+        flexDirection: 'row'
+      }}
+      >
+      <aside 
+        className='left-side' 
+        style={{
+          display: 'block',
+          width: '15%',
+          flexGrow: 1,
+          flexBasis: 'auto'
+        }}
+        >
+        <Header
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%'
+          }}
+          />
+      </aside>
+      <main
+        style={{
+          display: 'block',
+          width: '70%',
+          flexGrow: 3,
+          flexBasis: 'auto'
+        }}
+        
+        >
+        <MessageBoard
+          transition={props.transition}
+          displayIntroMessage={displayIntroMessage}
+          />
+
+          <GameOverMessage
             score={score}
             leaderboardData={leaderboardData}
             displayGameOverMessage={displayGameOverMessage}
             setDisplayGameOverMessage={setDisplayGameOverMessage}
-          />
+            />
 
           <Leaderboard
             leaderboardData={leaderboardData}
@@ -839,18 +871,17 @@ export default function App(props) {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
-            resetScoreForNextGame={resetScoreForNextGame}
             loadingSpinner={loadingSpinner}
             displayLeaderboard={displayLeaderboard}
             displayLeaderboardForm={displayLeaderboardForm}
-          />
+            />
       
       {displayGameField &&
         <div 
           id='game-field'
-          // style={{display: displayGameField}}
+          style={{
+          }}
         >
-
             <GameField
               colorRound={colorRound}
               currentField={currentField}
@@ -869,19 +900,56 @@ export default function App(props) {
               currentFieldMouseLeave={currentFieldMouseLeave}
               bubbleClickHandler={bubbleClickHandler}
               displayIntroAnimation={displayIntroAnimation}
-            />
+              />
         </div>
       }
+      </main>
+      <aside 
+        className='right-side'
+        style={{
+          display: 'block',
+          width: '15%',
+          flexGrow: 1,
+          flexBasis: 'auto'
+        }}
+      >
+      <StartButtons
+          displayStartButton={displayStartButton}
+          displayPlayAgainButton={displayPlayAgainButton}
+          startGameClickHandler={startGameClickHandler}
+          setUpRoundN={setUpRoundN}
+        />
 
+        <Scoreboard 
+          round={round}
+          maxLossCount={maxLossCount}
+          maxAttemptCount={maxAttemptCount}
+          lostRounds={lostRounds}
+          attempt={attempt}
+          score={score}
+          previousScore={previousScore}
+          setPreviousScore={setPreviousScore}
+          beginRoundSound={beginRoundSound}
+          isAudioOn={isAudioOn}
+          startGameClickHandler={startGameClickHandler}
+          displayScoreBoard={displayScoreBoard}
+          displayStartButton={displayStartButton}
+          displayPlayAgainButton={displayPlayAgainButton}
+          setUpRoundN={setUpRoundN}
+        />
+
+      </aside>
+
+    </div>
         <footer>
           <Byline />
 
           <AudioToggle
             soundButtonToggle={soundButtonToggle}
             isAudioOn={isAudioOn}
-          />
+            />
         </footer>
-      </div>
+    </div>
     </div>
   );
 }

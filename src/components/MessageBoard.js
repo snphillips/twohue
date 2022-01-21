@@ -16,24 +16,22 @@ homeScreenPractice or showSolution
 export default function MessageBoard(props) {
 
   return (
-    <section className="message-board">
-      { props.displayIntroMessage &&
 
-      <div 
-      className="into-message"
-      style={{display: props.displayIntroMessage}}
-      >
+    <section className="message-board" >
+
+      {props.displayIntroMessage &&
+      <div className="into-message">
         <p>Twohue is a color mixing game.</p>
         <p>Practice clicking bubbles before playing.</p>
       </div>
       }
-{/* 
-      <p
-        className="solution-label"
-        style={{display: props.solutionStyle}}
-        >
+
+      {props.displaySolution &&
+      <p className="solution-label">
         Solution
-      </p> */}
+      </p> 
+      } 
+
     </section>
   );
 }
