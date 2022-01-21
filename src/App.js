@@ -175,10 +175,10 @@ export default function App(props) {
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
-    calculateNumWrongColorBubbles();
-    // generateColorRound();
+    // calculateNumWrongColorBubbles();
+    generateColorRound();
     setGameState('roundN')
-    console.log("🎡 Round updated. round: ",round,"prevRound.current: ",prevRound.current)
+    console.log("🎡 Round updated. round: ",round)
   }, [round])
   
    // =================================================
@@ -382,21 +382,20 @@ export default function App(props) {
     if (gameState === 'homeScreenPractice') {
       setNumWrongColorBubbles(0);
     } else if (round <= 6) {
-      console.log("🍄 🍄 round is fewer than 7. Make more bublbles", round)
-      console.log("🍄 numWrongColorBubbles:", numWrongColorBubbles)
+      console.log("🍄 🍄 round is fewer than 7. Make more bublbles")
       setNumWrongColorBubbles(round);
    } else {
+     console.log("round over 6")
     setNumWrongColorBubbles(6);
    }
   }
 
-  useEffect( () => {
-    generateColorRound();
-  }, [numWrongColorBubbles])
+  // useEffect( () => {
+  //   generateColorRound();
+  // }, [numWrongColorBubbles])
+
 
   function generateColorRound() {
-
-    
     console.log("🎨 generate color round. round:", round, gameState)
     if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
       console.log('gameState isnt loading or practice, right?', gameState)
@@ -450,11 +449,14 @@ export default function App(props) {
          get wrongColors() {
            // first, empty the array of old colors
            wrongColorsArray = [];
+
+           let numWrongs;
+           (round <= 6 ? numWrongs = round: numWrongs = 6);   
            
-          for (let i = 0; i < numWrongColorBubbles; i++) {   
         // for (let i = round; i > 0; i--) {
-        // for (let i = numWrongColorBubbles; i > 0; i--) {
-          wrongColorsArray.push(chroma.random().hex());
+        for (let i = numWrongs; i > 0; i--) {
+
+        wrongColorsArray.push(chroma.random().hex());
         }
         return wrongColorsArray;
       },
