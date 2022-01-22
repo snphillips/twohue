@@ -159,8 +159,9 @@ export default function App(props) {
   }
 
   function setUpRoundN() {
-    setGameState('setUpRoundN')
-    console.log("🚜 setUpRoundN")
+    console.log("🚜 setUpRoundN");
+    setRunRoundConfetti(false);
+    setGameState('setUpRoundN');
     beginRoundSound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
@@ -172,7 +173,6 @@ export default function App(props) {
   // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
-    // calculateNumWrongColorBubbles();
     generateColorRound();
     setGameState('roundN')
     console.log("🎡 Round updated. round: ",round)
@@ -237,7 +237,7 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWins() {
-    console.log("Player wins round 🎉 🎉 🎉 🎉 🎉");
+    console.log("🦄 Player wins round");
     setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
@@ -247,6 +247,10 @@ export default function App(props) {
       setUpRoundN();
     }, 3000);
   };
+
+  useEffect( () => {
+    console.log("🎊 🎊 🎊 🎊 runRoundConfetti updates", runRoundConfetti )
+  }, [runRoundConfetti])
 
   //  ===================================
   //  Player Looses Round
@@ -760,6 +764,7 @@ export default function App(props) {
 
   return (
     <div className='outer-div'>
+
       <div className='win-round-confetti'>
         <Confetti
           width={width}
@@ -771,12 +776,15 @@ export default function App(props) {
           colors={colorRound.allColorBubbles}
           opacity={0.6}
           gravity={0.6}
+          // This resets confetti so it's ready to fall 
+          // next time the user wins
+          onConfettiComplete={confetti => {
+            confetti.reset()
+          }}
         />
       </div>
-      <div
-        className='win-game-confetti'
-        style={{display: displayGameOverConfetti}} 
-      >
+
+      <div className='win-game-confetti'>
         <Confetti
           width={width}
           height={height}
@@ -786,19 +794,16 @@ export default function App(props) {
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
-        />
+          />
       </div>
 
-      
+      <div className='twohue'>
       <div 
-        className='twohue'
-        >
-      <div 
-      className='gamefield-top'
-      style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}
+        className='gamefield-top'
+        style={{
+          display: 'flex',
+          flexDirection: 'row'
+        }}
       >
       <aside 
         className='left-side' 
@@ -903,6 +908,7 @@ export default function App(props) {
       </aside>
 
     </div>
+    {displayGameField &&
     <div 
       className='gamefield-bottom'
       style={{
@@ -924,6 +930,7 @@ export default function App(props) {
             />
 
     </div>
+   }
         <footer>
           <Byline />
 
