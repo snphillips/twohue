@@ -22,7 +22,13 @@ const twohueMachine = new Machine({
   generateColorRound: {
     onEntry: 'generateColorRound',
     on: {
-      ONTO_TO_ROUNDN: 'roundN',
+      ONTO_TO_ROUNDN: 'incrementRound',
+    },
+  },
+  incrementRound: {
+    onEntry: 'incrementRound',
+    on: {
+      ONTO_ATTEMPTN: 'attemptN',
     },
   },
   roundN: {

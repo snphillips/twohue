@@ -22,9 +22,6 @@ export default function StartButtons(props) {
               start={props.previousScore}
               end={props.score}
               duration={1.5}
-              onEnd={() => {
-                // can I remove this onEnd?
-              }}
               />
           </span>
         </p>
@@ -38,7 +35,7 @@ export default function StartButtons(props) {
         </p>
 
 <p className="loses">
-          lost rounds: {props.lostRounds}/{props.maxLossCount}
+          lives: {props.lostRounds}/{props.maxLossCount}
         </p>
       </div>
     }

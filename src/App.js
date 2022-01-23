@@ -31,8 +31,8 @@ let value;
 
 export default function App(props) {
 
-  const [currentState, send] = useMachine(twohueMachine);
-  console.log("currentState", currentState)
+  const [current, send] = useMachine(twohueMachine);
+  console.log("🚦 current.value", current.value)
   // gameStates: 
   // 'loading', 'homeScreenPractice'  'setUpRoundN', 
   // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
@@ -95,6 +95,7 @@ export default function App(props) {
   // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
+    send('APP_LOADS');
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
@@ -105,30 +106,22 @@ export default function App(props) {
     }
     setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    initializeGame().then(afterGameHasInitialized)
+    initializeGame( () => {
+      generateColorRound();
+    })
   }, []);
   
   function initializeGame() {
-    return new Promise(function(resolve) {
       console.log('🪄 initializeGame() hello player');
       setDisplayPlayAgainButton(false);
       setDisplayStartButton(true);
       setDisplayScoreBoard(false);
       setDisplayGameOverMessage('none');
-      resolve();
-    });
-}
-
-  function afterGameHasInitialized() {
-      return new Promise(function(resolve) {
-        generateColorRound();
-        resolve();
-      });
-  }
+   };
 
   useEffect(() => {
     // keep this for development
-    console.log('🚦🚦🚦 gameState is:', gameState)
+    console.log('🚥 gameState is:', gameState)
 
     if (gameState === 'setUpRoundN') {
         setRound(round => round + 1);
