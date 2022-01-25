@@ -4,12 +4,12 @@ import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
 import axios from 'axios';
-import Header from './components/Header';
+import LeftSidebar from './components/leftsidebar/LeftSidebar';
 import Byline from './components/footer/Byline';
 import GameField from './components/GameField';
 import AudioToggle from './components/footer/AudioToggle';
 import ColorBubbleTray from './components/ColorBubbleTray';
-import GameOverMessage from './components/GameOverMessage';
+// import GameOverMessage from './components/GameOverMessage';
 import MessageBoard from './components/MessageBoard';
 import Leaderboard from './components/Leaderboard';
 import StartButtons from './components/StartButtons';
@@ -33,7 +33,8 @@ export default function App(props) {
 
   const [current, send] = useMachine(twohueMachine);
   console.log("🚦 current.value", current.value)
-  // gameStates: 
+
+   // gameStates: 
   // 'loading', 'homeScreenPractice'  'setUpRoundN', 
   // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
   // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
@@ -95,7 +96,6 @@ export default function App(props) {
   // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
-    send('APP_LOADS');
     // A couple things change depending on whether
     // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
@@ -109,6 +109,7 @@ export default function App(props) {
     initializeGame( () => {
       generateColorRound();
     })
+    send('ONTO_HOMESCREENPRACTICE');
   }, []);
   
   function initializeGame() {
@@ -116,7 +117,7 @@ export default function App(props) {
       setDisplayPlayAgainButton(false);
       setDisplayStartButton(true);
       setDisplayScoreBoard(false);
-      setDisplayGameOverMessage('none');
+      setDisplayGameOverMessage(false);
    };
 
   useEffect(() => {
@@ -807,12 +808,15 @@ export default function App(props) {
           flexBasis: 'auto'
         }}
         >
-        <Header
+        <LeftSidebar
           style={{
             display: 'block',
             width: '100%',
             height: '100%'
           }}
+          score={score}
+          leaderboardData={leaderboardData}
+          displayGameOverMessage={displayGameOverMessage}
           />
       </aside>
       <main
@@ -825,16 +829,12 @@ export default function App(props) {
         
         >
         <MessageBoard
-          transition={props.transition}
+          // transition={props.transition}
           displayIntroMessage={displayIntroMessage}
           />
 
-          <GameOverMessage
-            score={score}
-            leaderboardData={leaderboardData}
-            displayGameOverMessage={displayGameOverMessage}
-            setDisplayGameOverMessage={setDisplayGameOverMessage}
-            />
+          {/* <GameOverMessage
+          /> */}
 
           <Leaderboard
             leaderboardData={leaderboardData}

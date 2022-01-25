@@ -9,26 +9,44 @@ const twohueMachine = new Machine({
   states: {
     loading: {
       on: {
-        APP_LOADS: 'homeScreenPractice',
+        ONTO_INITIALIZE_GAME: 'initializeGame',
       },
   },
-  homeScreenPractice: {
-    onEntry: 'homeScreenPractice',
+  initializeGame: {
+    onEntry: 'initializeGame',
     on: {
-      SELECT_COLOR_PRACTICE: 'homeScreenPractice',
       ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
     },
   },
   generateColorRound: {
     onEntry: 'generateColorRound',
     on: {
-      ONTO_TO_ROUNDN: 'incrementRound',
+      ONTO_COLOR_PRACTICE: 'homeScreenPractice',
+    },
+  },
+  homeScreenPractice: {
+    onEntry: 'homeScreenPractice',
+    on: {
+      ONTO_COLOR_PRACTICE: 'homeScreenPractice',
+      ONTO_START_GAME: 'startGame',
+    },
+  },
+  startGame: {
+    onEntry: 'startGame',
+    on: {
+      ONTO_INCREMENT_ROUND: 'incrementRound',
     },
   },
   incrementRound: {
     onEntry: 'incrementRound',
     on: {
-      ONTO_ATTEMPTN: 'attemptN',
+      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
+    },
+  },
+  generateColorRound: {
+    onEntry: 'generateColorRound',
+    on: {
+      ONTO_TO_ROUNDN: 'roundN',
     },
   },
   roundN: {
@@ -58,6 +76,9 @@ const twohueMachine = new Machine({
       ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
       NO_MORE_ROUNDS: 'gameOver',
     },
+    after: {
+      2500: 'generateColorRound',
+    }
   },
   gameOver: {
     onEntry: 'gameOver',

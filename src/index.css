@@ -645,11 +645,14 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
+#game-over-message {
+  display: block;
+}
+
 
 #game-over,
 #game-over-score {
-  display: inline-block;
-  position: relative;
+  display: block;
   margin: 0 auto;
   font-size: 1.5rem;
 }

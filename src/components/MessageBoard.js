@@ -32,8 +32,8 @@ export default function MessageBoard(props) {
       {props.displaySolution &&
       <p className="solution-label">
         Solution
-      </p> 
-      } 
+      </p>
+      }
 
     </section>
   );
