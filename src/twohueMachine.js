@@ -22,6 +22,7 @@ const twohueMachine = new Machine({
     onEntry: 'generateColorRound',
     on: {
       ONTO_COLOR_PRACTICE: 'homeScreenPractice',
+      ONTO_ROUNDN: 'roundN'
     },
   },
   homeScreenPractice: {
@@ -46,11 +47,11 @@ const twohueMachine = new Machine({
   generateColorRound: {
     onEntry: 'generateColorRound',
     on: {
-      ONTO_TO_ROUNDN: 'roundN',
+      ONTO_TO_PREPARE_ROUNDN: 'prepareRoundN',
     },
   },
-  roundN: {
-    onEntry: 'roundN',
+  prepareRoundN: {
+    onEntry: 'prepareRoundN',
     on: {
       ONTO_ATTEMPTN: 'attemptN',
     },
@@ -58,26 +59,33 @@ const twohueMachine = new Machine({
   attemptN: {
     onEntry: 'attemptN',
     on: {
-      RIGHT_GUESS_PLAYER_WINS: 'playerWins',
+      RIGHT_GUESS_PLAYER_WINS: 'playerWinsConfettiFalls',
       WRONG_GUESS_ONTO_ATTEMPTN: 'attemptN',
       WRONG_GUESS_ONTO_PLAYER_LOOSES: 'playerLoosesShowSolution'
     },
   },
-  playerWins: {
-    onEntry: 'playerWins',
+  playerWinsConfettiFalls: {
+    onEntry: 'playerWinsConfettiFalls',
     on: {
-      ONTO_ROUNDN: 'roundN',
-      NO_MORE_ROUNDS: 'gameOver',
+      ONTO_INCREMENT_ROUND: 'incrementRound',
     },
+    after: {
+      3000: [
+        {target: 'incrementRound'}
+      ]
+    }
   },
   playerLoosesShowSolution: {
     onEntry: 'playerLoosesShowSolution',
     on: {
-      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
+      ONTO_INCREMENT_ROUND: 'incrementRound',
       NO_MORE_ROUNDS: 'gameOver',
     },
     after: {
-      2500: 'generateColorRound',
+      3000: [
+        {target: 'incrementRound'},
+        {target: 'gameOver'}
+        ]
     }
   },
   gameOver: {

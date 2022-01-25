@@ -886,7 +886,7 @@ input.leaderboard-input-field {
     padding-right: 0;
     text-align: center;
     width: 100%;
-    font-size: 1rem;
+    /* font-size: 1rem; */
     min-height: 22px;
   }
 
