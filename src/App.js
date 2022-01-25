@@ -338,10 +338,12 @@ export default function App(props) {
       }
     };
 
-    // Transition to leaderboard after X seconds
-    setTimeout(function () {
-      evaluateIfLeaderboardMaterial();
-    }, 3000);
+    // // Transition to leaderboard after X seconds
+    // setTimeout(function () {
+    //   evaluateIfLeaderboardMaterial();
+    // }, 3000);
+
+    evaluateIfLeaderboardMaterial();
   }
 
   function joinLeaderboard() {
