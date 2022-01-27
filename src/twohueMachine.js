@@ -1,9 +1,5 @@
 import { createMachine } from 'xstate';
 
-
-
-
-
 // ==============================
 // https://xstate.js.org/viz/?gist=164f6bb8dff9841e0b57f244f214826c
 // ==============================

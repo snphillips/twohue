@@ -129,8 +129,9 @@ export default function App(props) {
    function homeScreenPractice() {
     console.log("I'm in homeScreenPractice() state")
     // generate the two colors for practice round
-    setAllColorBubbles(["#222222", '#999999']); 
-    send({type: 'ONTO_START_GAME' });
+    setAllColorBubbles(['#999999', '#000']);
+    setColorRound(["#ff8080", '#4d79ff']) 
+    // send({type: 'ONTO_START_GAME' });
   }
 
   function startGame() {
