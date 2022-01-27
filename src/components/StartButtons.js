@@ -1,4 +1,5 @@
 import React from "react";
+import { send } from "xstate/lib/actionTypes";
 
 
 export default function StartButtons(props) {
@@ -10,8 +11,9 @@ export default function StartButtons(props) {
       <button
       className="start-button"
       onClick={ () => {
-        props.startGameClickHandler( () => {
-          props.setUpRoundN();
+        props.startGame( () => {
+          // props.setUpRoundN();
+          // send('ONTO_INCREMENT_ROUND')
         });
       }}
       >
@@ -25,8 +27,9 @@ export default function StartButtons(props) {
           display: props.displayPlayAgainButton
         }}
         onClick={() => {
-          props.startGameClickHandler( () => {
-            props.setUpRoundN();
+          props.startGame( () => {
+            // props.setUpRoundN();
+            // send('ONTO_INCREMENT_ROUND')
           });
         }}
       >

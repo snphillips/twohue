@@ -1,63 +1,56 @@
-import { Machine } from 'xstate';
+import { createMachine } from 'xstate';
+
+
+
+
 
 // ==============================
 // https://xstate.js.org/viz/?gist=164f6bb8dff9841e0b57f244f214826c
 // ==============================
-const twohueMachine = new Machine({
+const twohueMachine = createMachine({
   id: 'twohue',
-  initial: 'loading',
+  initial: 'initializeApp',
   states: {
-    loading: {
-      on: {
-        ONTO_INITIALIZE_GAME: 'initializeGame',
-      },
-  },
-  initializeGame: {
-    onEntry: 'initializeGame',
+  initializeApp: {
+    entry: 'initializeApp',
     on: {
-      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
-    },
-  },
-  generateColorRound: {
-    onEntry: 'generateColorRound',
-    on: {
-      ONTO_COLOR_PRACTICE: 'homeScreenPractice',
-      ONTO_ROUNDN: 'roundN'
+      ONTO_HOME_SCREEN_PRACTICE: 'homeScreenPractice'
     },
   },
   homeScreenPractice: {
-    onEntry: 'homeScreenPractice',
+    entry: 'homeScreenPractice',
     on: {
-      ONTO_COLOR_PRACTICE: 'homeScreenPractice',
       ONTO_START_GAME: 'startGame',
+      ONTO_HOME_SCREEN_PRACTICE:'homeScreenPractice',
     },
   },
   startGame: {
-    onEntry: 'startGame',
+    entry: 'startGame',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRound',
+      ONTO_INCREMENT_ROUND: 'incrementRound'
     },
   },
   incrementRound: {
-    onEntry: 'incrementRound',
+    entry: 'incrementRound',
     on: {
-      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound',
-    },
-  },
-  generateColorRound: {
-    onEntry: 'generateColorRound',
-    on: {
-      ONTO_TO_PREPARE_ROUNDN: 'prepareRoundN',
+      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound'
     },
   },
   prepareRoundN: {
-    onEntry: 'prepareRoundN',
+    entry: 'prepareRoundN',
     on: {
       ONTO_ATTEMPTN: 'attemptN',
     },
   },
+  generateColorRound: {
+    entry: 'generateColorRound',
+    on: {
+      ONTO_HOMESCREEN_PRACTICE: 'homeScreenPractice',
+      ONTO_PREPARE_ROUNDN: 'prepareRoundN',
+    },
+  },
   attemptN: {
-    onEntry: 'attemptN',
+    entry: 'attemptN',
     on: {
       RIGHT_GUESS_PLAYER_WINS: 'playerWinsConfettiFalls',
       WRONG_GUESS_ONTO_ATTEMPTN: 'attemptN',
@@ -65,7 +58,7 @@ const twohueMachine = new Machine({
     },
   },
   playerWinsConfettiFalls: {
-    onEntry: 'playerWinsConfettiFalls',
+    entry: 'playerWinsConfettiFalls',
     on: {
       ONTO_INCREMENT_ROUND: 'incrementRound',
     },
@@ -76,7 +69,7 @@ const twohueMachine = new Machine({
     }
   },
   playerLoosesShowSolution: {
-    onEntry: 'playerLoosesShowSolution',
+    entry: 'playerLoosesShowSolution',
     on: {
       ONTO_INCREMENT_ROUND: 'incrementRound',
       NO_MORE_ROUNDS: 'gameOver',
@@ -89,25 +82,27 @@ const twohueMachine = new Machine({
     }
   },
   gameOver: {
-    onEntry: 'gameOver',
+    entry: 'gameOver',
     on: {
       ONTO_LEADERBOARD: 'leaderboard',
       ONTO_SERVER_ERROR_NO_LEADERBOARD: 'noLeaderboard',
     },
   },
   leaderboard: {
-    onEntry: 'leaderboard',
+    entry: 'leaderboard',
     on: {
       ONTO_START_GAME: 'generateColorRound',
     }
   },
     noLeaderboard: {
-    onEntry: 'noLeaderboard',
+    entry: 'noLeaderboard',
     on: {
       ONTO_START_GAME: 'generateColorRound',
     }
   }
-}
+},
 });
+
+// console.log("twohueMachine.states.on.initializeApp:", twohueMachine.states.on.ONTO_INITIALIZE_APP)
 
 export default twohueMachine;
