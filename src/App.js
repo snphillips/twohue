@@ -48,17 +48,9 @@ export default function App(props) {
   }
   ));
 
-  
   console.log("🚦 state.value:", state.value)
   // console.log("twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value   );
 
-   // gameStates: 
-  // 'loading', 'homeScreenPractice'  'prepareRoundN', 
-  // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
-  // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
-  // 'incrementRound', 'gameOver', 'gameOverTransition', 
-  // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
-  const [gameState, setGameState] = useState('loading');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
@@ -103,7 +95,7 @@ export default function App(props) {
   */
   const firstUpdate = useRef(true);
 
-    if (state.value === 'homeScreenPractice') {
+    if (state.value === 'homeScreenPracticeState') {
       console.log("maxAttemptCount = 30")
       maxAttemptCount = 30; 
     } else {
@@ -130,23 +122,23 @@ export default function App(props) {
 
    function homeScreenPractice() {
     console.log("🍄 I'm in homeScreenPractice() state")
-    // generate the practice round colors
-    // setColorRound(['#8cb5ef','#8cb5ef','#1b6501'])
+    // Hard code practice colors
     setColorRound({
       solutionColor1: '#8cb5ef',
       solutionColor2: '#d79fb3',
       targetColor: '#7671a8',
       solutionColors: ['#8cb5ef','#d79fb3']
-      })
+    })
     setAllColorBubbles(['#8cb5ef','#d79fb3'])
+  }
   
-
-    // send({type: 'ONTO_START_GAME' });
+  function startGameClickHandler() {
+    console.log('▶️ Im in startGameClickHandler() state');
+    send({type: 'ONTO_START_GAME' });
   }
 
   function startGame() {
     console.log('🏁 Im in startGame() state');
-    setGameState('prepareRoundN')
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
     setDisplayLeaderboard(false);
@@ -169,14 +161,18 @@ export default function App(props) {
   function incrementRound() {
     console.log("👆 I'm in incrementRound() state");
     setRound(round => round + 1);
-    send({type: 'ONTO_GENERATE_COLOR_ROUND'});
+    // send({type: 'ONTO_GENERATE_COLOR_ROUND'});
   };
-  function generateColorRound() {
-    console.log("🎨 I'm in generate color round")
 
-    if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
-      console.log('gameState isnt loading or practice, right?', gameState)
-      // setGameState('generateColorRound')
+  useEffect( () => {
+    generateColorRound()
+  }, [round])
+
+  function generateColorRound() {
+    console.log("🎨 I'm in generate color round state")
+
+    if (state !== 'homeScreenPracticeState' && state !== 'loadingState') {
+      // console.log('state isnt loading or practice, right?', state)
     }
     let soluColor1;
     let soluColor2;
@@ -228,7 +224,8 @@ export default function App(props) {
            wrongColorsArray = [];
 
            let numWrongColors;
-           (round <= 6 ? numWrongColors = round: numWrongColors = 6);   
+           (round <= 6 ? numWrongColors = round: numWrongColors = 6);
+           console.log("pizza party", round, numWrongColors)   
            
         for (let i = numWrongColors; i > 0; i--) {
 
@@ -277,7 +274,6 @@ export default function App(props) {
   function prepareRoundN() {
     console.log("🚜 I'm in prepareRoundN() state");
     setRunRoundConfetti(false);
-    setGameState('prepareRoundN');
     beginRoundSound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
@@ -286,60 +282,87 @@ export default function App(props) {
   
   function attemptN() {
     console.log("🚜 I'm in attemptN() state");
+
+    // if (state.value === 'homeScreenPracticeState') {
+    //   console.log("🎬 practice round. keep making attempts")
+    //   return
+    // }
+    // // Guard clause: return whe attempt resets to 0
+    // if (attempt === 0 ) {
+    //   return
+    // }
+    //   let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+    //   let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+    //   let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+    //   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+    //   let solutionColors = colorRound.solutionColors;
+    
+    //   // Not enough trys for solution
+    //   if (attempt === 1) {
+    //     console.log('👆 First guess.');
+    //     // correct
+    //   } else if (
+    //     solutionColors.includes(leftFieldHexColor) &&
+    //     solutionColors.includes(rightFieldHexColor) &&
+    //     // the colors can't be the same on either side
+    //     leftFieldHexColor !== rightFieldHexColor
+    //   ) {
+    //     playerWinsConfettiFalls();
+    
+    //     // incorrect
+    //   } else {
+    //     playerMadeWrongGuess()
+    //   }
+  
+
+
+
   };
-  
-  
+
   // =================================================
-  // When the round changes, generate a color round 
+  // Check the solution after every attempt
   // =================================================
-  // useLayoutEffect(() => {
-  //   generateColorRound();
-  //   setGameState('roundN')
-  //   console.log("🎡 Round updated. round: ",round)
-  // }, [round])
+  useEffect( () => {
+   // Don't run on first render (firstUpdate)
+   if (firstUpdate.current) {
+     firstUpdate.current = false;
+     return;
+   }
+   if (state.value === 'homeScreenPracticeState') {
+     console.log("🎬 practice round. keep making attempts")
+     return
+   }
+   // Guard clause: return whe attempt resets to 0
+   if (attempt === 0 ) {
+     return
+   }
+     let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+     let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+     let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+     let solutionColors = colorRound.solutionColors;
+   
+     // Not enough trys for solution
+     if (attempt === 1) {
+       console.log('👆 First guess.');
+       // correct
+     } else if (
+       solutionColors.includes(leftFieldHexColor) &&
+       solutionColors.includes(rightFieldHexColor) &&
+       // the colors can't be the same on either side
+       leftFieldHexColor !== rightFieldHexColor
+     ) {
+       playerWinsConfettiFalls();
+   
+       // incorrect
+     } else {
+       playerMadeWrongGuess()
+     }
+ 
+ }, [attempt])
   
-   // =================================================
-   // Check the solution after every attempt
-   // =================================================
-   useEffect( () => {
-    // Don't run on first render (firstUpdate)
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-    if (state.value === 'homeScreenPractice') {
-      console.log("🎬 practice round. keep making attempts")
-      return
-    }
-    // Guard clause: return whe attempt resets to 0
-    if (attempt === 0 ) {
-      return
-    }
-      let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-      let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-      let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-      let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-      let solutionColors = colorRound.solutionColors;
-    
-      // Not enough trys for solution
-      if (attempt === 1) {
-        console.log('👆 First guess.');
-        // correct
-      } else if (
-        solutionColors.includes(leftFieldHexColor) &&
-        solutionColors.includes(rightFieldHexColor) &&
-        // the colors can't be the same on either side
-        leftFieldHexColor !== rightFieldHexColor
-      ) {
-        setGameState('playerWins');
-        playerWinsConfettiFalls();
-    
-        // incorrect
-      } else {
-        playerMadeWrongGuess()
-      }
   
-  }, [attempt])
+
 
  
   function playerMadeWrongGuess() {
@@ -358,7 +381,6 @@ export default function App(props) {
   //  ===================================
   function playerWinsConfettiFalls() {
     console.log("🦄 Player wins round state:", state.value);
-    setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
     increasePlayerScore();    
@@ -366,6 +388,7 @@ export default function App(props) {
     setTimeout(function () {
       prepareRoundN();
     }, 3000);
+    send({type: 'ONTO_INCREMENT_ROUND' });
   };
 
   useEffect( () => {
@@ -377,14 +400,12 @@ export default function App(props) {
   //  ===================================
   function playerLoosesShowSolution(maxLossCount) {
     console.log('😭 player looses round');
-    setGameState('playerLoosesShowSolution');
     playLoseSound();
     showSolution();
     setLostRounds(lostRounds => lostRounds + 1);
   }
   
   function showSolution() {
-    setGameState('showSolution');
     console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
     
     setLeftFieldStyle({
@@ -399,8 +420,8 @@ export default function App(props) {
 
 
   useEffect( () => {
-    // Do not transition if gameState is "homescreenpractice"
-    if (state.value === "homeScreenPractice") {return}
+    // Do not transition if state is "homescreenpractice"
+    if (state.value === "homeScreenPracticeState") {return}
     // Do not transition if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
     // Player lost this round. 
@@ -409,10 +430,12 @@ export default function App(props) {
       console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
-        prepareRoundN()
+        // prepareRoundN()
+        send({type: 'ONTO_INCREMENT_ROUND' });
       } else if (lostRounds >= maxLossCount) {
         console.log(`🌑 Transition to gameOver()`);
-        gameOver()
+        // gameOver()
+        send({type: 'NO_MORE_ROUNDS' });
       }
     }, 2000);
 
@@ -420,7 +443,6 @@ export default function App(props) {
    
 
   function gameOver() {
-    setGameState('game-over');
     gameOverChimes();
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(true);
@@ -479,7 +501,6 @@ export default function App(props) {
   function joinLeaderboard() {
     setDisplayGameField(false);
     setDisplayGameOverMessage('none');
-    setGameState('joinLeaderboard');
     setDisplayLeaderboard(true);
     setDisplayLeaderboardForm(true);
     setNewLeaderboardInductee('');
@@ -498,9 +519,6 @@ export default function App(props) {
     });
   }
  
-
-
-
    /* 
    ============================================
    Hover handler for color bubbles - shows player which 
@@ -510,7 +528,7 @@ export default function App(props) {
    ============================================
    */
   function currentFieldMouseEnter() {
-    if (state.value === 'playerWins') return;
+    if (state.value === 'playerWinsState') return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -525,7 +543,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (state.value === 'playerWins') return;
+    if (state.value === 'playerWinsState') return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
@@ -585,9 +603,9 @@ export default function App(props) {
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
-    if ((state.value === "game-over") ||
-       (state.value === 'playerWins') ||
-       (state.value === 'prepareRoundN')) {
+    if ((state.value === "gameOverState") ||
+       (state.value === 'playerWinsState') ||
+       (state.value === 'prepareRoundNState')) {
       console.log("✋ click handler disabled")
       return
     }
@@ -597,7 +615,7 @@ export default function App(props) {
     };
 
     // Don't count attempts if user is practicing
-    if (state.value === 'homeScreenPractice') {
+    if (state.value === 'homeScreenPracticeState') {
       setAttempt(0)
     } else {
       setAttempt(attempt + 1);
@@ -914,7 +932,7 @@ export default function App(props) {
       <StartButtons
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
-          startGame={startGame}
+          startGameClickHandler={startGameClickHandler}
           prepareRoundN={prepareRoundN}
         />
 

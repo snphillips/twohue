@@ -5,95 +5,93 @@ import { createMachine } from 'xstate';
 // ==============================
 const twohueMachine = createMachine({
   id: 'twohue',
-  initial: 'initializeApp',
+  initial: 'initializeAppState',
   states: {
-  initializeApp: {
+    initializeAppState: {
     entry: 'initializeApp',
     on: {
-      ONTO_HOMESCREEN_PRACTICE: 'homeScreenPractice'
+      ONTO_HOMESCREEN_PRACTICE: 'homeScreenPracticeState'
     },
   },
-  homeScreenPractice: {
+  homeScreenPracticeState: {
     entry: 'homeScreenPractice',
     on: {
-      ONTO_START_GAME: 'startGame',
-      ONTO_HOMESCREEN_PRACTICE:'homeScreenPractice',
+      ONTO_START_GAME: 'startGameState'
     },
   },
-  startGame: {
+  startGameState: {
     entry: 'startGame',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRound'
+      ONTO_INCREMENT_ROUND: 'incrementRoundState'
     },
   },
-  incrementRound: {
+  incrementRoundState: {
     entry: 'incrementRound',
     on: {
-      ONTO_GENERATE_COLOR_ROUND: 'generateColorRound'
+      ONTO_GENERATE_COLOR_ROUND: 'generateColorRoundState'
     },
   },
-  prepareRoundN: {
+  prepareRoundNState: {
     entry: 'prepareRoundN',
     on: {
-      ONTO_ATTEMPTN: 'attemptN',
+      ONTO_ATTEMPTN: 'attemptNState',
     },
   },
-  generateColorRound: {
+  generateColorRoundState: {
     entry: 'generateColorRound',
     on: {
-      ONTO_HOMESCREEN_PRACTICE: 'homeScreenPractice',
-      ONTO_PREPARE_ROUNDN: 'prepareRoundN',
+      ONTO_PREPARE_ROUNDN: 'prepareRoundNState'
     },
   },
-  attemptN: {
+  attemptNState: {
     entry: 'attemptN',
     on: {
-      RIGHT_GUESS_PLAYER_WINS: 'playerWinsConfettiFalls',
-      WRONG_GUESS_ONTO_ATTEMPTN: 'attemptN',
-      WRONG_GUESS_ONTO_PLAYER_LOOSES: 'playerLoosesShowSolution'
+      RIGHT_GUESS_PLAYER_WINS: 'playerWinsConfettiFallsState',
+      WRONG_GUESS_ONTO_ATTEMPTN: 'attemptNState',
+      WRONG_GUESS_ONTO_PLAYER_LOOSES: 'playerLoosesShowSolutionState'
     },
   },
-  playerWinsConfettiFalls: {
+  playerWinsConfettiFallsState: {
     entry: 'playerWinsConfettiFalls',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRound',
+      ONTO_INCREMENT_ROUND: 'incrementRoundState',
     },
     after: {
       3000: [
-        {target: 'incrementRound'}
+        {target: 'incrementRoundState'}
       ]
     }
   },
-  playerLoosesShowSolution: {
+  playerLoosesShowSolutionState: {
     entry: 'playerLoosesShowSolution',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRound',
-      NO_MORE_ROUNDS: 'gameOver',
+      ONTO_INCREMENT_ROUND: 'incrementRoundState',
+      NO_MORE_ROUNDS: 'gameOverState',
     },
     after: {
       3000: [
-        {target: 'incrementRound'},
-        {target: 'gameOver'}
+        {target: 'incrementRoundState'},
+        {target: 'gameOverState'}
         ]
     }
   },
-  gameOver: {
+  gameOverState: {
     entry: 'gameOver',
     on: {
-      ONTO_LEADERBOARD: 'leaderboard',
-      ONTO_SERVER_ERROR_NO_LEADERBOARD: 'noLeaderboard',
+      ONTO_LEADERBOARD: 'leaderboardState',
+      ONTO_SERVER_ERROR_NO_LEADERBOARD: 'noLeaderboardState',
     },
   },
-  leaderboard: {
+  leaderboardState: {
     entry: 'leaderboard',
     on: {
-      ONTO_START_GAME: 'generateColorRound',
+      ONTO_START_GAME: 'generateColorRoundState',
     }
   },
-    noLeaderboard: {
+  noLeaderboardState: {
     entry: 'noLeaderboard',
     on: {
-      ONTO_START_GAME: 'generateColorRound',
+      ONTO_START_GAME: 'generateColorRoundState',
     }
   }
 },
