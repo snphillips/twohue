@@ -18,7 +18,6 @@ export default function ColorBubbleTray(props) {
     {props.displayIntroAnimation &&
       <div 
           className="arrow-container arrow-container-left"
-          // style={{display: props.displayIntroAnimation}}
           >
           <svg className="svg-icon arrow" viewBox="0 0 20 20">
             <path
@@ -57,7 +56,6 @@ export default function ColorBubbleTray(props) {
       {props.displayIntroAnimation &&
       <div 
         className="arrow-container arrow-container-right"
-        // style={{display: props.displayIntroAnimation}}
       >
         <svg className="svg-icon arrow" viewBox="0 0 20 20">
           <path

@@ -49,7 +49,7 @@ export default function App(props) {
   ));
 
   
-  console.log("🚦 state:", state.value)
+  console.log("🚦 state.value:", state.value)
   // console.log("twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value   );
 
    // gameStates: 
@@ -103,9 +103,11 @@ export default function App(props) {
   */
   const firstUpdate = useRef(true);
 
-    if (gameState === 'homeScreenPractice') {
+    if (state.value === 'homeScreenPractice') {
+      console.log("maxAttemptCount = 30")
       maxAttemptCount = 30; 
     } else {
+      console.log("maxAttemptCount = 6")
       maxAttemptCount = 6;
     }
 
@@ -123,18 +125,22 @@ export default function App(props) {
     setDisplayStartButton(true);
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(false);
-    send({ type: 'ONTO_HOME_SCREEN_PRACTICE' })
+    send({ type: 'ONTO_HOMESCREEN_PRACTICE' })
    };
 
    function homeScreenPractice() {
-    console.log("I'm in homeScreenPractice() state")
-    // generate the two colors for practice round
-    setAllColorBubbles(['#999999', '#000']);
+    console.log("🍄 I'm in homeScreenPractice() state")
+    // generate the practice round colors
+    // setColorRound(['#8cb5ef','#8cb5ef','#1b6501'])
     setColorRound({
       solutionColor1: '#8cb5ef',
       solutionColor2: '#d79fb3',
-      targetColor: '#1b6501'
-    }) 
+      targetColor: '#7671a8',
+      solutionColors: ['#8cb5ef','#d79fb3']
+      })
+    setAllColorBubbles(['#8cb5ef','#d79fb3'])
+  
+
     // send({type: 'ONTO_START_GAME' });
   }
 
@@ -161,12 +167,12 @@ export default function App(props) {
   };
   
   function incrementRound() {
-    console.log("I'm in incrementRound() state");
+    console.log("👆 I'm in incrementRound() state");
     setRound(round => round + 1);
     send({type: 'ONTO_GENERATE_COLOR_ROUND'});
   };
   function generateColorRound() {
-    console.log("🎨 I'm in generate color round.", state.value)
+    console.log("🎨 I'm in generate color round")
 
     if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
       console.log('gameState isnt loading or practice, right?', gameState)
@@ -265,7 +271,7 @@ export default function App(props) {
     shuffleColors(newColorRound.allColorBubbles);
     setColorRound(newColorRound);
     setWrongColors(wrongColorsArray);
-    send({type: 'ONTO_TO_PREPARE_ROUNDN'});
+    send({type: 'ONTO_TO_PREPARE_ROUNDN' });
   };
 
   function prepareRoundN() {
@@ -301,7 +307,7 @@ export default function App(props) {
       firstUpdate.current = false;
       return;
     }
-    if (gameState === 'homeScreenPractice') {
+    if (state.value === 'homeScreenPractice') {
       console.log("🎬 practice round. keep making attempts")
       return
     }
@@ -394,7 +400,7 @@ export default function App(props) {
 
   useEffect( () => {
     // Do not transition if gameState is "homescreenpractice"
-    if (gameState === "homeScreenPractice") {return}
+    if (state.value === "homeScreenPractice") {return}
     // Do not transition if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
     // Player lost this round. 
@@ -504,7 +510,7 @@ export default function App(props) {
    ============================================
    */
   function currentFieldMouseEnter() {
-    if (gameState === 'playerWins') return;
+    if (state.value === 'playerWins') return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -519,7 +525,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (gameState === 'playerWins') return;
+    if (state.value === 'playerWins') return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
@@ -579,9 +585,9 @@ export default function App(props) {
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
-    if ((gameState === "game-over") ||
-       (gameState === 'playerWins') ||
-       (gameState === 'prepareRoundN')) {
+    if ((state.value === "game-over") ||
+       (state.value === 'playerWins') ||
+       (state.value === 'prepareRoundN')) {
       console.log("✋ click handler disabled")
       return
     }
@@ -590,8 +596,14 @@ export default function App(props) {
       return
     };
 
+    // Don't count attempts if user is practicing
+    if (state.value === 'homeScreenPractice') {
+      setAttempt(0)
+    } else {
+      setAttempt(attempt + 1);
+    }
 
-    setAttempt(attempt + 1);
+
     bubbleSound();
     toggleLeftRightField();
     // 'event' is the click on a specific color bubble.
