@@ -16,15 +16,15 @@ const twohueMachine = createMachine({
   homeScreenPracticeState: {
     entry: 'homeScreenPractice',
     on: {
-      ONTO_START_GAME: 'startGameState'
-    },
-  },
-  startGameState: {
-    entry: 'startGame',
-    on: {
       ONTO_INCREMENT_ROUND: 'incrementRoundState'
     },
   },
+  // startGameState: {
+  //   entry: 'startGame',
+  //   on: {
+  //     ONTO_INCREMENT_ROUND: 'incrementRoundState'
+  //   },
+  // },
   incrementRoundState: {
     entry: 'incrementRound',
     on: {

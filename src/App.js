@@ -132,10 +132,10 @@ export default function App(props) {
     setAllColorBubbles(['#8cb5ef','#d79fb3'])
   }
   
-  function startGameClickHandler() {
-    console.log('▶️ Im in startGameClickHandler() state');
-    send({type: 'ONTO_START_GAME' });
-  }
+  // function startGameClickHandler() {
+  //   console.log('▶️ Im in startGameClickHandler() state');
+  //   send({type: 'ONTO_START_GAME' });
+  // }
 
   function startGame() {
     console.log('🏁 Im in startGame() state');
@@ -155,25 +155,29 @@ export default function App(props) {
     setLostRounds(0);
     setAttempt(0);
     setRound(0);
-    send({type: 'ONTO_INCREMENT_ROUND'});
+    send({type:'ONTO_INCREMENT_ROUND'});
   };
   
   function incrementRound() {
     console.log("👆 I'm in incrementRound() state");
     setRound(round => round + 1);
-    // send({type: 'ONTO_GENERATE_COLOR_ROUND'});
+    // does this work?
+    send({type: 'ONTO_GENERATE_COLOR_ROUND'});
   };
 
   useEffect( () => {
+    console.log('snakejazz round:', round)
     generateColorRound()
   }, [round])
 
   function generateColorRound() {
     console.log("🎨 I'm in generate color round state")
 
-    if (state !== 'homeScreenPracticeState' && state !== 'loadingState') {
-      // console.log('state isnt loading or practice, right?', state)
+    // don't generate color round while in practice round
+    if (state.value !== 'generateColorRoundState') {
+      return
     }
+
     let soluColor1;
     let soluColor2;
     let targColor;
@@ -225,7 +229,7 @@ export default function App(props) {
 
            let numWrongColors;
            (round <= 6 ? numWrongColors = round: numWrongColors = 6);
-           console.log("pizza party", round, numWrongColors)   
+           console.log("in generate color round", round, numWrongColors)   
            
         for (let i = numWrongColors; i > 0; i--) {
 
@@ -932,7 +936,7 @@ export default function App(props) {
       <StartButtons
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
-          startGameClickHandler={startGameClickHandler}
+          startGame={startGame}
           prepareRoundN={prepareRoundN}
         />
 
