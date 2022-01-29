@@ -16,7 +16,7 @@ import Scoreboard from './components/Scoreboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import twohueMachine from './twohueMachine';
 import { useMachine } from '@xstate/react';
-import { Machine} from 'xstate';
+import { Machine } from 'xstate';
 import { GridLoader } from 'react-spinners';
 
 // Leave both server addresses here in case you want to switch
@@ -26,6 +26,7 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
+let round = 0;
 
 
 export default function App(props) {
@@ -39,7 +40,9 @@ export default function App(props) {
       prepareRoundN: prepareRoundN,
       generateColorRound: generateColorRound,
       attemptN: attemptN,
+      evaluateAttempt: evaluateAttempt,
       playerWinsConfettiFalls: playerWinsConfettiFalls,
+      wrongGuess: wrongGuess,
       playerLoosesShowSolution: playerLoosesShowSolution,
       gameOver: gameOver,
       leaderboard: leaderboard,
@@ -49,7 +52,7 @@ export default function App(props) {
   ));
 
   console.log("🚦 state.value:", state.value)
-  // console.log("twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'ONTO_GENERATE_COLOR_ROUND').value   );
+  // console.log("twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value   );
 
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
@@ -64,7 +67,7 @@ export default function App(props) {
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
-  const [round, setRound] = useState(0);
+  // const [round, setRound] = useState(0);
   const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -96,10 +99,10 @@ export default function App(props) {
   const firstUpdate = useRef(true);
 
     if (state.value === 'homeScreenPracticeState') {
-      console.log("maxAttemptCount = 30")
+      // console.log("maxAttemptCount = 30")
       maxAttemptCount = 30; 
     } else {
-      console.log("maxAttemptCount = 6")
+      // console.log("maxAttemptCount = 6")
       maxAttemptCount = 6;
     }
 
@@ -117,7 +120,7 @@ export default function App(props) {
     setDisplayStartButton(true);
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(false);
-    send({ type: 'ONTO_HOMESCREEN_PRACTICE' })
+    send({ type: 'TO_HOMESCREEN_PRACTICE_STATE' })
    };
 
    function homeScreenPractice() {
@@ -127,18 +130,17 @@ export default function App(props) {
       solutionColor1: '#8cb5ef',
       solutionColor2: '#d79fb3',
       targetColor: '#7671a8',
-      solutionColors: ['#8cb5ef','#d79fb3']
+      solutionColors: ['#8cb5ef','#d79fb3'],
+      wrongColorsArray: []
     })
     setAllColorBubbles(['#8cb5ef','#d79fb3'])
+    // game moves to next state when user clicks start button
   }
-  
-  // function startGameClickHandler() {
-  //   console.log('▶️ Im in startGameClickHandler() state');
-  //   send({type: 'ONTO_START_GAME' });
-  // }
 
   function startGame() {
-    console.log('🏁 Im in startGame() state');
+    console.log('🏁 Im still in homeScreenPractice() state');
+    // setRound(0);
+    round = 0;
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
     setDisplayLeaderboard(false);
@@ -154,29 +156,36 @@ export default function App(props) {
     setPreviousScore(0);
     setLostRounds(0);
     setAttempt(0);
-    setRound(0);
-    send({type:'ONTO_INCREMENT_ROUND'});
+    send({type:'TO_INCREMENT_ROUND_STATE'});
   };
   
   function incrementRound() {
-    console.log("👆 I'm in incrementRound() state");
-    setRound(round => round + 1);
-    // does this work?
-    send({type: 'ONTO_GENERATE_COLOR_ROUND'});
+    console.log("👆 I'm in incrementRoundState");
+    // setRound(round => round + 1);
+    round = round + 1;
+    // see useEffect for the state update
+    send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
   };
-
-  useEffect( () => {
-    console.log('snakejazz round:', round)
-    generateColorRound()
-  }, [round])
+  
+  // useEffect( () => {
+  //   // we do not need to generate color round for practice
+  //   // as the practice round colors are hard-coded
+  //   if (round === 0) {
+  //     console.log("round is 0. Do not generate color round", round)
+  //     return
+  //   }
+    
+  //   console.log('🍩 round changed so useEffect triggers')
+  //   // TODO: why does transitioning with generateColorRound() work,
+  //   // but send({}) does not?
+  //   // send({}) does send along to generateColorRound(), but 
+  //   // not at the right time. 
+  //   send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
+  //   // generateColorRound();
+  // }, [round])
 
   function generateColorRound() {
-    console.log("🎨 I'm in generate color round state")
-
-    // don't generate color round while in practice round
-    if (state.value !== 'generateColorRoundState') {
-      return
-    }
+    console.log("🎨 I'm in generateColorRound(). round:", round)
 
     let soluColor1;
     let soluColor2;
@@ -229,7 +238,7 @@ export default function App(props) {
 
            let numWrongColors;
            (round <= 6 ? numWrongColors = round: numWrongColors = 6);
-           console.log("in generate color round", round, numWrongColors)   
+           console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
            
         for (let i = numWrongColors; i > 0; i--) {
 
@@ -272,56 +281,24 @@ export default function App(props) {
     shuffleColors(newColorRound.allColorBubbles);
     setColorRound(newColorRound);
     setWrongColors(wrongColorsArray);
-    send({type: 'ONTO_TO_PREPARE_ROUNDN' });
+    send({type:'TO_PREPARE_ROUNDN_STATE'});
   };
 
   function prepareRoundN() {
-    console.log("🚜 I'm in prepareRoundN() state");
+    console.log("🛠 I'm in prepareRoundN() state");
     setRunRoundConfetti(false);
     beginRoundSound();
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
+    send({type:'TO_ATTEMPTN_STATE'});
   };
   
   function attemptN() {
     console.log("🚜 I'm in attemptN() state");
-
-    // if (state.value === 'homeScreenPracticeState') {
-    //   console.log("🎬 practice round. keep making attempts")
-    //   return
-    // }
-    // // Guard clause: return whe attempt resets to 0
-    // if (attempt === 0 ) {
-    //   return
-    // }
-    //   let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-    //   let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-    //   let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-    //   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-    //   let solutionColors = colorRound.solutionColors;
-    
-    //   // Not enough trys for solution
-    //   if (attempt === 1) {
-    //     console.log('👆 First guess.');
-    //     // correct
-    //   } else if (
-    //     solutionColors.includes(leftFieldHexColor) &&
-    //     solutionColors.includes(rightFieldHexColor) &&
-    //     // the colors can't be the same on either side
-    //     leftFieldHexColor !== rightFieldHexColor
-    //   ) {
-    //     playerWinsConfettiFalls();
-    
-    //     // incorrect
-    //   } else {
-    //     playerMadeWrongGuess()
-    //   }
-  
-
-
-
+    send({type:'TO_EVALUATE_ATTEMPT_STATE'});
   };
+
 
   // =================================================
   // Check the solution after every attempt
@@ -332,51 +309,62 @@ export default function App(props) {
      firstUpdate.current = false;
      return;
    }
-   if (state.value === 'homeScreenPracticeState') {
-     console.log("🎬 practice round. keep making attempts")
-     return
-   }
-   // Guard clause: return whe attempt resets to 0
-   if (attempt === 0 ) {
-     return
-   }
-     let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-     let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-     let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-     let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-     let solutionColors = colorRound.solutionColors;
-   
-     // Not enough trys for solution
-     if (attempt === 1) {
-       console.log('👆 First guess.');
-       // correct
-     } else if (
-       solutionColors.includes(leftFieldHexColor) &&
-       solutionColors.includes(rightFieldHexColor) &&
-       // the colors can't be the same on either side
-       leftFieldHexColor !== rightFieldHexColor
-     ) {
-       playerWinsConfettiFalls();
-   
-       // incorrect
-     } else {
-       playerMadeWrongGuess()
-     }
- 
+   evaluateAttempt()
  }, [attempt])
-  
-  
 
 
- 
-  function playerMadeWrongGuess() {
-    console.log("👎 wrong guess")
+  function evaluateAttempt() {
+     console.log("🌡 I'm in evaluateAttemptState state")
+
+     // No need to evaluate attempt when in practice round
+     if (state.value === 'homeScreenPracticeState') {
+      console.log("🎬 practice round. keep making attempts")
+      return
+    }
+    // Guard clause: no need to evaluate attempt
+    // when attempt resets to 0
+    if (attempt === 0 ) {
+      return
+    }
+
+      let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+      let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+      let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+      let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+      let solutionColors = colorRound.solutionColors;
+    
+      // Not enough trys for solution
+      if (attempt === 1) {
+        console.log('👆 First guess.');
+        // correct
+      } else if (
+        solutionColors.includes(leftFieldHexColor) &&
+        solutionColors.includes(rightFieldHexColor) &&
+        // the colors can't be the same on either side
+        leftFieldHexColor !== rightFieldHexColor
+      ) {
+        console.log("😎 player makes correct guess - TO_PLAYER_WINS_CONFETTI_FALLS_STATE")
+        send({type:'TO_PLAYER_WINS_CONFETTI_FALLS_STATE'});
+        // playerWinsConfettiFalls();
+  
+        // incorrect
+      } else {
+      //  wrongGuess()
+      console.log("🙃 player makes wrong guess - TO_WRONG_GUESS_STATE")
+       send({type:'TO_WRONG_GUESS_STATE'});
+      }
+  }
+
+  
+  function wrongGuess() {
+    console.log("👎 I'm in wrongGuessState")
     if (attempt < maxAttemptCount) {
-      console.log("player makes an other guess")
+      console.log("player may guess again, TO_ATTEMPTN_STATE")
+      send({type:'TO_ATTEMPTN_STATE'});
     } else {
-      console.log("😖 player out of guesses - show solution")
-      showSolution()
-      playerLoosesShowSolution()
+      console.log("😖 player out of guesses. Show solution. WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE")
+      // playerLoosesShowSolution();
+      send({type:'WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE'});
     }
   }
 
@@ -384,15 +372,15 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWinsConfettiFalls() {
-    console.log("🦄 Player wins round state:", state.value);
+    console.log("🦄 I'm in playerWinsConfettiFallsState");
     setRunRoundConfetti(true);
     playWinSound();
-    increasePlayerScore();    
-    // After x seconds, proceed to prepareRoundN()
-    setTimeout(function () {
-      prepareRoundN();
-    }, 3000);
-    send({type: 'ONTO_INCREMENT_ROUND' });
+    increasePlayerScore();
+    // After x seconds, proceed to incrementRoundN()
+    // setTimeout(function () {
+    //   send({type:'TO_INCREMENT_ROUND_STATE'});
+    //   // incrementRound();
+    // }, 3000);
   };
 
   useEffect( () => {
@@ -402,7 +390,7 @@ export default function App(props) {
   //  ===================================
   //  Player Looses Round
   //  ===================================
-  function playerLoosesShowSolution(maxLossCount) {
+  function playerLoosesShowSolution() {
     console.log('😭 player looses round');
     playLoseSound();
     showSolution();
@@ -422,24 +410,27 @@ export default function App(props) {
     });
   }
 
-
   useEffect( () => {
-    // Do not transition if state is "homescreenpractice"
+    // Do not proceed if state is "homescreenpractice"
     if (state.value === "homeScreenPracticeState") {return}
-    // Do not transition if prevLostRounds is equal to lostRounds
+    
+    // Do not proceed if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
+   
+    console.log('lostRounds useEffect. Triggers b/c lostRounds changed')
     // Player lost this round. 
     // Transition to either the next round or game over after X seconds
     setTimeout(function () {
       console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
-        // prepareRoundN()
-        send({type: 'ONTO_INCREMENT_ROUND' });
+        // incrementRoundN(
+        // send({type:'TO_CLEAR_ROUND_STATE'});
+        send({type:'TO_INCREMENT_ROUND_STATE'});
       } else if (lostRounds >= maxLossCount) {
         console.log(`🌑 Transition to gameOver()`);
         // gameOver()
-        send({type: 'NO_MORE_ROUNDS' });
+        send({type:'TO_GAMEOVER_STATE'});
       }
     }, 2000);
 
@@ -608,8 +599,7 @@ export default function App(props) {
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
     if ((state.value === "gameOverState") ||
-       (state.value === 'playerWinsState') ||
-       (state.value === 'prepareRoundNState')) {
+       (state.value === 'playerWinsState')) {
       console.log("✋ click handler disabled")
       return
     }
@@ -625,7 +615,6 @@ export default function App(props) {
       setAttempt(attempt + 1);
     }
 
-
     bubbleSound();
     toggleLeftRightField();
     // 'event' is the click on a specific color bubble.
@@ -633,7 +622,6 @@ export default function App(props) {
     // 'style.backgroundColor' takes whatever background color
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
-
   }
 
   //  ==================================

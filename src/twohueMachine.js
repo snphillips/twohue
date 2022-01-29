@@ -1,5 +1,11 @@
 import { createMachine } from 'xstate';
 
+
+  // // Action to increment the context amount
+  // const incrementRoundz = assign({
+  //   amount: (context, event) => context.roundz + 1
+  // });
+
 // ==============================
 // https://xstate.js.org/viz/?gist=164f6bb8dff9841e0b57f244f214826c
 // ==============================
@@ -10,91 +16,90 @@ const twohueMachine = createMachine({
     initializeAppState: {
     entry: 'initializeApp',
     on: {
-      ONTO_HOMESCREEN_PRACTICE: 'homeScreenPracticeState'
+      TO_HOMESCREEN_PRACTICE_STATE: 'homeScreenPracticeState'
     },
   },
   homeScreenPracticeState: {
     entry: 'homeScreenPractice',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRoundState'
+      TO_INCREMENT_ROUND_STATE: 'incrementRoundState'
     },
   },
-  // startGameState: {
-  //   entry: 'startGame',
-  //   on: {
-  //     ONTO_INCREMENT_ROUND: 'incrementRoundState'
-  //   },
-  // },
   incrementRoundState: {
     entry: 'incrementRound',
     on: {
-      ONTO_GENERATE_COLOR_ROUND: 'generateColorRoundState'
-    },
-  },
-  prepareRoundNState: {
-    entry: 'prepareRoundN',
-    on: {
-      ONTO_ATTEMPTN: 'attemptNState',
+      TO_GENERATE_COLOR_ROUND_STATE: 'generateColorRoundState'
     },
   },
   generateColorRoundState: {
     entry: 'generateColorRound',
     on: {
-      ONTO_PREPARE_ROUNDN: 'prepareRoundNState'
+      TO_PREPARE_ROUNDN_STATE: 'prepareRoundNState'
+    },
+  },
+  prepareRoundNState: {
+    entry: 'prepareRoundN',
+    on: {
+      TO_ATTEMPTN_STATE: 'attemptNState',
     },
   },
   attemptNState: {
     entry: 'attemptN',
     on: {
-      RIGHT_GUESS_PLAYER_WINS: 'playerWinsConfettiFallsState',
-      WRONG_GUESS_ONTO_ATTEMPTN: 'attemptNState',
-      WRONG_GUESS_ONTO_PLAYER_LOOSES: 'playerLoosesShowSolutionState'
+      TO_EVALUATE_ATTEMPT_STATE: 'evaluateAttemptState'
+    },
+  },
+  evaluateAttemptState: {
+    entry: 'evaluateAttempt',
+    on: {
+      TO_PLAYER_WINS_CONFETTI_FALLS_STATE: 'playerWinsConfettiFallsState',
+      TO_WRONG_GUESS_STATE: 'wrongGuessState'
     },
   },
   playerWinsConfettiFallsState: {
     entry: 'playerWinsConfettiFalls',
-    on: {
-      ONTO_INCREMENT_ROUND: 'incrementRoundState',
-    },
     after: {
-      3000: [
-        {target: 'incrementRoundState'}
-      ]
-    }
+      3000: {target: 'incrementRoundState'}
+    } 
+    // on: {
+    //   TO_INCREMENT_ROUND_STATE: 'incrementRoundState',
+    // },
+  },
+  wrongGuessState: {
+    entry: 'wrongGuess',
+    on: {
+      WRONG_GUESS_TO_ATTEMPT_STATE: 'attemptNState',
+      WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE: 'playerLoosesShowSolutionState'
+    },
   },
   playerLoosesShowSolutionState: {
     entry: 'playerLoosesShowSolution',
     on: {
-      ONTO_INCREMENT_ROUND: 'incrementRoundState',
-      NO_MORE_ROUNDS: 'gameOverState',
+      TO_INCREMENT_ROUND_STATE: 'incrementRoundState',
+      TO_GAMEOVER_STATE: 'gameOverState'
     },
-    after: {
-      3000: [
-        {target: 'incrementRoundState'},
-        {target: 'gameOverState'}
-        ]
-    }
   },
   gameOverState: {
     entry: 'gameOver',
     on: {
-      ONTO_LEADERBOARD: 'leaderboardState',
-      ONTO_SERVER_ERROR_NO_LEADERBOARD: 'noLeaderboardState',
+      TO_LEADERBOARD_STATE: 'leaderboardState',
+      TO_SERVER_ERROR_NO_LEADERBOARD_STATE: 'noLeaderboardState',
     },
   },
   leaderboardState: {
     entry: 'leaderboard',
     on: {
-      ONTO_START_GAME: 'generateColorRoundState',
+      TO_START_GAME_STATE: 'generateColorRoundState',
     }
   },
   noLeaderboardState: {
     entry: 'noLeaderboard',
     on: {
-      ONTO_START_GAME: 'generateColorRoundState',
+      TO_START_GAME_STATE: 'generateColorRoundState',
     }
   }
 },
-});
+},
+);
 
 export default twohueMachine;
