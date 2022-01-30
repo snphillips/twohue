@@ -52,6 +52,7 @@ const twohueMachine = createMachine({
   evaluateAttemptState: {
     entry: 'evaluateAttempt',
     on: {
+      FIRST_GUESS_TO_ATTEMPTN_STATE: 'attemptNState',
       TO_PLAYER_WINS_CONFETTI_FALLS_STATE: 'playerWinsConfettiFallsState',
       TO_WRONG_GUESS_STATE: 'wrongGuessState'
     },

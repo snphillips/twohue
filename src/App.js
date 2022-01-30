@@ -336,6 +336,7 @@ export default function App(props) {
       // Not enough trys for solution
       if (attempt === 1) {
         console.log('👆 First guess.');
+        send({type:'TO_ATTEMPTN_STATE'});
         // correct
       } else if (
         solutionColors.includes(leftFieldHexColor) &&
