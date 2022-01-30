@@ -26,14 +26,34 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
-let round = 0;
-let attempt = 0;
+// let round = 0;
+// let attempts = 0;
 
 
 export default function App(props) {
 
-  const [state, send] = useMachine(twohueMachine.withConfig({
-    actions:{
+  // const [state, send] = useMachine(twohueMachine.withConfig({
+  //   actions:{
+  //     initializeApp: initializeApp,
+  //     homeScreenPractice: homeScreenPractice,
+  //     startGame: startGame,
+  //     incrementRound: incrementRound,
+  //     prepareRoundN: prepareRoundN,
+  //     generateColorRound: generateColorRound,
+  //     attemptN: attemptN,
+  //     evaluateAttempt: evaluateAttempt,
+  //     playerWinsConfettiFalls: playerWinsConfettiFalls,
+  //     wrongGuess: wrongGuess,
+  //     playerLoosesShowSolution: playerLoosesShowSolution,
+  //     gameOver: gameOver,
+  //     leaderboard: leaderboard,
+  //     noLeaderboard: noLeaderboard,
+  //   }
+  // }
+  // ));
+
+  const [state, send] = useMachine( () => twohueMachine.withConfig({
+    actions: {
       initializeApp: initializeApp,
       homeScreenPractice: homeScreenPractice,
       startGame: startGame,
@@ -48,9 +68,8 @@ export default function App(props) {
       gameOver: gameOver,
       leaderboard: leaderboard,
       noLeaderboard: noLeaderboard,
-    }
-  }
-  ));
+    }})
+  );
 
   console.log("🚦 state.value:", state.value)
   // console.log("twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value   );
@@ -68,9 +87,9 @@ export default function App(props) {
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
-  // const [round, setRound] = useState(0);
+  const [round, setRound] = useState(0);
   // const prevRound = useRef(0);
-  // const [attempt, setAttempt] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
   const prevLostRounds = useRef(0);
   const [score, setScore] = useState(0);
@@ -140,10 +159,10 @@ export default function App(props) {
 
   function startGame() {
     console.log('🏁 Im still in homeScreenPractice() state');
-    // setRound(0);
-    // setAttempt(0);
-    round = 0;
-    attempt = 0;
+    setRound(0);
+    setAttempt(0);
+    // round = 0;
+    // attempt = 0;
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
     setDisplayLeaderboard(false);
@@ -163,11 +182,19 @@ export default function App(props) {
   
   function incrementRound() {
     console.log("👆 I'm in incrementRoundState");
-    // setRound(round => round + 1);
-    round = round + 1;
-    // see useEffect for the state update
-    send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
+    setRound(round => round + 1);
+    // round = round + 1;
+    // see useEffect for the state update 'TO_GENERATE_COLOR_ROUND_STATE'
+    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
   };
+
+  useEffect( () => {
+    // TODO - sadly the send({}) method results in stale data
+    // generateColorRound() works as expected
+    // generateColorRound()
+    send({type: 'TO_GENERATE_COLOR_ROUND_STATE', data: round });
+    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE'});
+  }, [round])
   
   function generateColorRound() {
     console.log("🎨 I'm in generateColorRound(). round:", round)
@@ -266,15 +293,21 @@ export default function App(props) {
     shuffleColors(newColorRound.allColorBubbles);
     setColorRound(newColorRound);
     setWrongColors(wrongColorsArray);
-    send({type:'TO_PREPARE_ROUNDN_STATE'});
+    // send({type:'TO_PREPARE_ROUNDN_STATE'});
   };
+
+  useEffect(() => {
+    // TODO: find out why any sends({}) in useEffect not working
+    prepareRoundN();
+    // send({type:'TO_PREPARE_ROUNDN_STATE'});
+  }, [colorRound])
 
   function prepareRoundN() {
     console.log("🛠 I'm in prepareRoundN() state");
     setRunRoundConfetti(false);
     beginRoundSound();
-    // setAttempt(0);
-    attempt = 0;
+    setAttempt(0);
+    // attempt = 0;
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
     send({type:'TO_ATTEMPTN_STATE'});
@@ -286,18 +319,18 @@ export default function App(props) {
   };
 
 
-//   // =================================================
-//   // Check the solution after every attempt
-//   // =================================================
-//   useEffect( () => {
-//    // Don't run on first render (firstUpdate)
-//    if (firstUpdate.current) {
-//      firstUpdate.current = false;
-//      return;
-//    }
-//   //  evaluateAttempt()
-//    send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
-//  }, [attempt])
+  // =================================================
+  // Check the solution after every attempt
+  // =================================================
+  useEffect( () => {
+   // Don't run on first render (firstUpdate)
+   if (firstUpdate.current) {
+     firstUpdate.current = false;
+     return;
+   }
+  //  evaluateAttempt()
+   send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
+ }, [attempt])
 
 
   function evaluateAttempt() {
@@ -552,8 +585,8 @@ export default function App(props) {
   }
 
   function incrementAttempt() {
-    // setAttempt(attempt => attempt + 1);
-    attempt = (attempt + 1);
+    setAttempt(attempt => attempt + 1);
+    // attempt = (attempt + 1);
   }
 
   function increasePlayerScore() {
@@ -594,11 +627,11 @@ export default function App(props) {
 
     // Don't count attempts if user is practicing
     if (state.value === 'homeScreenPracticeState') {
-      // setAttempt(0)
-      attempt = 0
+      setAttempt(0)
+      // attempt = 0
     } else {
-      // setAttempt(attempt + 1);
-      attempt = attempt + 1;
+      setAttempt(attempt + 1);
+      // attempt = attempt + 1;
     }
 
     bubbleSound();
@@ -609,7 +642,8 @@ export default function App(props) {
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
     // evaluateAttempt();
-    send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
+    // send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
+    // right now we're using a useEffect hook to transition 'TO_EVALUATE_ATTEMPTN_STATE'
   }
 
   //  ==================================

@@ -69,7 +69,7 @@ const twohueMachine = createMachine({
   wrongGuessState: {
     entry: 'wrongGuess',
     on: {
-      WRONG_GUESS_TO_ATTEMPT_STATE: 'attemptNState',
+      WRONG_GUESS_TO_ATTEMPTN_STATE: 'attemptNState',
       WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE: 'playerLoosesShowSolutionState'
     },
   },
