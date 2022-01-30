@@ -27,6 +27,7 @@ let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
 let round = 0;
+let attempt = 0;
 
 
 export default function App(props) {
@@ -68,8 +69,8 @@ export default function App(props) {
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
   // const [round, setRound] = useState(0);
-  const prevRound = useRef(0);
-  const [attempt, setAttempt] = useState(0);
+  // const prevRound = useRef(0);
+  // const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
   const prevLostRounds = useRef(0);
   const [score, setScore] = useState(0);
@@ -140,7 +141,9 @@ export default function App(props) {
   function startGame() {
     console.log('🏁 Im still in homeScreenPractice() state');
     // setRound(0);
+    // setAttempt(0);
     round = 0;
+    attempt = 0;
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
     setDisplayLeaderboard(false);
@@ -155,7 +158,6 @@ export default function App(props) {
     setScore(0);
     setPreviousScore(0);
     setLostRounds(0);
-    setAttempt(0);
     send({type:'TO_INCREMENT_ROUND_STATE'});
   };
   
@@ -167,23 +169,6 @@ export default function App(props) {
     send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
   };
   
-  // useEffect( () => {
-  //   // we do not need to generate color round for practice
-  //   // as the practice round colors are hard-coded
-  //   if (round === 0) {
-  //     console.log("round is 0. Do not generate color round", round)
-  //     return
-  //   }
-    
-  //   console.log('🍩 round changed so useEffect triggers')
-  //   // TODO: why does transitioning with generateColorRound() work,
-  //   // but send({}) does not?
-  //   // send({}) does send along to generateColorRound(), but 
-  //   // not at the right time. 
-  //   send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
-  //   // generateColorRound();
-  // }, [round])
-
   function generateColorRound() {
     console.log("🎨 I'm in generateColorRound(). round:", round)
 
@@ -238,7 +223,7 @@ export default function App(props) {
 
            let numWrongColors;
            (round <= 6 ? numWrongColors = round: numWrongColors = 6);
-           console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
+          //  console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
            
         for (let i = numWrongColors; i > 0; i--) {
 
@@ -288,7 +273,8 @@ export default function App(props) {
     console.log("🛠 I'm in prepareRoundN() state");
     setRunRoundConfetti(false);
     beginRoundSound();
-    setAttempt(0);
+    // setAttempt(0);
+    attempt = 0;
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
     send({type:'TO_ATTEMPTN_STATE'});
@@ -296,34 +282,30 @@ export default function App(props) {
   
   function attemptN() {
     console.log("🚜 I'm in attemptN() state");
-    send({type:'TO_EVALUATE_ATTEMPT_STATE'});
+    // send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
   };
 
 
-  // =================================================
-  // Check the solution after every attempt
-  // =================================================
-  useEffect( () => {
-   // Don't run on first render (firstUpdate)
-   if (firstUpdate.current) {
-     firstUpdate.current = false;
-     return;
-   }
-   evaluateAttempt()
- }, [attempt])
+//   // =================================================
+//   // Check the solution after every attempt
+//   // =================================================
+//   useEffect( () => {
+//    // Don't run on first render (firstUpdate)
+//    if (firstUpdate.current) {
+//      firstUpdate.current = false;
+//      return;
+//    }
+//   //  evaluateAttempt()
+//    send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
+//  }, [attempt])
 
 
   function evaluateAttempt() {
-     console.log("🌡 I'm in evaluateAttemptState state")
+     console.log("🌡 I'm in evaluateAttemptState state attempt:", attempt)
 
      // No need to evaluate attempt when in practice round
      if (state.value === 'homeScreenPracticeState') {
       console.log("🎬 practice round. keep making attempts")
-      return
-    }
-    // Guard clause: no need to evaluate attempt
-    // when attempt resets to 0
-    if (attempt === 0 ) {
       return
     }
 
@@ -336,7 +318,7 @@ export default function App(props) {
       // Not enough trys for solution
       if (attempt === 1) {
         console.log('👆 First guess.');
-        send({type:'TO_ATTEMPTN_STATE'});
+        send({type:'FIRST_GUESS_TO_ATTEMPTN_STATE'});
         // correct
       } else if (
         solutionColors.includes(leftFieldHexColor) &&
@@ -345,23 +327,23 @@ export default function App(props) {
         leftFieldHexColor !== rightFieldHexColor
       ) {
         console.log("😎 player makes correct guess - TO_PLAYER_WINS_CONFETTI_FALLS_STATE")
-        send({type:'TO_PLAYER_WINS_CONFETTI_FALLS_STATE'});
         // playerWinsConfettiFalls();
+        send({type:'TO_PLAYER_WINS_CONFETTI_FALLS_STATE'});
   
         // incorrect
       } else {
-      //  wrongGuess()
-      console.log("🙃 player makes wrong guess - TO_WRONG_GUESS_STATE")
-       send({type:'TO_WRONG_GUESS_STATE'});
+        console.log("🙃 player makes wrong guess - TO_WRONG_GUESS_STATE")
+        // wrongGuess() 
+        send({type:'TO_WRONG_GUESS_STATE'});
       }
   }
 
   
   function wrongGuess() {
-    console.log("👎 I'm in wrongGuessState")
+    console.log("👎 I'm in wrongGuessState attempt:", attempt, "/", maxAttemptCount)
     if (attempt < maxAttemptCount) {
       console.log("player may guess again, TO_ATTEMPTN_STATE")
-      send({type:'TO_ATTEMPTN_STATE'});
+      send({type:'WRONG_GUESS_TO_ATTEMPTN_STATE'});
     } else {
       console.log("😖 player out of guesses. Show solution. WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE")
       // playerLoosesShowSolution();
@@ -378,10 +360,10 @@ export default function App(props) {
     playWinSound();
     increasePlayerScore();
     // After x seconds, proceed to incrementRoundN()
-    // setTimeout(function () {
-    //   send({type:'TO_INCREMENT_ROUND_STATE'});
-    //   // incrementRound();
-    // }, 3000);
+    setTimeout(function () {
+      send({type:'TO_INCREMENT_ROUND_STATE'});
+      // incrementRound();
+    }, 3000);
   };
 
   useEffect( () => {
@@ -570,7 +552,8 @@ export default function App(props) {
   }
 
   function incrementAttempt() {
-    setAttempt(attempt => attempt + 1);
+    // setAttempt(attempt => attempt + 1);
+    attempt = (attempt + 1);
   }
 
   function increasePlayerScore() {
@@ -611,9 +594,11 @@ export default function App(props) {
 
     // Don't count attempts if user is practicing
     if (state.value === 'homeScreenPracticeState') {
-      setAttempt(0)
+      // setAttempt(0)
+      attempt = 0
     } else {
-      setAttempt(attempt + 1);
+      // setAttempt(attempt + 1);
+      attempt = attempt + 1;
     }
 
     bubbleSound();
@@ -623,6 +608,8 @@ export default function App(props) {
     // 'style.backgroundColor' takes whatever background color
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
+    // evaluateAttempt();
+    send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
   }
 
   //  ==================================

@@ -46,7 +46,7 @@ const twohueMachine = createMachine({
   attemptNState: {
     entry: 'attemptN',
     on: {
-      TO_EVALUATE_ATTEMPT_STATE: 'evaluateAttemptState'
+      TO_EVALUATE_ATTEMPTN_STATE: 'evaluateAttemptState'
     },
   },
   evaluateAttemptState: {
@@ -59,12 +59,12 @@ const twohueMachine = createMachine({
   },
   playerWinsConfettiFallsState: {
     entry: 'playerWinsConfettiFalls',
-    after: {
-      3000: {target: 'incrementRoundState'}
-    } 
-    // on: {
-    //   TO_INCREMENT_ROUND_STATE: 'incrementRoundState',
-    // },
+    // after: {
+    //   3000: {target: 'incrementRoundState'}
+    // } 
+    on: {
+      TO_INCREMENT_ROUND_STATE: 'incrementRoundState',
+    },
   },
   wrongGuessState: {
     entry: 'wrongGuess',
