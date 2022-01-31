@@ -26,9 +26,9 @@ export default function StartButtons(props) {
           </span>
         </p>
 
-        <p>
-          round: {props.round}
-        </p>
+        <p>round: {props.round}</p>
+        <p>roundz: {props.roundz}</p>
+
         
         <p>
           attempt: {props.attempt}/{props.maxAttemptCount}

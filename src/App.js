@@ -14,10 +14,11 @@ import Leaderboard from './components/Leaderboard';
 import StartButtons from './components/StartButtons';
 import Scoreboard from './components/Scoreboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
-import twohueMachine from './twohueMachine';
+import {twohueMachine, incrementRoundz} from './twohueMachine';
 import { useMachine } from '@xstate/react';
 import { Machine } from 'xstate';
 import { GridLoader } from 'react-spinners';
+import { mapContext } from 'xstate/lib/utils';
 
 // Leave both server addresses here in case you want to switch
 let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
@@ -28,12 +29,38 @@ let maxAttemptCount = 6;
 let value;
 // let round = 0;
 // let attempts = 0;
+console.log("incrementRoundz", incrementRoundz)
 
 
 export default function App(props) {
 
-  // const [state, send] = useMachine(twohueMachine.withConfig({
-  //   actions:{
+  const [state, send] = useMachine( (roundz) => twohueMachine.withConfig({
+    actions: {
+      initializeApp: initializeApp,
+      homeScreenPractice: homeScreenPractice,
+      startGameClickHandler: startGameClickHandler,
+      incrementRound: incrementRound,
+      prepareRoundN: prepareRoundN,
+      generateColorRound: generateColorRound,
+      attemptN: attemptN,
+      evaluateAttempt: evaluateAttempt,
+      playerWinsConfettiFalls: playerWinsConfettiFalls,
+      wrongGuess: wrongGuess,
+      playerLoosesShowSolution: playerLoosesShowSolution,
+      gameOver: gameOver,
+      leaderboard: leaderboard,
+      noLeaderboard: noLeaderboard,
+    }, 
+    context: {
+      roundz
+    }
+  })
+  );
+
+  const roundz = state.context.roundz;
+
+  // const [state, send] = useMachine( () => twohueMachine.withContext({
+  //   actions: {
   //     initializeApp: initializeApp,
   //     homeScreenPractice: homeScreenPractice,
   //     startGame: startGame,
@@ -48,30 +75,11 @@ export default function App(props) {
   //     gameOver: gameOver,
   //     leaderboard: leaderboard,
   //     noLeaderboard: noLeaderboard,
-  //   }
-  // }
-  // ));
+  //   }})
+  // );
 
-  const [state, send] = useMachine( () => twohueMachine.withConfig({
-    actions: {
-      initializeApp: initializeApp,
-      homeScreenPractice: homeScreenPractice,
-      startGame: startGame,
-      incrementRound: incrementRound,
-      prepareRoundN: prepareRoundN,
-      generateColorRound: generateColorRound,
-      attemptN: attemptN,
-      evaluateAttempt: evaluateAttempt,
-      playerWinsConfettiFalls: playerWinsConfettiFalls,
-      wrongGuess: wrongGuess,
-      playerLoosesShowSolution: playerLoosesShowSolution,
-      gameOver: gameOver,
-      leaderboard: leaderboard,
-      noLeaderboard: noLeaderboard,
-    }})
-  );
+  console.log("🚦 state.value:", state.value,  "roundz:", roundz)
 
-  console.log("🚦 state.value:", state.value)
   // console.log("twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value",  twohueMachine.transition('initializeApp', 'TO_GENERATE_COLOR_ROUND').value   );
 
   const [confettiRecycle, setConfettiRecycle] = useState(false);
@@ -140,7 +148,8 @@ export default function App(props) {
     setDisplayStartButton(true);
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(false);
-    send({ type: 'TO_HOMESCREEN_PRACTICE_STATE' })
+    // send({ type: 'TO_HOMESCREEN_PRACTICE_STATE' })
+    send('TO_HOMESCREEN_PRACTICE_STATE')
    };
 
    function homeScreenPractice() {
@@ -154,15 +163,16 @@ export default function App(props) {
       wrongColorsArray: []
     })
     setAllColorBubbles(['#8cb5ef','#d79fb3'])
-    // game moves to next state when user clicks start button
+    // game moves to next state in startGameClickHandler
   }
 
-  function startGame() {
-    console.log('🏁 Im still in homeScreenPractice() state');
+  function startGameClickHandler() {
+    console.log('🏁 Im still in homeScreenPractice() state', state.context.roundz);
+    // round = 0;
+    // state.context.roundz = 10;
+    // attempt = 0;
     setRound(0);
     setAttempt(0);
-    // round = 0;
-    // attempt = 0;
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
     setDisplayLeaderboard(false);
@@ -177,27 +187,38 @@ export default function App(props) {
     setScore(0);
     setPreviousScore(0);
     setLostRounds(0);
-    send({type:'TO_INCREMENT_ROUND_STATE'});
+    // console.log( send('TO_INCREMENT_ROUND_STATE') )
+    send('TO_INCREMENT_ROUND_STATE');
   };
   
   function incrementRound() {
-    console.log("👆 I'm in incrementRoundState");
-    setRound(round => round + 1);
+    console.log("👆 I'm in incrementRoundState", roundz);
+    // setRound(round => round + 1);
     // round = round + 1;
     // see useEffect for the state update 'TO_GENERATE_COLOR_ROUND_STATE'
-    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
+    send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
   };
 
   useEffect( () => {
     // TODO - sadly the send({}) method results in stale data
     // generateColorRound() works as expected
-    // generateColorRound()
-    send({type: 'TO_GENERATE_COLOR_ROUND_STATE', data: round });
+    if (state.matches === "generateColorRoundState" ) {
+      console.log("round changed. bleep", state.value)
+      generateColorRound()
+    }
+    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE', value: state.context.roundz });
     // send({type: 'TO_GENERATE_COLOR_ROUND_STATE'});
-  }, [round])
+  }, [roundz])
   
+
+
   function generateColorRound() {
-    console.log("🎨 I'm in generateColorRound(). round:", round)
+
+    // Guard clause
+    // Don't run when we're in homeScreenPractice state
+    if (state.matches('homeScreenPracticeState')) return;
+    
+    console.log("🎨 I'm in generateColorRound(). round:", roundz)
 
     let soluColor1;
     let soluColor2;
@@ -249,7 +270,7 @@ export default function App(props) {
            wrongColorsArray = [];
 
            let numWrongColors;
-           (round <= 6 ? numWrongColors = round: numWrongColors = 6);
+           (round <= 6 ? numWrongColors = roundz: numWrongColors = 6);
           //  console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
            
         for (let i = numWrongColors; i > 0; i--) {
@@ -298,8 +319,8 @@ export default function App(props) {
 
   useEffect(() => {
     // TODO: find out why any sends({}) in useEffect not working
-    prepareRoundN();
-    // send({type:'TO_PREPARE_ROUNDN_STATE'});
+    // prepareRoundN();
+    send({type:'TO_PREPARE_ROUNDN_STATE'});
   }, [colorRound])
 
   function prepareRoundN() {
@@ -946,12 +967,13 @@ export default function App(props) {
       <StartButtons
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
-          startGame={startGame}
+          startGameClickHandler={startGameClickHandler}
           prepareRoundN={prepareRoundN}
         />
 
         <Scoreboard 
           round={round}
+          roundz={roundz}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
           lostRounds={lostRounds}
@@ -961,7 +983,6 @@ export default function App(props) {
           setPreviousScore={setPreviousScore}
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
-          startGame={startGame}
           displayScoreBoard={displayScoreBoard}
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}

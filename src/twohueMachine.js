@@ -1,16 +1,21 @@
-import { createMachine } from 'xstate';
+import { createMachine, assign } from 'xstate';
 
 
-  // // Action to increment the context amount
-  // const incrementRoundz = assign({
-  //   amount: (context, event) => context.roundz + 1
-  // });
+  // Action to increment the context amount
+const incrementRoundz = assign({
+    roundz: (context) => context.roundz + 1
+  });
+  
 
 // ==============================
 // https://xstate.js.org/viz/?gist=164f6bb8dff9841e0b57f244f214826c
 // ==============================
 const twohueMachine = createMachine({
   id: 'twohue',
+  // the initial context (extended state) of the statechart
+  context: {
+    roundz: 0
+  },
   initial: 'initializeAppState',
   states: {
     initializeAppState: {
@@ -22,7 +27,10 @@ const twohueMachine = createMachine({
   homeScreenPracticeState: {
     entry: 'homeScreenPractice',
     on: {
-      TO_INCREMENT_ROUND_STATE: 'incrementRoundState'
+      TO_INCREMENT_ROUND_STATE: {
+        target: 'incrementRoundState',
+        actions: 'incrementRoundz'
+      }
     },
   },
   incrementRoundState: {
@@ -98,9 +106,15 @@ const twohueMachine = createMachine({
     on: {
       TO_START_GAME_STATE: 'generateColorRoundState',
     }
-  }
+  },
+}
 },
+{actions: { 
+  incrementRoundz 
 },
+}
 );
 
-export default twohueMachine;
+// export default twohueMachine;
+// export default incrementRoundz;
+export {twohueMachine, incrementRoundz};
