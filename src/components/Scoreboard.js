@@ -25,8 +25,7 @@ export default function StartButtons(props) {
               />
           </span>
         </p>
-
-        <p>round: {props.round}</p>
+        
         <p>roundz: {props.roundz}</p>
 
         

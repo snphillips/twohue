@@ -27,9 +27,8 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
-// let round = 0;
 // let attempts = 0;
-console.log("incrementRoundz", incrementRoundz)
+// console.log("incrementRoundz:", incrementRoundz)
 
 
 export default function App(props) {
@@ -57,26 +56,8 @@ export default function App(props) {
   })
   );
 
-  const roundz = state.context.roundz;
+  let roundz = state.context.roundz;
 
-  // const [state, send] = useMachine( () => twohueMachine.withContext({
-  //   actions: {
-  //     initializeApp: initializeApp,
-  //     homeScreenPractice: homeScreenPractice,
-  //     startGame: startGame,
-  //     incrementRound: incrementRound,
-  //     prepareRoundN: prepareRoundN,
-  //     generateColorRound: generateColorRound,
-  //     attemptN: attemptN,
-  //     evaluateAttempt: evaluateAttempt,
-  //     playerWinsConfettiFalls: playerWinsConfettiFalls,
-  //     wrongGuess: wrongGuess,
-  //     playerLoosesShowSolution: playerLoosesShowSolution,
-  //     gameOver: gameOver,
-  //     leaderboard: leaderboard,
-  //     noLeaderboard: noLeaderboard,
-  //   }})
-  // );
 
   console.log("🚦 state.value:", state.value,  "roundz:", roundz)
 
@@ -95,7 +76,7 @@ export default function App(props) {
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
-  const [round, setRound] = useState(0);
+  // const [round, setRound] = useState(0);
   // const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -171,7 +152,9 @@ export default function App(props) {
     // round = 0;
     // state.context.roundz = 10;
     // attempt = 0;
-    setRound(0);
+    // setRound(0);
+    // TODO: is this needed? Or does it reset when game starts?
+    roundz = 0;
     setAttempt(0);
     setDisplayGameField(true);
     setDisplayScoreBoard(true);
@@ -270,7 +253,7 @@ export default function App(props) {
            wrongColorsArray = [];
 
            let numWrongColors;
-           (round <= 6 ? numWrongColors = roundz: numWrongColors = 6);
+           (roundz <= 6 ? numWrongColors = roundz: numWrongColors = 6);
           //  console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
            
         for (let i = numWrongColors; i > 0; i--) {
@@ -972,7 +955,7 @@ export default function App(props) {
         />
 
         <Scoreboard 
-          round={round}
+          // round={round}
           roundz={roundz}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
@@ -1001,7 +984,7 @@ export default function App(props) {
       }}
       >
           <ColorBubbleTray
-            round={round}
+            // round={round}
             allColorBubbles={allColorBubbles}
             updateFieldColor={updateFieldColor}
             currentField={currentField}
