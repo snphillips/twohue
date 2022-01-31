@@ -76,8 +76,6 @@ export default function App(props) {
   const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
-  // const [round, setRound] = useState(0);
-  // const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
   const prevLostRounds = useRef(0);
@@ -129,7 +127,6 @@ export default function App(props) {
     setDisplayStartButton(true);
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(false);
-    // send({ type: 'TO_HOMESCREEN_PRACTICE_STATE' })
     send('TO_HOMESCREEN_PRACTICE_STATE')
    };
 
@@ -149,10 +146,6 @@ export default function App(props) {
 
   function startGameClickHandler() {
     console.log('🏁 Im still in homeScreenPractice() state', state.context.roundz);
-    // round = 0;
-    // state.context.roundz = 10;
-    // attempt = 0;
-    // setRound(0);
     // TODO: is this needed? Or does it reset when game starts?
     roundz = 0;
     setAttempt(0);
@@ -170,14 +163,11 @@ export default function App(props) {
     setScore(0);
     setPreviousScore(0);
     setLostRounds(0);
-    // console.log( send('TO_INCREMENT_ROUND_STATE') )
     send('TO_INCREMENT_ROUND_STATE');
   };
   
   function incrementRound() {
     console.log("👆 I'm in incrementRoundState", roundz);
-    // setRound(round => round + 1);
-    // round = round + 1;
     // see useEffect for the state update 'TO_GENERATE_COLOR_ROUND_STATE'
     send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
   };
@@ -189,7 +179,6 @@ export default function App(props) {
       console.log("round changed. bleep", state.value)
       generateColorRound()
     }
-    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE', value: state.context.roundz });
     // send({type: 'TO_GENERATE_COLOR_ROUND_STATE'});
   }, [roundz])
   
@@ -272,10 +261,12 @@ export default function App(props) {
 
       // Mix all the color bubbles together
       get allColorBubbles() {
-        // The concat() method merges two or more arrays.
-        // This method does not change the existing arrays,
-        // but instead returns a new array.
-        // We're merging solutionColors & wrongColors
+        /* 
+        The concat() method merges two or more arrays.
+        This method does not change the existing arrays,
+        but instead returns a new array.
+        We're merging solutionColors & wrongColors
+        */
         return newColorRound.solutionColors.concat(newColorRound.wrongColors);
       },
     };
