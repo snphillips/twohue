@@ -15,9 +15,6 @@ import Leaderboard from './components/Leaderboard';
 import StartButtons from './components/StartButtons';
 import Scoreboard from './components/Scoreboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
-import twohueMachine from './twohueMachine';
-import { useMachine } from '@xstate/react';
-import { Machine} from 'xstate';
 import { GridLoader } from 'react-spinners';
 
 // Leave both server addresses here in case you want to switch
@@ -31,16 +28,13 @@ let value;
 
 export default function App(props) {
 
-  const [current, send] = useMachine(twohueMachine);
-  console.log("🚦 current.value", current.value)
-
    // gameStates: 
   // 'loading', 'homeScreenPractice'  'setUpRoundN', 
   // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
   // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
   // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
-  const [gameState, setGameState] = useState('loading');
+  const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
@@ -106,10 +100,8 @@ export default function App(props) {
     }
     setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    initializeGame( () => {
-      generateColorRound();
-    })
-    send('ONTO_HOMESCREENPRACTICE');
+    initializeGame()
+    homeScreenPractice()
   }, []);
   
   function initializeGame() {
@@ -119,6 +111,19 @@ export default function App(props) {
       setDisplayScoreBoard(false);
       setDisplayGameOverMessage(false);
    };
+
+   function homeScreenPractice() {
+     console.log("🍄 I'm in homeScreenPractice()", colorRound)
+     // Hard code practice colors
+     setColorRound({
+       solutionColor1: '#8cb5ef',
+       solutionColor2: '#d79fb3',
+       targetColor: '#7671a8',
+       solutionColors: ['#8cb5ef','#d79fb3'],
+       wrongColorsArray: []
+      })
+      setAllColorBubbles(['#8cb5ef','#d79fb3'])
+    }
 
   useEffect(() => {
     // keep this for development
@@ -243,7 +248,7 @@ export default function App(props) {
   };
 
   useEffect( () => {
-    console.log("🎊 🎊 🎊 🎊 runRoundConfetti updates", runRoundConfetti )
+    console.log("🎊 runRoundConfetti updates", runRoundConfetti )
   }, [runRoundConfetti])
 
   //  ===================================
@@ -367,6 +372,9 @@ export default function App(props) {
   }
  
   function generateColorRound() {
+    // No need to generate colors for practice.
+    // Practice colors are hard-coded
+    if (gameState === 'homeScreenPractice') {return}
     console.log("🎨 generate color round. round:", round, gameState)
     if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
       console.log('gameState isnt loading or practice, right?', gameState)
