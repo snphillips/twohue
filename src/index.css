@@ -94,6 +94,38 @@ code {
   transform: translateY(-50%);
 }
 
+.gamefield-top {
+  display: flex;
+  flex-direction: row;
+}
+
+.left-side {
+  order: 1;
+  display: block;
+  width: 20%;
+  flex-grow: 1;
+  flex-basis: auto;
+  border: 1px solid purple;
+}
+
+main {
+  order: 2;
+  display: block;
+  width: 60%;
+  flex-grow: 3;
+  flex-basis: auto;
+  border: 1px solid green;
+}
+
+.right-side {
+  order: 3;
+  display: block;
+  width: 20%;
+  flex-grow: 1;
+  flex-basis: auto;
+  border: 1px solid red;
+}
+
 /* =======================*/
 /* SVG Icons - svgicons.sparkk.fr*/
 /* =======================*/
@@ -862,10 +894,34 @@ input.leaderboard-input-field {
 
   .twohue {
     max-width: 100%;
-    height: unset;
+    height: 100%;
     padding: 1rem 1rem 0 1rem;
     margin: .5rem auto 1rem auto;
     border-top: 4px solid #ebedef;
+  }
+
+  .gamefield-top {
+    flex-direction: column;
+  }
+
+  .left-side {
+    order: 1;
+    width: 100%;
+  }
+
+  main {
+    order: 3;
+    width: 100%;
+  }
+
+  .right-side {
+    order: 2;
+    width: 100%;
+  }
+
+  .start-buttons {
+    position: unset;
+    right: unset;
   }
 
   header {
@@ -900,7 +956,7 @@ input.leaderboard-input-field {
     margin-top: 0;
   }
 
-section#left-and-right-field {
+  section#left-and-right-field {
     height: 11.5rem;
   }
 

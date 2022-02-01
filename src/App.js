@@ -12,10 +12,9 @@ import ColorBubbleTray from './components/ColorBubbleTray';
 // import GameOverMessage from './components/GameOverMessage';
 import MessageBoard from './components/MessageBoard';
 import Leaderboard from './components/Leaderboard';
-import StartButtons from './components/StartButtons';
-import Scoreboard from './components/Scoreboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import { GridLoader } from 'react-spinners';
+import RightSidebar from './components/rightsidebar/RightSidebar';
 
 // Leave both server addresses here in case you want to switch
 let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
@@ -322,10 +321,12 @@ export default function App(props) {
 
       let leaderboardMembers = leaderboardData;
 
-      // What is smaller? 9 or the 'array length - 1'?
-      // Either pick the last item in the array, or the 10th item,
-      // whichever is smaller.
-      // We do this in case the array has fewer than 10 members.
+     /*
+      What is smaller? 9 or the 'array length - 1'?
+      Either pick the last item in the array, or the 10th item,
+      whichever is smaller.
+      We do this in case the array has fewer than 10 members.
+      */
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
       let lowestCurrentScore =
         leaderboardMembers[lowestCurrentScoreIndex].score;
@@ -794,49 +795,23 @@ export default function App(props) {
       </div>
 
       <div className='twohue'>
-      <div 
-        className='gamefield-top'
-        style={{
-          display: 'flex',
-          flexDirection: 'row'
-        }}
-      >
-      <aside 
-        className='left-side' 
-        style={{
-          display: 'block',
-          width: '20%',
-          flexGrow: 1,
-          flexBasis: 'auto'
-        }}
-        >
+      <div className='gamefield-top'>
+      <aside className='left-side'>
         <LeftSidebar
           style={{
             display: 'block',
             width: '100%',
-            height: '100%'
+            // height: '100%'
           }}
           score={score}
           leaderboardData={leaderboardData}
           displayGameOverMessage={displayGameOverMessage}
           />
       </aside>
-      <main
-        style={{
-          display: 'block',
-          width: '60%',
-          flexGrow: 3,
-          flexBasis: 'auto'
-        }}
-        
-        >
+      <main>
         <MessageBoard
-          // transition={props.transition}
           displayIntroMessage={displayIntroMessage}
           />
-
-          {/* <GameOverMessage
-          /> */}
 
           <Leaderboard
             leaderboardData={leaderboardData}
@@ -851,38 +826,22 @@ export default function App(props) {
             />
       
       {displayGameField &&
-        <div 
-          id='game-field'
-          style={{
-          }}
-        >
-            <GameField
-              colorRound={colorRound}
-              currentField={currentField}
-              leftFieldStyle={leftFieldStyle}
-              rightFieldStyle={rightFieldStyle}
-              />
-
+        <div id='game-field'>
+          <GameField
+            colorRound={colorRound}
+            currentField={currentField}
+            leftFieldStyle={leftFieldStyle}
+            rightFieldStyle={rightFieldStyle}
+            />
         </div>
       }
       </main>
-      <aside 
-        className='right-side'
-        style={{
-          display: 'block',
-          width: '20%',
-          flexGrow: 1,
-          flexBasis: 'auto'
-        }}
-      >
-      <StartButtons
+      <aside className='right-side'>
+        <RightSidebar
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
           startGameClickHandler={startGameClickHandler}
           setUpRoundN={setUpRoundN}
-        />
-
-        <Scoreboard 
           round={round}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
@@ -898,8 +857,8 @@ export default function App(props) {
           displayStartButton={displayStartButton}
           displayPlayAgainButton={displayPlayAgainButton}
           setUpRoundN={setUpRoundN}
+          gameState={gameState}
         />
-
       </aside>
 
     </div>
@@ -908,27 +867,25 @@ export default function App(props) {
       className='gamefield-bottom'
       style={{
         display: 'block',
-        // border: '1px solid gold'
+        border: '1px solid gold'
       }}
       >
-          <ColorBubbleTray
-            round={round}
-            allColorBubbles={allColorBubbles}
-            updateFieldColor={updateFieldColor}
-            currentField={currentField}
-            leftFieldStyle={leftFieldStyle}
-            rightFieldStyle={rightFieldStyle}
-            currentFieldMouseEnter={currentFieldMouseEnter}
-            currentFieldMouseLeave={currentFieldMouseLeave}
-            bubbleClickHandler={bubbleClickHandler}
-            displayIntroAnimation={displayIntroAnimation}
-            />
-
+        <ColorBubbleTray
+          round={round}
+          allColorBubbles={allColorBubbles}
+          updateFieldColor={updateFieldColor}
+          currentField={currentField}
+          leftFieldStyle={leftFieldStyle}
+          rightFieldStyle={rightFieldStyle}
+          currentFieldMouseEnter={currentFieldMouseEnter}
+          currentFieldMouseLeave={currentFieldMouseLeave}
+          bubbleClickHandler={bubbleClickHandler}
+          displayIntroAnimation={displayIntroAnimation}
+          />
     </div>
    }
         <footer>
           <Byline />
-
           <AudioToggle
             soundButtonToggle={soundButtonToggle}
             isAudioOn={isAudioOn}
