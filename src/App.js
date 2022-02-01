@@ -79,11 +79,11 @@ export default function App(props) {
   */
   const firstUpdate = useRef(true);
 
-    if (gameState === 'homeScreenPractice') {
-      maxAttemptCount = 30; 
-    } else {
-      maxAttemptCount = 6;
-    }
+  // if (gameState === 'homeScreenPractice') {
+  //   maxAttemptCount = 30; 
+  // } else {
+  //   maxAttemptCount = 6;
+  // }
 
   // ***********************************
   // Here's where the app begins.
@@ -342,11 +342,7 @@ export default function App(props) {
         console.log('score is lower than lowestCurrentScore');
       }
     };
-
-    // Transition to leaderboard after X seconds
-    setTimeout(function () {
-      evaluateIfLeaderboardMaterial();
-    }, 3000);
+    evaluateIfLeaderboardMaterial();
   }
 
   function joinLeaderboard() {
@@ -531,10 +527,6 @@ export default function App(props) {
     }
   }
 
-  function incrementAttempt() {
-    setAttempt(attempt => attempt + 1);
-  }
-
   function increasePlayerScore() {
     // update previous score for react-countup
     setPreviousScore(score)
@@ -571,9 +563,12 @@ export default function App(props) {
       console.log("✋ attempt >= maxAttemptCount - click handler disabled")
       return
     };
+   
+    // No need to increment attempts during practice
+    if (gameState !== 'homeScreenPractice') {
+      setAttempt(attempt + 1);
+    }
 
-
-    setAttempt(attempt + 1);
     bubbleSound();
     toggleLeftRightField();
     // 'event' is the click on a specific color bubble.
@@ -581,7 +576,6 @@ export default function App(props) {
     // 'style.backgroundColor' takes whatever background color
     // the clicked color bubble has, and applies that to color field
     updateFieldColor(event.currentTarget.style.backgroundColor);
-
   }
 
   //  ==================================
