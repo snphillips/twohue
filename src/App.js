@@ -298,7 +298,7 @@ export default function App(props) {
    
 
   function gameOver() {
-    setGameState('game-over');
+    setGameState('gameOver');
     gameOverChimes();
     setDisplayScoreBoard(false);
     setDisplayGameOverMessage(true);
@@ -554,7 +554,7 @@ export default function App(props) {
     // 1) the game is over,
     // 2) player is out of attempts,attemptN
     // 3) player has won the round,
-    if ((gameState === "game-over") ||
+    if ((gameState === "gameOver") ||
        (gameState === 'playerWins') ||
        (gameState === 'setUpRoundN')) {
       console.log("✋ click handler disabled")

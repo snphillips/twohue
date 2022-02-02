@@ -5,7 +5,7 @@ import Scoreboard from './Scoreboard';
 export default function RightSidebar(props) {
   return (
     
-    <div style={{justifyContent: "flex-end"}}>
+    <div style={{ display: "flex", justifyContent: "flex-end"}}>
 
         <StartButtons
           startGameClickHandler={props.startGameClickHandler}
@@ -24,9 +24,8 @@ export default function RightSidebar(props) {
           previousScore={props.previousScore}
           setPreviousScore={props.setPreviousScore}
           displayScoreBoard={props.displayScoreBoard}
+          gameState={props.gameState}
         />
-
-
     </div>
   
   );

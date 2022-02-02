@@ -1,7 +1,7 @@
 import React from "react";
 import CountUp from "react-countup";
 
-// gotcha: if the duration of the counter is changed,
+// GOTCHA: if the duration of the counter is changed,
 // the counter may count down then up again.
 
 
@@ -10,10 +10,14 @@ export default function StartButtons(props) {
     
   return (
     <section className="score-board">
-    { props.displayScoreBoard &&
+
+    { props.gameState != "homeScreenPractice" && 
+      props.gameState != "gameOver" &&
+      props.gameState != "joinLeaderboard" &&
+    // { props.displayScoreBoard &&
       <div
         className='scoreboard'
-        style={{display: props.displayScoreBoard}}
+        // style={{display: props.displayScoreBoard}}
         >
         <p className="score-word">
           score:

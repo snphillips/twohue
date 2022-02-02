@@ -949,7 +949,7 @@ input.leaderboard-input-field {
   .score-board {
     order: 2;
     margin: 0;
-    font-size: .75rem;
+    /* font-size: .75rem; */
   }
 
   #game-field {
