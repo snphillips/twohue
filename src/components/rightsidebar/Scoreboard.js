@@ -1,8 +1,16 @@
 import React from "react";
 import CountUp from "react-countup";
 
-// GOTCHA: if the duration of the counter is changed,
-// the counter may count down then up again.
+
+
+/* ==============================
+GOTCHA: if the duration of the counter is changed,
+the counter may count down then up again.
+
+Displaying the score board based on what gameState the app
+is in. As long as the gameState is NOT homeScreenPractice, 
+gameOver or joinLeaderboard, then display the scoreboard
+============================== */
 
 
 
@@ -14,11 +22,8 @@ export default function StartButtons(props) {
     { props.gameState != "homeScreenPractice" && 
       props.gameState != "gameOver" &&
       props.gameState != "joinLeaderboard" &&
-    // { props.displayScoreBoard &&
-      <div
-        className='scoreboard'
-        // style={{display: props.displayScoreBoard}}
-        >
+      
+      <div className='scoreboard'>
         <p className="score-word">
           score:
           <span className="actual-score">
@@ -38,11 +43,11 @@ export default function StartButtons(props) {
           attempt: {props.attempt}/{props.maxAttemptCount}
         </p>
 
-<p className="loses">
+        <p className="loses">
           lives: {props.lostRounds}/{props.maxLossCount}
         </p>
       </div>
     }
       </section>
-      );
+  );
 }
