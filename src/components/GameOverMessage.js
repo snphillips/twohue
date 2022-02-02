@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 /*
 =========================================
-Xstate On Entry State is: gameOverTransition
+NOTE - NOT USING
 
 The Game Over & Final Score bubble pops-in, then pops-out.
 Then user is moved onto the next
