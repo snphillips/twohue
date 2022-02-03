@@ -5,8 +5,7 @@ import React from "react";
 The set of 'color bubbles'
 at the bottom on the game field.
 
-The helper arrows only display during 'homeScreenPractice',
-as indicated by <State is={['homeScreenPractice']}>
+The helper arrows only display during 'homeScreenPractice'.
 ==============================
 */
 

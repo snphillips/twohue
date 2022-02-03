@@ -521,7 +521,7 @@ export default function App(props) {
           // TODO: how to disable/change the hover effect
           // Well, disabling is working, but removing the disabled
           // effect is where I'm stuck
-          document.getElementById(event.currentTarget.id).classList.add('disable-click');
+          // document.getElementById(event.currentTarget.id).classList.add('disable-click');
           return
         }
    
