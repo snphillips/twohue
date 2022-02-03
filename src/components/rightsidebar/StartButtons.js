@@ -11,7 +11,6 @@ export default function StartButtons(props) {
       className="start-button"
       onClick={ () => {
         props.startGameClickHandler( () => {
-          props.setUpRoundN();
         });
       }}
       >
@@ -24,7 +23,6 @@ export default function StartButtons(props) {
         className="play-again-button"
         onClick={() => {
           props.startGameClickHandler( () => {
-            props.setUpRoundN();
           });
         }}
       >
