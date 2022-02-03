@@ -677,7 +677,7 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
-#game-over-message {
+.game-over-message {
   display: block;
 }
 
@@ -944,6 +944,10 @@ input.leaderboard-input-field {
     width: 100%;
     font-size: 1rem;
     min-height: 22px;
+  }
+
+  .game-over-message {
+    text-align: center;
   }
 
   .score-board {

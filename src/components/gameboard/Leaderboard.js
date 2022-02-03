@@ -1,7 +1,7 @@
 import React from "react";
 import LeaderboardForm from "./LeaderboardForm";
 // the spinner in a dependency
-import ReactSpinners from "./ReactSpinners";
+import ReactSpinners from "../ReactSpinners";
 
 /*
 ========================

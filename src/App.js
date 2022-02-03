@@ -6,12 +6,11 @@ import Confetti from 'react-confetti';
 import axios from 'axios';
 import LeftSidebar from './components/leftsidebar/LeftSidebar';
 import Byline from './components/footer/Byline';
-import GameField from './components/GameField';
+import GameField from './components/gameboard/GameField';
 import AudioToggle from './components/footer/AudioToggle';
-import ColorBubbleTray from './components/ColorBubbleTray';
-// import GameOverMessage from './components/GameOverMessage';
-import MessageBoard from './components/MessageBoard';
-import Leaderboard from './components/Leaderboard';
+import ColorBubbleTray from './components/gameboard/ColorBubbleTray';
+import MessageBoard from './components/gameboard/MessageBoard';
+import Leaderboard from './components/gameboard/Leaderboard';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import { GridLoader } from 'react-spinners';
 import RightSidebar from './components/rightsidebar/RightSidebar';
@@ -37,8 +36,6 @@ export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
-  const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
@@ -56,7 +53,7 @@ export default function App(props) {
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
 
-  const [wrongColors, setWrongColors] = useState([]);
+  // const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
@@ -85,10 +82,6 @@ export default function App(props) {
   
   function initializeGame() {
       console.log('🪄 initializeGame() hello player');
-      // setDisplayPlayAgainButton(false);
-      // setDisplayStartButton(true);
-      // setDisplayScoreBoard(false);
-      // setDisplayGameOverMessage(false);
    };
 
    function homeScreenPractice() {
@@ -117,14 +110,7 @@ export default function App(props) {
   function startGameClickHandler() {
     setGameState('setUpRoundN')
     setDisplayGameField(true);
-    // setDisplayScoreBoard(true);
-    // setDisplayLeaderboard(false);
-    setDisplayIntroAnimation(false);
-    // setDisplayStartButton(false);
-    // setDisplayPlayAgainButton(false);
-    // setDisplayIntroMessage(false);
     setDisplayGameOverConfetti(false);
-    setDisplayGameOverMessage(false);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
@@ -276,9 +262,6 @@ export default function App(props) {
   function gameOver() {
     setGameState('gameOver');
     gameOverChimes();
-    // setDisplayScoreBoard(false);
-    setDisplayGameOverMessage(true);
-    // setDisplayPlayAgainButton(true);
     setrunGameOverConfetti(true);
     setDisplayGameOverConfetti(true);
     setConfettiRecycle(true);
@@ -324,14 +307,11 @@ export default function App(props) {
 
   function joinLeaderboard() {
     setDisplayGameField(false);
-    setDisplayGameOverMessage('none');
     setGameState('joinLeaderboard');
-    // setDisplayLeaderboardForm(true);
     setNewLeaderboardInductee('');
   }
 
   function leaderboardAPICall() {
-    // setDisplayLeaderboardForm(false);
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
@@ -446,7 +426,7 @@ export default function App(props) {
 
     shuffleColors(newColorRound.allColorBubbles);
     setColorRound(newColorRound);
-    setWrongColors(wrongColorsArray);
+    // setWrongColors(wrongColorsArray);
   }
 
 
@@ -782,7 +762,8 @@ export default function App(props) {
           }}
           score={score}
           leaderboardData={leaderboardData}
-          displayGameOverMessage={displayGameOverMessage}
+          // displayGameOverMessage={displayGameOverMessage}
+          gameState={gameState}
           />
       </aside>
       <main>
@@ -808,14 +789,13 @@ export default function App(props) {
             currentField={currentField}
             leftFieldStyle={leftFieldStyle}
             rightFieldStyle={rightFieldStyle}
+            gameState={gameState}
             />
         </div>
       }
       </main>
       <aside className='right-side'>
         <RightSidebar
-          // displayStartButton={displayStartButton}
-          // displayPlayAgainButton={displayPlayAgainButton}
           startGameClickHandler={startGameClickHandler}
           setUpRoundN={setUpRoundN}
           round={round}
@@ -844,20 +824,18 @@ export default function App(props) {
       }}
       >
         <ColorBubbleTray
-          round={round}
           allColorBubbles={allColorBubbles}
-          updateFieldColor={updateFieldColor}
           currentField={currentField}
           leftFieldStyle={leftFieldStyle}
           rightFieldStyle={rightFieldStyle}
           currentFieldMouseEnter={currentFieldMouseEnter}
           currentFieldMouseLeave={currentFieldMouseLeave}
           bubbleClickHandler={bubbleClickHandler}
-          displayIntroAnimation={displayIntroAnimation}
+          gameState={gameState}
           />
     </div>
    }
-   <div style={{ display: 'flex',flexGrow: '1'}}> 
+   <div style={{display: 'flex', flexGrow: '1'}}> 
    </div>
         <footer>
           <Byline />

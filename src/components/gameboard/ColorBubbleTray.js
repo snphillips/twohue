@@ -15,11 +15,10 @@ export default function ColorBubbleTray(props) {
   return (
 
   <section id="color-bubble-tray">
-    {props.displayIntroAnimation &&
-      <div 
-          className="arrow-container arrow-container-left"
-          // style={{display: props.displayIntroAnimation}}
-          >
+
+  {props.gameState === 'homeScreenPractice' &&
+
+      <div className="arrow-container arrow-container-left">
           <svg className="svg-icon arrow" viewBox="0 0 20 20">
             <path
               fill="none"
@@ -54,11 +53,9 @@ export default function ColorBubbleTray(props) {
           </div>
         );
       })}
-      {props.displayIntroAnimation &&
-      <div 
-        className="arrow-container arrow-container-right"
-        // style={{display: props.displayIntroAnimation}}
-      >
+
+      {props.gameState === 'homeScreenPractice' &&
+      <div className="arrow-container arrow-container-right">
         <svg className="svg-icon arrow" viewBox="0 0 20 20">
           <path
             fill="none"
