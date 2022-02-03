@@ -22,8 +22,6 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
-// let attempts = 0;
-// console.log("incrementRoundz:", incrementRoundz)
 
 
 export default function App(props) {
@@ -62,218 +60,82 @@ export default function App(props) {
   // have to insert this during leaderboard api calls
   const [loadingSpinner, setLoadingSpinner] = useState(false);
 
-  /*
-  We can make a useEffect hook not run on initial render
-  by creating a variable with the useRef hook to keep track
-  of when the first render is done. Set the variable’s value
-  to true initially. When the component is rendered the first time,
-  set the variable to false.
-  */
-  const firstUpdate = useRef(true);
-
-    if (state.value === 'homeScreenPracticeState') {
-      // console.log("maxAttemptCount = 30")
-      maxAttemptCount = 30; 
-    } else {
-      // console.log("maxAttemptCount = 6")
-      maxAttemptCount = 6;
-    }
-
+  // ***********************************
+  // Here's where the app begins.
+  // Run this only on first render (as evidenced by empty array)
+  // ***********************************
+  useEffect(() => {
+    // A couple things change depending on whether
+    // we're in production vs. development
     if (process.env.NODE_ENV === 'production') {
       setIsAudioOn(true);
     } else if (process.env.NODE_ENV === 'development') {
       maxLossCount = 2;
       maxAttemptCount = 4;
     }
-
-  function initializeApp() {
-    console.log('🪄 Im in initializeApp() state');
+    setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    setDisplayPlayAgainButton(false);
-    setDisplayStartButton(true);
-    setDisplayScoreBoard(false);
-    setDisplayGameOverMessage(false);
-    send('TO_HOMESCREEN_PRACTICE_STATE')
+    initializeGame()
+    homeScreenPractice()
+  }, []);
+  
+  function initializeGame() {
+      console.log('🪄 initializeGame() hello player');
    };
 
    function homeScreenPractice() {
-    console.log("🍄 I'm in homeScreenPractice() state")
-    // Hard code practice colors
-    setColorRound({
-      solutionColor1: '#8cb5ef',
-      solutionColor2: '#d79fb3',
-      targetColor: '#7671a8',
-      solutionColors: ['#8cb5ef','#d79fb3'],
-      wrongColorsArray: []
-    })
-    setAllColorBubbles(['#8cb5ef','#d79fb3'])
-    // game moves to next state in startGameClickHandler
-  }
+     console.log("🍄 I'm in homeScreenPractice()", colorRound)
+     // Hard code practice colors
+     setColorRound({
+       solutionColor1: '#8cb5ef',
+       solutionColor2: '#d79fb3',
+       targetColor: '#7671a8',
+       solutionColors: ['#8cb5ef','#d79fb3'],
+       wrongColorsArray: []
+      })
+      setAllColorBubbles(['#8cb5ef','#d79fb3'])
+    }
 
+  useEffect(() => {
+    // keep this for development
+    console.log('🚥 gameState is:', gameState)
+
+    if (gameState === 'setUpRoundN') {
+        setRound(round => round + 1);
+        console.log("+ 1 increment round")
+      }
+  }, [gameState]);
+  
   function startGameClickHandler() {
-    console.log('🏁 Im still in homeScreenPractice() state', state.context.roundz);
-    // TODO: is this needed? Or does it reset when game starts?
-    roundz = 0;
-    setAttempt(0);
+    setGameState('setUpRoundN')
     setDisplayGameField(true);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
-    setScore(0);
-    setPreviousScore(0);
     setLostRounds(0);
-    send('TO_INCREMENT_ROUND_STATE');
-  };
-  
-  function incrementRound() {
-    console.log("👆 I'm in incrementRoundState", roundz);
-    // see useEffect for the state update 'TO_GENERATE_COLOR_ROUND_STATE'
-    send({type: 'TO_GENERATE_COLOR_ROUND_STATE' });
-  };
+    setAttempt(0);
+    setRound(0);
+    setPreviousScore(0);
+    setScore(0);
+    setUpRoundN();
+    console.log('🏁 start game click handler', round);
+  }
 
-  useEffect( () => {
-    // TODO - sadly the send({}) method results in stale data
-    // generateColorRound() works as expected
-    if (state.matches === "generateColorRoundState" ) {
-      console.log("round changed. bleep", state.value)
-      generateColorRound()
-    }
-    // send({type: 'TO_GENERATE_COLOR_ROUND_STATE'});
-  }, [roundz])
-  
-
-
-  function generateColorRound() {
-
-    // Guard clause
-    // Don't run when we're in homeScreenPractice state
-    if (state.matches('homeScreenPracticeState')) return;
-    
-    console.log("🎨 I'm in generateColorRound(). round:", roundz)
-
-    let soluColor1;
-    let soluColor2;
-    let targColor;
-    let colorLightness = 29;
-    let wrongColorsArray = [];
-
-    /* 
-    =============================
-    If the target color is too dark (like blackish),
-    the round is nearly impossible to play.
-    To solve this problem, we're not allowing rounds with very dark target color.
-    Use a while-loop to genereate solution & target
-    colors. Keep looping until it finds a solution
-    that ISN'T too dark. We're using Chroma.js's .get('lab.l')
-    to determine lightness.
-    ============================= 
-    */
-    while (colorLightness <= 30) {
-      soluColor1 = chroma.random().hex();
-      soluColor2 = chroma.random().hex();
-      targColor = chroma.blend(
-        chroma(soluColor1).hex(),
-        chroma(soluColor2).hex(),
-        'multiply'
-      );
-      colorLightness = chroma(targColor).get('lab.l');
-      // console.log('colorLightness: ', colorLightness)
-    }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    let newColorRound = {
-      solutionColor1: soluColor1,
-      solutionColor2: soluColor2,
-      targetColor: targColor,
-      
-          /*
-          Only create enough wrongColors to fill in the
-          color bubbles. For instance, the practice round only
-          has two bubbles total (therefore no wrong colors 
-          are needed).
-          numWrongColors tells us how many times we
-          generate a random 'wrong color' to push into
-          getter methods are used to access the properties of an object
-          */
-         get wrongColors() {
-           // first, empty the array of old colors
-           wrongColorsArray = [];
-
-           let numWrongColors;
-           (roundz <= 6 ? numWrongColors = roundz: numWrongColors = 6);
-          //  console.log("🍱 in generate color round. We're on round:", round, "so make ", numWrongColors, " wrong colors.")   
-           
-        for (let i = numWrongColors; i > 0; i--) {
-
-        wrongColorsArray.push(chroma.random().hex());
-        }
-        return wrongColorsArray;
-      },
-
-      get solutionColors() {
-        return [
-          chroma(newColorRound.solutionColor1).hex(),
-          chroma(newColorRound.solutionColor2).hex(),
-        ];
-      },
-
-      // Mix all the color bubbles together
-      get allColorBubbles() {
-        /* 
-        The concat() method merges two or more arrays.
-        This method does not change the existing arrays,
-        but instead returns a new array.
-        We're merging solutionColors & wrongColors
-        */
-        return newColorRound.solutionColors.concat(newColorRound.wrongColors);
-      },
-    };
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    // The function that shuffles the allColorBubbles bubbles
-    // so the first two bubbles aren't always the solution
-    let shuffleColors = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * i);
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-      setAllColorBubbles(array);
-    };
-
-    shuffleColors(newColorRound.allColorBubbles);
-    setColorRound(newColorRound);
-    setWrongColors(wrongColorsArray);
-    // send({type:'TO_PREPARE_ROUNDN_STATE'});
-  };
-
-  useEffect(() => {
-    // TODO: find out why any sends({}) in useEffect not working
-    // prepareRoundN();
-    send({type:'TO_PREPARE_ROUNDN_STATE'});
-  }, [colorRound])
-
-  function prepareRoundN() {
-    console.log("🛠 I'm in prepareRoundN() state");
+  function setUpRoundN() {
+    console.log("🚜 setUpRoundN");
     setRunRoundConfetti(false);
+    setGameState('setUpRoundN');
     beginRoundSound();
     setAttempt(0);
-    // attempt = 0;
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
-    send({type:'TO_ATTEMPTN_STATE'});
-  };
+    // TODO - find a place for this line. Not working here
+    // what I don't get, is how the .disable-click persists?
+    // document.querySelectorAll('.bubble').classList.remove('disable-click');
+  }
   
-  function attemptN() {
-    console.log("🚜 I'm in attemptN() state");
-    // send({type:'TO_EVALUATE_ATTEMPTN_STATE'});
-  };
-
-
+  
   // =================================================
-  // Check the solution after every attempt
+  // When the round changes, generate a color round 
   // =================================================
   useLayoutEffect(() => {
     generateColorRound();
@@ -290,7 +152,10 @@ export default function App(props) {
       console.log("🎬 practice round. keep making attempts")
       return
     }
-
+    // Guard clause: return whe attempt resets to 0
+    if (attempt === 0 ) {
+      return
+    }
       let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
       let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
       let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
@@ -300,7 +165,6 @@ export default function App(props) {
       // Not enough trys for solution
       if (attempt === 1) {
         console.log('👆 First guess.');
-        send({type:'FIRST_GUESS_TO_ATTEMPTN_STATE'});
         // correct
       } else if (
         solutionColors.includes(leftFieldHexColor) &&
@@ -308,43 +172,40 @@ export default function App(props) {
         // the colors can't be the same on either side
         leftFieldHexColor !== rightFieldHexColor
       ) {
-        console.log("😎 player makes correct guess - TO_PLAYER_WINS_CONFETTI_FALLS_STATE")
-        // playerWinsConfettiFalls();
-        send({type:'TO_PLAYER_WINS_CONFETTI_FALLS_STATE'});
-  
+        setGameState('playerWins');
+        playerWins();
+    
         // incorrect
       } else {
-        console.log("🙃 player makes wrong guess - TO_WRONG_GUESS_STATE")
-        // wrongGuess() 
-        send({type:'TO_WRONG_GUESS_STATE'});
+        playerMadeWrongGuess()
       }
-  }
-
   
-  function wrongGuess() {
-    console.log("👎 I'm in wrongGuessState attempt:", attempt, "/", maxAttemptCount)
+  }, [attempt])
+
+ 
+  function playerMadeWrongGuess() {
+    console.log("👎 wrong guess")
     if (attempt < maxAttemptCount) {
-      console.log("player may guess again, TO_ATTEMPTN_STATE")
-      send({type:'WRONG_GUESS_TO_ATTEMPTN_STATE'});
+      console.log("player makes an other guess")
     } else {
-      console.log("😖 player out of guesses. Show solution. WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE")
-      // playerLoosesShowSolution();
-      send({type:'WRONG_GUESS_TO_PLAYER_LOOSES_ROUND_STATE'});
+      console.log("😖 player out of guesses - show solution")
+      showSolution()
+      playerLoosesShowSolution()
     }
   }
 
   //  ===================================
   //  Player Wins Round
   //  ===================================
-  function playerWinsConfettiFalls() {
-    console.log("🦄 I'm in playerWinsConfettiFallsState");
+  function playerWins() {
+    console.log("🦄 Player wins round");
+    setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
-    increasePlayerScore();
-    // After x seconds, proceed to incrementRoundN()
+    increasePlayerScore();    
+    // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
-      send({type:'TO_INCREMENT_ROUND_STATE'});
-      // incrementRound();
+      setUpRoundN();
     }, 3000);
   };
 
@@ -355,14 +216,16 @@ export default function App(props) {
   //  ===================================
   //  Player Looses Round
   //  ===================================
-  function playerLoosesShowSolution() {
+  function playerLoosesShowSolution(maxLossCount) {
     console.log('😭 player looses round');
+    setGameState('playerLoosesShowSolution');
     playLoseSound();
     showSolution();
     setLostRounds(lostRounds => lostRounds + 1);
   }
   
   function showSolution() {
+    setGameState('showSolution');
     console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
     
     setLeftFieldStyle({
@@ -375,27 +238,22 @@ export default function App(props) {
     });
   }
 
+
   useEffect( () => {
-    // Do not proceed if state is "homescreenpractice"
-    if (state.value === "homeScreenPracticeState") {return}
-    
-    // Do not proceed if prevLostRounds is equal to lostRounds
+    // Do not transition if gameState is "homescreenpractice"
+    if (gameState === "homeScreenPractice") {return}
+    // Do not transition if prevLostRounds is equal to lostRounds
     if (prevLostRounds.current === lostRounds) {return}
-   
-    console.log('lostRounds useEffect. Triggers b/c lostRounds changed')
     // Player lost this round. 
     // Transition to either the next round or game over after X seconds
     setTimeout(function () {
       console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
       if (lostRounds < maxLossCount) {
         console.log(`🌗 Set up next round`);
-        // incrementRoundN(
-        // send({type:'TO_CLEAR_ROUND_STATE'});
-        send({type:'TO_INCREMENT_ROUND_STATE'});
+        setUpRoundN()
       } else if (lostRounds >= maxLossCount) {
         console.log(`🌑 Transition to gameOver()`);
-        // gameOver()
-        send({type:'TO_GAMEOVER_STATE'});
+        gameOver()
       }
     }, 2000);
 
@@ -582,7 +440,7 @@ export default function App(props) {
    ============================================
    */
   function currentFieldMouseEnter() {
-    if (state.value === 'playerWinsState') return;
+    if (gameState === 'playerWins') return;
     else if (currentField === 'leftField') {
       setLeftFieldStyle({
         border: '8px solid #abb2b9',
@@ -597,7 +455,7 @@ export default function App(props) {
   }
 
   function currentFieldMouseLeave() {
-    if (state.value === 'playerWinsState') return;
+    if (gameState === 'playerWins') return;
 
     if (currentField === 'leftField') {
       setLeftFieldStyle({
