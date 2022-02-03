@@ -1,5 +1,4 @@
 import React from "react";
-import { stateValuesEqual } from "xstate/lib/State";
 
 
 export default function StartButtons(props) {
