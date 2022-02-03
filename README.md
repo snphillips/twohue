@@ -1,21 +1,19 @@
-## About TwoHue with State Machine
+## About TwoHue
 
-TwoHue with State Machine is a a refactor of the game TwoHue I created in 2018.
+Twohue is a one-player color mixing game. Players are presented with a color sample that they must recreate using two transparent color swatches from a set of several swatches.
 
-In this version I've made several changes, including:
+The front end twohue is created with React.
+The back end leaderboard server is created with Node/Express. See the repo for the server here: https://github.com/snphillips/twohue-state-machine-leaderboard-server
 
-1) I use **react-automata** (an Xstate library) to create a state machine that manages user flow,
-2) I use the color library **chroma.js** to dynamically create unlimmited game rounds,
-3) I change the game logic so that the game ends when the player looses x rounds, and 
-4) I added a node/express server to host a leaderboard of top players.
+I use the color library **chroma.js** to dynamically create unlimmited game rounds,
 
-View deployed game here: http://twohue-state-machine.surge.sh
+View deployed game here: http://twohue.surge.sh
 
 <img src="https://i.imgur.com/iaWzlC8.png" width="350">
 
 
 ## How to Play
-The player is presented with a brief introduction to the game and a "begin game" button.
+The player is presented with a brief introduction to the game and a "start" button.
 
 The player is shown: 
 
@@ -24,7 +22,6 @@ The player is shown:
 - outlines of two overlapping large circles(like a Venn diagram).
 
 The player selects the two colors they believe mix to create the target color. Points are assigned based on how few attempts the player solves the round in. Fewer tries = more points. The goal of the game is to win as many points as the player can before loosing six rounds.
-
 
 
 ## Getting Started
@@ -48,14 +45,9 @@ start the server:
 
 your browser should open to http://localhost:3000/ !
 
-Visualize your state chart by pasting it into this tool: https://xstate.js.org/viz/
-
-
-
 
 ## Made With
 - Create React App
-- React Automata (an X-state library for React) https://www.npmjs.com/package/react-automata
 - Chroma.js https://www.npmjs.com/package/chroma-js
 - react-confetti (for cool falling confetti effect) https://www.npmjs.com/package/react-confetti
 - Howler.js (for sound effects) https://www.npmjs.com/package/howler
