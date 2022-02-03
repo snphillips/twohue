@@ -317,6 +317,7 @@ input[type=submit]{
   padding: .5rem 1.75rem .2rem 1.75rem;
 }
 
+
 button:hover,
 input[type=submit]:hover {
   cursor: pointer;
@@ -488,9 +489,16 @@ section#left-and-right-field {
   transition: border .1s;
 }
 
+/* TODO don't apply styles if click handler dissabled */
 .bubble:hover {
   border: 3px solid #74808b;
   cursor: pointer;
+}
+
+.disable-click:hover {
+  cursor: none;
+  cursor: not-allowed;
+  border: 3px solid  #abb2b9;
 }
 
 /* Revealing the solution animation */

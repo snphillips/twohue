@@ -36,7 +36,6 @@ export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
@@ -110,7 +109,6 @@ export default function App(props) {
   function startGameClickHandler() {
     setGameState('setUpRoundN')
     setDisplayGameField(true);
-    setDisplayGameOverConfetti(false);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
@@ -130,6 +128,9 @@ export default function App(props) {
     setAttempt(0);
     setLeftFieldStyle({backgroundColor: '#ffffff'});
     setRightFieldStyle({backgroundColor: '#ffffff'});
+    // TODO - find a place for this line. Not working here
+    // what I don't get, is how the .disable-click persists?
+    // document.querySelectorAll('.bubble').classList.remove('disable-click');
   }
   
   
@@ -263,7 +264,6 @@ export default function App(props) {
     setGameState('gameOver');
     gameOverChimes();
     setrunGameOverConfetti(true);
-    setDisplayGameOverConfetti(true);
     setConfettiRecycle(true);
     gameOverTransition();
   }
@@ -472,8 +472,7 @@ export default function App(props) {
 
    /* ====================================
    Toggling between the left and right fields,
-   to determine which
-   one will get filled in with color.
+   to determine which one will get filled in with color.
    ==================================== */
   function toggleLeftRightField() {
     if (currentField === 'leftField') {
@@ -486,9 +485,9 @@ export default function App(props) {
   }
 
   function increasePlayerScore() {
-    // update previous score for react-countup
+    // Update previous score for react-countup
+    // React-countup is the cute score incrementing animation
     setPreviousScore(score)
-
     if (attempt === 6) {
       setScore(score => score + 1);
     } else if (attempt === 5) {
@@ -506,21 +505,25 @@ export default function App(props) {
   //  Click handler for the color bubbles at bottom of screen
   //  ===================================
   function bubbleClickHandler(event) {
-    console.log("🧚‍♀️ bubble click handler")
-    // guard clauses to disable click handler if:
-    // 1) the game is over,
-    // 2) player is out of attempts,attemptN
-    // 3) player has won the round,
+    
+    /*
+    guard clause to disable click handler if:
+    1) the game is over,
+    2) player is out of attempts,
+    3) player has won the round,
+    4) player has lost the round
+    */
     if ((gameState === "gameOver") ||
-       (gameState === 'playerWins') ||
-       (gameState === 'setUpRoundN')) {
-      console.log("✋ click handler disabled")
-      return
-    }
-    if (attempt >= maxAttemptCount) {
-      console.log("✋ attempt >= maxAttemptCount - click handler disabled")
-      return
-    };
+        (gameState === 'playerWins') ||
+        (gameState === 'setUpRoundN') || 
+        (attempt >= maxAttemptCount)) {
+          console.log("✋ click handler disabled")
+          // TODO: how to disable/change the hover effect
+          // Well, disabling is working, but removing the disabled
+          // effect is where I'm stuck
+          document.getElementById(event.currentTarget.id).classList.add('disable-click');
+          return
+        }
    
     // No need to increment attempts during practice
     if (gameState !== 'homeScreenPractice') {
@@ -529,10 +532,12 @@ export default function App(props) {
 
     bubbleSound();
     toggleLeftRightField();
-    // 'event' is the click on a specific color bubble.
-    // 'currentTarget' is whatever color bubble is clicked.
-    // 'style.backgroundColor' takes whatever background color
-    // the clicked color bubble has, and applies that to color field
+    /*
+    'event' is the click on a specific color bubble.
+    'currentTarget' is whatever color bubble is clicked.
+    'style.backgroundColor' takes whatever background color
+    the clicked color bubble has, and applies that to color field
+    */
     updateFieldColor(event.currentTarget.style.backgroundColor);
   }
 
@@ -550,34 +555,36 @@ export default function App(props) {
   }
 
   function beginRoundSound() {
-    // A guard clause if the user has clicked the audio off
-    if (isAudioOn === false) {
-      return;
-    }
+    // Guard clause if player has toggled sound to be off
+    if (isAudioOn === false) return;
     const sound = new Howl({
       src: ['/sound/finger-snap.wav'],
     });
     sound.play();
   }
 
-  //  ==================================
-  //  🎶 audio button switch toggle
-  //  if audio is on the state of isAudioOn is true,
-  //  if audio is off the state of isAudioOn is false,
-  //  the ! is the oposite of what it currently is.
-  //  So, set the state to the 'oposite' of what it is.
-  //  ==================================
+   /* 
+   ==================================
+   🎶 audio button switch toggle
+   if audio is on the state of isAudioOn is true,
+   if audio is off the state of isAudioOn is false,
+   the ! is the oposite of what it currently is.
+   So, set the state to the 'oposite' of what it is.
+   ==================================
+   */
   function soundButtonToggle() {
     setIsAudioOn(!isAudioOn);
   }
 
   function bubbleSound() {
-    // Using the Howler npm package for sound
-    // There are two distinct sounds. One for the left, one for the right.
-    // a guard clause if the player has toggled sound to be off
-    if (isAudioOn === false) {
-      return;
-    }
+    /*
+    Using the Howler npm package for sound
+    There are two distinct bubble sounds: 
+    One for the left, one for the right.
+    */
+    
+    // Guard clause if player has toggled sound to be off
+    if (isAudioOn === false) return;
 
     if (currentField === 'leftField') {
       const sound = new Howl({
@@ -593,10 +600,8 @@ export default function App(props) {
   }
 
   function playWinSound() {
-    // a guard clause if the player has toggled sound to be off
-    if (isAudioOn === false) {
-      return;
-    }
+    // Guard clause if player has toggled sound to be off
+    if (isAudioOn === false) return;
     const sound = new Howl({
       src: ['/sound/success.wav'],
     });
@@ -604,10 +609,8 @@ export default function App(props) {
   }
 
   function playLoseSound() {
-    // a guard clause if the player has toggled sound to be off
-    if (isAudioOn === false) {
-      return;
-    }
+    // Guard clause if player has toggled sound to be off
+    if (isAudioOn === false) return;
     const sound = new Howl({
       src: ['/sound/wrong-guess.wav'],
     });
@@ -615,10 +618,8 @@ export default function App(props) {
   }
 
   function gameOverChimes() {
-    // A guard clause if the user has clicked the audio off
-    if (isAudioOn === false) {
-      return;
-    }
+    // Guard clause if player has toggled sound to be off
+    if (isAudioOn === false) return;
     const sound = new Howl({
       src: ['/sound/windchimes.mp3'],
     });
@@ -758,7 +759,6 @@ export default function App(props) {
           style={{
             display: 'block',
             width: '100%',
-            // height: '100%'
           }}
           score={score}
           leaderboardData={leaderboardData}
@@ -809,7 +809,6 @@ export default function App(props) {
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
-          setUpRoundN={setUpRoundN}
           gameState={gameState}
         />
       </aside>
@@ -826,8 +825,8 @@ export default function App(props) {
         <ColorBubbleTray
           allColorBubbles={allColorBubbles}
           currentField={currentField}
-          leftFieldStyle={leftFieldStyle}
-          rightFieldStyle={rightFieldStyle}
+          // leftFieldStyle={leftFieldStyle}
+          // rightFieldStyle={rightFieldStyle}
           currentFieldMouseEnter={currentFieldMouseEnter}
           currentFieldMouseLeave={currentFieldMouseLeave}
           bubbleClickHandler={bubbleClickHandler}
