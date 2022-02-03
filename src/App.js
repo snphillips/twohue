@@ -39,7 +39,6 @@ export default function App(props) {
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
-  // const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
   const prevLostRounds = useRef(0);
@@ -51,8 +50,6 @@ export default function App(props) {
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
-
-  // const [wrongColors, setWrongColors] = useState([]);
   const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
