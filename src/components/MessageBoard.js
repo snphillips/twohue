@@ -22,7 +22,7 @@ export default function MessageBoard(props) {
       style={{height: '2.5rem'}}
       >
 
-      {props.displayIntroMessage &&
+      {props.gameState === 'homeScreenPractice' &&
       <div className="into-message">
         <p>Twohue is a color mixing game.</p>
         <p>Practice clicking bubbles before playing.</p>

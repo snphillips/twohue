@@ -9,7 +9,6 @@ export default function RightSidebar(props) {
 
         <StartButtons
           startGameClickHandler={props.startGameClickHandler}
-          displayPlayAgainButton={props.displayPlayAgainButton}
           setUpRoundN={props.setUpRoundN}
           gameState={props.gameState}
         />
@@ -23,7 +22,6 @@ export default function RightSidebar(props) {
           maxAttemptCount={props.maxAttemptCount}
           previousScore={props.previousScore}
           setPreviousScore={props.setPreviousScore}
-          displayScoreBoard={props.displayScoreBoard}
           gameState={props.gameState}
         />
     </div>

@@ -22,7 +22,9 @@ export default function Leaderboard(props) {
 
     return (
       <div>
-        {props.displayLeaderboard &&
+      {(props.gameState === 'joinLeaderboard' ||
+       props.gameState === 'gameOver') &&
+
         <div id="leaderboard-component">
         
           <div className="leaderboard-title">high scores</div>
@@ -47,11 +49,12 @@ export default function Leaderboard(props) {
           </ul>
 
         <div className="lederboard-form-placeholder">
+
             <LeaderboardForm
               handleChange={props.handleChange}
               handleSubmit={props.handleSubmit}
               newLeaderboardInductee={props.newLeaderboardInductee}
-              displayLeaderboardForm={props.displayLeaderboardForm}
+              gameState={props.gameState}
             />
 
             <ReactSpinners loadingSpinner={props.loadingSpinner} />

@@ -19,12 +19,10 @@ export default function StartButtons(props) {
         start
       </button>
     }
-    {props.displayPlayAgainButton &&
+    {props.gameState === 'gameOver' ||
+     props.gameState === 'joinLeaderboard' && 
       <button
         className="play-again-button"
-        style={{
-          display: props.displayPlayAgainButton
-        }}
         onClick={() => {
           props.startGameClickHandler( () => {
             props.setUpRoundN();
@@ -32,7 +30,7 @@ export default function StartButtons(props) {
         }}
       >
         play again
-          </button>
+      </button>
     }
 
     </section>

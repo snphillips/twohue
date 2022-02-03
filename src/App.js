@@ -37,18 +37,13 @@ export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
-  const [displayScoreBoard, setDisplayScoreBoard] = useState(true);
-  const [displayStartButton, setDisplayStartButton] = useState(true);
-  const [displayIntroMessage, setDisplayIntroMessage] = useState(true);
   const [displayIntroAnimation, setDisplayIntroAnimation] = useState(true);
   const [displayGameOverMessage, setDisplayGameOverMessage] = useState(false);
-  const [displayPlayAgainButton, setDisplayPlayAgainButton] = useState(false);
   const [displayGameOverConfetti, setDisplayGameOverConfetti] = useState(false);
-  const [displayLeaderboard, setDisplayLeaderboard] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
-  const prevRound = useRef(0);
+  // const prevRound = useRef(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
   const prevLostRounds = useRef(0);
@@ -68,21 +63,6 @@ export default function App(props) {
   const [previousScore, setPreviousScore] = useState(0);
   // have to insert this during leaderboard api calls
   const [loadingSpinner, setLoadingSpinner] = useState(false);
-
-  /*
-  We can make a useEffect hook not run on initial render
-  by creating a variable with the useRef hook to keep track
-  of when the first render is done. Set the variable’s value
-  to true initially. When the component is rendered the first time,
-  set the variable to false.
-  */
-  const firstUpdate = useRef(true);
-
-  // if (gameState === 'homeScreenPractice') {
-  //   maxAttemptCount = 30; 
-  // } else {
-  //   maxAttemptCount = 6;
-  // }
 
   // ***********************************
   // Here's where the app begins.
@@ -105,10 +85,10 @@ export default function App(props) {
   
   function initializeGame() {
       console.log('🪄 initializeGame() hello player');
-      setDisplayPlayAgainButton(false);
-      setDisplayStartButton(true);
-      setDisplayScoreBoard(false);
-      setDisplayGameOverMessage(false);
+      // setDisplayPlayAgainButton(false);
+      // setDisplayStartButton(true);
+      // setDisplayScoreBoard(false);
+      // setDisplayGameOverMessage(false);
    };
 
    function homeScreenPractice() {
@@ -137,12 +117,12 @@ export default function App(props) {
   function startGameClickHandler() {
     setGameState('setUpRoundN')
     setDisplayGameField(true);
-    setDisplayScoreBoard(true);
-    setDisplayLeaderboard(false);
+    // setDisplayScoreBoard(true);
+    // setDisplayLeaderboard(false);
     setDisplayIntroAnimation(false);
-    setDisplayStartButton(false);
-    setDisplayPlayAgainButton(false);
-    setDisplayIntroMessage(false);
+    // setDisplayStartButton(false);
+    // setDisplayPlayAgainButton(false);
+    // setDisplayIntroMessage(false);
     setDisplayGameOverConfetti(false);
     setDisplayGameOverMessage(false);
     setRunRoundConfetti(false);
@@ -180,11 +160,7 @@ export default function App(props) {
    // Check the solution after every attempt
    // =================================================
    useEffect( () => {
-    // Don't run on first render (firstUpdate)
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
+
     if (gameState === 'homeScreenPractice') {
       console.log("🎬 practice round. keep making attempts")
       return
@@ -300,9 +276,9 @@ export default function App(props) {
   function gameOver() {
     setGameState('gameOver');
     gameOverChimes();
-    setDisplayScoreBoard(false);
+    // setDisplayScoreBoard(false);
     setDisplayGameOverMessage(true);
-    setDisplayPlayAgainButton(true);
+    // setDisplayPlayAgainButton(true);
     setrunGameOverConfetti(true);
     setDisplayGameOverConfetti(true);
     setConfettiRecycle(true);
@@ -350,13 +326,12 @@ export default function App(props) {
     setDisplayGameField(false);
     setDisplayGameOverMessage('none');
     setGameState('joinLeaderboard');
-    setDisplayLeaderboard(true);
-    setDisplayLeaderboardForm(true);
+    // setDisplayLeaderboardForm(true);
     setNewLeaderboardInductee('');
   }
 
   function leaderboardAPICall() {
-    setDisplayLeaderboardForm(false);
+    // setDisplayLeaderboardForm(false);
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
@@ -387,7 +362,9 @@ export default function App(props) {
     =============================
     If the target color is too dark (like blackish),
     the round is nearly impossible to play.
-    To solve this problem, we're not allowing rounds with very dark target color.
+    To solve this problem, we're not allowing rounds with 
+    a very dark target color.
+    
     Use a while-loop to genereate solution & target
     colors. Keep looping until it finds a solution
     that ISN'T too dark. We're using Chroma.js's .get('lab.l')
@@ -810,7 +787,7 @@ export default function App(props) {
       </aside>
       <main>
         <MessageBoard
-          displayIntroMessage={displayIntroMessage}
+          gameState={gameState}
           />
 
           <Leaderboard
@@ -821,8 +798,7 @@ export default function App(props) {
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
             loadingSpinner={loadingSpinner}
-            displayLeaderboard={displayLeaderboard}
-            displayLeaderboardForm={displayLeaderboardForm}
+            gameState={gameState}
             />
       
       {displayGameField &&
@@ -838,8 +814,8 @@ export default function App(props) {
       </main>
       <aside className='right-side'>
         <RightSidebar
-          displayStartButton={displayStartButton}
-          displayPlayAgainButton={displayPlayAgainButton}
+          // displayStartButton={displayStartButton}
+          // displayPlayAgainButton={displayPlayAgainButton}
           startGameClickHandler={startGameClickHandler}
           setUpRoundN={setUpRoundN}
           round={round}
@@ -853,9 +829,6 @@ export default function App(props) {
           beginRoundSound={beginRoundSound}
           isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
-          displayScoreBoard={displayScoreBoard}
-          displayStartButton={displayStartButton}
-          displayPlayAgainButton={displayPlayAgainButton}
           setUpRoundN={setUpRoundN}
           gameState={gameState}
         />
@@ -867,7 +840,7 @@ export default function App(props) {
       className='gamefield-bottom'
       style={{
         display: 'block',
-        border: '1px solid gold'
+        // border: '1px solid gold'
       }}
       >
         <ColorBubbleTray
