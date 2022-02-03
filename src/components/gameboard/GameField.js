@@ -2,12 +2,14 @@ import React from 'react';
 
 
 export default function GameField(props) {
+
   
   return (
     <section>
         <div>
-          <div id="target-swatch"
-              style={{'backgroundColor': props.colorRound.targetColor}}>
+          <div 
+            id="target-swatch"
+            style={{'backgroundColor': props.colorRound.targetColor}}>
               &nbsp;
             <span className="tooltiptext">target color</span>
           </div>

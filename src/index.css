@@ -94,6 +94,38 @@ code {
   transform: translateY(-50%);
 }
 
+.gamefield-top {
+  display: flex;
+  flex-direction: row;
+}
+
+.left-side {
+  order: 1;
+  display: block;
+  width: 20%;
+  flex-grow: 1;
+  flex-basis: auto;
+  /* border: 1px solid purple; */
+}
+
+main {
+  order: 2;
+  display: block;
+  width: 60%;
+  flex-grow: 3;
+  flex-basis: auto;
+  /* border: 1px solid green; */
+}
+
+.right-side {
+  order: 3;
+  display: block;
+  width: 20%;
+  flex-grow: 1;
+  flex-basis: auto;
+  /* border: 1px solid red; */
+}
+
 /* =======================*/
 /* SVG Icons - svgicons.sparkk.fr*/
 /* =======================*/
@@ -285,6 +317,7 @@ input[type=submit]{
   padding: .5rem 1.75rem .2rem 1.75rem;
 }
 
+
 button:hover,
 input[type=submit]:hover {
   cursor: pointer;
@@ -456,9 +489,16 @@ section#left-and-right-field {
   transition: border .1s;
 }
 
+/* TODO don't apply styles if click handler dissabled */
 .bubble:hover {
   border: 3px solid #74808b;
   cursor: pointer;
+}
+
+.disable-click:hover {
+  cursor: none;
+  cursor: not-allowed;
+  border: 3px solid  #abb2b9;
 }
 
 /* Revealing the solution animation */
@@ -645,7 +685,7 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
-#game-over-message {
+.game-over-message {
   display: block;
 }
 
@@ -862,10 +902,34 @@ input.leaderboard-input-field {
 
   .twohue {
     max-width: 100%;
-    height: unset;
+    height: 100%;
     padding: 1rem 1rem 0 1rem;
     margin: .5rem auto 1rem auto;
     border-top: 4px solid #ebedef;
+  }
+
+  .gamefield-top {
+    flex-direction: column;
+  }
+
+  .left-side {
+    order: 1;
+    width: 100%;
+  }
+
+  main {
+    order: 3;
+    width: 100%;
+  }
+
+  .right-side {
+    order: 2;
+    width: 100%;
+  }
+
+  .start-buttons {
+    position: unset;
+    right: unset;
   }
 
   header {
@@ -890,17 +954,21 @@ input.leaderboard-input-field {
     min-height: 22px;
   }
 
+  .game-over-message {
+    text-align: center;
+  }
+
   .score-board {
     order: 2;
     margin: 0;
-    font-size: .75rem;
+    /* font-size: .75rem; */
   }
 
   #game-field {
     margin-top: 0;
   }
 
-section#left-and-right-field {
+  section#left-and-right-field {
     height: 11.5rem;
   }
 

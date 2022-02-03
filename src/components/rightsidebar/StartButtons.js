@@ -6,7 +6,7 @@ export default function StartButtons(props) {
   return (
     <section className="start-buttons">
 
-    {props.displayStartButton && 
+    {props.gameState === 'homeScreenPractice' && 
       <button
       className="start-button"
       onClick={ () => {
@@ -17,19 +17,17 @@ export default function StartButtons(props) {
         start
       </button>
     }
-    {props.displayPlayAgainButton &&
+    {props.gameState === 'gameOver' ||
+     props.gameState === 'joinLeaderboard' && 
       <button
         className="play-again-button"
-        style={{
-          display: props.displayPlayAgainButton
-        }}
         onClick={() => {
           props.startGameClickHandler( () => {
           });
         }}
       >
         play again
-          </button>
+      </button>
     }
 
     </section>

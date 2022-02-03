@@ -5,8 +5,7 @@ import React from "react";
 The set of 'color bubbles'
 at the bottom on the game field.
 
-The helper arrows only display during 'homeScreenPractice',
-as indicated by <State is={['homeScreenPractice']}>
+The helper arrows only display during 'homeScreenPractice'.
 ==============================
 */
 
@@ -15,10 +14,10 @@ export default function ColorBubbleTray(props) {
   return (
 
   <section id="color-bubble-tray">
-    {props.displayIntroAnimation &&
-      <div 
-          className="arrow-container arrow-container-left"
-          >
+
+  {props.gameState === 'homeScreenPractice' &&
+
+      <div className="arrow-container arrow-container-left">
           <svg className="svg-icon arrow" viewBox="0 0 20 20">
             <path
               fill="none"
@@ -53,10 +52,9 @@ export default function ColorBubbleTray(props) {
           </div>
         );
       })}
-      {props.displayIntroAnimation &&
-      <div 
-        className="arrow-container arrow-container-right"
-      >
+
+      {props.gameState === 'homeScreenPractice' &&
+      <div className="arrow-container arrow-container-right">
         <svg className="svg-icon arrow" viewBox="0 0 20 20">
           <path
             fill="none"

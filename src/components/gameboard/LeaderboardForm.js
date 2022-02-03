@@ -7,11 +7,11 @@ export default function LeaderboardForm(props) {
 
   return (
     <div style={{display: 'flex'}}>
-      { props.displayLeaderboardForm &&
+
+      {props.gameState === 'joinLeaderboard' &&
+      
       <div className="leaderboard-form">
-        <form
-          onSubmit={props.handleSubmit}
-          >
+        <form onSubmit={props.handleSubmit}>
 
         <label>
           <input
