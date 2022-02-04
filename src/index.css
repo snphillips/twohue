@@ -977,9 +977,13 @@ input.leaderboard-input-field {
     height: 12rem;
   }
 
+  #color-bubble-tray {
+    flex-flow: wrap;
+  }
+  
   .bubble {
-    width: 4rem;
-    height: 4rem;
+    /* width: 4rem; */
+    /* height: 4rem; */
   }
 
   footer {
@@ -1012,8 +1016,8 @@ input.leaderboard-input-field {
   }
 
   #target-swatch {
-    width: 22vw;
-    height: 22vw;
+    /* width: 22vw; */
+    /* height: 22vw; */
   }
 
    section#left-and-right-field {
@@ -1026,8 +1030,8 @@ input.leaderboard-input-field {
   }
 
   .bubble {
-    width: 58px;
-    height: 58px;
+    /* width: 58px; */
+    /* height: 58px; */
   }
 
 }
@@ -1050,8 +1054,8 @@ input.leaderboard-input-field {
   }
 
   #target-swatch {
-    width: 22vw;
-    height: 22vw;
+    /* width: 22vw; */
+    /* height: 22vw; */
   }
 
 
