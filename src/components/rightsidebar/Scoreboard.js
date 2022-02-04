@@ -19,9 +19,9 @@ export default function StartButtons(props) {
   return (
     <section className="score-board">
 
-    { props.gameState != "homeScreenPractice" && 
-      props.gameState != "gameOver" &&
-      props.gameState != "joinLeaderboard" &&
+    { props.gameState !== "homeScreenPractice" && 
+      props.gameState !== "gameOver" &&
+      props.gameState !== "joinLeaderboard" &&
       
       <div className='scoreboard'>
         <p className="score-word">

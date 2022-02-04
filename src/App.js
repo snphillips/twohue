@@ -37,7 +37,7 @@ export default function App(props) {
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
-  const [displayGameField, setDisplayGameField] = useState(true);
+  // const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -105,7 +105,7 @@ export default function App(props) {
   
   function startGameClickHandler() {
     setGameState('setUpRoundN')
-    setDisplayGameField(true);
+    // setDisplayGameField(true);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
@@ -303,7 +303,7 @@ export default function App(props) {
   }
 
   function joinLeaderboard() {
-    setDisplayGameField(false);
+    // setDisplayGameField(false);
     setGameState('joinLeaderboard');
     setNewLeaderboardInductee('');
   }
@@ -804,15 +804,14 @@ export default function App(props) {
           previousScore={previousScore}
           setPreviousScore={setPreviousScore}
           beginRoundSound={beginRoundSound}
-          startGameClickHandler={startGameClickHandler}
         />
       </aside>
 
     </div>
 
-    {(gameState != 'joinLeaderboard' &&
-      gameState != 'leaderboard' &&
-      gameState != 'gameOver') &&
+    {(gameState !== 'joinLeaderboard' &&
+      gameState !== 'leaderboard' &&
+      gameState !== 'gameOver') &&
     
     <div 
       className='gamefield-bottom'

@@ -8,9 +8,9 @@ export default function LeftSidebar(props) {
         <h1>twohue</h1>
       </section>
 
-      {props.gameState != "homeScreenPractice" && 
-       props.gameState != "gameOver" &&
-       props.gameState != "joinLeaderboard" &&
+      {props.gameState !== "homeScreenPractice" && 
+       props.gameState !== "gameOver" &&
+       props.gameState !== "joinLeaderboard" &&
 
        <button
        className="end-game-button"

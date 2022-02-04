@@ -7,9 +7,9 @@ export default function GameField(props) {
   return (
     <section>
 
-      {(props.gameState != 'joinLeaderboard' &&
-        props.gameState != 'leaderboard' &&
-        props.gameState != 'gameOver') &&
+      {(props.gameState !== 'joinLeaderboard' &&
+        props.gameState !== 'leaderboard' &&
+        props.gameState !== 'gameOver') &&
         <div>
           <div 
             id="target-swatch"
