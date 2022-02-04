@@ -551,6 +551,24 @@ export default function App(props) {
     }
   }
 
+  function endGameClickHandler() {
+    console.log("end game early")
+  } 
+  
+
+  /* 
+  ==================================
+  🎶 audio button switch toggle
+  if audio is on the state of isAudioOn is true,
+  if audio is off the state of isAudioOn is false,
+  the ! is the oposite of what it currently is.
+  So, set the state to the 'oposite' of what it is.
+  ==================================
+  */
+ function soundButtonToggle() {
+   setIsAudioOn(!isAudioOn);
+  }
+
   function beginRoundSound() {
     // Guard clause if player has toggled sound to be off
     if (isAudioOn === false) return;
@@ -558,19 +576,6 @@ export default function App(props) {
       src: ['/sound/finger-snap.wav'],
     });
     sound.play();
-  }
-
-   /* 
-   ==================================
-   🎶 audio button switch toggle
-   if audio is on the state of isAudioOn is true,
-   if audio is off the state of isAudioOn is false,
-   the ! is the oposite of what it currently is.
-   So, set the state to the 'oposite' of what it is.
-   ==================================
-   */
-  function soundButtonToggle() {
-    setIsAudioOn(!isAudioOn);
   }
 
   function bubbleSound() {
@@ -753,6 +758,8 @@ export default function App(props) {
         <LeftSidebar
           style={{ display: 'block', width: '100%' }}
           gameState={gameState}
+          endGameClickHandler={endGameClickHandler}
+          gameOver={gameOver}
           // score={score}
           />
       </aside>

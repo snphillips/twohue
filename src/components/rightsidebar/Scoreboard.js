@@ -47,6 +47,7 @@ export default function StartButtons(props) {
         </p>
       </div>
     }
+
       </section>
   );
 }
