@@ -27,11 +27,11 @@ let value;
 export default function App(props) {
 
    // gameStates: 
-  // 'loading', 'homeScreenPractice'  'setUpRoundN', 
+  // 'homeScreenPractice'  'setUpRoundN', 
   // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
   // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
-  // 'joinLeaderboard','viewLeaderboard', 'leaderboardAPICall' 
+  // 'joinLeaderboard', 'leaderboardAPICall' 
   const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
@@ -325,8 +325,8 @@ export default function App(props) {
     // Practice colors are hard-coded
     if (gameState === 'homeScreenPractice') {return}
     console.log("🎨 generate color round. round:", round, gameState)
-    if (gameState !== 'homeScreenPractice' && gameState !== 'loading') {
-      console.log('gameState isnt loading or practice, right?', gameState)
+    if (gameState !== 'homeScreenPractice') {
+      console.log('gameState isnt practice, right?', gameState)
       setGameState('generateColorRound')
     }
     let soluColor1;
@@ -778,9 +778,8 @@ export default function App(props) {
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
             loadingSpinner={loadingSpinner}
-            />
-      
-      {displayGameField &&
+          />
+
         <div id='game-field'>
           <GameField
             gameState={gameState}
@@ -790,7 +789,7 @@ export default function App(props) {
             rightFieldStyle={rightFieldStyle}
             />
         </div>
-      }
+
       </main>
       <aside className='right-side'>
         <RightSidebar
@@ -810,7 +809,11 @@ export default function App(props) {
       </aside>
 
     </div>
-    {displayGameField &&
+
+    {(gameState != 'joinLeaderboard' &&
+      gameState != 'leaderboard' &&
+      gameState != 'gameOver') &&
+    
     <div 
       className='gamefield-bottom'
       style={{

@@ -6,6 +6,10 @@ export default function GameField(props) {
   
   return (
     <section>
+
+      {(props.gameState != 'joinLeaderboard' &&
+        props.gameState != 'leaderboard' &&
+        props.gameState != 'gameOver') &&
         <div>
           <div 
             id="target-swatch"
@@ -16,10 +20,12 @@ export default function GameField(props) {
 
           <section id="left-and-right-field">
 
-            <div className="field"
-                id="left-field"
-                style={props.leftFieldStyle}
-                >&nbsp;
+            <div 
+              className="field"
+              id="left-field"
+              style={props.leftFieldStyle}
+              >
+                &nbsp;
             </div>
 
             <div className="field"
@@ -29,6 +35,7 @@ export default function GameField(props) {
             </div>
           </section>
         </div>
+      } 
     </section>
   );
 }
