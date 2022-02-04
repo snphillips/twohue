@@ -650,7 +650,6 @@ export default function App(props) {
   //  POST
   //  =================================
   function axiosPostNewLeaderboardInductee() {
-    // props.transition('FILLED_OUT_FORM')
     let string = newLeaderboardInductee;
     let length = 12;
     let trimmedString = string.substring(0, length);
@@ -678,7 +677,6 @@ export default function App(props) {
       })
       .then(() => {
         console.log('after axiosGetAllLeaderboardResults()');
-        // props.transition('API_DATABASE_CALL_COMPLETE');
         // TODO: sarah what happens here?
       })
       .catch(function (error) {
@@ -753,22 +751,19 @@ export default function App(props) {
       <div className='gamefield-top'>
       <aside className='left-side'>
         <LeftSidebar
-          style={{
-            display: 'block',
-            width: '100%',
-          }}
-          score={score}
-          leaderboardData={leaderboardData}
-          // displayGameOverMessage={displayGameOverMessage}
+          style={{ display: 'block', width: '100%' }}
           gameState={gameState}
+          // score={score}
           />
       </aside>
       <main>
         <MessageBoard
           gameState={gameState}
+          score={score}
           />
 
           <Leaderboard
+            gameState={gameState}
             leaderboardData={leaderboardData}
             score={score}
             value={value}
@@ -776,37 +771,34 @@ export default function App(props) {
             handleSubmit={handleSubmit}
             newLeaderboardInductee={newLeaderboardInductee}
             loadingSpinner={loadingSpinner}
-            gameState={gameState}
             />
       
       {displayGameField &&
         <div id='game-field'>
           <GameField
+            gameState={gameState}
             colorRound={colorRound}
             currentField={currentField}
             leftFieldStyle={leftFieldStyle}
             rightFieldStyle={rightFieldStyle}
-            gameState={gameState}
             />
         </div>
       }
       </main>
       <aside className='right-side'>
         <RightSidebar
-          startGameClickHandler={startGameClickHandler}
-          setUpRoundN={setUpRoundN}
+          gameState={gameState}
           round={round}
+          score={score}
+          attempt={attempt}
+          startGameClickHandler={startGameClickHandler}
           maxLossCount={maxLossCount}
           maxAttemptCount={maxAttemptCount}
           lostRounds={lostRounds}
-          attempt={attempt}
-          score={score}
           previousScore={previousScore}
           setPreviousScore={setPreviousScore}
           beginRoundSound={beginRoundSound}
-          isAudioOn={isAudioOn}
           startGameClickHandler={startGameClickHandler}
-          gameState={gameState}
         />
       </aside>
 
@@ -820,14 +812,12 @@ export default function App(props) {
       }}
       >
         <ColorBubbleTray
+          gameState={gameState}
           allColorBubbles={allColorBubbles}
           currentField={currentField}
-          // leftFieldStyle={leftFieldStyle}
-          // rightFieldStyle={rightFieldStyle}
           currentFieldMouseEnter={currentFieldMouseEnter}
           currentFieldMouseLeave={currentFieldMouseLeave}
           bubbleClickHandler={bubbleClickHandler}
-          gameState={gameState}
           />
     </div>
    }

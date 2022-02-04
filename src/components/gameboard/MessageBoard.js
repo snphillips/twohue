@@ -19,7 +19,10 @@ export default function MessageBoard(props) {
 
     <section 
       className="message-board" 
-      style={{height: '2.5rem'}}
+      style={{
+        display: 'block',
+        height: '3rem'
+      }}
       >
 
       {props.gameState === 'homeScreenPractice' &&
@@ -28,6 +31,15 @@ export default function MessageBoard(props) {
         <p>Practice clicking bubbles before playing.</p>
       </div>
       }
+
+{props.gameState === 'gameOver'||
+     props.gameState === 'joinLeaderboard' &&
+      
+      <div className="game-over-message">
+        <p id="game-over">game over</p>
+        <p id="game-over-score">final score: {props.score}</p>
+      </div>
+    }
 
       {props.displaySolution &&
       <p className="solution-label">
