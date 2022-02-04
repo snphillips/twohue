@@ -10,6 +10,7 @@ I use the color library **chroma.js** to dynamically create unlimmited game roun
 View deployed game here: http://twohue.surge.sh
 
 <img src="https://i.imgur.com/iaWzlC8.png" width="350">
+<img src="https://i.imgur.com/zIltcWs.png" width="350">
 
 
 ## How to Play
