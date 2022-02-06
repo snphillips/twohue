@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import './App.css';
+// import './App.css';
 import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
@@ -26,12 +26,12 @@ let value;
 
 export default function App(props) {
 
-   // gameStates: 
+  // gameStates: 
   // 'homeScreenPractice'  'setUpRoundN', 
   // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
   // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
   // 'incrementRound', 'gameOver', 'gameOverTransition', 
-  // 'joinLeaderboard', 'leaderboardAPICall' 
+  // 'joinLeaderboard',
   const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
@@ -105,7 +105,6 @@ export default function App(props) {
   
   function startGameClickHandler() {
     setGameState('setUpRoundN')
-    // setDisplayGameField(true);
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
