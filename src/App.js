@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-// import './App.css';
 import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
@@ -26,18 +25,20 @@ let value;
 
 export default function App(props) {
 
-  // gameStates: 
-  // 'homeScreenPractice'  'setUpRoundN', 
-  // 'generateColorRound', 'roundN', 'attemptN', 'checkSolution',  
-  // 'playerWins', 'playerLoosesShowSolution', 'showSolution', 
-  // 'incrementRound', 'gameOver', 'gameOverTransition', 
-  // 'joinLeaderboard',
+  // ====================================
+  // gameStates
+  // Lots of the game logic depend gamestate (a useState)
+  // ====================================
+  // 'homeScreenPractice'  'setUpRoundN', 'generateColorRound',
+  // 'roundN', 'playerWins', 'playerLoosesShowSolution', 
+  // 'gameOver', 'joinLeaderboard',
+
+
   const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
-  // const [displayGameField, setDisplayGameField] = useState(true);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const [lostRounds, setLostRounds] = useState(0);
@@ -425,6 +426,46 @@ export default function App(props) {
     // setWrongColors(wrongColorsArray);
   }
 
+  //  ===================================
+  //  Click handler for the color bubbles at bottom of screen
+  //  ===================================
+  function bubbleClickHandler(event) {
+    
+    /*
+    guard clause to disable click handler if:
+    1) the game is over,
+    2) player is out of attempts,
+    3) player has won the round,
+    4) player has lost the round
+    */
+    if ((gameState === "gameOver") ||
+        (gameState === 'playerWins') ||
+        (gameState === 'setUpRoundN') || 
+        (attempt >= maxAttemptCount)) {
+          console.log("✋ click handler disabled")
+          // TODO: how to disable/change the hover effect
+          // Well, disabling is working, but removing the disabled
+          // effect is where I'm stuck
+          // document.getElementById(event.currentTarget.id).classList.add('disable-click');
+          return
+        }
+   
+    // No need to increment attempts during practice
+    if (gameState !== 'homeScreenPractice') {
+      setAttempt(attempt + 1);
+    }
+
+    bubbleSound();
+    toggleLeftRightField();
+    /*
+    'event' is the click on a specific color bubble.
+    'currentTarget' is whatever color bubble is clicked.
+    'style.backgroundColor' takes whatever background color
+    the clicked color bubble has, and applies that to color field
+    */
+    updateFieldColor(event.currentTarget.style.backgroundColor);
+  }
+
 
 
    /* 
@@ -497,45 +538,7 @@ export default function App(props) {
     }
   }
 
-  //  ===================================
-  //  Click handler for the color bubbles at bottom of screen
-  //  ===================================
-  function bubbleClickHandler(event) {
-    
-    /*
-    guard clause to disable click handler if:
-    1) the game is over,
-    2) player is out of attempts,
-    3) player has won the round,
-    4) player has lost the round
-    */
-    if ((gameState === "gameOver") ||
-        (gameState === 'playerWins') ||
-        (gameState === 'setUpRoundN') || 
-        (attempt >= maxAttemptCount)) {
-          console.log("✋ click handler disabled")
-          // TODO: how to disable/change the hover effect
-          // Well, disabling is working, but removing the disabled
-          // effect is where I'm stuck
-          // document.getElementById(event.currentTarget.id).classList.add('disable-click');
-          return
-        }
-   
-    // No need to increment attempts during practice
-    if (gameState !== 'homeScreenPractice') {
-      setAttempt(attempt + 1);
-    }
 
-    bubbleSound();
-    toggleLeftRightField();
-    /*
-    'event' is the click on a specific color bubble.
-    'currentTarget' is whatever color bubble is clicked.
-    'style.backgroundColor' takes whatever background color
-    the clicked color bubble has, and applies that to color field
-    */
-    updateFieldColor(event.currentTarget.style.backgroundColor);
-  }
 
   //  ==================================
   //  Filling in chosen color into left or right fields
@@ -656,10 +659,10 @@ export default function App(props) {
   function axiosPostNewLeaderboardInductee() {
     let string = newLeaderboardInductee;
     let length = 12;
-    let trimmedString = string.substring(0, length);
+    let trimmedString = string.substring(0, length) || 'Bob Sacamano';
 
     setNewLeaderboardInductee((trimmedString) => {
-      console.log(string, length, trimmedString);
+      console.log("string:", string, "length:", length, "trimmedString:", trimmedString);
       console.log(
         'Posting new result. name: ',
         newLeaderboardInductee,
@@ -679,10 +682,10 @@ export default function App(props) {
       .then(() => {
         axiosGetAllLeaderboardResults();
       })
-      .then(() => {
-        console.log('after axiosGetAllLeaderboardResults()');
-        // TODO: sarah what happens here?
-      })
+      // .then(() => {
+      //   console.log('after axiosGetAllLeaderboardResults()');
+      //   // TODO: sarah what happens here?
+      // })
       .catch(function (error) {
         console.log(error);
       });
@@ -696,11 +699,8 @@ export default function App(props) {
   
   function handleSubmit(event) {
     event.preventDefault();
-    // props.transition('FILLED_OUT_FORM');
     // handleChange(event.target.value);
     leaderboardAPICall( () => {
-      // TODO: find a way to hide leaderboard form.
-      // it's not working here.
       setDisplayLeaderboardForm(false);
     });
   }
@@ -759,7 +759,6 @@ export default function App(props) {
           gameState={gameState}
           endGameClickHandler={endGameClickHandler}
           gameOver={gameOver}
-          // score={score}
           />
       </aside>
       <main>
@@ -814,10 +813,7 @@ export default function App(props) {
     
     <div 
       className='gamefield-bottom'
-      style={{
-        display: 'block',
-        // border: '1px solid gold'
-      }}
+      style={{ display: 'block'}}
       >
         <ColorBubbleTray
           gameState={gameState}
