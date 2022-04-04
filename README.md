@@ -3,7 +3,7 @@
 Twohue is a one-player color mixing game. Players are presented with a color sample that they must recreate using two transparent color swatches from a set of several swatches.
 
 The front end twohue is created with React.
-The back end leaderboard server is created with Node/Express. See the repo for the server here: https://github.com/snphillips/twohue-state-machine-leaderboard-server
+The back end leaderboard server is created with Node/Express. See the repo for the server here: https://github.com/snphillips/twohue-leaderboard-server
 
 I use the color library **chroma.js** to dynamically create unlimmited game rounds,
 
@@ -26,15 +26,15 @@ The player selects the two colors they believe mix to create the target color. P
 
 
 ## Getting Started
-note: the backend server for the leaderboard can be found here: https://github.com/snphillips/twohue-state-machine-leaderboard-server
+note: the backend server for the leaderboard can be found here: https://github.com/snphillips/twohue-leaderboard-server
 
 clone this repo:
 
-`git clone https://github.com/snphillips/twohue-state-chart.git`
+`git clone https://github.com/snphillips/twohue.git`
 
 get into the correct directory:
 
-`cd twohue-state-machine`
+`cd twohue`
 
 run npm to install all the dependencies:
 
