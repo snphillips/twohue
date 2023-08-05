@@ -10,7 +10,7 @@ import AudioToggle from './components/footer/AudioToggle';
 import ColorBubbleTray from './components/gameboard/ColorBubbleTray';
 import MessageBoard from './components/gameboard/MessageBoard';
 import Leaderboard from './components/gameboard/Leaderboard';
-import useWindowSize from 'react-use/lib/useWindowSize'
+import useWindowSize from 'react-use/lib/useWindowSize';
 import { GridLoader } from 'react-spinners';
 import RightSidebar from './components/rightsidebar/RightSidebar';
 
@@ -22,17 +22,14 @@ let maxLossCount = 6;
 let maxAttemptCount = 6;
 let value;
 
-
 export default function App(props) {
-
   // ====================================
   // gameStates
   // Lots of the game logic depend gamestate (a useState)
   // ====================================
   // 'homeScreenPractice'  'setUpRoundN', 'generateColorRound',
-  // 'roundN', 'playerWins', 'playerLoosesShowSolution', 
+  // 'roundN', 'playerWins', 'playerLoosesShowSolution',
   // 'gameOver', 'joinLeaderboard',
-
 
   const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
@@ -73,39 +70,38 @@ export default function App(props) {
     }
     setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    initializeGame()
-    homeScreenPractice()
+    initializeGame();
+    homeScreenPractice();
   }, []);
-  
-  function initializeGame() {
-      console.log('🪄 initializeGame() hello player');
-   };
 
-   function homeScreenPractice() {
-     console.log("🍄 I'm in homeScreenPractice()", colorRound)
-     // Hard code practice colors
-     setColorRound({
-       solutionColor1: '#8cb5ef',
-       solutionColor2: '#d79fb3',
-       targetColor: '#7671a8',
-       solutionColors: ['#8cb5ef','#d79fb3'],
-       wrongColorsArray: []
-      })
-      setAllColorBubbles(['#8cb5ef','#d79fb3'])
-    }
+  function initializeGame() {
+    console.log('🪄 initializeGame() hello player');
+  }
+
+  function homeScreenPractice() {
+    // Hard code practice colors
+    setColorRound({
+      solutionColor1: '#8cb5ef',
+      solutionColor2: '#d79fb3',
+      targetColor: '#7671a8',
+      solutionColors: ['#8cb5ef', '#d79fb3'],
+      wrongColorsArray: [],
+    });
+    setAllColorBubbles(['#8cb5ef', '#d79fb3']);
+  }
 
   useEffect(() => {
     // keep this for development
-    console.log('🚥 gameState is:', gameState)
+    // console.log('🚥 gameState is:', gameState)
 
     if (gameState === 'setUpRoundN') {
-        setRound(round => round + 1);
-        console.log("+ 1 increment round")
-      }
+      setRound((round) => round + 1);
+      console.log('+ 1 increment round');
+    }
   }, [gameState]);
-  
+
   function startGameClickHandler() {
-    setGameState('setUpRoundN')
+    setGameState('setUpRoundN');
     setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
@@ -118,76 +114,69 @@ export default function App(props) {
   }
 
   function setUpRoundN() {
-    console.log("🚜 setUpRoundN");
+    console.log('🚜 setUpRoundN');
     setRunRoundConfetti(false);
     setGameState('setUpRoundN');
     beginRoundSound();
     setAttempt(0);
-    setLeftFieldStyle({backgroundColor: '#ffffff'});
-    setRightFieldStyle({backgroundColor: '#ffffff'});
+    setLeftFieldStyle({ backgroundColor: '#ffffff' });
+    setRightFieldStyle({ backgroundColor: '#ffffff' });
     // TODO - find a place for this line. Not working here
     // what I don't get, is how the .disable-click persists?
     // document.querySelectorAll('.bubble').classList.remove('disable-click');
   }
-  
-  
+
   // =================================================
-  // When the round changes, generate a color round 
+  // When the round changes, generate a color round
   // =================================================
   useLayoutEffect(() => {
     generateColorRound();
-    setGameState('roundN')
-    console.log("🎡 Round updated. round: ",round)
-  }, [round])
-  
-   // =================================================
-   // Check the solution after every attempt
-   // =================================================
-   useEffect( () => {
+    setGameState('roundN');
+    console.log('🎡 Round updated. round: ', round);
+  }, [round]);
 
+  // =================================================
+  // Check the solution after every attempt
+  // =================================================
+  useEffect(() => {
     if (gameState === 'homeScreenPractice') {
-      console.log("🎬 practice round. keep making attempts")
-      return
+      console.log('🎬 practice round. keep making attempts');
+      return;
     }
     // Guard clause: return whe attempt resets to 0
-    if (attempt === 0 ) {
-      return
+    if (attempt === 0) {
+      return;
     }
-      let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-      let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-      let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-      let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-      let solutionColors = colorRound.solutionColors;
-    
-      // Not enough trys for solution
-      if (attempt === 1) {
-        console.log('👆 First guess.');
-        // correct
-      } else if (
-        solutionColors.includes(leftFieldHexColor) &&
-        solutionColors.includes(rightFieldHexColor) &&
-        // the colors can't be the same on either side
-        leftFieldHexColor !== rightFieldHexColor
-      ) {
-        setGameState('playerWins');
-        playerWins();
-    
-        // incorrect
-      } else {
-        playerMadeWrongGuess()
-      }
-  
-  }, [attempt])
+    let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+    let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+    let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+    let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+    let solutionColors = colorRound.solutionColors;
 
- 
-  function playerMadeWrongGuess() {
-    console.log("👎 wrong guess")
-    if (attempt < maxAttemptCount) {
-      console.log("player makes an other guess")
+    // Not enough trys for solution
+    if (attempt === 1) {
+      // correct
+    } else if (
+      solutionColors.includes(leftFieldHexColor) &&
+      solutionColors.includes(rightFieldHexColor) &&
+      // the colors can't be the same on either side
+      leftFieldHexColor !== rightFieldHexColor
+    ) {
+      setGameState('playerWins');
+      playerWins();
+
+      // incorrect
     } else {
-      console.log("😖 player out of guesses - show solution")
-      showSolution()
-      playerLoosesShowSolution()
+      playerMadeWrongGuess();
+    }
+  }, [attempt]);
+
+  function playerMadeWrongGuess() {
+    if (attempt < maxAttemptCount) {
+      console.log('player makes an other guess');
+    } else {
+      showSolution();
+      playerLoosesShowSolution();
     }
   }
 
@@ -195,36 +184,35 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWins() {
-    console.log("🦄 Player wins round");
+    console.log('🦄 Player wins round');
     setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
-    increasePlayerScore();    
+    increasePlayerScore();
     // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
       setUpRoundN();
     }, 3000);
-  };
+  }
 
-  useEffect( () => {
-    console.log("🎊 runRoundConfetti updates", runRoundConfetti )
-  }, [runRoundConfetti])
+  useEffect(() => {
+    console.log('🎊 runRoundConfetti updates', runRoundConfetti);
+  }, [runRoundConfetti]);
 
   //  ===================================
   //  Player Looses Round
   //  ===================================
   function playerLoosesShowSolution(maxLossCount) {
-    console.log('😭 player looses round');
     setGameState('playerLoosesShowSolution');
     playLoseSound();
     showSolution();
-    setLostRounds(lostRounds => lostRounds + 1);
+    setLostRounds((lostRounds) => lostRounds + 1);
   }
-  
+
   function showSolution() {
     setGameState('showSolution');
     console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
-    
+
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
       animation: 'fadein 1.25s',
@@ -235,27 +223,33 @@ export default function App(props) {
     });
   }
 
-
-  useEffect( () => {
+  useEffect(() => {
     // Do not transition if gameState is "homescreenpractice"
-    if (gameState === "homeScreenPractice") {return}
+    if (gameState === 'homeScreenPractice') {
+      return;
+    }
     // Do not transition if prevLostRounds is equal to lostRounds
-    if (prevLostRounds.current === lostRounds) {return}
-    // Player lost this round. 
+    if (prevLostRounds.current === lostRounds) {
+      return;
+    }
+    // Player lost this round.
     // Transition to either the next round or game over after X seconds
     setTimeout(function () {
-      console.log("prevLostRounds", prevLostRounds.current, "lostRounds:", lostRounds, "maxLossCount:", maxLossCount)
+      console.log(
+        'prevLostRounds',
+        prevLostRounds.current,
+        'lostRounds:',
+        lostRounds,
+        'maxLossCount:',
+        maxLossCount
+      );
       if (lostRounds < maxLossCount) {
-        console.log(`🌗 Set up next round`);
-        setUpRoundN()
+        setUpRoundN();
       } else if (lostRounds >= maxLossCount) {
-        console.log(`🌑 Transition to gameOver()`);
-        gameOver()
+        gameOver();
       }
     }, 2000);
-
-  }, [lostRounds])
-   
+  }, [lostRounds]);
 
   function gameOver() {
     setGameState('gameOver');
@@ -277,15 +271,14 @@ export default function App(props) {
 
       let leaderboardMembers = leaderboardData;
 
-     /*
+      /*
       What is smaller? 9 or the 'array length - 1'?
       Either pick the last item in the array, or the 10th item,
       whichever is smaller.
       We do this in case the array has fewer than 10 members.
       */
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
-      let lowestCurrentScore =
-        leaderboardMembers[lowestCurrentScoreIndex].score;
+      let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score;
       // let score = score;
 
       console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
@@ -294,7 +287,7 @@ export default function App(props) {
 
       if (score >= lowestCurrentScore) {
         console.log('score is higher than lowestCurrentScore');
-        joinLeaderboard()
+        joinLeaderboard();
       } else {
         console.log('score is lower than lowestCurrentScore');
       }
@@ -312,22 +305,23 @@ export default function App(props) {
     // POST a new leaderboard inductee, then GET the results again.
     // The leaderboard only shows the top 10 results,
     // so the new inductee will appear in the list
-    axiosPostNewLeaderboardInductee( () => {
+    axiosPostNewLeaderboardInductee(() => {
       // props.transition('FILLED_OUT_FORM')
-      console.log('🫒 displayLeaderboardForm: ', displayLeaderboardForm)
+      console.log('🫒 displayLeaderboardForm: ', displayLeaderboardForm);
       axiosGetAllLeaderboardResults();
-  
     });
   }
- 
+
   function generateColorRound() {
     // No need to generate colors for practice.
     // Practice colors are hard-coded
-    if (gameState === 'homeScreenPractice') {return}
-    console.log("🎨 generate color round. round:", round, gameState)
+    if (gameState === 'homeScreenPractice') {
+      return;
+    }
+    console.log('🎨 generate color round. round:', round, gameState);
     if (gameState !== 'homeScreenPractice') {
-      console.log('gameState isnt practice, right?', gameState)
-      setGameState('generateColorRound')
+      console.log('gameState isnt practice, right?', gameState);
+      setGameState('generateColorRound');
     }
     let soluColor1;
     let soluColor2;
@@ -351,11 +345,7 @@ export default function App(props) {
     while (colorLightness <= 30) {
       soluColor1 = chroma.random().hex();
       soluColor2 = chroma.random().hex();
-      targColor = chroma.blend(
-        chroma(soluColor1).hex(),
-        chroma(soluColor2).hex(),
-        'multiply'
-      );
+      targColor = chroma.blend(chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
       colorLightness = chroma(targColor).get('lab.l');
       // console.log('colorLightness: ', colorLightness)
     }
@@ -366,8 +356,8 @@ export default function App(props) {
       solutionColor1: soluColor1,
       solutionColor2: soluColor2,
       targetColor: targColor,
-      
-          /*
+
+      /*
           Only create enough wrongColors to fill in the
           color bubbles. For instance, the practice round only
           has two bubbles total (therefore no wrong colors 
@@ -376,16 +366,15 @@ export default function App(props) {
           generate a random 'wrong color' to push into
           getter methods are used to access the properties of an object
           */
-         get wrongColors() {
-           // first, empty the array of old colors
-           wrongColorsArray = [];
+      get wrongColors() {
+        // first, empty the array of old colors
+        wrongColorsArray = [];
 
-           let numWrongColors;
-           (round <= 6 ? numWrongColors = round: numWrongColors = 6);   
-           
+        let numWrongColors;
+        round <= 6 ? (numWrongColors = round) : (numWrongColors = 6);
+
         for (let i = numWrongColors; i > 0; i--) {
-
-        wrongColorsArray.push(chroma.random().hex());
+          wrongColorsArray.push(chroma.random().hex());
         }
         return wrongColorsArray;
       },
@@ -430,7 +419,6 @@ export default function App(props) {
   //  Click handler for the color bubbles at bottom of screen
   //  ===================================
   function bubbleClickHandler(event) {
-    
     /*
     guard clause to disable click handler if:
     1) the game is over,
@@ -438,18 +426,20 @@ export default function App(props) {
     3) player has won the round,
     4) player has lost the round
     */
-    if ((gameState === "gameOver") ||
-        (gameState === 'playerWins') ||
-        (gameState === 'setUpRoundN') || 
-        (attempt >= maxAttemptCount)) {
-          console.log("✋ click handler disabled")
-          // TODO: how to disable/change the hover effect
-          // Well, disabling is working, but removing the disabled
-          // effect is where I'm stuck
-          // document.getElementById(event.currentTarget.id).classList.add('disable-click');
-          return
-        }
-   
+    if (
+      gameState === 'gameOver' ||
+      gameState === 'playerWins' ||
+      gameState === 'setUpRoundN' ||
+      attempt >= maxAttemptCount
+    ) {
+      console.log('✋ click handler disabled');
+      // TODO: how to disable/change the hover effect
+      // Well, disabling is working, but removing the disabled
+      // effect is where I'm stuck
+      // document.getElementById(event.currentTarget.id).classList.add('disable-click');
+      return;
+    }
+
     // No need to increment attempts during practice
     if (gameState !== 'homeScreenPractice') {
       setAttempt(attempt + 1);
@@ -466,9 +456,7 @@ export default function App(props) {
     updateFieldColor(event.currentTarget.style.backgroundColor);
   }
 
-
-
-   /* 
+  /* 
    ============================================
    Hover handler for color bubbles - shows player which 
    field of the two fields is currently active.
@@ -507,7 +495,7 @@ export default function App(props) {
     }
   }
 
-   /* ====================================
+  /* ====================================
    Toggling between the left and right fields,
    to determine which one will get filled in with color.
    ==================================== */
@@ -524,21 +512,19 @@ export default function App(props) {
   function increasePlayerScore() {
     // Update previous score for react-countup
     // React-countup is the cute score incrementing animation
-    setPreviousScore(score)
+    setPreviousScore(score);
     if (attempt === 6) {
-      setScore(score => score + 1);
+      setScore((score) => score + 1);
     } else if (attempt === 5) {
-      setScore(score => score + 2);
+      setScore((score) => score + 2);
     } else if (attempt === 4) {
-      setScore(score => score + 3);
+      setScore((score) => score + 3);
     } else if (attempt === 3) {
-      setScore(score => score + 4);
+      setScore((score) => score + 4);
     } else if (attempt === 2) {
-      setScore(score => score + 6);
+      setScore((score) => score + 6);
     }
   }
-
-
 
   //  ==================================
   //  Filling in chosen color into left or right fields
@@ -554,9 +540,8 @@ export default function App(props) {
   }
 
   function endGameClickHandler() {
-    console.log("end game early")
-  } 
-  
+    console.log('end game early');
+  }
 
   /* 
   ==================================
@@ -567,8 +552,8 @@ export default function App(props) {
   So, set the state to the 'oposite' of what it is.
   ==================================
   */
- function soundButtonToggle() {
-   setIsAudioOn(!isAudioOn);
+  function soundButtonToggle() {
+    setIsAudioOn(!isAudioOn);
   }
 
   function beginRoundSound() {
@@ -586,7 +571,7 @@ export default function App(props) {
     There are two distinct bubble sounds: 
     One for the left, one for the right.
     */
-    
+
     // Guard clause if player has toggled sound to be off
     if (isAudioOn === false) return;
 
@@ -637,18 +622,19 @@ export default function App(props) {
   //  ==================================
 
   function axiosGetAllLeaderboardResults() {
-    axios.get(dataSource)
-      .then( (response) => {
+    axios
+      .get(dataSource)
+      .then((response) => {
         setLeaderboardData(response.data);
-        console.log('leaderboardData: ', leaderboardData);
+        // console.log('leaderboardData: ', leaderboardData);
       })
       .catch(function (error) {
         // If there's an error
         console.log('axiosGetAllLeaderboardResults() error:', error);
-        setLeaderboardServerDown(true)
+        setLeaderboardServerDown(true);
 
         if (leaderboardServerDown === true) {
-         console.log("leaderboard down")
+          console.log('leaderboard down');
         }
       });
   }
@@ -662,13 +648,9 @@ export default function App(props) {
     let trimmedString = string.substring(0, length) || 'Bob Sacamano';
 
     setNewLeaderboardInductee((trimmedString) => {
-      console.log("string:", string, "length:", length, "trimmedString:", trimmedString);
-      console.log(
-        'Posting new result. name: ',
-        newLeaderboardInductee,
-        'score: ',
-        score
-      );
+      // TODO: what's your plan for trimmedString?
+      console.log('string:', string, 'length:', length, 'trimmedString:', trimmedString);
+      console.log('Posting new result. name: ', newLeaderboardInductee, 'score: ', score);
     });
 
     axios
@@ -682,30 +664,24 @@ export default function App(props) {
       .then(() => {
         axiosGetAllLeaderboardResults();
       })
-      // .then(() => {
-      //   console.log('after axiosGetAllLeaderboardResults()');
-      //   // TODO: sarah what happens here?
-      // })
       .catch(function (error) {
-        console.log(error);
+        console.log('Axios post error: ', error);
       });
   }
 
   function handleChange(event) {
-    console.log('leaderboard form value:',  event.target.value)
-    setNewLeaderboardInductee(event.target.value) 
-    console.log('newLeaderboardInductee: ', newLeaderboardInductee)
+    console.log('leaderboard form value:', event.target.value);
+    setNewLeaderboardInductee(event.target.value);
+    console.log('newLeaderboardInductee: ', newLeaderboardInductee);
   }
-  
+
   function handleSubmit(event) {
     event.preventDefault();
     // handleChange(event.target.value);
-    leaderboardAPICall( () => {
+    leaderboardAPICall(() => {
       setDisplayLeaderboardForm(false);
     });
   }
-  
-
 
   // *****************************************************
   // *****************************************************
@@ -714,11 +690,10 @@ export default function App(props) {
 
   // Confetti falls accross whole window
   // even if window is resized
-  const { width, height } = useWindowSize()
+  const { width, height } = useWindowSize();
 
   return (
     <div className='outer-div'>
-
       <div className='win-round-confetti'>
         <Confetti
           width={width}
@@ -730,10 +705,10 @@ export default function App(props) {
           colors={colorRound.allColorBubbles}
           opacity={0.6}
           gravity={0.6}
-          // This resets confetti so it's ready to fall 
+          // This resets confetti so it's ready to fall
           // next time the user wins
-          onConfettiComplete={confetti => {
-            confetti.reset()
+          onConfettiComplete={(confetti) => {
+            confetti.reset();
           }}
         />
       </div>
@@ -748,93 +723,80 @@ export default function App(props) {
           tweenDuration={100}
           opacity={0.6}
           gravity={0.08}
-          />
+        />
       </div>
 
       <div className='twohue'>
-      <div className='gamefield-top'>
-      <aside className='left-side'>
-        <LeftSidebar
-          style={{ display: 'block', width: '100%' }}
-          gameState={gameState}
-          endGameClickHandler={endGameClickHandler}
-          gameOver={gameOver}
-          />
-      </aside>
-      <main>
-        <MessageBoard
-          gameState={gameState}
-          score={score}
-          />
-
-          <Leaderboard
-            gameState={gameState}
-            leaderboardData={leaderboardData}
-            score={score}
-            value={value}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            newLeaderboardInductee={newLeaderboardInductee}
-            loadingSpinner={loadingSpinner}
-          />
-
-        <div id='game-field'>
-          <GameField
-            gameState={gameState}
-            colorRound={colorRound}
-            currentField={currentField}
-            leftFieldStyle={leftFieldStyle}
-            rightFieldStyle={rightFieldStyle}
+        <div className='gamefield-top'>
+          <aside className='left-side'>
+            <LeftSidebar
+              style={{ display: 'block', width: '100%' }}
+              gameState={gameState}
+              endGameClickHandler={endGameClickHandler}
+              gameOver={gameOver}
             />
+          </aside>
+          <main>
+            <MessageBoard gameState={gameState} score={score} />
+
+            <Leaderboard
+              gameState={gameState}
+              leaderboardData={leaderboardData}
+              score={score}
+              value={value}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              newLeaderboardInductee={newLeaderboardInductee}
+              loadingSpinner={loadingSpinner}
+            />
+
+            <div id='game-field'>
+              <GameField
+                gameState={gameState}
+                colorRound={colorRound}
+                currentField={currentField}
+                leftFieldStyle={leftFieldStyle}
+                rightFieldStyle={rightFieldStyle}
+              />
+            </div>
+          </main>
+          <aside className='right-side'>
+            <RightSidebar
+              gameState={gameState}
+              round={round}
+              score={score}
+              attempt={attempt}
+              startGameClickHandler={startGameClickHandler}
+              maxLossCount={maxLossCount}
+              maxAttemptCount={maxAttemptCount}
+              lostRounds={lostRounds}
+              previousScore={previousScore}
+              setPreviousScore={setPreviousScore}
+              beginRoundSound={beginRoundSound}
+            />
+          </aside>
         </div>
 
-      </main>
-      <aside className='right-side'>
-        <RightSidebar
-          gameState={gameState}
-          round={round}
-          score={score}
-          attempt={attempt}
-          startGameClickHandler={startGameClickHandler}
-          maxLossCount={maxLossCount}
-          maxAttemptCount={maxAttemptCount}
-          lostRounds={lostRounds}
-          previousScore={previousScore}
-          setPreviousScore={setPreviousScore}
-          beginRoundSound={beginRoundSound}
-        />
-      </aside>
-
-    </div>
-
-    {(gameState !== 'joinLeaderboard' &&
-      gameState !== 'leaderboard' &&
-      gameState !== 'gameOver') &&
-    
-    <div 
-      className='gamefield-bottom'
-      style={{ display: 'block'}}
-      >
-        <ColorBubbleTray
-          gameState={gameState}
-          allColorBubbles={allColorBubbles}
-          currentField={currentField}
-          currentFieldMouseEnter={currentFieldMouseEnter}
-          currentFieldMouseLeave={currentFieldMouseLeave}
-          bubbleClickHandler={bubbleClickHandler}
-          />
-    </div>
-   }
-   <div style={{display: 'flex', flexGrow: '1'}}> 
-   </div>
+        {gameState !== 'joinLeaderboard' &&
+          gameState !== 'leaderboard' &&
+          gameState !== 'gameOver' && (
+            <div className='gamefield-bottom' style={{ display: 'block' }}>
+              <ColorBubbleTray
+                gameState={gameState}
+                allColorBubbles={allColorBubbles}
+                currentField={currentField}
+                currentFieldMouseEnter={currentFieldMouseEnter}
+                currentFieldMouseLeave={currentFieldMouseLeave}
+                bubbleClickHandler={bubbleClickHandler}
+              />
+            </div>
+          )}
+        <div style={{ display: 'flex', flexGrow: '1' }}></div>
         <footer>
           <Byline />
-          <AudioToggle
-            soundButtonToggle={soundButtonToggle}
-            isAudioOn={isAudioOn}
-            />
+          <AudioToggle soundButtonToggle={soundButtonToggle} isAudioOn={isAudioOn} />
         </footer>
-    </div>
+      </div>
     </div>
   );
 }
