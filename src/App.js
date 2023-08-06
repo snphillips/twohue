@@ -11,12 +11,11 @@ import ColorBubbleTray from './components/gameboard/ColorBubbleTray';
 import MessageBoard from './components/gameboard/MessageBoard';
 import Leaderboard from './components/gameboard/Leaderboard';
 import useWindowSize from 'react-use/lib/useWindowSize';
-import { GridLoader } from 'react-spinners';
 import RightSidebar from './components/rightsidebar/RightSidebar';
 
 // Leave both server addresses here in case you want to switch
-let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
-// let dataSource = 'http://localhost:3001/players';
+// let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
@@ -75,7 +74,7 @@ export default function App(props) {
   }, []);
 
   function initializeGame() {
-    console.log('🪄 initializeGame() hello player');
+    // console.log('🪄 initializeGame() hello player');
   }
 
   function homeScreenPractice() {
@@ -96,7 +95,7 @@ export default function App(props) {
 
     if (gameState === 'setUpRoundN') {
       setRound((round) => round + 1);
-      console.log('+ 1 increment round');
+      // console.log('+ 1 increment round');
     }
   }, [gameState]);
 
@@ -110,11 +109,11 @@ export default function App(props) {
     setPreviousScore(0);
     setScore(0);
     setUpRoundN();
-    console.log('🏁 start game click handler', round);
+    // console.log('🏁 start game click handler', round);
   }
 
   function setUpRoundN() {
-    console.log('🚜 setUpRoundN');
+    // console.log('🚜 setUpRoundN');
     setRunRoundConfetti(false);
     setGameState('setUpRoundN');
     beginRoundSound();
@@ -132,7 +131,7 @@ export default function App(props) {
   useLayoutEffect(() => {
     generateColorRound();
     setGameState('roundN');
-    console.log('🎡 Round updated. round: ', round);
+    // console.log('🎡 Round updated. round: ', round);
   }, [round]);
 
   // =================================================
@@ -140,7 +139,7 @@ export default function App(props) {
   // =================================================
   useEffect(() => {
     if (gameState === 'homeScreenPractice') {
-      console.log('🎬 practice round. keep making attempts');
+      // console.log('🎬 practice round. keep making attempts');
       return;
     }
     // Guard clause: return whe attempt resets to 0
@@ -173,7 +172,7 @@ export default function App(props) {
 
   function playerMadeWrongGuess() {
     if (attempt < maxAttemptCount) {
-      console.log('player makes an other guess');
+      // console.log('player makes an other guess');
     } else {
       showSolution();
       playerLoosesShowSolution();
@@ -184,7 +183,7 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWins() {
-    console.log('🦄 Player wins round');
+    // console.log('🦄 Player wins round');
     setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
@@ -279,7 +278,7 @@ export default function App(props) {
       */
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
       let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score;
-      // let score = score;
+      let score = score;
 
       console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
       console.log('lowestLeaderBoard score:', lowestCurrentScore);
@@ -292,7 +291,7 @@ export default function App(props) {
         console.log('score is lower than lowestCurrentScore');
       }
     };
-    evaluateIfLeaderboardMaterial();
+    evaluateIfLeaderboardMaterial(score);
   }
 
   function joinLeaderboard() {
@@ -626,16 +625,11 @@ export default function App(props) {
       .get(dataSource)
       .then((response) => {
         setLeaderboardData(response.data);
-        // console.log('leaderboardData: ', leaderboardData);
       })
       .catch(function (error) {
-        // If there's an error
         console.log('axiosGetAllLeaderboardResults() error:', error);
         setLeaderboardServerDown(true);
-
-        if (leaderboardServerDown === true) {
-          console.log('leaderboard down');
-        }
+        console.log('🥺 leaderboard down');
       });
   }
 
