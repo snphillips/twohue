@@ -1,23 +1,23 @@
 import React from 'react';
 
-export default function StartButtons(props) {
+export default function StartButtons({ gameState, startGameClickHandler }) {
   return (
     <section className='start-buttons'>
-      {props.gameState === 'homeScreenPractice' && (
+      {gameState === 'homeScreenPractice' && (
         <button
           className='start-button'
           onClick={() => {
-            props.startGameClickHandler(() => {});
+            startGameClickHandler(() => {});
           }}
         >
           start
         </button>
       )}
-      {(props.gameState === 'gameOver' || props.gameState === 'joinLeaderboard') && (
+      {(gameState === 'gameOver' || gameState === 'joinLeaderboard') && (
         <button
           className='play-again-button'
           onClick={() => {
-            props.startGameClickHandler(() => {});
+            startGameClickHandler(() => {});
           }}
         >
           play again

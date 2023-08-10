@@ -13,7 +13,7 @@ homeScreenPractice or showSolution
 ==================================
 */
 
-export default function MessageBoard(props) {
+export default function MessageBoard({ gameState, score, displaySolution }) {
   return (
     <section
       className='message-board'
@@ -22,23 +22,23 @@ export default function MessageBoard(props) {
         height: '3rem',
       }}
     >
-      {props.gameState === 'homeScreenPractice' && (
+      {gameState === 'homeScreenPractice' && (
         <div className='into-message'>
           <p>Twohue is a color mixing game.</p>
           <p>Practice clicking bubbles before playing.</p>
         </div>
       )}
 
-      {(props.gameState === 'gameOver' ||
-        props.gameState === 'leaderboard' ||
-        props.gameState === 'joinLeaderboard') && (
+      {(gameState === 'gameOver' ||
+        gameState === 'leaderboard' ||
+        gameState === 'joinLeaderboard') && (
         <div className='game-over-message'>
           <p id='game-over'>game over</p>
-          <p id='game-over-score'>final score: {props.score}</p>
+          <p id='game-over-score'>final score: {score}</p>
         </div>
       )}
 
-      {props.displaySolution && <p className='solution-label'>Solution</p>}
+      {displaySolution && <p className='solution-label'>Solution</p>}
     </section>
   );
 }
