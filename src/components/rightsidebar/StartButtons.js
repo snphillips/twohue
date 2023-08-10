@@ -1,5 +1,7 @@
 import React from 'react';
 
+// TODO: reuse the same button. No need for two
+
 export default function StartButtons({ gameState, startGameClickHandler }) {
   return (
     <section className='start-buttons'>
@@ -15,7 +17,7 @@ export default function StartButtons({ gameState, startGameClickHandler }) {
       )}
       {(gameState === 'gameOver' || gameState === 'joinLeaderboard') && (
         <button
-          className='play-again-button'
+          // className='play-again-button'
           onClick={() => {
             startGameClickHandler(() => {});
           }}

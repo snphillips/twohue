@@ -1,17 +1,14 @@
-import React from "react";
+import React from 'react';
 
-export default function Byline(props) {
+export default function Byline() {
   return (
-    <div className="byline">
-      <a className="footer-link" href="https://sarahphillipsdev.surge.sh/">
-        by Sarah Phillips{" "}
+    <div className='byline'>
+      <a className='footer-link' href='https://sarahphillipsdev.surge.sh/'>
+        by Sarah Phillips{' '}
       </a>
 
-      <a
-        className="footer-link"
-        href="https://github.com/snphillips/twohue-state-chart"
-      >
-        <i className="fa fa-github" aria-hidden="true"></i>
+      <a className='footer-link' href='https://github.com/snphillips/twohue-state-chart'>
+        <i className='fa fa-github' aria-hidden='true'></i>
       </a>
     </div>
   );
