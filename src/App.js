@@ -210,7 +210,7 @@ export default function App(props) {
 
   function showSolution() {
     setGameState('showSolution');
-    console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
+    // console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
 
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
@@ -234,14 +234,14 @@ export default function App(props) {
     // Player lost this round.
     // Transition to either the next round or game over after X seconds
     setTimeout(function () {
-      console.log(
-        'prevLostRounds',
-        prevLostRounds.current,
-        'lostRounds:',
-        lostRounds,
-        'maxLossCount:',
-        maxLossCount
-      );
+      // console.log(
+      //   'prevLostRounds',
+      //   prevLostRounds.current,
+      //   'lostRounds:',
+      //   lostRounds,
+      //   'maxLossCount:',
+      //   maxLossCount
+      // );
       if (lostRounds < maxLossCount) {
         setUpRoundN();
       } else if (lostRounds >= maxLossCount) {
@@ -261,6 +261,8 @@ export default function App(props) {
   function gameOverTransition() {
     if (leaderboardServerDown === true) {
       console.log('🚨 leaderboard is not available');
+      // TODO: hide high scores heading
+      // move play again button to center of screen
     }
 
     let evaluateIfLeaderboardMaterial = () => {
@@ -278,17 +280,17 @@ export default function App(props) {
       */
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
       let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score;
-      let score = score;
+      // let score = score;
 
       console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
       console.log('lowestLeaderBoard score:', lowestCurrentScore);
       console.log('current score:', score);
 
       if (score >= lowestCurrentScore) {
-        console.log('score is higher than lowestCurrentScore');
+        console.log(`score: ${score} is higher than lowestCurrentScore: ${lowestCurrentScore}`);
         joinLeaderboard();
       } else {
-        console.log('score is lower than lowestCurrentScore');
+        console.log(`score: ${score} is lower than lowestCurrentScore: ${lowestCurrentScore}`);
       }
     };
     evaluateIfLeaderboardMaterial(score);
@@ -306,7 +308,7 @@ export default function App(props) {
     // so the new inductee will appear in the list
     axiosPostNewLeaderboardInductee(() => {
       // props.transition('FILLED_OUT_FORM')
-      console.log('🫒 displayLeaderboardForm: ', displayLeaderboardForm);
+      console.log('displayLeaderboardForm: ', displayLeaderboardForm);
       axiosGetAllLeaderboardResults();
     });
   }
@@ -317,9 +319,9 @@ export default function App(props) {
     if (gameState === 'homeScreenPractice') {
       return;
     }
-    console.log('🎨 generate color round. round:', round, gameState);
+    // console.log('🎨 generate color round. round:', round, gameState);
     if (gameState !== 'homeScreenPractice') {
-      console.log('gameState isnt practice, right?', gameState);
+      // console.log('gameState isnt practice, right?', gameState);
       setGameState('generateColorRound');
     }
     let soluColor1;
@@ -431,7 +433,7 @@ export default function App(props) {
       gameState === 'setUpRoundN' ||
       attempt >= maxAttemptCount
     ) {
-      console.log('✋ click handler disabled');
+      // console.log('✋ click handler disabled');
       // TODO: how to disable/change the hover effect
       // Well, disabling is working, but removing the disabled
       // effect is where I'm stuck
@@ -539,7 +541,7 @@ export default function App(props) {
   }
 
   function endGameClickHandler() {
-    console.log('end game early');
+    // console.log('end game early');
   }
 
   /* 
@@ -742,6 +744,7 @@ export default function App(props) {
               handleSubmit={handleSubmit}
               newLeaderboardInductee={newLeaderboardInductee}
               loadingSpinner={loadingSpinner}
+              leaderboardServerDown={leaderboardServerDown}
             />
 
             <div id='game-field'>

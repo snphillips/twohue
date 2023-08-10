@@ -1,7 +1,7 @@
-import React from "react";
-import LeaderboardForm from "./LeaderboardForm";
+import React from 'react';
+import LeaderboardForm from './LeaderboardForm';
 // the spinner in a dependency
-import ReactSpinners from "../ReactSpinners";
+import ReactSpinners from '../ReactSpinners';
 
 /*
 ========================
@@ -14,54 +14,55 @@ The leaderboard form is only displayed if the player's score is
 equal to, or more than the last person in the list.
 
 If for some reason the leaderboard doesn't load due to
-a server error, the leaderboard donesn't display.
+a server error, the leaderboard doesn't display.
 ========================
 */
 
-export default function Leaderboard(props) {
+export default function Leaderboard({
+  leaderboardServerDown,
+  gameState,
+  leaderboardData,
+  handleChange,
+  handleSubmit,
+  newLeaderboardInductee,
+  loadingSpinner,
+}) {
+  return (
+    <div>
+      {leaderboardServerDown !== true &&
+        (gameState === 'joinLeaderboard' || gameState === 'gameOver') && (
+          <div id='leaderboard-component'>
+            <div className='leaderboard-title'>high scores</div>
 
-    return (
-      <div>
-      {(props.gameState === 'joinLeaderboard' ||
-       props.gameState === 'gameOver') &&
+            <ul className='leaderboard-list'>
+              {leaderboardData.map((item) => {
+                let playerIndex = leaderboardData.indexOf(item);
 
-        <div id="leaderboard-component">
-        
-          <div className="leaderboard-title">high scores</div>
+                return (
+                  <li
+                    key={playerIndex}
+                    className='leaderboard-entry'
+                    id={'leaderboard-entry' + playerIndex}
+                  >
+                    <span className='player-rank'>{item.player}</span>
+                    <span className='player-score'>{item.score}</span>
+                  </li>
+                );
+              })}
+            </ul>
 
-          <ul className="leaderboard-list">
-            {props.leaderboardData.map((item) => {
-              let playerIndex = props.leaderboardData.indexOf(item);
+            <div className='lederboard-form-placeholder'>
+              <LeaderboardForm
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                newLeaderboardInductee={newLeaderboardInductee}
+                gameState={gameState}
+              />
 
-              return (
-                <li
-                  key={playerIndex}
-                  className="leaderboard-entry"
-                  id={"leaderboard-entry" + playerIndex}
-                >
-                  <span className="player-rank">
-                    {item.player}
-                  </span>
-                  <span className="player-score">{item.score}</span>
-                </li>
-              );
-            })}
-          </ul>
-
-        <div className="lederboard-form-placeholder">
-
-            <LeaderboardForm
-              handleChange={props.handleChange}
-              handleSubmit={props.handleSubmit}
-              newLeaderboardInductee={props.newLeaderboardInductee}
-              gameState={props.gameState}
-            />
-
-            <ReactSpinners loadingSpinner={props.loadingSpinner} />
-        </div>
-      </div>
-      }
+              <ReactSpinners loadingSpinner={loadingSpinner} />
+            </div>
+          </div>
+        )}
     </div>
-    );
+  );
 }
-
