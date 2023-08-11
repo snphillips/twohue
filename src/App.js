@@ -85,7 +85,7 @@ export default function App(props) {
   }
 
   useEffect(() => {
-    // keep this for development
+    // keep for development
     // console.log('🚥 gameState is:', gameState)
 
     if (gameState === 'setUpRoundN') {
@@ -112,15 +112,113 @@ export default function App(props) {
     setAttempt(0);
     setLeftFieldStyle({ backgroundColor: '#ffffff' });
     setRightFieldStyle({ backgroundColor: '#ffffff' });
-    // TODO - find a place for this line. Not working here
-    // what I don't get, is how the .disable-click persists?
-    // document.querySelectorAll('.bubble').classList.remove('disable-click');
   }
 
   // =================================================
   // When the round changes, generate a color round
   // =================================================
+  // TODO: we need to use useLayoutEffect to display the practice round
+  // but I forgot why this is the case
   useLayoutEffect(() => {
+    const generateColorRound = () => {
+      // No need to generate colors for practice
+      // Practice colors are hard-coded
+      if (gameState === 'homeScreenPractice') {
+        return;
+      }
+      if (gameState !== 'homeScreenPractice') {
+        setGameState('generateColorRound');
+      }
+      let soluColor1;
+      let soluColor2;
+      let targColor;
+      let colorLightness = 29;
+      let wrongColorsArray = [];
+
+      /* 
+        =============================
+        If the target color is too dark (like blackish),
+        the round is nearly impossible to play.
+        To solve this problem, we're not allowing rounds with 
+        a very dark target color.
+        
+        Use a while-loop to generate solution & target
+        colors. Keep looping until it finds a solution
+        that ISN'T too dark. We're using Chroma.js's .get('lab.l')
+        to determine lightness.
+        ============================= 
+        */
+      while (colorLightness <= 30) {
+        soluColor1 = chroma.random().hex();
+        soluColor2 = chroma.random().hex();
+        targColor = chroma.blend(chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
+        colorLightness = chroma(targColor).get('lab.l');
+      }
+
+      // ~~~~~~~~~~~~~~~~~~~~~~~~
+      // ~~~~~~~~~~~~~~~~~~~~~~~~
+      let newColorRound = {
+        solutionColor1: soluColor1,
+        solutionColor2: soluColor2,
+        targetColor: targColor,
+
+        /*
+              Only create enough wrongColors to fill in the
+              color bubbles. For instance, the practice round only
+              has two bubbles total (therefore no wrong colors 
+              are needed).
+              numWrongColors tells us how many times we
+              generate a random 'wrong color' to push into
+              getter methods are used to access the properties of an object
+              */
+        get wrongColors() {
+          // first, empty the array of old colors
+          wrongColorsArray = [];
+
+          let numWrongColors;
+          round <= 6 ? (numWrongColors = round) : (numWrongColors = 6);
+
+          for (let i = numWrongColors; i > 0; i--) {
+            wrongColorsArray.push(chroma.random().hex());
+          }
+          return wrongColorsArray;
+        },
+
+        get solutionColors() {
+          return [
+            chroma(newColorRound.solutionColor1).hex(),
+            chroma(newColorRound.solutionColor2).hex(),
+          ];
+        },
+
+        // Mix all the color bubbles together
+        get allColorBubbles() {
+          // The concat() method merges two or more arrays.
+          // This method does not change the existing arrays,
+          // but instead returns a new array.
+          // We're merging solutionColors & wrongColors
+          return newColorRound.solutionColors.concat(newColorRound.wrongColors);
+        },
+      };
+      // ~~~~~~~~~~~~~~~~~~~~~~~~
+      // ~~~~~~~~~~~~~~~~~~~~~~~~
+
+      // The function that shuffles the allColorBubbles bubbles
+      // so the first two bubbles aren't always the solution
+      let shuffleColors = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * i);
+          const temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+        }
+        setAllColorBubbles(array);
+      };
+
+      shuffleColors(newColorRound.allColorBubbles);
+      setColorRound(newColorRound);
+    };
+
     generateColorRound();
     setGameState('roundN');
   }, [round]);
@@ -148,7 +246,7 @@ export default function App(props) {
     } else if (
       solutionColors.includes(leftFieldHexColor) &&
       solutionColors.includes(rightFieldHexColor) &&
-      // the colors can't be the same on either side
+      // The colors can't be the same on either side
       leftFieldHexColor !== rightFieldHexColor
     ) {
       setGameState('playerWins');
@@ -183,6 +281,7 @@ export default function App(props) {
   }
 
   useEffect(() => {
+    // Keep while working on confetti
     console.log('🎊 runRoundConfetti updates', runRoundConfetti);
   }, [runRoundConfetti]);
 
@@ -210,7 +309,8 @@ export default function App(props) {
   }
 
   useEffect(() => {
-    // Do not transition if gameState is "homescreenpractice"
+    // Do not transition to next round or gave over
+    // if gameState is "homescreenpractice"
     if (gameState === 'homeScreenPractice') {
       return;
     }
@@ -221,14 +321,6 @@ export default function App(props) {
     // Player lost this round.
     // Transition to either the next round or game over after X seconds
     setTimeout(function () {
-      // console.log(
-      //   'prevLostRounds',
-      //   prevLostRounds.current,
-      //   'lostRounds:',
-      //   lostRounds,
-      //   'maxLossCount:',
-      //   maxLossCount
-      // );
       if (lostRounds < maxLossCount) {
         setUpRoundN();
       } else if (lostRounds >= maxLossCount) {
@@ -283,7 +375,6 @@ export default function App(props) {
   }
 
   function joinLeaderboard() {
-    // setDisplayGameField(false);
     setGameState('joinLeaderboard');
     setNewLeaderboardInductee('');
   }
@@ -297,106 +388,6 @@ export default function App(props) {
       console.log('displayLeaderboardForm: ', displayLeaderboardForm);
       axiosGetAllLeaderboardResults();
     });
-  }
-
-  function generateColorRound() {
-    // No need to generate colors for practice
-    // Practice colors are hard-coded
-    if (gameState === 'homeScreenPractice') {
-      return;
-    }
-    if (gameState !== 'homeScreenPractice') {
-      setGameState('generateColorRound');
-    }
-    let soluColor1;
-    let soluColor2;
-    let targColor;
-    let colorLightness = 29;
-    let wrongColorsArray = [];
-
-    /* 
-    =============================
-    If the target color is too dark (like blackish),
-    the round is nearly impossible to play.
-    To solve this problem, we're not allowing rounds with 
-    a very dark target color.
-    
-    Use a while-loop to generate solution & target
-    colors. Keep looping until it finds a solution
-    that ISN'T too dark. We're using Chroma.js's .get('lab.l')
-    to determine lightness.
-    ============================= 
-    */
-    while (colorLightness <= 30) {
-      soluColor1 = chroma.random().hex();
-      soluColor2 = chroma.random().hex();
-      targColor = chroma.blend(chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
-      colorLightness = chroma(targColor).get('lab.l');
-    }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    let newColorRound = {
-      solutionColor1: soluColor1,
-      solutionColor2: soluColor2,
-      targetColor: targColor,
-
-      /*
-          Only create enough wrongColors to fill in the
-          color bubbles. For instance, the practice round only
-          has two bubbles total (therefore no wrong colors 
-          are needed).
-          numWrongColors tells us how many times we
-          generate a random 'wrong color' to push into
-          getter methods are used to access the properties of an object
-          */
-      get wrongColors() {
-        // first, empty the array of old colors
-        wrongColorsArray = [];
-
-        let numWrongColors;
-        round <= 6 ? (numWrongColors = round) : (numWrongColors = 6);
-
-        for (let i = numWrongColors; i > 0; i--) {
-          wrongColorsArray.push(chroma.random().hex());
-        }
-        return wrongColorsArray;
-      },
-
-      get solutionColors() {
-        return [
-          chroma(newColorRound.solutionColor1).hex(),
-          chroma(newColorRound.solutionColor2).hex(),
-        ];
-      },
-
-      // Mix all the color bubbles together
-      get allColorBubbles() {
-        // The concat() method merges two or more arrays.
-        // This method does not change the existing arrays,
-        // but instead returns a new array.
-        // We're merging solutionColors & wrongColors
-        return newColorRound.solutionColors.concat(newColorRound.wrongColors);
-      },
-    };
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    // The function that shuffles the allColorBubbles bubbles
-    // so the first two bubbles aren't always the solution
-    let shuffleColors = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * i);
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-      setAllColorBubbles(array);
-    };
-
-    shuffleColors(newColorRound.allColorBubbles);
-    setColorRound(newColorRound);
-    // setWrongColors(wrongColorsArray);
   }
 
   //  ===================================
@@ -613,13 +604,8 @@ export default function App(props) {
   function axiosPostNewLeaderboardInductee() {
     let string = newLeaderboardInductee;
     let length = 12;
-    let trimmedString = string.substring(0, length) || 'Bob Sacamano';
-
-    // setNewLeaderboardInductee((trimmedString) => {
     //   // TODO: what's your plan for trimmedString?
-    //   console.log('string:', string, 'length:', length, 'trimmedString:', trimmedString);
-    //   console.log('Posting new result. name: ', newLeaderboardInductee, 'score: ', score);
-    // });
+    let trimmedString = string.substring(0, length) || 'Bob Sacamano';
 
     axios
       .post(dataSource, {
