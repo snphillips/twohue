@@ -14,8 +14,8 @@ import useWindowSize from 'react-use/lib/useWindowSize';
 import RightSidebar from './components/rightsidebar/RightSidebar';
 
 // Leave both server addresses here in case you want to switch
-// let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
-let dataSource = 'http://localhost:3001/players';
+let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+// let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
@@ -55,7 +55,7 @@ export default function App(props) {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
 
   // ***********************************
-  // Here's where the app begins.
+  // App begins here
   // Run this only on first render (as evidenced by empty array)
   // ***********************************
   useEffect(() => {
@@ -69,16 +69,11 @@ export default function App(props) {
     }
     setGameState('homeScreenPractice');
     axiosGetAllLeaderboardResults();
-    initializeGame();
     homeScreenPractice();
   }, []);
 
-  function initializeGame() {
-    // console.log('🪄 initializeGame() hello player');
-  }
-
   function homeScreenPractice() {
-    // Hard code practice colors
+    // Hard coded practice colors
     setColorRound({
       solutionColor1: '#8cb5ef',
       solutionColor2: '#d79fb3',
@@ -95,7 +90,6 @@ export default function App(props) {
 
     if (gameState === 'setUpRoundN') {
       setRound((round) => round + 1);
-      // console.log('+ 1 increment round');
     }
   }, [gameState]);
 
@@ -109,11 +103,9 @@ export default function App(props) {
     setPreviousScore(0);
     setScore(0);
     setUpRoundN();
-    // console.log('🏁 start game click handler', round);
   }
 
   function setUpRoundN() {
-    // console.log('🚜 setUpRoundN');
     setRunRoundConfetti(false);
     setGameState('setUpRoundN');
     beginRoundSound();
@@ -131,7 +123,6 @@ export default function App(props) {
   useLayoutEffect(() => {
     generateColorRound();
     setGameState('roundN');
-    // console.log('🎡 Round updated. round: ', round);
   }, [round]);
 
   // =================================================
@@ -139,7 +130,6 @@ export default function App(props) {
   // =================================================
   useEffect(() => {
     if (gameState === 'homeScreenPractice') {
-      // console.log('🎬 practice round. keep making attempts');
       return;
     }
     // Guard clause: return whe attempt resets to 0
@@ -152,7 +142,7 @@ export default function App(props) {
     let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
     let solutionColors = colorRound.solutionColors;
 
-    // Not enough trys for solution
+    // Not enough attempts for a solution
     if (attempt === 1) {
       // correct
     } else if (
@@ -172,7 +162,6 @@ export default function App(props) {
 
   function playerMadeWrongGuess() {
     if (attempt < maxAttemptCount) {
-      // console.log('player makes an other guess');
     } else {
       showSolution();
       playerLoosesShowSolution();
@@ -183,7 +172,6 @@ export default function App(props) {
   //  Player Wins Round
   //  ===================================
   function playerWins() {
-    // console.log('🦄 Player wins round');
     setGameState('playerWins');
     setRunRoundConfetti(true);
     playWinSound();
@@ -210,7 +198,6 @@ export default function App(props) {
 
   function showSolution() {
     setGameState('showSolution');
-    // console.log('showSolution', colorRound.solutionColor1, colorRound.solutionColor2);
 
     setLeftFieldStyle({
       backgroundColor: colorRound.solutionColor1,
@@ -280,7 +267,6 @@ export default function App(props) {
       */
       let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
       let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score;
-      // let score = score;
 
       console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
       console.log('lowestLeaderBoard score:', lowestCurrentScore);
@@ -314,14 +300,12 @@ export default function App(props) {
   }
 
   function generateColorRound() {
-    // No need to generate colors for practice.
+    // No need to generate colors for practice
     // Practice colors are hard-coded
     if (gameState === 'homeScreenPractice') {
       return;
     }
-    // console.log('🎨 generate color round. round:', round, gameState);
     if (gameState !== 'homeScreenPractice') {
-      // console.log('gameState isnt practice, right?', gameState);
       setGameState('generateColorRound');
     }
     let soluColor1;
@@ -337,7 +321,7 @@ export default function App(props) {
     To solve this problem, we're not allowing rounds with 
     a very dark target color.
     
-    Use a while-loop to genereate solution & target
+    Use a while-loop to generate solution & target
     colors. Keep looping until it finds a solution
     that ISN'T too dark. We're using Chroma.js's .get('lab.l')
     to determine lightness.
@@ -348,7 +332,6 @@ export default function App(props) {
       soluColor2 = chroma.random().hex();
       targColor = chroma.blend(chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
       colorLightness = chroma(targColor).get('lab.l');
-      // console.log('colorLightness: ', colorLightness)
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -433,15 +416,8 @@ export default function App(props) {
       gameState === 'setUpRoundN' ||
       attempt >= maxAttemptCount
     ) {
-      // console.log('✋ click handler disabled');
-      // TODO: how to disable/change the hover effect
-      // Well, disabling is working, but removing the disabled
-      // effect is where I'm stuck
-      // document.getElementById(event.currentTarget.id).classList.add('disable-click');
       return;
     }
-
-    // No need to increment attempts during practice
     if (gameState !== 'homeScreenPractice') {
       setAttempt(attempt + 1);
     }
@@ -540,17 +516,13 @@ export default function App(props) {
     }
   }
 
-  function endGameClickHandler() {
-    // console.log('end game early');
-  }
-
   /* 
   ==================================
   🎶 audio button switch toggle
   if audio is on the state of isAudioOn is true,
   if audio is off the state of isAudioOn is false,
-  the ! is the oposite of what it currently is.
-  So, set the state to the 'oposite' of what it is.
+  the ! is the opposite of what it currently is.
+  So, set the state to the 'opposite' of what it is.
   ==================================
   */
   function soundButtonToggle() {
@@ -629,9 +601,9 @@ export default function App(props) {
         setLeaderboardData(response.data);
       })
       .catch(function (error) {
+        console.log('🥺 leaderboard unavailable');
         console.log('axiosGetAllLeaderboardResults() error:', error);
         setLeaderboardServerDown(true);
-        console.log('🥺 leaderboard down');
       });
   }
 
@@ -643,11 +615,11 @@ export default function App(props) {
     let length = 12;
     let trimmedString = string.substring(0, length) || 'Bob Sacamano';
 
-    setNewLeaderboardInductee((trimmedString) => {
-      // TODO: what's your plan for trimmedString?
-      console.log('string:', string, 'length:', length, 'trimmedString:', trimmedString);
-      console.log('Posting new result. name: ', newLeaderboardInductee, 'score: ', score);
-    });
+    // setNewLeaderboardInductee((trimmedString) => {
+    //   // TODO: what's your plan for trimmedString?
+    //   console.log('string:', string, 'length:', length, 'trimmedString:', trimmedString);
+    //   console.log('Posting new result. name: ', newLeaderboardInductee, 'score: ', score);
+    // });
 
     axios
       .post(dataSource, {
@@ -684,7 +656,7 @@ export default function App(props) {
   // *****************************************************
   // *****************************************************
 
-  // Confetti falls accross whole window
+  // Confetti falls across whole window
   // even if window is resized
   const { width, height } = useWindowSize();
 
@@ -728,7 +700,6 @@ export default function App(props) {
             <LeftSidebar
               style={{ display: 'block', width: '100%' }}
               gameState={gameState}
-              endGameClickHandler={endGameClickHandler}
               gameOver={gameOver}
             />
           </aside>
