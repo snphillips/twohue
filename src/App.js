@@ -33,7 +33,7 @@ export default function App(props) {
   const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
-  const [runGameOverConfetti, setrunGameOverConfetti] = useState(false);
+  const [runGameOverConfetti, setRunGameOverConfetti] = useState(false);
   const [displayLeaderboardForm, setDisplayLeaderboardForm] = useState(true);
   const [round, setRound] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -277,7 +277,7 @@ export default function App(props) {
     // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
       setUpRoundN();
-    }, 3000);
+    }, 2000);
   }
 
   useEffect(() => {
@@ -308,6 +308,14 @@ export default function App(props) {
     });
   }
 
+  function gameOver() {
+    setGameState('gameOver');
+    gameOverChimes();
+    setRunGameOverConfetti(true);
+    setConfettiRecycle(true);
+    gameOverTransition();
+  }
+
   useEffect(() => {
     // Do not transition to next round or gave over
     // if gameState is "homescreenpractice"
@@ -328,14 +336,6 @@ export default function App(props) {
       }
     }, 2000);
   }, [lostRounds]);
-
-  function gameOver() {
-    setGameState('gameOver');
-    gameOverChimes();
-    setrunGameOverConfetti(true);
-    setConfettiRecycle(true);
-    gameOverTransition();
-  }
 
   function gameOverTransition() {
     if (leaderboardServerDown === true) {
