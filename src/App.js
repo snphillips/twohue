@@ -22,15 +22,6 @@ let maxAttemptCount = 6;
 let value;
 
 export default function App(props) {
-  // ====================================
-  // gameStates
-  // Lots of the game logic depend gamestate (a useState)
-  // ====================================
-  // 'homeScreenPractice'  'setUpRoundN', 'generateColorRound',
-  // 'roundN', 'playerWins', 'playerLoosesShowSolution',
-  // 'gameOver', 'joinLeaderboard',
-
-  const [gameState, setGameState] = useState('homeScreenPractice');
   const [confettiRecycle, setConfettiRecycle] = useState(false);
   const [runRoundConfetti, setRunRoundConfetti] = useState(false);
   const [runGameOverConfetti, setRunGameOverConfetti] = useState(false);
@@ -53,6 +44,19 @@ export default function App(props) {
   const [previousScore, setPreviousScore] = useState(0);
   // have to insert this during leaderboard api calls
   const [loadingSpinner, setLoadingSpinner] = useState(false);
+  const [gameState, setGameState] = useState('homeScreenPractice');
+  // Lots of the game logic depend gameState
+  // TODO: This would make a great type once you refactor to typescript
+  // const gameStateArray = [
+  //   'homeScreenPractice',
+  //   'setUpRoundN',
+  //   'generateColorRound',
+  //   'roundN',
+  //   'playerWins',
+  //   'playerLoosesShowSolution',
+  //   'gameOver',
+  //   'joinLeaderboard',
+  // ];
 
   // ***********************************
   // App begins here
@@ -86,12 +90,32 @@ export default function App(props) {
 
   useEffect(() => {
     // keep for development
-    // console.log('🚥 gameState is:', gameState)
+    console.log('🚥 gameState is:', gameState);
 
     if (gameState === 'setUpRoundN') {
       setRound((round) => round + 1);
     }
-  }, [gameState]);
+
+    let soundFileObj = {
+      setUpRoundN: '/sound/finger-snap.wav',
+      playerWins: '/sound/success.wav',
+      showSolution: '/sound/wrong-guess.wav',
+      gameOver: '/sound/windchimes.mp3',
+    };
+
+    function playSound(gameState) {
+      if (isAudioOn === false) return;
+
+      console.log(`${gameState}: Play this sound ${soundFileObj[gameState]}`);
+
+      const sound = new Howl({
+        src: [soundFileObj[gameState]],
+      });
+      sound.play();
+    }
+
+    playSound(gameState);
+  }, [gameState, isAudioOn]);
 
   function startGameClickHandler() {
     setGameState('setUpRoundN');
@@ -108,7 +132,6 @@ export default function App(props) {
   function setUpRoundN() {
     setRunRoundConfetti(false);
     setGameState('setUpRoundN');
-    beginRoundSound();
     setAttempt(0);
     setLeftFieldStyle({ backgroundColor: '#ffffff' });
     setRightFieldStyle({ backgroundColor: '#ffffff' });
@@ -272,7 +295,6 @@ export default function App(props) {
   function playerWins() {
     setGameState('playerWins');
     setRunRoundConfetti(true);
-    playWinSound();
     increasePlayerScore();
     // After x seconds, proceed to setUpRoundN()
     setTimeout(function () {
@@ -280,17 +302,11 @@ export default function App(props) {
     }, 2000);
   }
 
-  useEffect(() => {
-    // Keep while working on confetti
-    console.log('🎊 runRoundConfetti updates', runRoundConfetti);
-  }, [runRoundConfetti]);
-
   //  ===================================
   //  Player Looses Round
   //  ===================================
   function playerLoosesShowSolution(maxLossCount) {
     setGameState('playerLoosesShowSolution');
-    playLoseSound();
     showSolution();
     setLostRounds((lostRounds) => lostRounds + 1);
   }
@@ -310,7 +326,6 @@ export default function App(props) {
 
   function gameOver() {
     setGameState('gameOver');
-    gameOverChimes();
     setRunGameOverConfetti(true);
     setConfettiRecycle(true);
     gameOverTransition();
@@ -520,15 +535,6 @@ export default function App(props) {
     setIsAudioOn(!isAudioOn);
   }
 
-  function beginRoundSound() {
-    // Guard clause if player has toggled sound to be off
-    if (isAudioOn === false) return;
-    const sound = new Howl({
-      src: ['/sound/finger-snap.wav'],
-    });
-    sound.play();
-  }
-
   function bubbleSound() {
     /*
     Using the Howler npm package for sound
@@ -536,7 +542,6 @@ export default function App(props) {
     One for the left, one for the right.
     */
 
-    // Guard clause if player has toggled sound to be off
     if (isAudioOn === false) return;
 
     if (currentField === 'leftField') {
@@ -550,33 +555,6 @@ export default function App(props) {
       });
       sound.play();
     }
-  }
-
-  function playWinSound() {
-    // Guard clause if player has toggled sound to be off
-    if (isAudioOn === false) return;
-    const sound = new Howl({
-      src: ['/sound/success.wav'],
-    });
-    sound.play();
-  }
-
-  function playLoseSound() {
-    // Guard clause if player has toggled sound to be off
-    if (isAudioOn === false) return;
-    const sound = new Howl({
-      src: ['/sound/wrong-guess.wav'],
-    });
-    sound.play();
-  }
-
-  function gameOverChimes() {
-    // Guard clause if player has toggled sound to be off
-    if (isAudioOn === false) return;
-    const sound = new Howl({
-      src: ['/sound/windchimes.mp3'],
-    });
-    sound.play();
   }
 
   //  ==================================
@@ -604,7 +582,9 @@ export default function App(props) {
   function axiosPostNewLeaderboardInductee() {
     let string = newLeaderboardInductee;
     let length = 12;
-    //   // TODO: what's your plan for trimmedString?
+    // TODO: what's your plan for trimmedString?
+    // we need to update leaderboard with trimmedString b/c
+    // database can't accept strings longer than 12 chars.
     let trimmedString = string.substring(0, length) || 'Bob Sacamano';
 
     axios
@@ -726,7 +706,6 @@ export default function App(props) {
               lostRounds={lostRounds}
               previousScore={previousScore}
               setPreviousScore={setPreviousScore}
-              beginRoundSound={beginRoundSound}
             />
           </aside>
         </div>
