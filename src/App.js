@@ -65,15 +65,21 @@ export default function App(props) {
   useEffect(() => {
     // A couple things change depending on whether
     // we're in production vs. development
-    if (process.env.NODE_ENV === 'production') {
-      setIsAudioOn(true);
-    } else if (process.env.NODE_ENV === 'development') {
-      maxLossCount = 2;
-      maxAttemptCount = 4;
+
+    // Only runs once per app load
+    let didInit = false;
+    if (!didInit) {
+      didInit = true;
+      if (process.env.NODE_ENV === 'production') {
+        setIsAudioOn(true);
+      } else if (process.env.NODE_ENV === 'development') {
+        maxLossCount = 2;
+        maxAttemptCount = 4;
+      }
+      setGameState('homeScreenPractice');
+      axiosGetAllLeaderboardResults();
+      homeScreenPractice();
     }
-    setGameState('homeScreenPractice');
-    axiosGetAllLeaderboardResults();
-    homeScreenPractice();
   }, []);
 
   function homeScreenPractice() {
@@ -186,14 +192,14 @@ export default function App(props) {
         targetColor: targColor,
 
         /*
-              Only create enough wrongColors to fill in the
-              color bubbles. For instance, the practice round only
-              has two bubbles total (therefore no wrong colors 
-              are needed).
-              numWrongColors tells us how many times we
-              generate a random 'wrong color' to push into
-              getter methods are used to access the properties of an object
-              */
+        Only create enough wrongColors to fill in the
+        color bubbles. For instance, the practice round only
+        has two bubbles total (therefore no wrong colors 
+        are needed).
+        numWrongColors tells us how many times we
+        generate a random 'wrong color' to push into
+        getter methods are used to access the properties of an object
+        */
         get wrongColors() {
           // first, empty the array of old colors
           wrongColorsArray = [];
@@ -296,7 +302,7 @@ export default function App(props) {
     setGameState('playerWins');
     setRunRoundConfetti(true);
     increasePlayerScore();
-    // After x seconds, proceed to setUpRoundN()
+    // Wait a moment before setting up the next round
     setTimeout(function () {
       setUpRoundN();
     }, 2000);
@@ -355,8 +361,7 @@ export default function App(props) {
   function gameOverTransition() {
     if (leaderboardServerDown === true) {
       console.log('🚨 leaderboard is not available');
-      // TODO: hide high scores heading
-      // move play again button to center of screen
+      // TODO: move play again button to center of screen
     }
 
     let evaluateIfLeaderboardMaterial = () => {
