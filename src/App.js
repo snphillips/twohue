@@ -19,7 +19,6 @@ let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
-let value;
 
 export default function App(props) {
   const [confettiRecycle, setConfettiRecycle] = useState(false);
@@ -76,34 +75,55 @@ export default function App(props) {
     setAllColorBubbles(['#8cb5ef', '#d79fb3']);
   }
 
+  // useEffect(() => {
+  //   // keep for development
+  //   console.log('🚥 gameState is:', gameState);
+
+  //   if (gameState === 'setUpRoundN') {
+  //     setRound((round) => round + 1);
+  //   }
+
+  //   let soundFileObj = {
+  //     setUpRoundN: '/sound/finger-snap.wav',
+  //     playerWins: '/sound/success.wav',
+  //     showSolution: '/sound/wrong-guess.wav',
+  //     gameOver: '/sound/windchimes.mp3',
+  //   };
+
+  //   function playSound(gameState) {
+  //     if (isAudioOn === false) return;
+
+  //     console.log(`${gameState}: Play this sound ${soundFileObj[gameState]}`);
+
+  //     const sound = new Howl({
+  //       src: [soundFileObj[gameState]],
+  //     });
+  //     sound.play();
+  //   }
+
+  //   playSound(gameState);
+  // }, [gameState, isAudioOn]);
+
   useEffect(() => {
-    // keep for development
-    console.log('🚥 gameState is:', gameState);
+  console.log('🚥 gameState is:', gameState);
+  if (gameState === 'setUpRoundN') {
+    setRound((round) => round + 1);
+  }
+}, [gameState]);
 
-    if (gameState === 'setUpRoundN') {
-      setRound((round) => round + 1);
-    }
+useEffect(() => {
+  const soundFileObj = {
+    setUpRoundN: '/sound/finger-snap.wav',
+    playerWins: '/sound/success.wav',
+    showSolution: '/sound/wrong-guess.wav',
+    gameOver: '/sound/windchimes.mp3',
+  };
 
-    let soundFileObj = {
-      setUpRoundN: '/sound/finger-snap.wav',
-      playerWins: '/sound/success.wav',
-      showSolution: '/sound/wrong-guess.wav',
-      gameOver: '/sound/windchimes.mp3',
-    };
+  if (!isAudioOn || !soundFileObj[gameState]) return;
 
-    function playSound(gameState) {
-      if (isAudioOn === false) return;
-
-      console.log(`${gameState}: Play this sound ${soundFileObj[gameState]}`);
-
-      const sound = new Howl({
-        src: [soundFileObj[gameState]],
-      });
-      sound.play();
-    }
-
-    playSound(gameState);
-  }, [gameState, isAudioOn]);
+  const sound = new Howl({ src: [soundFileObj[gameState]] });
+  sound.play();
+}, [gameState, isAudioOn]);
 
   function startGameClickHandler() {
     setGameState('setUpRoundN');
