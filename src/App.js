@@ -45,18 +45,6 @@ export default function App(props) {
   // have to insert this during leaderboard api calls
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [gameState, setGameState] = useState('homeScreenPractice');
-  // Lots of the game logic depend gameState
-  // TODO: This would make a great type once you refactor to typescript
-  // const gameStateArray = [
-  //   'homeScreenPractice',
-  //   'setUpRoundN',
-  //   'generateColorRound',
-  //   'roundN',
-  //   'playerWins',
-  //   'playerLoosesShowSolution',
-  //   'gameOver',
-  //   'joinLeaderboard',
-  // ];
 
   // ***********************************
   // App begins here
@@ -65,22 +53,16 @@ export default function App(props) {
   useEffect(() => {
     // A couple things change depending on whether
     // we're in production vs. development
-
-    // Only runs once per app load
-    let didInit = false;
-    if (!didInit) {
-      didInit = true;
-      if (process.env.NODE_ENV === 'production') {
-        setIsAudioOn(true);
-      } else if (process.env.NODE_ENV === 'development') {
-        maxLossCount = 2;
-        maxAttemptCount = 4;
-      }
-      setGameState('homeScreenPractice');
-      axiosGetAllLeaderboardResults();
-      homeScreenPractice();
-    }
-  }, []);
+  if (process.env.NODE_ENV === 'production') {
+    setIsAudioOn(true);
+  } else if (process.env.NODE_ENV === 'development') {
+    maxLossCount = 2;
+    maxAttemptCount = 4;
+  }
+  setGameState('homeScreenPractice');
+  axiosGetAllLeaderboardResults();
+  homeScreenPractice();
+}, []);
 
   function homeScreenPractice() {
     // Hard coded practice colors
@@ -498,20 +480,11 @@ export default function App(props) {
   }
 
   function increasePlayerScore() {
-    // Update previous score for react-countup
-    // React-countup is the cute score incrementing animation
+    const pointsByAttempt = { 2: 6, 3: 4, 4: 3, 5: 2, 6: 1 };
+    const points = pointsByAttempt[attempt];
+    if (!points) return;
     setPreviousScore(score);
-    if (attempt === 6) {
-      setScore((score) => score + 1);
-    } else if (attempt === 5) {
-      setScore((score) => score + 2);
-    } else if (attempt === 4) {
-      setScore((score) => score + 3);
-    } else if (attempt === 3) {
-      setScore((score) => score + 4);
-    } else if (attempt === 2) {
-      setScore((score) => score + 6);
-    }
+    setScore((score) => score + points);
   }
 
   //  ==================================
@@ -681,7 +654,6 @@ export default function App(props) {
               gameState={gameState}
               leaderboardData={leaderboardData}
               score={score}
-              value={value}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               newLeaderboardInductee={newLeaderboardInductee}
