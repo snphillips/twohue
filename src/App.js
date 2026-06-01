@@ -389,32 +389,19 @@ function playerLoosesShowSolution() {
    */
   function currentFieldMouseEnter() {
     if (gameState === 'playerWins') return;
-    else if (currentField === 'leftField') {
-      setLeftFieldStyle({
-        border: '8px solid #abb2b9',
-        backgroundColor: 'color',
-      });
+    if (currentField === 'leftField') {
+      setLeftFieldStyle((prev) => ({ ...prev, border: '8px solid #abb2b9' }));
     } else {
-      setRightFieldStyle({
-        border: '8px solid #abb2b9',
-        backgroundColor: 'color',
-      });
+      setRightFieldStyle((prev) => ({ ...prev, border: '8px solid #abb2b9' }));
     }
   }
 
   function currentFieldMouseLeave() {
     if (gameState === 'playerWins') return;
-
     if (currentField === 'leftField') {
-      setLeftFieldStyle({
-        border: '3px solid #abb2b9',
-        backgroundColor: 'color',
-      });
+      setLeftFieldStyle((prev) => ({ ...prev, border: '3px solid #abb2b9' }));
     } else {
-      setRightFieldStyle({
-        border: '3px solid #abb2b9',
-        backgroundColor: 'color',
-      });
+      setRightFieldStyle((prev) => ({ ...prev, border: '3px solid #abb2b9' }));
     }
   }
 
@@ -539,14 +526,6 @@ function playerLoosesShowSolution() {
     setNewLeaderboardInductee(event.target.value);
     console.log('newLeaderboardInductee: ', newLeaderboardInductee);
   }
-
-  // function handleSubmit(event) {
-  //   event.preventDefault();
-  //   // handleChange(event.target.value);
-  //   leaderboardAPICall(() => {
-  //     setDisplayLeaderboardForm(false);
-  //   });
-  // }
 
   function handleSubmit(event) {
   event.preventDefault();
