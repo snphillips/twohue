@@ -319,21 +319,13 @@ function playerLoosesShowSolution() {
 }
 
   useEffect(() => {
-    // Do not transition to next round or gave over
-    // if gameState is "homescreenpractice"
-    if (gameState === 'homeScreenPractice') {
-      return;
-    }
-    // Do not transition if prevLostRounds is equal to lostRounds
-    if (prevLostRounds.current === lostRounds) {
-      return;
-    }
-    // Player lost this round.
-    // Transition to either the next round or game over after X seconds
-    setTimeout(function () {
+    if (gameState === 'homeScreenPractice') return;
+    if (lostRounds === 0) return;
+
+    setTimeout(() => {
       if (lostRounds < maxLossCount) {
         setUpRoundN();
-      } else if (lostRounds >= maxLossCount) {
+      } else {
         gameOver();
       }
     }, 2000);
