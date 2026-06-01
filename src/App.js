@@ -97,11 +97,8 @@ useEffect(() => {
 }, [gameState, isAudioOn]);
 
   function startGameClickHandler() {
-    setGameState('setUpRoundN');
-    setRunRoundConfetti(false);
     setConfettiRecycle(false);
     setLostRounds(0);
-    setAttempt(0);
     setRound(0);
     setPreviousScore(0);
     setScore(0);
@@ -109,12 +106,12 @@ useEffect(() => {
   }
 
   function setUpRoundN() {
-    setRunRoundConfetti(false);
-    setGameState('setUpRoundN');
-    setAttempt(0);
-    setLeftFieldStyle({ backgroundColor: '#ffffff' });
-    setRightFieldStyle({ backgroundColor: '#ffffff' });
-  }
+  setGameState('setUpRoundN');
+  setRunRoundConfetti(false);
+  setAttempt(0);
+  setLeftFieldStyle({ backgroundColor: '#ffffff' });
+  setRightFieldStyle({ backgroundColor: '#ffffff' });
+}
 
   // =================================================
   // When the round changes, generate a color round
