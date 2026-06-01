@@ -266,8 +266,6 @@ useEffect(() => {
     }
   }
 
-
-
   //  ===================================
   //  Player Wins Round
   //  ===================================
@@ -345,17 +343,6 @@ function playerLoosesShowSolution() {
   function joinLeaderboard() {
     setGameState('joinLeaderboard');
     setNewLeaderboardInductee('');
-  }
-
-  function leaderboardAPICall() {
-    // POST a new leaderboard inductee, then GET the results again.
-    // The leaderboard only shows the top 10 results,
-    // so the new inductee will appear in the list
-    axiosPostNewLeaderboardInductee(() => {
-      // props.transition('FILLED_OUT_FORM')
-      console.log('displayLeaderboardForm: ', displayLeaderboardForm);
-      axiosGetAllLeaderboardResults();
-    });
   }
 
   //  ===================================
@@ -553,13 +540,19 @@ function playerLoosesShowSolution() {
     console.log('newLeaderboardInductee: ', newLeaderboardInductee);
   }
 
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   // handleChange(event.target.value);
+  //   leaderboardAPICall(() => {
+  //     setDisplayLeaderboardForm(false);
+  //   });
+  // }
+
   function handleSubmit(event) {
-    event.preventDefault();
-    // handleChange(event.target.value);
-    leaderboardAPICall(() => {
-      setDisplayLeaderboardForm(false);
-    });
-  }
+  event.preventDefault();
+  axiosPostNewLeaderboardInductee();
+  setDisplayLeaderboardForm(false);
+}
 
   // *****************************************************
   // *****************************************************
