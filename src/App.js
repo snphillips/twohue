@@ -75,35 +75,6 @@ export default function App(props) {
     setAllColorBubbles(['#8cb5ef', '#d79fb3']);
   }
 
-  // useEffect(() => {
-  //   // keep for development
-  //   console.log('🚥 gameState is:', gameState);
-
-  //   if (gameState === 'setUpRoundN') {
-  //     setRound((round) => round + 1);
-  //   }
-
-  //   let soundFileObj = {
-  //     setUpRoundN: '/sound/finger-snap.wav',
-  //     playerWins: '/sound/success.wav',
-  //     showSolution: '/sound/wrong-guess.wav',
-  //     gameOver: '/sound/windchimes.mp3',
-  //   };
-
-  //   function playSound(gameState) {
-  //     if (isAudioOn === false) return;
-
-  //     console.log(`${gameState}: Play this sound ${soundFileObj[gameState]}`);
-
-  //     const sound = new Howl({
-  //       src: [soundFileObj[gameState]],
-  //     });
-  //     sound.play();
-  //   }
-
-  //   playSound(gameState);
-  // }, [gameState, isAudioOn]);
-
   useEffect(() => {
   console.log('🚥 gameState is:', gameState);
   if (gameState === 'setUpRoundN') {
@@ -290,12 +261,12 @@ useEffect(() => {
   }, [attempt]);
 
   function playerMadeWrongGuess() {
-    if (attempt < maxAttemptCount) {
-    } else {
-      showSolution();
+    if (attempt >= maxAttemptCount) {
       playerLoosesShowSolution();
     }
   }
+
+
 
   //  ===================================
   //  Player Wins Round
@@ -313,11 +284,11 @@ useEffect(() => {
   //  ===================================
   //  Player Looses Round
   //  ===================================
-  function playerLoosesShowSolution(maxLossCount) {
-    setGameState('playerLoosesShowSolution');
-    showSolution();
-    setLostRounds((lostRounds) => lostRounds + 1);
-  }
+function playerLoosesShowSolution() {
+  setGameState('playerLoosesShowSolution');
+  showSolution();
+  setLostRounds((lostRounds) => lostRounds + 1);
+}
 
   function showSolution() {
     setGameState('showSolution');
@@ -333,11 +304,21 @@ useEffect(() => {
   }
 
   function gameOver() {
-    setGameState('gameOver');
-    setRunGameOverConfetti(true);
-    setConfettiRecycle(true);
-    gameOverTransition();
+  setGameState('gameOver');
+  setRunGameOverConfetti(true);
+  setConfettiRecycle(true);
+
+  if (leaderboardServerDown) {
+    console.log('🚨 leaderboard is not available');
   }
+
+  const lowestScoreIndex = Math.min(9, leaderboardData.length - 1);
+  const lowestCurrentScore = leaderboardData[lowestScoreIndex].score;
+
+  if (score >= lowestCurrentScore) {
+    joinLeaderboard();
+  }
+}
 
   useEffect(() => {
     // Do not transition to next round or gave over
@@ -360,41 +341,6 @@ useEffect(() => {
     }, 2000);
   }, [lostRounds]);
 
-  function gameOverTransition() {
-    if (leaderboardServerDown === true) {
-      console.log('🚨 leaderboard is not available');
-      // TODO: move play again button to center of screen
-    }
-
-    let evaluateIfLeaderboardMaterial = () => {
-      console.log('evaluateIfLeaderboardMaterial()', leaderboardData);
-      // checking if the player's score in equal to or higher than
-      // the lowest/last score in the array
-
-      let leaderboardMembers = leaderboardData;
-
-      /*
-      What is smaller? 9 or the 'array length - 1'?
-      Either pick the last item in the array, or the 10th item,
-      whichever is smaller.
-      We do this in case the array has fewer than 10 members.
-      */
-      let lowestCurrentScoreIndex = Math.min(9, leaderboardMembers.length - 1);
-      let lowestCurrentScore = leaderboardMembers[lowestCurrentScoreIndex].score;
-
-      console.log('lowestCurrentScoreIndex:', lowestCurrentScoreIndex);
-      console.log('lowestLeaderBoard score:', lowestCurrentScore);
-      console.log('current score:', score);
-
-      if (score >= lowestCurrentScore) {
-        console.log(`score: ${score} is higher than lowestCurrentScore: ${lowestCurrentScore}`);
-        joinLeaderboard();
-      } else {
-        console.log(`score: ${score} is lower than lowestCurrentScore: ${lowestCurrentScore}`);
-      }
-    };
-    evaluateIfLeaderboardMaterial(score);
-  }
 
   function joinLeaderboard() {
     setGameState('joinLeaderboard');
