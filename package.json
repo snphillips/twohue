@@ -6,6 +6,10 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^12.1.6",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.5.0",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
     "chroma-js": "^2.4.2",
     "dotenv": "^16.3.1",
@@ -18,7 +22,8 @@
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.13.8",
     "react-test-renderer": "^17.0.2",
-    "react-use": "^17.4.0"
+    "react-use": "^17.4.0",
+    "typescript": "^5.1.6"
   },
   "scripts": {
     "start": "CI=false react-scripts start",
