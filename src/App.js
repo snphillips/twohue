@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
-import axios from 'axios';
 import LeftSidebar from './components/leftsidebar/LeftSidebar';
 import Byline from './components/footer/Byline';
 import GameField from './components/gameboard/GameField';
@@ -464,29 +463,24 @@ async function fetchLeaderboardResults() {
   //  =================================
   //  POST
   //  =================================
-  function axiosPostNewLeaderboardInductee() {
-    let string = newLeaderboardInductee;
-    let length = 12;
-    // TODO: what's your plan for trimmedString?
-    // we need to update leaderboard with trimmedString b/c
-    // database can't accept strings longer than 12 chars.
-    let trimmedString = string.substring(0, length) || 'Bob Sacamano';
+async function postNewLeaderboardInductee() {
+  // TODO: what's your plan for trimmedString?
+  //   // we need to update leaderboard with trimmedString b/c
+  //   // database can't accept strings longer than 12 chars.
+  const trimmedName = newLeaderboardInductee.substring(0, 12) || 'Bob Sacamano';
 
-    axios
-      .post(dataSource, {
-        player: newLeaderboardInductee || 'bubble boy',
-        score: score,
-      })
-      .then(function (response) {
-        console.log('leaderboard axios call response: ', response);
-      })
-      .then(() => {
-        fetchLeaderboardResults();
-      })
-      .catch(function (error) {
-        console.log('Axios post error: ', error);
-      });
+  try {
+    const response = await fetch(dataSource, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player: trimmedName, score }),
+    });
+    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    await fetchLeaderboardResults();
+  } catch (error) {
+    console.log('Post error:', error);
   }
+}
 
   function handleChange(event) {
     // console.log('leaderboard form value:', event.target.value);
@@ -496,7 +490,7 @@ async function fetchLeaderboardResults() {
 
   function handleSubmit(event) {
   event.preventDefault();
-  axiosPostNewLeaderboardInductee();
+  postNewLeaderboardInductee();
   setDisplayLeaderboardForm(false);
 }
 
