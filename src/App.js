@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Howl } from 'howler'; // Howler manages sound effects
 import chroma from 'chroma-js'; // Color are all generated and mixed using chroma.js
 import Confetti from 'react-confetti';
@@ -13,7 +13,8 @@ import useWindowSize from 'react-use/lib/useWindowSize';
 import RightSidebar from './components/rightsidebar/RightSidebar';
 
 // Leave both server addresses here in case you want to switch
-let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+// let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
+let dataSource = 'twohue-serverless-leaderboard.netlify.app/players';
 // let dataSource = 'http://localhost:3001/players';
 
 let maxLossCount = 6;
