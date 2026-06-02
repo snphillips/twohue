@@ -12,10 +12,10 @@ import Leaderboard from './components/gameboard/Leaderboard';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import RightSidebar from './components/rightsidebar/RightSidebar';
 
-// Leave both server addresses here in case you want to switch
+// Leave server addresses here in case you want to switch
 // let dataSource = 'https://twohue-leaderboard-server.herokuapp.com/players';
-let dataSource = 'twohue-serverless-leaderboard.netlify.app/players';
 // let dataSource = 'http://localhost:3001/players';
+let dataSource = 'https://twohue-serverless-leaderboard.netlify.app/players';
 
 let maxLossCount = 6;
 let maxAttemptCount = 6;
@@ -357,27 +357,6 @@ function playerLoosesShowSolution() {
     setIsAudioOn(!isAudioOn);
   }
 
-  // function bubbleSound() {
-  //   /*
-  //   Using the Howler npm package for sound
-  //   There are two distinct bubble sounds: 
-  //   One for the left, one for the right.
-  //   */
-
-  //   if (isAudioOn === false) return;
-
-  //   if (currentField === 'leftField') {
-  //     const sound = new Howl({
-  //       src: ['/sound/moogy73_perc14.wav'],
-  //     });
-  //     sound.play();
-  //   } else if (currentField === 'rightField') {
-  //     const sound = new Howl({
-  //       src: ['/sound/moogy73_perc15.wav'],
-  //     });
-  //     sound.play();
-  //   }
-  // }
 
   function playSound(filename) {
     if (!isAudioOn) return;
