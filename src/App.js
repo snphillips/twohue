@@ -37,7 +37,7 @@ export default function App(props) {
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
-  const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
+  // const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
@@ -399,13 +399,7 @@ function playerLoosesShowSolution() {
    to determine which one will get filled in with color.
    ==================================== */
   function toggleLeftRightField() {
-    if (currentField === 'leftField') {
-      setCurrentField('rightField');
-      setCurrentFieldHover('rightField');
-    } else {
-      setCurrentField('leftField');
-      setCurrentFieldHover('leftField');
-    }
+    setCurrentField((prev) => prev === 'leftField' ? 'rightField' : 'leftField');
   }
 
   function increasePlayerScore() {
