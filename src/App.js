@@ -73,26 +73,16 @@ export default function App(props) {
     setAllColorBubbles(['#8cb5ef', '#d79fb3']);
   }
 
+  // And in the sound useEffect:
   useEffect(() => {
-  // console.log('🚥 gameState is:', gameState);
-  if (gameState === 'setUpRoundN') {
-    setRound((round) => round + 1);
-  }
-}, [gameState]);
-
-useEffect(() => {
-  const soundFileObj = {
-    setUpRoundN: '/sound/finger-snap.wav',
-    playerWins: '/sound/success.wav',
-    showSolution: '/sound/wrong-guess.wav',
-    gameOver: '/sound/windchimes.mp3',
-  };
-
-  if (!isAudioOn || !soundFileObj[gameState]) return;
-
-  const sound = new Howl({ src: [soundFileObj[gameState]] });
-  sound.play();
-}, [gameState, isAudioOn]);
+    const soundFileObj = {
+      setUpRoundN: 'finger-snap.wav',
+      playerWins: 'success.wav',
+      showSolution: 'wrong-guess.wav',
+      gameOver: 'windchimes.mp3',
+    };
+    if (soundFileObj[gameState]) playSound(soundFileObj[gameState]);
+  }, [gameState, isAudioOn]);
 
   function startGameClickHandler() {
     setConfettiRecycle(false);
@@ -105,6 +95,7 @@ useEffect(() => {
 
   function setUpRoundN() {
   setGameState('setUpRoundN');
+  setRound((r) => r + 1);
   setRunRoundConfetti(false);
   setAttempt(0);
   setLeftFieldStyle({ backgroundColor: '#ffffff' });
@@ -114,111 +105,56 @@ useEffect(() => {
   // =================================================
   // When the round changes, generate a color round
   // =================================================
-  // TODO: we need to use useLayoutEffect to display the practice round
-  // but I forgot why this is the case
-  useLayoutEffect(() => {
-    const generateColorRound = () => {
-      // No need to generate colors for practice
-      // Practice colors are hard-coded
-      if (gameState === 'homeScreenPractice') {
-        return;
-      }
-      if (gameState !== 'homeScreenPractice') {
-        setGameState('generateColorRound');
-      }
-      let soluColor1;
-      let soluColor2;
-      let targColor;
-      let colorLightness = 29;
-      let wrongColorsArray = [];
+useEffect(() => {
+  // Practice round uses hard-coded colors, so skip generation
+  if (gameState === 'homeScreenPractice') return;
+  setGameState('generateColorRound');
 
-      /* 
-        =============================
-        If the target color is too dark (like blackish),
-        the round is nearly impossible to play.
-        To solve this problem, we're not allowing rounds with 
-        a very dark target color.
-        
-        Use a while-loop to generate solution & target
-        colors. Keep looping until it finds a solution
-        that ISN'T too dark. We're using Chroma.js's .get('lab.l')
-        to determine lightness.
-        ============================= 
-        */
-      while (colorLightness <= 30) {
-        soluColor1 = chroma.random().hex();
-        soluColor2 = chroma.random().hex();
-        targColor = chroma.blend(chroma(soluColor1).hex(), chroma(soluColor2).hex(), 'multiply');
-        colorLightness = chroma(targColor).get('lab.l');
-      }
+  let soluColor1, soluColor2, targColor;
+  let colorLightness = 29;
 
-      // ~~~~~~~~~~~~~~~~~~~~~~~~
-      // ~~~~~~~~~~~~~~~~~~~~~~~~
-      let newColorRound = {
-        solutionColor1: soluColor1,
-        solutionColor2: soluColor2,
-        targetColor: targColor,
+  /*
+  If the target color is too dark (like blackish),
+  the round is nearly impossible to play.
+  Keep looping until we find solution colors whose
+  blended result isn't too dark. Chroma's .get('lab.l')
+  measures lightness on the LAB color scale.
+  */
+  while (colorLightness <= 30) {
+    soluColor1 = chroma.random().hex();
+    soluColor2 = chroma.random().hex();
+    targColor = chroma.blend(soluColor1, soluColor2, 'multiply');
+    colorLightness = chroma(targColor).get('lab.l');
+  }
 
-        /*
-        Only create enough wrongColors to fill in the
-        color bubbles. For instance, the practice round only
-        has two bubbles total (therefore no wrong colors 
-        are needed).
-        numWrongColors tells us how many times we
-        generate a random 'wrong color' to push into
-        getter methods are used to access the properties of an object
-        */
-        get wrongColors() {
-          // first, empty the array of old colors
-          wrongColorsArray = [];
+  // Add more wrong colors as rounds progress, capped at 6
+  const numWrongColors = Math.min(round, 6);
+  const wrongColors = Array.from({ length: numWrongColors }, () => chroma.random().hex());
 
-          let numWrongColors;
-          round <= 6 ? (numWrongColors = round) : (numWrongColors = 6);
+  // The two correct answer colors
+  const solutionColors = [chroma(soluColor1).hex(), chroma(soluColor2).hex()];
 
-          for (let i = numWrongColors; i > 0; i--) {
-            wrongColorsArray.push(chroma.random().hex());
-          }
-          return wrongColorsArray;
-        },
+  // Merge solution and wrong colors into one array for the bubble tray
+  const allBubbles = [...solutionColors, ...wrongColors];
 
-        get solutionColors() {
-          return [
-            chroma(newColorRound.solutionColor1).hex(),
-            chroma(newColorRound.solutionColor2).hex(),
-          ];
-        },
+  // Fisher-Yates shuffle so the solution bubbles
+  // aren't always the first two in the tray
+  for (let i = allBubbles.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    [allBubbles[i], allBubbles[j]] = [allBubbles[j], allBubbles[i]];
+  }
 
-        // Mix all the color bubbles together
-        get allColorBubbles() {
-          // The concat() method merges two or more arrays.
-          // This method does not change the existing arrays,
-          // but instead returns a new array.
-          // We're merging solutionColors & wrongColors
-          return newColorRound.solutionColors.concat(newColorRound.wrongColors);
-        },
-      };
-      // ~~~~~~~~~~~~~~~~~~~~~~~~
-      // ~~~~~~~~~~~~~~~~~~~~~~~~
+  setColorRound({
+    solutionColor1: soluColor1,
+    solutionColor2: soluColor2,
+    targetColor: targColor,
+    solutionColors,
+  });
+  setAllColorBubbles(allBubbles);
 
-      // The function that shuffles the allColorBubbles bubbles
-      // so the first two bubbles aren't always the solution
-      let shuffleColors = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * i);
-          const temp = array[i];
-          array[i] = array[j];
-          array[j] = temp;
-        }
-        setAllColorBubbles(array);
-      };
-
-      shuffleColors(newColorRound.allColorBubbles);
-      setColorRound(newColorRound);
-    };
-
-    generateColorRound();
-    setGameState('roundN');
-  }, [round]);
+  // Round is ready to play
+  setGameState('roundN');
+}, [round]);
 
 useEffect(() => {
   if (gameState === 'homeScreenPractice') return;
@@ -420,6 +356,33 @@ function playerLoosesShowSolution() {
     setIsAudioOn(!isAudioOn);
   }
 
+  // function bubbleSound() {
+  //   /*
+  //   Using the Howler npm package for sound
+  //   There are two distinct bubble sounds: 
+  //   One for the left, one for the right.
+  //   */
+
+  //   if (isAudioOn === false) return;
+
+  //   if (currentField === 'leftField') {
+  //     const sound = new Howl({
+  //       src: ['/sound/moogy73_perc14.wav'],
+  //     });
+  //     sound.play();
+  //   } else if (currentField === 'rightField') {
+  //     const sound = new Howl({
+  //       src: ['/sound/moogy73_perc15.wav'],
+  //     });
+  //     sound.play();
+  //   }
+  // }
+
+  function playSound(filename) {
+    if (!isAudioOn) return;
+    new Howl({ src: [`/sound/${filename}`] }).play();
+  }
+
   function bubbleSound() {
     /*
     Using the Howler npm package for sound
@@ -427,19 +390,8 @@ function playerLoosesShowSolution() {
     One for the left, one for the right.
     */
 
-    if (isAudioOn === false) return;
-
-    if (currentField === 'leftField') {
-      const sound = new Howl({
-        src: ['/sound/moogy73_perc14.wav'],
-      });
-      sound.play();
-    } else if (currentField === 'rightField') {
-      const sound = new Howl({
-        src: ['/sound/moogy73_perc15.wav'],
-      });
-      sound.play();
-    }
+    const file = currentField === 'leftField' ? 'moogy73_perc14.wav' : 'moogy73_perc15.wav';
+      playSound(file);
   }
 
   //  ==================================
@@ -464,8 +416,8 @@ async function fetchLeaderboardResults() {
   //  POST
   //  =================================
 async function postNewLeaderboardInductee() {
-  // TODO: what's your plan for trimmedString?
-  //   // we need to update leaderboard with trimmedString b/c
+  // TODO: what's your plan for trimmedName?
+  //   // we need to update leaderboard with trimmedName b/c
   //   // database can't accept strings longer than 12 chars.
   const trimmedName = newLeaderboardInductee.substring(0, 12) || 'Bob Sacamano';
 
