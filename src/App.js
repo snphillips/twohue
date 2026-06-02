@@ -76,7 +76,7 @@ export default function App(props) {
   }
 
   useEffect(() => {
-  console.log('🚥 gameState is:', gameState);
+  // console.log('🚥 gameState is:', gameState);
   if (gameState === 'setUpRoundN') {
     setRound((round) => round + 1);
   }
@@ -225,37 +225,58 @@ useEffect(() => {
   // =================================================
   // Check the solution after every attempt
   // =================================================
-  useEffect(() => {
-    if (gameState === 'homeScreenPractice') {
-      return;
-    }
-    // Guard clause: return whe attempt resets to 0
-    if (attempt === 0) {
-      return;
-    }
-    let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-    let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-    let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-    let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-    let solutionColors = colorRound.solutionColors;
+  // useEffect(() => {
+  //   if (gameState === 'homeScreenPractice') {
+  //     return;
+  //   }
+  //   // Guard clause: return whe attempt resets to 0
+  //   if (attempt === 0) {
+  //     return;
+  //   }
+  //   let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
+  //   let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
+  //   let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
+  //   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
+  //   let solutionColors = colorRound.solutionColors;
 
-    // Not enough attempts for a solution
-    if (attempt === 1) {
-      // correct
-    } else if (
-      solutionColors.includes(leftFieldHexColor) &&
-      solutionColors.includes(rightFieldHexColor) &&
-      // The colors can't be the same on either side
-      leftFieldHexColor !== rightFieldHexColor
-    ) {
-      setGameState('playerWins');
-      playerWins();
+  //   // Not enough attempts for a solution
+  //   if (attempt === 1) {
+  //     // correct
+  //   } else if (
+  //     solutionColors.includes(leftFieldHexColor) &&
+  //     solutionColors.includes(rightFieldHexColor) &&
+  //     // The colors can't be the same on either side
+  //     leftFieldHexColor !== rightFieldHexColor
+  //   ) {
+  //     setGameState('playerWins');
+  //     playerWins();
 
-      // incorrect
-    } else {
-      playerMadeWrongGuess();
-    }
-  }, [attempt]);
+  //     // incorrect
+  //   } else {
+  //     playerMadeWrongGuess();
+  //   }
+  // }, [attempt]);
+
+useEffect(() => {
+  if (gameState === 'homeScreenPractice') return;
+  if (attempt === 0) return;
+
+  const leftFieldHexColor = chroma(leftFieldStyle.backgroundColor).hex();
+  const rightFieldHexColor = chroma(rightFieldStyle.backgroundColor).hex();
+  const solutionColors = colorRound.solutionColors;
+
+  if (
+    solutionColors.includes(leftFieldHexColor) &&
+    solutionColors.includes(rightFieldHexColor) &&
+    leftFieldHexColor !== rightFieldHexColor
+  ) {
+    playerWins();
+  } else {
+    playerMadeWrongGuess();
+  }
+}, [attempt, colorRound, leftFieldStyle, rightFieldStyle]);
+
+
 
   function playerMadeWrongGuess() {
     if (attempt >= maxAttemptCount) {
@@ -505,9 +526,9 @@ function playerLoosesShowSolution() {
   }
 
   function handleChange(event) {
-    console.log('leaderboard form value:', event.target.value);
+    // console.log('leaderboard form value:', event.target.value);
     setNewLeaderboardInductee(event.target.value);
-    console.log('newLeaderboardInductee: ', newLeaderboardInductee);
+    // console.log('newLeaderboardInductee: ', newLeaderboardInductee);
   }
 
   function handleSubmit(event) {
