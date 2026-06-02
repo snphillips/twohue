@@ -37,7 +37,6 @@ export default function App(props) {
   const [rightFieldStyle, setRightFieldStyle] = useState({ backgroundColor: '#ffffff' });
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [newLeaderboardInductee, setNewLeaderboardInductee] = useState('');
-  // const [currentFieldHover, setCurrentFieldHover] = useState('leftField');
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [leaderboardServerDown, setLeaderboardServerDown] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
@@ -59,7 +58,7 @@ export default function App(props) {
     maxAttemptCount = 4;
   }
   setGameState('homeScreenPractice');
-  axiosGetAllLeaderboardResults();
+  fetchLeaderboardResults();
   homeScreenPractice();
 }, []);
 
@@ -221,41 +220,6 @@ useEffect(() => {
     generateColorRound();
     setGameState('roundN');
   }, [round]);
-
-  // =================================================
-  // Check the solution after every attempt
-  // =================================================
-  // useEffect(() => {
-  //   if (gameState === 'homeScreenPractice') {
-  //     return;
-  //   }
-  //   // Guard clause: return whe attempt resets to 0
-  //   if (attempt === 0) {
-  //     return;
-  //   }
-  //   let leftFieldBackgroundColor = leftFieldStyle.backgroundColor;
-  //   let leftFieldHexColor = chroma(leftFieldBackgroundColor).hex();
-  //   let rightFieldBackgroundColor = rightFieldStyle.backgroundColor;
-  //   let rightFieldHexColor = chroma(rightFieldBackgroundColor).hex();
-  //   let solutionColors = colorRound.solutionColors;
-
-  //   // Not enough attempts for a solution
-  //   if (attempt === 1) {
-  //     // correct
-  //   } else if (
-  //     solutionColors.includes(leftFieldHexColor) &&
-  //     solutionColors.includes(rightFieldHexColor) &&
-  //     // The colors can't be the same on either side
-  //     leftFieldHexColor !== rightFieldHexColor
-  //   ) {
-  //     setGameState('playerWins');
-  //     playerWins();
-
-  //     // incorrect
-  //   } else {
-  //     playerMadeWrongGuess();
-  //   }
-  // }, [attempt]);
 
 useEffect(() => {
   if (gameState === 'homeScreenPractice') return;
@@ -485,18 +449,17 @@ function playerLoosesShowSolution() {
   //  GET
   //  ==================================
 
-  function axiosGetAllLeaderboardResults() {
-    axios
-      .get(dataSource)
-      .then((response) => {
-        setLeaderboardData(response.data);
-      })
-      .catch(function (error) {
-        console.log('🥺 leaderboard unavailable');
-        console.log('axiosGetAllLeaderboardResults() error:', error);
-        setLeaderboardServerDown(true);
-      });
+async function fetchLeaderboardResults() {
+  try {
+    const response = await fetch(dataSource);
+    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    const data = await response.json();
+    setLeaderboardData(data);
+  } catch (error) {
+    console.log('🥺 leaderboard unavailable:', error);
+    setLeaderboardServerDown(true);
   }
+}
 
   //  =================================
   //  POST
@@ -518,7 +481,7 @@ function playerLoosesShowSolution() {
         console.log('leaderboard axios call response: ', response);
       })
       .then(() => {
-        axiosGetAllLeaderboardResults();
+        fetchLeaderboardResults();
       })
       .catch(function (error) {
         console.log('Axios post error: ', error);
